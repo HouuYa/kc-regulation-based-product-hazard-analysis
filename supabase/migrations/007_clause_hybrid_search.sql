@@ -80,49 +80,35 @@ base as (
 
 -- ① 코드 매칭 — HF/DT 교집합 (§5.1 ①)
 --    근거가 명확하고 통계 집계가 가능한 유일한 갈래다.
---    상위 계위 일치(HF.M.* )도 잡아야 하므로 접두사 비교를 함께 한다.
-code_hits as (
+--
+--    질의 코드를 축과 함께 펴 놓고 조인한다. 집계 FILTER 안에 상관 서브쿼리를
+--    넣는 방식보다 읽기 쉽고, 어느 태그가 왜 걸렸는지 그대로 드러난다.
+query_codes as (
+  select 'HF'::text as axis, c as code from unnest(coalesce(p_hf_codes, '{}')) c
+  union all
+  select 'DT'::text, c from unnest(coalesce(p_dt_codes, '{}')) c
+),
+tag_match as (
   select
     t.clause_id,
-    count(*) filter (
-      where (t.axis = 'HF' and t.code = any (coalesce(p_hf_codes, '{}')))
-         or (t.axis = 'DT' and t.code = any (coalesce(p_dt_codes, '{}')))
-    )::int as hit_full,
-    count(*) filter (
-      where not (
-              (t.axis = 'HF' and t.code = any (coalesce(p_hf_codes, '{}')))
-           or (t.axis = 'DT' and t.code = any (coalesce(p_dt_codes, '{}')))
-            )
-        and exists (
-          select 1
-          from unnest(
-                 case when t.axis = 'HF' then coalesce(p_hf_codes, '{}')
-                      else coalesce(p_dt_codes, '{}') end
-               ) q
-          -- 어느 쪽이 더 굵든 상위 계위가 겹치면 부분 일치로 본다
-          where q like t.code || '.%' or t.code like q || '.%'
-        )
-    )::int as hit_partial
+    case when q.code = t.code then 'FULL' else 'PARTIAL' end as kind
   from public.clause_tag t
   join base b on b.id = t.clause_id
+  join query_codes q
+    on q.axis = t.axis
+   -- 어느 쪽이 더 굵든 상위 계위가 겹치면 부분 일치로 본다 (HF.M.* 대응)
+   and (q.code = t.code or q.code like t.code || '.%' or t.code like q.code || '.%')
   where p_use_code
     -- 검수에서 반려된 태깅은 매칭에 쓰지 않는다
     and t.review_status <> 'rejected'
-  group by t.clause_id
-  having count(*) filter (
-           where (t.axis = 'HF' and t.code = any (coalesce(p_hf_codes, '{}')))
-              or (t.axis = 'DT' and t.code = any (coalesce(p_dt_codes, '{}')))
-         ) > 0
-      or count(*) filter (
-           where exists (
-             select 1
-             from unnest(
-                    case when t.axis = 'HF' then coalesce(p_hf_codes, '{}')
-                         else coalesce(p_dt_codes, '{}') end
-                  ) q
-             where q like t.code || '.%' or t.code like q || '.%'
-           )
-         ) > 0
+),
+code_hits as (
+  select
+    clause_id,
+    count(*) filter (where kind = 'FULL')::int    as hit_full,
+    count(*) filter (where kind = 'PARTIAL')::int as hit_partial
+  from tag_match
+  group by clause_id
 ),
 code_ranked as (
   select
