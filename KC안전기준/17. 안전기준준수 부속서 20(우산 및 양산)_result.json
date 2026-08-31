@@ -1,0 +1,1622 @@
+{
+  "batch_id": "4a6eded78e684ce3beba5df22c1d997f",
+  "status": "completed",
+  "applied_fixes": null,
+  "filename": "17. 안전기준준수 부속서 20(우산 및 양산).pdf",
+  "mode": "onprem_compose",
+  "tagger": "hierarchy",
+  "translation_ko": false,
+  "total_pages": 4,
+  "total_chunks": 4,
+  "total_latency_seconds": 10.496885,
+  "result": {
+    "filename": "17. 안전기준준수 부속서 20(우산 및 양산).pdf",
+    "content": {
+      "ocr": {
+        "provider": "ocr_model_onprem",
+        "model": "ocr_model_onprem",
+        "text": "<div data-label=\"title\" data-bbox=\"0.4070,0.0680,0.5240,0.0860\" data-score=\"0.9334\"><h1>안전기준</h1></div>\n<div data-label=\"title\" data-bbox=\"0.4020,0.1020,0.5290,0.1200\" data-score=\"1.0000\"><h1>우산 및 양산</h1></div>\n<div data-label=\"title\" data-bbox=\"0.7170,0.1020,0.8140,0.1200\" data-score=\"0.9992\"><h1>부속서 20</h1></div>\n<div data-label=\"title\" data-bbox=\"0.3640,0.1380,0.5660,0.1560\" data-score=\"0.9987\"><h1>(Umbrella & Parasol)</h1></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.2120,0.9060,0.2470\" data-score=\"0.9972\"><p>1. 적용범위 이 기준은 우산, 양산 및 우산 겸용 양산에 대하여 적용한다. 다만, 일회성의 용도 등으로 제조된 비닐우산 등은 제외한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.2750,0.9060,0.3100\" data-score=\"0.9938\"><p>2. 인용표준 다음에 나타내는 표준은 이 검사기준 및 방법에 인용됨으로써 이 검사기준 및 방법의 일부를 구성한다. 이러한 인용표준은 그 최신표준을 적용한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0990,0.3200,0.2920,0.3350\" data-score=\"0.9935\"><p>KS G 3711 우산·양산</p></div>\n<div data-label=\"text\" data-bbox=\"0.0990,0.3450,0.5850,0.3600\" data-score=\"0.9985\"><p>KS K 0850 텍스타일의 자외선 차단율 및 차단지수 시험방법</p></div>\n<div data-label=\"text\" data-bbox=\"0.0990,0.3690,0.3670,0.3850\" data-score=\"0.9999\"><p>안전확인 안전기준 부속서6 완구</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.4140,0.6600,0.4300\" data-score=\"0.9890\"><p>3. 용어의 정의 이 기준에 사용하는 주된 용어의 정의는 다음에 따른다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0990,0.4390,0.5400,0.4540\" data-score=\"0.9402\"><p>3.1 살 대 살,대 및 부속품들이 조립된 상태를 말한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0980,0.4630,0.9060,0.5170\" data-score=\"0.9782\"><p>3.2 살 윗살, 윗살보조살, 끝살, 받침살, 받침살보조살을 말한다. 윗살은 우산의 천정을 지지하는 살 중에서 가장 힘을 많이 받는 중앙의 살로서, 주로 열처리된 살(Topless형 및 미니형 살대에서는 홈 받침살 및 보조살 아래의 주살을 말한다)을 말한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0980,0.5260,0.9050,0.5610\" data-score=\"0.9932\"><p>3.3 대 손잡이가 달려 있는 중앙의 봉을 말하며 일반식대(일체형)와 1단, 2단, 3단 등으로 접을 수 있는 접이식대가 있다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0980,0.5700,0.9050,0.6050\" data-score=\"0.9156\"><p>3.4 흙 살 경강선 또는 FRP 등의 재료로 U자형 또는 오목 형태로 흡을 가공하여 주로 받침살 또는 웃살로 사용되어지는 삶을 말한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0980,0.6140,0.7830,0.6300\" data-score=\"0.9868\"><p>3.5 통 살 경강선 또는 FRP 등의 재료를 이용하여 원통형 형태로 가공한 삶을 말한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0990,0.6390,0.6860,0.6550\" data-score=\"0.9760\"><p>3.6 고정쇠 접이식 우산을 펼쳤을때 고정을 하기 위한 고정장치를 말한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.6840,0.4210,0.6990\" data-score=\"0.9981\"><p>4. 종류 우산·양산의 종류는 표 1과 같다.</p></div>\n<div data-label=\"table_caption\" data-bbox=\"0.4550,0.7090,0.5420,0.7240\" data-score=\"0.9778\" style=\"font-weight:600;\">표 1. 종류</div>\n<div data-label=\"table\" data-bbox=\"0.1250,0.7370,0.8750,0.8510\" data-score=\"0.9917\"><table><tr><td>구분</td><td>종류</td></tr><tr><td rowspan=\"2\">일반식</td><td>수동우산(장우산 포함), 수동양산</td></tr><tr><td>자동우산(장우산 포함), 자동양산</td></tr><tr><td rowspan=\"2\">접이식</td><td>수동우산, 수동양산</td></tr><tr><td>자동우산, 자동양산</td></tr></table></div>\n<div data-label=\"text\" data-bbox=\"0.0910,0.8630,0.1850,0.8780\" data-score=\"0.9911\"><p>5. 안전요건</p></div>\n<div data-label=\"text\" data-bbox=\"0.0990,0.8880,0.2450,0.9030\" data-score=\"0.9970\"><p>5.1 부품 조립강도</p></div>\n<div data-label=\"text\" data-bbox=\"0.0980,0.9130,0.9000,0.9470\" data-score=\"0.9965\"><p>5.1.1 손잡이와 대의 강도 손잡이와 대의 강도는 표 2와 같으며 6.1.1에 따라 시험하였을 때 균열·파손·이완 등이 없어야 한다.</p></div>\n<div data-label=\"page_number\" data-bbox=\"0.4740,0.9710,0.5260,0.9820\" data-score=\"0.8524\" style=\"color:#888;font-size:0.9em;\">- 1 -</div>\n\n<div data-label=\"table_caption\" data-bbox=\"0.3970,0.0700,0.6000,0.0860\" data-score=\"0.9964\" style=\"font-weight:600;\">표 2. 손잡이와 대의 강도</div>\n<div data-label=\"table\" data-bbox=\"0.1210,0.0980,0.8790,0.2430\" data-score=\"0.9928\"><table><tr><td colspan=\"2\">구 분</td><td>기준치(N)</td></tr><tr><td rowspan=\"2\">일반식</td><td>수동</td><td>380 이상</td></tr><tr><td>자동</td><td>420 이상</td></tr><tr><td rowspan=\"2\">접이식</td><td>수동</td><td>250 이상</td></tr><tr><td>자동</td><td>420 이상</td></tr></table></div>\n<div data-label=\"text\" data-bbox=\"0.0980,0.2650,0.9040,0.2990\" data-score=\"0.9913\"><p>5.1.2 끝살과 천의 마무리 강도 끝살과 천의 마무리 강도는 6.1.2에 따라 시험하였을 때 우산 끝살과 천이 분리되지 않아야 한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0980,0.3080,0.9050,0.3620\" data-score=\"0.9944\"><p>5.1.3 손잡이와 캡의 조립강도 우산 손잡이와 캡의 조립 강도는 6.1.3에 따라 시험하였을 때, 견고하게 조립되어 분리되지 않아야 한다. 단, 접이식(수동) 우산 및 양산은 손잡이의 조립강도 안전요건에서 제외된다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0980,0.3710,0.7900,0.3870\" data-score=\"0.9943\"><p>5.2 굽힘강도 굽힘강도는 6.2에 따라 시험하였을 때 절단 또는 구부러짐이 없어야 한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0980,0.3960,0.9040,0.4500\" data-score=\"0.9609\"><p>5.3 구조 안전성 구조안전성은 6.3에 따라 시험하였을 때 절단 또는 구부러짐이 없어야 한다. 또한 손잡이 또는 캡의 월부분 등이 인체에 위해를 미칠 우려가 있는 예리한 돌출부 또는 뽅족한 부분이 없는 구조이어야 한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0980,0.4590,0.8500,0.4750\" data-score=\"0.9966\"><p>5.4 자외선(UV-R) 차단율 자외선(UV-R)차단율은 6.4에 따라 시험하였을 때 표 3과 같아야 한다.</p></div>\n<div data-label=\"table_caption\" data-bbox=\"0.4180,0.4960,0.5780,0.5110\" data-score=\"0.9899\" style=\"font-weight:600;\">표 3. 자외선 차단율</div>\n<div data-label=\"table\" data-bbox=\"0.1230,0.5230,0.8780,0.6240\" data-score=\"0.9824\"><table><tr><td>종 류</td><td>자외선 차단율(%)</td></tr><tr><td>골프용 양산 및 우산·양산 겸용</td><td>90 이상</td></tr><tr><td>양산 및 우산·양산 겸용</td><td>85 이상</td></tr></table></div>\n<div data-label=\"text\" data-bbox=\"0.1230,0.6380,0.8500,0.6530\" data-score=\"0.9944\"><p>비고 1. 골프용 양산 및 우산·양산 겸용제품은 살의 길이가 650 mm 이상인 제품을 말한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1640,0.6630,0.8700,0.6970\" data-score=\"0.9931\"><p>2. 면, 마가 40% 이상 함유된 원단, 자수원단, 번아웃 원단 등은 표 3의 요구사항을 충족하지 않아도 되나 자외선 차단율은 표시하여야 한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.0900,0.7390,0.1850,0.7540\" data-score=\"0.9860\"><h1>6. 시험방법</h1></div>\n<div data-label=\"title\" data-bbox=\"0.0980,0.7640,0.2790,0.7800\" data-score=\"0.9993\"><h1>6.1 부품조립 강도시험</h1></div>\n<div data-label=\"text\" data-bbox=\"0.0980,0.7890,0.9050,0.8240\" data-score=\"0.9813\"><p>6.1.1 손잡이와 대의 강도시험 분당 300 ± 20 mm 속도로 손잡이가 빠지는 방향으로 잡아 당졌을 때, 손잡이의 균열·이완·파손이 발생할 때의 최대강도를 측정한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0970,0.8330,0.9040,0.8680\" data-score=\"0.9939\"><p>6.1.2 끝살과 천의 마무리 강도 우산을 접은상태(단 우산의 끈을 해체한 상태)에서 살대끝 방향으로 20 N의 힘으로 당기어 1분간 유지한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0970,0.8770,0.9050,0.9120\" data-score=\"0.9887\"><p>6.1.3 손잡이와 캡의 조립강도 토오크 게이지로 다음의 상태가 될 때까지 시계방향으로 손잡이에 대하여는 1.0 N·m, 캡에 대하여는 0.3 N·m토크를 2초간 가한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1060,0.9220,0.4460,0.9370\" data-score=\"0.9906\"><p>a) 원래 위치에서 180° 회전할 때까지 또는</p></div>\n<div data-label=\"text\" data-bbox=\"0.1060,0.9460,0.4050,0.9620\" data-score=\"0.9986\"><p>b) 원하는 비틀림 힘에 도달할 때까지</p></div>\n<div data-label=\"page_number\" data-bbox=\"0.4740,0.9710,0.5250,0.9830\" data-score=\"0.9490\" style=\"color:#888;font-size:0.9em;\">- 2 -</div>\n\n<div data-label=\"text\" data-bbox=\"0.0980,0.0710,0.9080,0.1050\" data-score=\"0.9911\"><p>만약 시험 중에 있는 부분이 원하는 힘의 한계보다 적고 계속 회전하여 분리되지 않는다면 시험을 종료한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0970,0.1150,0.9080,0.1500\" data-score=\"0.9950\"><p>6.2 굽힘 강도 그림 1과 같이 고정쇠를 위로 향하게 하여 손잡이를 고정시키고, 일반식은 14 N, 접이식은 7 N 하중을 30초 동안 캡 부분에 가하여 시험한다.</p></div>\n<div data-label=\"image\" data-bbox=\"0.3100,0.1840,0.6910,0.3470\"><figure style=\"text-align:center;\"><img src=\"/v2/api/figures/4a6eded78e684ce3beba5df22c1d997f/3/fig_0.jpg?exp=1788163362&sig=d9b089e51564b8626b8a42c014af6410c7fee474a1b94ba119015c194cf8c517&aid=1e7abe98e7320523\" alt=\"image\" style=\"width:38%;height:auto;\" /></figure></div>\n<div data-label=\"image_caption\" data-bbox=\"0.4050,0.3560,0.5940,0.3720\" data-score=\"0.9915\" style=\"font-weight:600;\">그림 1. 굽힘 강도 시험</div>\n<div data-label=\"text\" data-bbox=\"0.0880,0.4060,0.9080,0.4420\" data-score=\"0.9759\"><p>6.3 구조 안전성 시험 구조 안전성 시험은  \\( 12 \\pm 0.5 \\)  m/s의 유속에서 바람의 방향으로  \\( (45 \\pm 1)^{\\circ} \\)  기울여서 20초간 유지하여 시험을 실시한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.4500,0.9080,0.5030\" data-score=\"0.9943\"><p>6.4 자외선 차단율 자외선 차단율 시험은 KS K 0850에 따른다. 단, 자외선 광원은 인공 태양광을 사용한다. 시료는 우산 캡으로부터 30 cm이내의 부위에서 10 cm거리를 두고 5개 부위를 채취하여 가장 연한 부위 5회, 무늬 등을 고려한 진한부위 5회를 측정하여 무늬비율을 고려한 평균값으로 한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.0910,0.5300,0.2870,0.5460\" data-score=\"0.9988\"><h1>7. 표시사항 및 표시방법</h1></div>\n<div data-label=\"text\" data-bbox=\"0.0970,0.5550,0.9080,0.5900\" data-score=\"0.9896\"><p>7.1 표시 제품 또는 최소단위 포장마다 소비자가 알아보기 쉽도록 한글로 스티커 또는 꼬리표에 인쇄하여 표시하여야 한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0990,0.5990,0.2000,0.6150\" data-score=\"0.9991\"><p>7.1.1 모델명</p></div>\n<div data-label=\"text\" data-bbox=\"0.0990,0.6230,0.2420,0.6390\" data-score=\"0.9995\"><p>7.1.2 원단의 조성</p></div>\n<div data-label=\"text\" data-bbox=\"0.0990,0.6480,0.3120,0.6640\" data-score=\"0.9933\"><p>7.1.3 자외선 차단율 : %</p></div>\n<div data-label=\"text\" data-bbox=\"0.0990,0.6730,0.2160,0.6890\" data-score=\"0.9994\"><p>7.1.4 제조자명</p></div>\n<div data-label=\"text\" data-bbox=\"0.0990,0.6980,0.3370,0.7150\" data-score=\"0.9998\"><p>7.1.5 수입자명(수입품에 한함)</p></div>\n<div data-label=\"text\" data-bbox=\"0.0990,0.7230,0.4030,0.7390\" data-score=\"0.9992\"><p>7.1.6 주소 및 전화번호(지역번호 포함)</p></div>\n<div data-label=\"text\" data-bbox=\"0.0990,0.7480,0.2160,0.7640\" data-score=\"0.9993\"><p>7.1.7 제조국명</p></div>\n<div data-label=\"text\" data-bbox=\"0.0990,0.7730,0.2620,0.7890\" data-score=\"0.9798\"><p>7.2 사용상 주의사항</p></div>\n<div data-label=\"page_number\" data-bbox=\"0.4740,0.9710,0.5260,0.9830\" data-score=\"0.9364\" style=\"color:#888;font-size:0.9em;\">- 3 -</div>\n\n<div data-label=\"table\" data-bbox=\"0.1130,0.3190,0.5680,0.4700\" data-score=\"0.9953\"><table><tr><td>개정</td><td>정: 기술표준원고시</td><td>제2009-979호(2009. 12. 30)</td></tr><tr><td>개정</td><td>정: 기술표준원고시</td><td>제2010-221호(2010. 6. 16)</td></tr><tr><td>개정</td><td>정: 기술표준원고시</td><td>제2010-360호(2010. 8. 31)</td></tr><tr><td>개정</td><td>정: 국가기술표준원고시</td><td>제2015-686호(2015. 12. 30)</td></tr><tr><td>개정</td><td>정: 국가기술표준원고시</td><td>제2017-033호(2017. 2. 8)</td></tr><tr><td>개정</td><td>정: 국가기술표준원고시</td><td>제2018-195호(2018. 6. 29)</td></tr><tr><td>개정</td><td>정: 국가기술표준원고시</td><td>제2019-0159호(2019. 7. 18.)</td></tr><tr><td>개정</td><td>정: 국가기술표준원고시</td><td>제2024-0072호(2024. 4. 29.)</td></tr></table></div>\n<div data-label=\"page_number\" data-bbox=\"0.4750,0.9710,0.5240,0.9820\" data-score=\"0.9441\" style=\"color:#888;font-size:0.9em;\">- 4 -</div>",
+        "text_ko": null,
+        "pages": [
+          {
+            "page_number": 1,
+            "part_number": null,
+            "text": "<div data-label=\"title\" data-bbox=\"0.4070,0.0680,0.5240,0.0860\" data-score=\"0.9334\"><h1>안전기준</h1></div>\n<div data-label=\"title\" data-bbox=\"0.4020,0.1020,0.5290,0.1200\" data-score=\"1.0000\"><h1>우산 및 양산</h1></div>\n<div data-label=\"title\" data-bbox=\"0.7170,0.1020,0.8140,0.1200\" data-score=\"0.9992\"><h1>부속서 20</h1></div>\n<div data-label=\"title\" data-bbox=\"0.3640,0.1380,0.5660,0.1560\" data-score=\"0.9987\"><h1>(Umbrella & Parasol)</h1></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.2120,0.9060,0.2470\" data-score=\"0.9972\"><p>1. 적용범위 이 기준은 우산, 양산 및 우산 겸용 양산에 대하여 적용한다. 다만, 일회성의 용도 등으로 제조된 비닐우산 등은 제외한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.2750,0.9060,0.3100\" data-score=\"0.9938\"><p>2. 인용표준 다음에 나타내는 표준은 이 검사기준 및 방법에 인용됨으로써 이 검사기준 및 방법의 일부를 구성한다. 이러한 인용표준은 그 최신표준을 적용한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0990,0.3200,0.2920,0.3350\" data-score=\"0.9935\"><p>KS G 3711 우산·양산</p></div>\n<div data-label=\"text\" data-bbox=\"0.0990,0.3450,0.5850,0.3600\" data-score=\"0.9985\"><p>KS K 0850 텍스타일의 자외선 차단율 및 차단지수 시험방법</p></div>\n<div data-label=\"text\" data-bbox=\"0.0990,0.3690,0.3670,0.3850\" data-score=\"0.9999\"><p>안전확인 안전기준 부속서6 완구</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.4140,0.6600,0.4300\" data-score=\"0.9890\"><p>3. 용어의 정의 이 기준에 사용하는 주된 용어의 정의는 다음에 따른다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0990,0.4390,0.5400,0.4540\" data-score=\"0.9402\"><p>3.1 살 대 살,대 및 부속품들이 조립된 상태를 말한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0980,0.4630,0.9060,0.5170\" data-score=\"0.9782\"><p>3.2 살 윗살, 윗살보조살, 끝살, 받침살, 받침살보조살을 말한다. 윗살은 우산의 천정을 지지하는 살 중에서 가장 힘을 많이 받는 중앙의 살로서, 주로 열처리된 살(Topless형 및 미니형 살대에서는 홈 받침살 및 보조살 아래의 주살을 말한다)을 말한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0980,0.5260,0.9050,0.5610\" data-score=\"0.9932\"><p>3.3 대 손잡이가 달려 있는 중앙의 봉을 말하며 일반식대(일체형)와 1단, 2단, 3단 등으로 접을 수 있는 접이식대가 있다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0980,0.5700,0.9050,0.6050\" data-score=\"0.9156\"><p>3.4 흙 살 경강선 또는 FRP 등의 재료로 U자형 또는 오목 형태로 흡을 가공하여 주로 받침살 또는 웃살로 사용되어지는 삶을 말한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0980,0.6140,0.7830,0.6300\" data-score=\"0.9868\"><p>3.5 통 살 경강선 또는 FRP 등의 재료를 이용하여 원통형 형태로 가공한 삶을 말한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0990,0.6390,0.6860,0.6550\" data-score=\"0.9760\"><p>3.6 고정쇠 접이식 우산을 펼쳤을때 고정을 하기 위한 고정장치를 말한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.6840,0.4210,0.6990\" data-score=\"0.9981\"><p>4. 종류 우산·양산의 종류는 표 1과 같다.</p></div>\n<div data-label=\"table_caption\" data-bbox=\"0.4550,0.7090,0.5420,0.7240\" data-score=\"0.9778\" style=\"font-weight:600;\">표 1. 종류</div>\n<div data-label=\"table\" data-bbox=\"0.1250,0.7370,0.8750,0.8510\" data-score=\"0.9917\"><table><tr><td>구분</td><td>종류</td></tr><tr><td rowspan=\"2\">일반식</td><td>수동우산(장우산 포함), 수동양산</td></tr><tr><td>자동우산(장우산 포함), 자동양산</td></tr><tr><td rowspan=\"2\">접이식</td><td>수동우산, 수동양산</td></tr><tr><td>자동우산, 자동양산</td></tr></table></div>\n<div data-label=\"text\" data-bbox=\"0.0910,0.8630,0.1850,0.8780\" data-score=\"0.9911\"><p>5. 안전요건</p></div>\n<div data-label=\"text\" data-bbox=\"0.0990,0.8880,0.2450,0.9030\" data-score=\"0.9970\"><p>5.1 부품 조립강도</p></div>\n<div data-label=\"text\" data-bbox=\"0.0980,0.9130,0.9000,0.9470\" data-score=\"0.9965\"><p>5.1.1 손잡이와 대의 강도 손잡이와 대의 강도는 표 2와 같으며 6.1.1에 따라 시험하였을 때 균열·파손·이완 등이 없어야 한다.</p></div>\n<div data-label=\"page_number\" data-bbox=\"0.4740,0.9710,0.5260,0.9820\" data-score=\"0.8524\" style=\"color:#888;font-size:0.9em;\">- 1 -</div>",
+            "text_ko": null,
+            "links": null,
+            "confidence": 0.9782
+          },
+          {
+            "page_number": 2,
+            "part_number": null,
+            "text": "<div data-label=\"table_caption\" data-bbox=\"0.3970,0.0700,0.6000,0.0860\" data-score=\"0.9964\" style=\"font-weight:600;\">표 2. 손잡이와 대의 강도</div>\n<div data-label=\"table\" data-bbox=\"0.1210,0.0980,0.8790,0.2430\" data-score=\"0.9928\"><table><tr><td colspan=\"2\">구 분</td><td>기준치(N)</td></tr><tr><td rowspan=\"2\">일반식</td><td>수동</td><td>380 이상</td></tr><tr><td>자동</td><td>420 이상</td></tr><tr><td rowspan=\"2\">접이식</td><td>수동</td><td>250 이상</td></tr><tr><td>자동</td><td>420 이상</td></tr></table></div>\n<div data-label=\"text\" data-bbox=\"0.0980,0.2650,0.9040,0.2990\" data-score=\"0.9913\"><p>5.1.2 끝살과 천의 마무리 강도 끝살과 천의 마무리 강도는 6.1.2에 따라 시험하였을 때 우산 끝살과 천이 분리되지 않아야 한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0980,0.3080,0.9050,0.3620\" data-score=\"0.9944\"><p>5.1.3 손잡이와 캡의 조립강도 우산 손잡이와 캡의 조립 강도는 6.1.3에 따라 시험하였을 때, 견고하게 조립되어 분리되지 않아야 한다. 단, 접이식(수동) 우산 및 양산은 손잡이의 조립강도 안전요건에서 제외된다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0980,0.3710,0.7900,0.3870\" data-score=\"0.9943\"><p>5.2 굽힘강도 굽힘강도는 6.2에 따라 시험하였을 때 절단 또는 구부러짐이 없어야 한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0980,0.3960,0.9040,0.4500\" data-score=\"0.9609\"><p>5.3 구조 안전성 구조안전성은 6.3에 따라 시험하였을 때 절단 또는 구부러짐이 없어야 한다. 또한 손잡이 또는 캡의 월부분 등이 인체에 위해를 미칠 우려가 있는 예리한 돌출부 또는 뽅족한 부분이 없는 구조이어야 한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0980,0.4590,0.8500,0.4750\" data-score=\"0.9966\"><p>5.4 자외선(UV-R) 차단율 자외선(UV-R)차단율은 6.4에 따라 시험하였을 때 표 3과 같아야 한다.</p></div>\n<div data-label=\"table_caption\" data-bbox=\"0.4180,0.4960,0.5780,0.5110\" data-score=\"0.9899\" style=\"font-weight:600;\">표 3. 자외선 차단율</div>\n<div data-label=\"table\" data-bbox=\"0.1230,0.5230,0.8780,0.6240\" data-score=\"0.9824\"><table><tr><td>종 류</td><td>자외선 차단율(%)</td></tr><tr><td>골프용 양산 및 우산·양산 겸용</td><td>90 이상</td></tr><tr><td>양산 및 우산·양산 겸용</td><td>85 이상</td></tr></table></div>\n<div data-label=\"text\" data-bbox=\"0.1230,0.6380,0.8500,0.6530\" data-score=\"0.9944\"><p>비고 1. 골프용 양산 및 우산·양산 겸용제품은 살의 길이가 650 mm 이상인 제품을 말한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1640,0.6630,0.8700,0.6970\" data-score=\"0.9931\"><p>2. 면, 마가 40% 이상 함유된 원단, 자수원단, 번아웃 원단 등은 표 3의 요구사항을 충족하지 않아도 되나 자외선 차단율은 표시하여야 한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.0900,0.7390,0.1850,0.7540\" data-score=\"0.9860\"><h1>6. 시험방법</h1></div>\n<div data-label=\"title\" data-bbox=\"0.0980,0.7640,0.2790,0.7800\" data-score=\"0.9993\"><h1>6.1 부품조립 강도시험</h1></div>\n<div data-label=\"text\" data-bbox=\"0.0980,0.7890,0.9050,0.8240\" data-score=\"0.9813\"><p>6.1.1 손잡이와 대의 강도시험 분당 300 ± 20 mm 속도로 손잡이가 빠지는 방향으로 잡아 당졌을 때, 손잡이의 균열·이완·파손이 발생할 때의 최대강도를 측정한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0970,0.8330,0.9040,0.8680\" data-score=\"0.9939\"><p>6.1.2 끝살과 천의 마무리 강도 우산을 접은상태(단 우산의 끈을 해체한 상태)에서 살대끝 방향으로 20 N의 힘으로 당기어 1분간 유지한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0970,0.8770,0.9050,0.9120\" data-score=\"0.9887\"><p>6.1.3 손잡이와 캡의 조립강도 토오크 게이지로 다음의 상태가 될 때까지 시계방향으로 손잡이에 대하여는 1.0 N·m, 캡에 대하여는 0.3 N·m토크를 2초간 가한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1060,0.9220,0.4460,0.9370\" data-score=\"0.9906\"><p>a) 원래 위치에서 180° 회전할 때까지 또는</p></div>\n<div data-label=\"text\" data-bbox=\"0.1060,0.9460,0.4050,0.9620\" data-score=\"0.9986\"><p>b) 원하는 비틀림 힘에 도달할 때까지</p></div>\n<div data-label=\"page_number\" data-bbox=\"0.4740,0.9710,0.5250,0.9830\" data-score=\"0.9490\" style=\"color:#888;font-size:0.9em;\">- 2 -</div>",
+            "text_ko": null,
+            "links": null,
+            "confidence": 0.9881
+          },
+          {
+            "page_number": 3,
+            "part_number": null,
+            "text": "<div data-label=\"text\" data-bbox=\"0.0980,0.0710,0.9080,0.1050\" data-score=\"0.9911\"><p>만약 시험 중에 있는 부분이 원하는 힘의 한계보다 적고 계속 회전하여 분리되지 않는다면 시험을 종료한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0970,0.1150,0.9080,0.1500\" data-score=\"0.9950\"><p>6.2 굽힘 강도 그림 1과 같이 고정쇠를 위로 향하게 하여 손잡이를 고정시키고, 일반식은 14 N, 접이식은 7 N 하중을 30초 동안 캡 부분에 가하여 시험한다.</p></div>\n<div data-label=\"image\" data-bbox=\"0.3100,0.1840,0.6910,0.3470\"><figure style=\"text-align:center;\"><img src=\"/v2/api/figures/4a6eded78e684ce3beba5df22c1d997f/3/fig_0.jpg?exp=1788163362&sig=d9b089e51564b8626b8a42c014af6410c7fee474a1b94ba119015c194cf8c517&aid=1e7abe98e7320523\" alt=\"image\" style=\"width:38%;height:auto;\" /></figure></div>\n<div data-label=\"image_caption\" data-bbox=\"0.4050,0.3560,0.5940,0.3720\" data-score=\"0.9915\" style=\"font-weight:600;\">그림 1. 굽힘 강도 시험</div>\n<div data-label=\"text\" data-bbox=\"0.0880,0.4060,0.9080,0.4420\" data-score=\"0.9759\"><p>6.3 구조 안전성 시험 구조 안전성 시험은  \\( 12 \\pm 0.5 \\)  m/s의 유속에서 바람의 방향으로  \\( (45 \\pm 1)^{\\circ} \\)  기울여서 20초간 유지하여 시험을 실시한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.4500,0.9080,0.5030\" data-score=\"0.9943\"><p>6.4 자외선 차단율 자외선 차단율 시험은 KS K 0850에 따른다. 단, 자외선 광원은 인공 태양광을 사용한다. 시료는 우산 캡으로부터 30 cm이내의 부위에서 10 cm거리를 두고 5개 부위를 채취하여 가장 연한 부위 5회, 무늬 등을 고려한 진한부위 5회를 측정하여 무늬비율을 고려한 평균값으로 한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.0910,0.5300,0.2870,0.5460\" data-score=\"0.9988\"><h1>7. 표시사항 및 표시방법</h1></div>\n<div data-label=\"text\" data-bbox=\"0.0970,0.5550,0.9080,0.5900\" data-score=\"0.9896\"><p>7.1 표시 제품 또는 최소단위 포장마다 소비자가 알아보기 쉽도록 한글로 스티커 또는 꼬리표에 인쇄하여 표시하여야 한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0990,0.5990,0.2000,0.6150\" data-score=\"0.9991\"><p>7.1.1 모델명</p></div>\n<div data-label=\"text\" data-bbox=\"0.0990,0.6230,0.2420,0.6390\" data-score=\"0.9995\"><p>7.1.2 원단의 조성</p></div>\n<div data-label=\"text\" data-bbox=\"0.0990,0.6480,0.3120,0.6640\" data-score=\"0.9933\"><p>7.1.3 자외선 차단율 : %</p></div>\n<div data-label=\"text\" data-bbox=\"0.0990,0.6730,0.2160,0.6890\" data-score=\"0.9994\"><p>7.1.4 제조자명</p></div>\n<div data-label=\"text\" data-bbox=\"0.0990,0.6980,0.3370,0.7150\" data-score=\"0.9998\"><p>7.1.5 수입자명(수입품에 한함)</p></div>\n<div data-label=\"text\" data-bbox=\"0.0990,0.7230,0.4030,0.7390\" data-score=\"0.9992\"><p>7.1.6 주소 및 전화번호(지역번호 포함)</p></div>\n<div data-label=\"text\" data-bbox=\"0.0990,0.7480,0.2160,0.7640\" data-score=\"0.9993\"><p>7.1.7 제조국명</p></div>\n<div data-label=\"text\" data-bbox=\"0.0990,0.7730,0.2620,0.7890\" data-score=\"0.9798\"><p>7.2 사용상 주의사항</p></div>\n<div data-label=\"page_number\" data-bbox=\"0.4740,0.9710,0.5260,0.9830\" data-score=\"0.9364\" style=\"color:#888;font-size:0.9em;\">- 3 -</div>",
+            "text_ko": null,
+            "links": null,
+            "confidence": 0.9901
+          },
+          {
+            "page_number": 4,
+            "part_number": null,
+            "text": "<div data-label=\"table\" data-bbox=\"0.1130,0.3190,0.5680,0.4700\" data-score=\"0.9953\"><table><tr><td>개정</td><td>정: 기술표준원고시</td><td>제2009-979호(2009. 12. 30)</td></tr><tr><td>개정</td><td>정: 기술표준원고시</td><td>제2010-221호(2010. 6. 16)</td></tr><tr><td>개정</td><td>정: 기술표준원고시</td><td>제2010-360호(2010. 8. 31)</td></tr><tr><td>개정</td><td>정: 국가기술표준원고시</td><td>제2015-686호(2015. 12. 30)</td></tr><tr><td>개정</td><td>정: 국가기술표준원고시</td><td>제2017-033호(2017. 2. 8)</td></tr><tr><td>개정</td><td>정: 국가기술표준원고시</td><td>제2018-195호(2018. 6. 29)</td></tr><tr><td>개정</td><td>정: 국가기술표준원고시</td><td>제2019-0159호(2019. 7. 18.)</td></tr><tr><td>개정</td><td>정: 국가기술표준원고시</td><td>제2024-0072호(2024. 4. 29.)</td></tr></table></div>\n<div data-label=\"page_number\" data-bbox=\"0.4750,0.9710,0.5240,0.9820\" data-score=\"0.9441\" style=\"color:#888;font-size:0.9em;\">- 4 -</div>",
+            "text_ko": null,
+            "links": null,
+            "confidence": 0.9697
+          }
+        ],
+        "latency_seconds": 6.346907283998917,
+        "confidence": 0.9815,
+        "truncated": false,
+        "full_text_length": null
+      },
+      "caption": {
+        "provider": "inference_provider",
+        "model": "caption_model_onprem",
+        "pages": [
+          {
+            "page_number": 1,
+            "part_number": null,
+            "entities": {
+              "text": "안전기준\n우산 및 양산\n(Umbrella & Parasol)\n부속서 20\n\n1. 적용범위 이 기준은 우산, 양산 및 우산 겸용 양산에 대하여 적용한다. 다만, 일회성의 용도 등으로 제조된 비닐우산 등은 제외한다.\n\n2. 인용표준 다음에 나타내는 표준은 이 검사기준 및 방법에 인용됨으로써 이 검사기준 및 방법의 일부를 구성한다. 이러한 인용표준은 그 최신표준을 적용한다.\nKS G 3711 우산 · 양산\nKS K 0850 텍스타일의 자외선 차단율 및 차단지수 시험방법\n안전확인 안전기준 부속서6 완구\n\n3. 용어의 정의 이 기준에 사용하는 주된 용어의 정의는 다음에 따른다.\n\n3.1 살대 살, 대 및 부착품들이 조립된 상태를 말한다.\n\n3.2 샅 윗살,윗살보조살,끝살,받침살,받침살보조살을 말한다. 윗샅은 우산의 천정을 지지하는 살 중에서 가장 힘을 많이 받는 중앙의 샅으로서, 주로 열처리된 샅(Topless형 및 미니형 샅대에서는 홈 받침샅 및 보조살 아래의 주샅을 말한다)을 말한다.\n\n3.3 대 손잡이가 달려 있는 중앙의 봉을 말하며 일반식대(일체형)와 1단, 2단, 3단 등으로 접을 수 있는 접이식대가 있다.\n\n3.4 홈샅 경강선 또는 FRP 등의 재료로 U자형 또는 오목 형태로 홈을 가공하여 주로 받침샅 또는 윗살로 사용되어지는 샅을 말한다.\n\n3.5 통 샅 경강선 또는 FRP 등의 재료를 이용하여 원통형 형태로 가공한 샅을 말한다.\n\n3.6 고정쇠 접이식 우산을 펼쳤을 때 고정을 하기 위한 고정장치를 말한다.\n\n4. 종류 우산·양산의 종류는 표 1과 같다.\n\n표 1. 종류\n[표 내용]\n\n5. 안전요건\n\n5.1 부품 조립강도\n\n5.1.1 손잡이와 대의 강도 손잡이와 대의 강도는 표 2와 같으며 6.1.1에 따라 시험하였을 때 균열 · 파손 · 이탈 등이 없어야 한다.\n\n- 1 -",
+              "graph": "",
+              "diagram": "",
+              "image_overview": "",
+              "table_markdown": "| 구분 | 종류 |\n| :--- | :--- |\n| 일반식 | 수동우산(장우산 포함), 수동양산<br>자동우산(장우산 포함), 자동양산 |\n| 접이식 | 수동우산, 수동양산<br>자동우산, 자동양산 |",
+              "visual_elements": "문서는 제목과 부제목이 상단에 위치하며, 그 아래로 번호가 매겨진 주요 섹션(1. 적용범위, 2. 인용표준 등)이 차례대로 배치되어 있습니다. 각 섹션은 해당 내용을 설명하는 텍스트로 구성되어 있으며, 하단부에는 문단의 분류를 나타내는 표 1이 삽입되어 있습니다."
+            },
+            "entities_ko": null
+          },
+          {
+            "page_number": 2,
+            "part_number": null,
+            "entities": {
+              "text": "표 2. 손잡이와 대의 강도\n구분 기준치(N)\n일반식 수 동 380 이상\n자 동 420 이상\n접이식 수 동 250 이상\n자 동 420 이상\n5.1.2 끝살과 천의 마무리 강도 끝살과 천의 마무리 강도는 6.1.2에 따라 시험하였을 때 우산 끝살과 천이 분리되지 않아야 한다.\n5.1.3 손잡이와 캡의 조립강도 우산 손잡이와 캡의 조립 강도는 6.1.3에 따라 시험하였을 때, 견고하게 조립되어 분리되지 않아야 한다. 단, 접이식(수동) 우산 및 양산은 손잡이의 조립강도 안전요건에서 제외된다.\n5.2 굽힘강도 굽힘강도는 6.2에 따라 시험하였을 때 절단 또는 구부러짐이 없어야 한다.\n5.3 구조안전성 구조안전성은 6.3에 따라 시험하였을 때 절단 또는 구부러짐이 없어야 한다. 또한 손잡이 또는 캡의 윗부분 등이 인체에 위해를 미칠 우려가 있는 예리한 돌출부 뾰족한 부분이 없는 구조이어야 한다.\n5.4 자외선(UV-R) 차단율 자외선(UV-R)차단율은 6.4에 따라 시험하였을 때 표 3과 같아야 한다.\n표 3. 자외선 차단율\n종 류 자외선 차단율(%)\n골프용 양산 및 우산·양산 겸용 90 이상\n양산 및 우산·양산 겸용 85 이상\n비고 1. 골프용 양산 및 우산 · 양산 겸용제품은 살의 길이가 650 mm 이상인 제품을 말한다.\n2. 면, 마가 40% 이상 함유된 원단, 자수원단, 번아웃 원단 등은 표 3의 요구사항을 충족하지 않아도 되나 자외선 차단율은 표시하여야 한다.\n6. 시험방법\n6.1 부품조립 강도시험\n6.1.1 손잡이와 대의 강도시험 분당 300 ± 20 mm 속도로 손잡이가 빠지는 방향으로 잡아 당겼을 때, 손잡이의 균열·이완·파손이 발생할 때의 최대강도를 측정한다.\n6.1.2 끝살과 천의 마무리 강도 우산을 접은상태(단 우산의 끈을 해제한 상태)에서 살대끝 방향으로 20 N의 힘으로 당기어 1분간 유지한다.\n6.1.3 손잡이와 캡의 조립강도 토오크 게이지로 다음의 상태가 될 때까지 시계방향으로 손잡이에 대하여는 1.0 N • m, 캡에 대하여는 0.3 N • m토크를 2초간 가한다.\na) 원래 위치에서 180° 회전할 때까지 또는\nb) 원하는 비틀림 힘에 도달할 때까지\n- 2 -",
+              "graph": "",
+              "diagram": "",
+              "image_overview": "",
+              "table_markdown": "| 구분 | 기준치(N) |\n| :--- | :--- |\n| 일반식 | 수동 | 380 이상 |\n| | 자동 | 420 이상 |\n| 접이식 | 수동 | 250 이상 |\n| | 자동 | 420 이상 |\n\n표 2. 손잡이와 대의 강도",
+              "visual_elements": "문서의 상단과 중앙에 두 개의 주요 표가 배치되어 있으며, 각 표 주변과 하단에는 해당 표를 설명하는 번호가 매겨진 본문 단락들이 위치하고 있습니다."
+            },
+            "entities_ko": null
+          },
+          {
+            "page_number": 3,
+            "part_number": null,
+            "entities": {
+              "text": "만약 시험 중에 있는 부분이 원하는 힘의 한계보다 적고 계속 회전하여 분리되지 않는다면 시험을 종료한다.\n\n6.2 굽힘 강도 그림 1과 같이 고정쇠를 위로 향하게 하여 손잡이를 고정시키고, 일반식은 14 N, 접이식은 7 N 하중을 30초 동안 캔 부분에 가하여 시험한다.\n\n고정쇠\n하중\n그림 1. 굽힘 강도 시험\n\n6.3 구조 안전성 실험 구조 안전성 실험은 12 ± 0.5 m/s 의 유속에서 바람의 방향으로 (45 ± 1)° 기울여서 20초간 유지하여 시험을 실시한다.\n6.4 자외선 차단율 자외선 차단율 실험은 KS K 0850에 따른다. 단, 자외선 광원은 인공 태양광을 사용한다. 시료는 우산 캡으로부터 30 cm이내의 부위에서 10 cm거리를 두고 5개 부위를 채취하여 가장 연한 부위 5회, 무늬 등을 고려한 진한부위 5회를 측정하여 무늬비율을 고려한 평균값으로 한다.\n\n7. 표시사항 및 표시방법\n7.1 표시 제품 또는 최소단위 포장마다 소비자가 알아보기 쉽도록 한글로 스티커 또는 꼬리표에 인쇄하여 표시하여야 한다.\n7.1.1 모델명\n7.1.2 원단의 조성\n7.1.3 자외선 차단율 : %\n7.1.4 제조자명\n7.1.5 수입자명(수입품에 한함)\n7.1.6 주소 및 전화번호(지역번호 포함)\n7.1.7 제조국명\n7.2 사용상 주의사항\n- 3 -",
+              "graph": "",
+              "diagram": "그림 1은 우산의 굽힘 강도 시험 setups를 개념적으로 나타냅니다. 왼쪽의 벽면에 고정된 기구가 있고, 중앙에는 수평으로 설치된 손잡이가 있으며, 우측 끝(갯 부분)에는 아래쪽 방향으로 힘이 가해지는 것을 보여줍니다. 화살표와 라벨을 통해 '고정쇠'가 기구를 벽면에 고정하는 역할을 하고, '하중'이 우산의 갯 부분에 작용함을 명확히 표시합니다.",
+              "image_overview": "",
+              "table_markdown": "",
+              "visual_elements": "본문 텍스트의 섹션인 6.2 '굽힘 강도'는 그 직하에 위치한 그림 1을 참조하여 실험 절차를 설명합니다. 또한, 본문 하단의 '7. 표시사항 및 표시방법'은 제품 또는 포장에 명시해야 할 정보들을 열거하고 있습니다."
+            },
+            "entities_ko": null
+          },
+          {
+            "page_number": 4,
+            "part_number": null,
+            "entities": {
+              "text": "제 정 : 기술표준원고시     제2009-979호(2009. 12. 30)\n개정 : 기술표준원고시     제2010-221호(2010. 6. 16)\n개정 : 기술표준원고시     제2010-360호(2010. 8. 31)\n개정 : 국가기술표준원고시 제2015-686호(2015. 12. 30)\n개정 : 국가기술표준원고시 제2017-033호(2017. 2. 8)\n개정 : 국가기술표준원고시 제2018-195호(2018. 6. 29)\n개정 : 국가기술표준원고시 제2019-0159호(2019. 7. 18.)\n개정 : 국가기술표준원고시 제2024-0072호(2024. 4. 29.)\n\n- 4 -",
+              "graph": "",
+              "diagram": "",
+              "image_overview": "",
+              "table_markdown": "| 제정 : 기술표준원고시 | 제2009-979호(2009. 12. 30) |\n|---|---|\n| 개정 : 기술표준원고시 | 제2010-221호(2010. 6. 16) |\n| 개정 : 기술표준원고시 | 제2010-360호(2010. 8. 31) |\n| 개정 : 국가기술표준원고시 | 제2015-686호(2015. 12. 30) |\n| 개정 : 국가기술표준원고시 | 제2017-033호(2017. 2. 8) |\n| 개정 : 국가기술표준원고시 | 제2018-195호(2018. 6. 29) |\n| 개정 : 국가기술표준원고시 | 제2019-0159호(2019. 7. 18.) |\n| 개정 : 국가기술표준원고시 | 제2024-0072호(2024. 4. 29.) |",
+              "visual_elements": "문서의 중앙 하단 부분에는 연혁(제정 및 개정 이력)이 정리된 하나의 사각형 텍스트 박스가 위치해 있습니다."
+            },
+            "entities_ko": null
+          }
+        ],
+        "latency_seconds": 15.054837501001202
+      },
+      "tagger": {
+        "provider": "hierarchy",
+        "model": "hierarchy-ko",
+        "pages": [
+          {
+            "page_number": 1,
+            "part_number": null,
+            "keywords": [],
+            "summary": null,
+            "hierarchy": [
+              {
+                "x0": 0.09,
+                "text": "이 기준은 우산, 양산 및 우산 겸용 양산에 대하여 적용한다. 다만, 일회성의 용도 등으로 제조된 비닐우산 등은 제외한다.",
+                "type": "section",
+                "title": "적용범위",
+                "marker": "1",
+                "confidence": 0.9972,
+                "level_code": "L3",
+                "level_name": "절"
+              },
+              {
+                "x0": 0.089,
+                "text": "이 검사기준 및 방법에 인용됨으로써 이 검사기준 및 방법의 일부를 구성한다. 이러한 인용표준은 그 최신표준을 적용한다.\nKS G 3711 우산·양산\nKS K 0850 텍스타일의 자외선 차단율 및 차단지수 시험방법\n안전확인 안전기준 부속서6 완구",
+                "type": "section",
+                "title": "인용표준 다음에 나타내는 표준은",
+                "marker": "2",
+                "confidence": 0.9938,
+                "level_code": "L3",
+                "level_name": "절"
+              },
+              {
+                "x0": 0.09,
+                "text": "이 기준에 사용하는 주된 용어의 정의는 다음에 따른다.\n3.1 살 대 살,대 및 부속품들이 조립된 상태를 말한다.\n3.2 살 윗살, 윗살보조살, 끝살, 받침살, 받침살보조살을 말한다. 윗살은 우산의 천정을 지지하는 살 중에서 가장 힘을 많이 받는 중앙의 살로서, 주로 열처리된 살(Topless형 및 미니형 살대에서는 홈 받침살 및 보조살 아래의 주살을 말한다)을 말한다.",
+                "type": "section",
+                "title": "용어의 정의",
+                "marker": "3",
+                "confidence": 0.989,
+                "level_code": "L3",
+                "level_name": "절"
+              },
+              {
+                "x0": 0.098,
+                "text": "대 손잡이가 달려 있는 중앙의 봉을 말하며 일반식대(일체형)와 1단, 2단, 3단 등으로 접을 수 있는 접이식대가 있다.",
+                "type": "subsection",
+                "title": "대 손잡이가 달려 있는 중앙의 봉을 말하며 일반식대(일체형)와 1단, 2",
+                "marker": "3.3",
+                "breadcrumb": [
+                  "3"
+                ],
+                "confidence": 0.9932,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "x0": 0.098,
+                "text": "또는 FRP 등의 재료로 U자형 또는 오목 형태로 흡을 가공하여 주로 받침살 또는 웃살로 사용되어지는 삶을 말한다.",
+                "type": "subsection",
+                "title": "흙 살 경강선",
+                "marker": "3.4",
+                "breadcrumb": [
+                  "3"
+                ],
+                "confidence": 0.9156,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "x0": 0.098,
+                "text": "또는 FRP 등의 재료를 이용하여 원통형 형태로 가공한 삶을 말한다.",
+                "type": "subsection",
+                "title": "통 살 경강선",
+                "marker": "3.5",
+                "breadcrumb": [
+                  "3"
+                ],
+                "confidence": 0.9868,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "x0": 0.099,
+                "type": "subsection",
+                "title": "고정쇠 접이식 우산을 펼쳤을때 고정을 하기 위한 고정장치를 말한다.",
+                "marker": "3.6",
+                "breadcrumb": [
+                  "3"
+                ],
+                "confidence": 0.976,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "x0": 0.09,
+                "text": "표 1. 종류",
+                "type": "section",
+                "title": "종류 우산·양산의 종류는 표 1과 같다.",
+                "marker": "4",
+                "confidence": 0.9981,
+                "level_code": "L3",
+                "level_name": "절"
+              },
+              {
+                "x0": 0.125,
+                "bbox": "0.1250,0.7370,0.8750,0.8510",
+                "type": "table",
+                "title": "표 1. 종류",
+                "caption": "<table><tr><td>구분</td><td>종류</td></tr><tr><td rowspan=\"2\">일반식</td><td>수동우산(장우산 포함), 수동양산</td></tr><tr><td>자동우산(장우산 포함), 자동양산</td></tr><tr><td rowspan=\"2\">접이식</td><td>수동우산, 수동양산</td></tr><tr><td>자동우산, 자동양산</td></tr></table>",
+                "breadcrumb": [
+                  "4"
+                ],
+                "confidence": 0.9917,
+                "level_code": "LT",
+                "level_name": "표"
+              },
+              {
+                "x0": 0.091,
+                "type": "section",
+                "title": "안전요건",
+                "marker": "5",
+                "confidence": 0.9911,
+                "level_code": "L3",
+                "level_name": "절"
+              },
+              {
+                "x0": 0.099,
+                "type": "subsection",
+                "title": "부품 조립강도",
+                "marker": "5.1",
+                "breadcrumb": [
+                  "5"
+                ],
+                "confidence": 0.997,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "x0": 0.098,
+                "text": "손잡이와 대의 강도 손잡이와 대의 강도는 표 2와 같으며 6.1.1에 따라 시험하였을 때 균열·파손·이완 등이 없어야 한다.",
+                "type": "subsubsection",
+                "title": "손잡이와 대의 강도 손잡이와 대의 강도는 표 2와 같으며 6.1.1에 따",
+                "marker": "5.1.1",
+                "breadcrumb": [
+                  "5",
+                  "5.1"
+                ],
+                "confidence": 0.9965,
+                "level_code": "L5",
+                "level_name": "세부항목"
+              }
+            ],
+            "n_nodes": 12,
+            "graph": {
+              "edges": [
+                {
+                  "to": "1:2",
+                  "from": "1:3",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "1:2",
+                  "from": "1:4",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "1:2",
+                  "from": "1:5",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "1:2",
+                  "from": "1:6",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "1:8",
+                  "from": "1:7",
+                  "type": "HAS_TABLE"
+                },
+                {
+                  "to": "1:9",
+                  "from": "1:10",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "1:10",
+                  "from": "1:11",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "2:12",
+                  "from": "1:11",
+                  "type": "HAS_TABLE"
+                },
+                {
+                  "to": "1:10",
+                  "from": "2:13",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "1:10",
+                  "from": "2:14",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "1:9",
+                  "from": "2:15",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "1:9",
+                  "from": "2:16",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "1:9",
+                  "from": "2:17",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "2:18",
+                  "from": "2:17",
+                  "type": "HAS_TABLE"
+                },
+                {
+                  "to": "2:19",
+                  "from": "2:17",
+                  "type": "HAS_NOTE"
+                },
+                {
+                  "to": "2:21",
+                  "from": "2:22",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "2:22",
+                  "from": "2:23",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "2:22",
+                  "from": "2:24",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "2:22",
+                  "from": "2:25",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "2:25",
+                  "from": "2:26",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "2:25",
+                  "from": "2:27",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "2:21",
+                  "from": "3:28",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "3:29",
+                  "from": "3:28",
+                  "type": "HAS_FIGURE"
+                },
+                {
+                  "to": "2:21",
+                  "from": "3:30",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "2:21",
+                  "from": "3:31",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "3:32",
+                  "from": "3:33",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "3:33",
+                  "from": "3:34",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "3:33",
+                  "from": "3:35",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "3:33",
+                  "from": "3:36",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "3:33",
+                  "from": "3:37",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "3:33",
+                  "from": "3:38",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "3:33",
+                  "from": "3:39",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "3:33",
+                  "from": "3:40",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "3:32",
+                  "from": "3:41",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "4:42",
+                  "from": "3:41",
+                  "type": "HAS_TABLE"
+                }
+              ],
+              "nodes": [
+                {
+                  "id": "1:0",
+                  "page": 1,
+                  "part": null,
+                  "type": "section",
+                  "order": 0,
+                  "title": "적용범위",
+                  "confidence": 0.9972,
+                  "level_code": "L3",
+                  "level_name": "절",
+                  "number_path": [
+                    "1"
+                  ]
+                },
+                {
+                  "id": "1:1",
+                  "page": 1,
+                  "part": null,
+                  "type": "section",
+                  "order": 1,
+                  "title": "인용표준 다음에 나타내는 표준은",
+                  "confidence": 0.9938,
+                  "level_code": "L3",
+                  "level_name": "절",
+                  "number_path": [
+                    "2"
+                  ]
+                },
+                {
+                  "id": "1:2",
+                  "page": 1,
+                  "part": null,
+                  "type": "section",
+                  "order": 2,
+                  "title": "용어의 정의",
+                  "confidence": 0.989,
+                  "level_code": "L3",
+                  "level_name": "절",
+                  "number_path": [
+                    "3"
+                  ]
+                },
+                {
+                  "id": "1:3",
+                  "page": 1,
+                  "part": null,
+                  "type": "subsection",
+                  "order": 3,
+                  "title": "대 손잡이가 달려 있는 중앙의 봉을 말하며 일반식대(일체형)와 1단, 2",
+                  "confidence": 0.9932,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "3",
+                    "3"
+                  ]
+                },
+                {
+                  "id": "1:4",
+                  "page": 1,
+                  "part": null,
+                  "type": "subsection",
+                  "order": 4,
+                  "title": "흙 살 경강선",
+                  "confidence": 0.9156,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "3",
+                    "4"
+                  ]
+                },
+                {
+                  "id": "1:5",
+                  "page": 1,
+                  "part": null,
+                  "type": "subsection",
+                  "order": 5,
+                  "title": "통 살 경강선",
+                  "confidence": 0.9868,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "3",
+                    "5"
+                  ]
+                },
+                {
+                  "id": "1:6",
+                  "page": 1,
+                  "part": null,
+                  "type": "subsection",
+                  "order": 6,
+                  "title": "고정쇠 접이식 우산을 펼쳤을때 고정을 하기 위한 고정장치를 말한다.",
+                  "confidence": 0.976,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "3",
+                    "6"
+                  ]
+                },
+                {
+                  "id": "1:7",
+                  "page": 1,
+                  "part": null,
+                  "type": "section",
+                  "order": 7,
+                  "title": "종류 우산·양산의 종류는 표 1과 같다.",
+                  "confidence": 0.9981,
+                  "level_code": "L3",
+                  "level_name": "절",
+                  "number_path": [
+                    "4"
+                  ]
+                },
+                {
+                  "id": "1:8",
+                  "page": 1,
+                  "part": null,
+                  "type": "table",
+                  "order": 8,
+                  "title": "표 1. 종류",
+                  "confidence": 0.9917,
+                  "level_code": "LT",
+                  "level_name": "표",
+                  "number_path": []
+                },
+                {
+                  "id": "1:9",
+                  "page": 1,
+                  "part": null,
+                  "type": "section",
+                  "order": 9,
+                  "title": "안전요건",
+                  "confidence": 0.9911,
+                  "level_code": "L3",
+                  "level_name": "절",
+                  "number_path": [
+                    "5"
+                  ]
+                },
+                {
+                  "id": "1:10",
+                  "page": 1,
+                  "part": null,
+                  "type": "subsection",
+                  "order": 10,
+                  "title": "부품 조립강도",
+                  "confidence": 0.997,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "5",
+                    "1"
+                  ]
+                },
+                {
+                  "id": "1:11",
+                  "page": 1,
+                  "part": null,
+                  "type": "subsubsection",
+                  "order": 11,
+                  "title": "손잡이와 대의 강도 손잡이와 대의 강도는 표 2와 같으며 6.1.1에 따",
+                  "confidence": 0.9965,
+                  "level_code": "L5",
+                  "level_name": "세부항목",
+                  "number_path": [
+                    "5",
+                    "1",
+                    "1"
+                  ]
+                },
+                {
+                  "id": "2:12",
+                  "page": 2,
+                  "part": null,
+                  "type": "table",
+                  "order": 12,
+                  "title": "표 2. 손잡이와 대의 강도",
+                  "confidence": 0.9928,
+                  "level_code": "LT",
+                  "level_name": "표",
+                  "number_path": []
+                },
+                {
+                  "id": "2:13",
+                  "page": 2,
+                  "part": null,
+                  "type": "subsubsection",
+                  "order": 13,
+                  "title": "끝살과 천의 마무리 강도 끝살과 천의 마무리 강도는 6.1.2에 따라 시",
+                  "confidence": 0.9913,
+                  "level_code": "L5",
+                  "level_name": "세부항목",
+                  "number_path": [
+                    "5",
+                    "1",
+                    "2"
+                  ]
+                },
+                {
+                  "id": "2:14",
+                  "page": 2,
+                  "part": null,
+                  "type": "subsubsection",
+                  "order": 14,
+                  "title": "손잡이와 캡의 조립강도 우산 손잡이와 캡의 조립 강도는 6.1.3에 따라",
+                  "confidence": 0.9944,
+                  "level_code": "L5",
+                  "level_name": "세부항목",
+                  "number_path": [
+                    "5",
+                    "1",
+                    "3"
+                  ]
+                },
+                {
+                  "id": "2:15",
+                  "page": 2,
+                  "part": null,
+                  "type": "subsection",
+                  "order": 15,
+                  "title": "굽힘강도 굽힘강도는 6.2에 따라 시험하였을 때 절단",
+                  "confidence": 0.9943,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "5",
+                    "2"
+                  ]
+                },
+                {
+                  "id": "2:16",
+                  "page": 2,
+                  "part": null,
+                  "type": "subsection",
+                  "order": 16,
+                  "title": "구조 안전성 구조안전성은 6.3에 따라 시험하였을 때 절단",
+                  "confidence": 0.9609,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "5",
+                    "3"
+                  ]
+                },
+                {
+                  "id": "2:17",
+                  "page": 2,
+                  "part": null,
+                  "type": "subsection",
+                  "order": 17,
+                  "title": "자외선(UV-R) 차단율 자외선(UV-R)차단율은 6.4에 따라 시험하였",
+                  "confidence": 0.9966,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "5",
+                    "4"
+                  ]
+                },
+                {
+                  "id": "2:18",
+                  "page": 2,
+                  "part": null,
+                  "type": "table",
+                  "order": 18,
+                  "title": "표 3. 자외선 차단율",
+                  "confidence": 0.9824,
+                  "level_code": "LT",
+                  "level_name": "표",
+                  "number_path": []
+                },
+                {
+                  "id": "2:19",
+                  "page": 2,
+                  "part": null,
+                  "type": "note",
+                  "order": 19,
+                  "title": "비고 1. 골프용 양산 및 우산·양산 겸용제품은 살의 길이가 650 mm 이상인 제품을 말한다.",
+                  "confidence": 0.9944,
+                  "level_code": "LN",
+                  "level_name": "주석",
+                  "number_path": []
+                },
+                {
+                  "id": "2:20",
+                  "page": 2,
+                  "part": null,
+                  "type": "section",
+                  "order": 20,
+                  "title": "면, 마가 40% 이상 함유된 원단, 자수원단, 번아웃 원단 등은 표 3",
+                  "confidence": 0.9931,
+                  "level_code": "L3",
+                  "level_name": "절",
+                  "number_path": [
+                    "2"
+                  ]
+                },
+                {
+                  "id": "2:21",
+                  "page": 2,
+                  "part": null,
+                  "type": "section",
+                  "order": 21,
+                  "title": "시험방법",
+                  "confidence": 0.986,
+                  "level_code": "L3",
+                  "level_name": "절",
+                  "number_path": [
+                    "6"
+                  ]
+                },
+                {
+                  "id": "2:22",
+                  "page": 2,
+                  "part": null,
+                  "type": "subsection",
+                  "order": 22,
+                  "title": "부품조립 강도시험",
+                  "confidence": 0.9993,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "6",
+                    "1"
+                  ]
+                },
+                {
+                  "id": "2:23",
+                  "page": 2,
+                  "part": null,
+                  "type": "subsubsection",
+                  "order": 23,
+                  "title": "손잡이와 대의 강도시험 분당 300 ± 20 mm 속도로 손잡이가 빠지는",
+                  "confidence": 0.9813,
+                  "level_code": "L5",
+                  "level_name": "세부항목",
+                  "number_path": [
+                    "6",
+                    "1",
+                    "1"
+                  ]
+                },
+                {
+                  "id": "2:24",
+                  "page": 2,
+                  "part": null,
+                  "type": "subsubsection",
+                  "order": 24,
+                  "title": "끝살과 천의 마무리 강도 우산을 접은상태(단 우산의 끈을 해체한 상태)에",
+                  "confidence": 0.9939,
+                  "level_code": "L5",
+                  "level_name": "세부항목",
+                  "number_path": [
+                    "6",
+                    "1",
+                    "2"
+                  ]
+                },
+                {
+                  "id": "2:25",
+                  "page": 2,
+                  "part": null,
+                  "type": "subsubsection",
+                  "order": 25,
+                  "title": "손잡이와 캡의 조립강도 토오크 게이지로 다음의 상태가 될 때까지 시계방향",
+                  "confidence": 0.9887,
+                  "level_code": "L5",
+                  "level_name": "세부항목",
+                  "number_path": [
+                    "6",
+                    "1",
+                    "3"
+                  ]
+                },
+                {
+                  "id": "2:26",
+                  "page": 2,
+                  "part": null,
+                  "type": "item",
+                  "order": 26,
+                  "title": "a) 원래 위치에서 180° 회전할 때까지 또는",
+                  "confidence": 0.9906,
+                  "level_code": "L7",
+                  "level_name": "열거항목",
+                  "number_path": []
+                },
+                {
+                  "id": "2:27",
+                  "page": 2,
+                  "part": null,
+                  "type": "item",
+                  "order": 27,
+                  "title": "b) 원하는 비틀림 힘에 도달할 때까지",
+                  "confidence": 0.9986,
+                  "level_code": "L7",
+                  "level_name": "열거항목",
+                  "number_path": []
+                },
+                {
+                  "id": "3:28",
+                  "page": 3,
+                  "part": null,
+                  "type": "subsection",
+                  "order": 28,
+                  "title": "굽힘 강도 그림 1과 같이 고정쇠를 위로 향하게 하여 손잡이를 고정시키고",
+                  "confidence": 0.995,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "6",
+                    "2"
+                  ]
+                },
+                {
+                  "id": "3:29",
+                  "page": 3,
+                  "part": null,
+                  "type": "figure",
+                  "order": 29,
+                  "title": "그림 1. 굽힘 강도 시험",
+                  "confidence": null,
+                  "level_code": "LF",
+                  "level_name": "그림",
+                  "number_path": []
+                },
+                {
+                  "id": "3:30",
+                  "page": 3,
+                  "part": null,
+                  "type": "subsection",
+                  "order": 30,
+                  "title": "구조 안전성 시험 구조 안전성 시험은",
+                  "confidence": 0.9759,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "6",
+                    "3"
+                  ]
+                },
+                {
+                  "id": "3:31",
+                  "page": 3,
+                  "part": null,
+                  "type": "subsection",
+                  "order": 31,
+                  "title": "자외선 차단율 자외선 차단율 시험은 KS K 0850에 따른다. 단, 자",
+                  "confidence": 0.9943,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "6",
+                    "4"
+                  ]
+                },
+                {
+                  "id": "3:32",
+                  "page": 3,
+                  "part": null,
+                  "type": "section",
+                  "order": 32,
+                  "title": "표시사항 및 표시방법",
+                  "confidence": 0.9988,
+                  "level_code": "L3",
+                  "level_name": "절",
+                  "number_path": [
+                    "7"
+                  ]
+                },
+                {
+                  "id": "3:33",
+                  "page": 3,
+                  "part": null,
+                  "type": "subsection",
+                  "order": 33,
+                  "title": "표시 제품",
+                  "confidence": 0.9896,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "7",
+                    "1"
+                  ]
+                },
+                {
+                  "id": "3:34",
+                  "page": 3,
+                  "part": null,
+                  "type": "subsubsection",
+                  "order": 34,
+                  "title": "모델명",
+                  "confidence": 0.9991,
+                  "level_code": "L5",
+                  "level_name": "세부항목",
+                  "number_path": [
+                    "7",
+                    "1",
+                    "1"
+                  ]
+                },
+                {
+                  "id": "3:35",
+                  "page": 3,
+                  "part": null,
+                  "type": "subsubsection",
+                  "order": 35,
+                  "title": "원단의 조성",
+                  "confidence": 0.9995,
+                  "level_code": "L5",
+                  "level_name": "세부항목",
+                  "number_path": [
+                    "7",
+                    "1",
+                    "2"
+                  ]
+                },
+                {
+                  "id": "3:36",
+                  "page": 3,
+                  "part": null,
+                  "type": "subsubsection",
+                  "order": 36,
+                  "title": "자외선 차단율 : %",
+                  "confidence": 0.9933,
+                  "level_code": "L5",
+                  "level_name": "세부항목",
+                  "number_path": [
+                    "7",
+                    "1",
+                    "3"
+                  ]
+                },
+                {
+                  "id": "3:37",
+                  "page": 3,
+                  "part": null,
+                  "type": "subsubsection",
+                  "order": 37,
+                  "title": "제조자명",
+                  "confidence": 0.9994,
+                  "level_code": "L5",
+                  "level_name": "세부항목",
+                  "number_path": [
+                    "7",
+                    "1",
+                    "4"
+                  ]
+                },
+                {
+                  "id": "3:38",
+                  "page": 3,
+                  "part": null,
+                  "type": "subsubsection",
+                  "order": 38,
+                  "title": "수입자명(수입품에 한함)",
+                  "confidence": 0.9998,
+                  "level_code": "L5",
+                  "level_name": "세부항목",
+                  "number_path": [
+                    "7",
+                    "1",
+                    "5"
+                  ]
+                },
+                {
+                  "id": "3:39",
+                  "page": 3,
+                  "part": null,
+                  "type": "subsubsection",
+                  "order": 39,
+                  "title": "주소 및 전화번호(지역번호 포함)",
+                  "confidence": 0.9992,
+                  "level_code": "L5",
+                  "level_name": "세부항목",
+                  "number_path": [
+                    "7",
+                    "1",
+                    "6"
+                  ]
+                },
+                {
+                  "id": "3:40",
+                  "page": 3,
+                  "part": null,
+                  "type": "subsubsection",
+                  "order": 40,
+                  "title": "제조국명",
+                  "confidence": 0.9993,
+                  "level_code": "L5",
+                  "level_name": "세부항목",
+                  "number_path": [
+                    "7",
+                    "1",
+                    "7"
+                  ]
+                },
+                {
+                  "id": "3:41",
+                  "page": 3,
+                  "part": null,
+                  "type": "subsection",
+                  "order": 41,
+                  "title": "사용상 주의사항",
+                  "confidence": 0.9798,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "7",
+                    "2"
+                  ]
+                },
+                {
+                  "id": "4:42",
+                  "page": 4,
+                  "part": null,
+                  "type": "table",
+                  "order": 42,
+                  "title": "표",
+                  "confidence": 0.9953,
+                  "level_code": "LT",
+                  "level_name": "표",
+                  "number_path": []
+                }
+              ]
+            }
+          },
+          {
+            "page_number": 2,
+            "part_number": null,
+            "keywords": [],
+            "summary": null,
+            "hierarchy": [
+              {
+                "x0": 0.121,
+                "bbox": "0.1210,0.0980,0.8790,0.2430",
+                "type": "table",
+                "title": "표 2. 손잡이와 대의 강도",
+                "caption": "<table><tr><td colspan=\"2\">구 분</td><td>기준치(N)</td></tr><tr><td rowspan=\"2\">일반식</td><td>수동</td><td>380 이상</td></tr><tr><td>자동</td><td>420 이상</td></tr><tr><td rowspan=\"2\">접이식</td><td>수동</td><td>250 이상</td></tr><tr><td>자동</td><td>420 이상</td></tr></table>",
+                "breadcrumb": [
+                  "5",
+                  "5.1",
+                  "5.1.1"
+                ],
+                "confidence": 0.9928,
+                "level_code": "LT",
+                "level_name": "표"
+              },
+              {
+                "x0": 0.098,
+                "text": "끝살과 천의 마무리 강도 끝살과 천의 마무리 강도는 6.1.2에 따라 시험하였을 때 우산 끝살과 천이 분리되지 않아야 한다.",
+                "type": "subsubsection",
+                "title": "끝살과 천의 마무리 강도 끝살과 천의 마무리 강도는 6.1.2에 따라 시",
+                "marker": "5.1.2",
+                "breadcrumb": [
+                  "5",
+                  "5.1"
+                ],
+                "confidence": 0.9913,
+                "level_code": "L5",
+                "level_name": "세부항목"
+              },
+              {
+                "x0": 0.098,
+                "text": "손잡이와 캡의 조립강도 우산 손잡이와 캡의 조립 강도는 6.1.3에 따라 시험하였을 때, 견고하게 조립되어 분리되지 않아야 한다. 단, 접이식(수동) 우산 및 양산은 손잡이의 조립강도 안전요건에서 제외된다.",
+                "type": "subsubsection",
+                "title": "손잡이와 캡의 조립강도 우산 손잡이와 캡의 조립 강도는 6.1.3에 따라",
+                "marker": "5.1.3",
+                "breadcrumb": [
+                  "5",
+                  "5.1"
+                ],
+                "confidence": 0.9944,
+                "level_code": "L5",
+                "level_name": "세부항목"
+              },
+              {
+                "x0": 0.098,
+                "text": "또는 구부러짐이 없어야 한다.",
+                "type": "subsection",
+                "title": "굽힘강도 굽힘강도는 6.2에 따라 시험하였을 때 절단",
+                "marker": "5.2",
+                "breadcrumb": [
+                  "5"
+                ],
+                "confidence": 0.9943,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "x0": 0.098,
+                "text": "또는 구부러짐이 없어야 한다. 또한 손잡이 또는 캡의 월부분 등이 인체에 위해를 미칠 우려가 있는 예리한 돌출부 또는 뽅족한 부분이 없는 구조이어야 한다.",
+                "type": "subsection",
+                "title": "구조 안전성 구조안전성은 6.3에 따라 시험하였을 때 절단",
+                "marker": "5.3",
+                "breadcrumb": [
+                  "5"
+                ],
+                "confidence": 0.9609,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "x0": 0.098,
+                "text": "자외선(UV-R) 차단율 자외선(UV-R)차단율은 6.4에 따라 시험하였을 때 표 3과 같아야 한다.",
+                "type": "subsection",
+                "title": "자외선(UV-R) 차단율 자외선(UV-R)차단율은 6.4에 따라 시험하였",
+                "marker": "5.4",
+                "breadcrumb": [
+                  "5"
+                ],
+                "confidence": 0.9966,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "x0": 0.123,
+                "bbox": "0.1230,0.5230,0.8780,0.6240",
+                "type": "table",
+                "title": "표 3. 자외선 차단율",
+                "caption": "<table><tr><td>종 류</td><td>자외선 차단율(%)</td></tr><tr><td>골프용 양산 및 우산·양산 겸용</td><td>90 이상</td></tr><tr><td>양산 및 우산·양산 겸용</td><td>85 이상</td></tr></table>",
+                "breadcrumb": [
+                  "5",
+                  "5.4"
+                ],
+                "confidence": 0.9824,
+                "level_code": "LT",
+                "level_name": "표"
+              },
+              {
+                "x0": 0.123,
+                "type": "note",
+                "title": "비고 1. 골프용 양산 및 우산·양산 겸용제품은 살의 길이가 650 mm 이상인 제품을 말한다.",
+                "breadcrumb": [
+                  "5",
+                  "5.4"
+                ],
+                "confidence": 0.9944,
+                "level_code": "LN",
+                "level_name": "주석"
+              },
+              {
+                "x0": 0.164,
+                "text": "면, 마가 40% 이상 함유된 원단, 자수원단, 번아웃 원단 등은 표 3의 요구사항을 충족하지 않아도 되나 자외선 차단율은 표시하여야 한다.",
+                "type": "section",
+                "title": "면, 마가 40% 이상 함유된 원단, 자수원단, 번아웃 원단 등은 표 3",
+                "marker": "2",
+                "confidence": 0.9931,
+                "level_code": "L3",
+                "level_name": "절"
+              },
+              {
+                "x0": 0.09,
+                "type": "section",
+                "title": "시험방법",
+                "marker": "6",
+                "confidence": 0.986,
+                "level_code": "L3",
+                "level_name": "절"
+              },
+              {
+                "x0": 0.098,
+                "type": "subsection",
+                "title": "부품조립 강도시험",
+                "marker": "6.1",
+                "breadcrumb": [
+                  "6"
+                ],
+                "confidence": 0.9993,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "x0": 0.098,
+                "text": "손잡이와 대의 강도시험 분당 300 ± 20 mm 속도로 손잡이가 빠지는 방향으로 잡아 당졌을 때, 손잡이의 균열·이완·파손이 발생할 때의 최대강도를 측정한다.",
+                "type": "subsubsection",
+                "title": "손잡이와 대의 강도시험 분당 300 ± 20 mm 속도로 손잡이가 빠지는",
+                "marker": "6.1.1",
+                "breadcrumb": [
+                  "6",
+                  "6.1"
+                ],
+                "confidence": 0.9813,
+                "level_code": "L5",
+                "level_name": "세부항목"
+              },
+              {
+                "x0": 0.097,
+                "text": "끝살과 천의 마무리 강도 우산을 접은상태(단 우산의 끈을 해체한 상태)에서 살대끝 방향으로 20 N의 힘으로 당기어 1분간 유지한다.",
+                "type": "subsubsection",
+                "title": "끝살과 천의 마무리 강도 우산을 접은상태(단 우산의 끈을 해체한 상태)에",
+                "marker": "6.1.2",
+                "breadcrumb": [
+                  "6",
+                  "6.1"
+                ],
+                "confidence": 0.9939,
+                "level_code": "L5",
+                "level_name": "세부항목"
+              },
+              {
+                "x0": 0.097,
+                "text": "손잡이와 캡의 조립강도 토오크 게이지로 다음의 상태가 될 때까지 시계방향으로 손잡이에 대하여는 1.0 N·m, 캡에 대하여는 0.3 N·m토크를 2초간 가한다.",
+                "type": "subsubsection",
+                "title": "손잡이와 캡의 조립강도 토오크 게이지로 다음의 상태가 될 때까지 시계방향",
+                "marker": "6.1.3",
+                "breadcrumb": [
+                  "6",
+                  "6.1"
+                ],
+                "confidence": 0.9887,
+                "level_code": "L5",
+                "level_name": "세부항목"
+              },
+              {
+                "x0": 0.106,
+                "type": "item",
+                "title": "a) 원래 위치에서 180° 회전할 때까지 또는",
+                "breadcrumb": [
+                  "6",
+                  "6.1",
+                  "6.1.3"
+                ],
+                "confidence": 0.9906,
+                "level_code": "L7",
+                "level_name": "열거항목"
+              },
+              {
+                "x0": 0.106,
+                "type": "item",
+                "title": "b) 원하는 비틀림 힘에 도달할 때까지",
+                "breadcrumb": [
+                  "6",
+                  "6.1",
+                  "6.1.3"
+                ],
+                "confidence": 0.9986,
+                "level_code": "L7",
+                "level_name": "열거항목"
+              }
+            ],
+            "n_nodes": 16,
+            "graph": null
+          },
+          {
+            "page_number": 3,
+            "part_number": null,
+            "keywords": [],
+            "summary": null,
+            "hierarchy": [
+              {
+                "x0": 0.097,
+                "text": "굽힘 강도 그림 1과 같이 고정쇠를 위로 향하게 하여 손잡이를 고정시키고, 일반식은 14 N, 접이식은 7 N 하중을 30초 동안 캡 부분에 가하여 시험한다.",
+                "type": "subsection",
+                "title": "굽힘 강도 그림 1과 같이 고정쇠를 위로 향하게 하여 손잡이를 고정시키고",
+                "marker": "6.2",
+                "breadcrumb": [
+                  "6"
+                ],
+                "confidence": 0.995,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "x0": 0.31,
+                "bbox": "0.3100,0.1840,0.6910,0.3470",
+                "type": "figure",
+                "title": "그림 1. 굽힘 강도 시험",
+                "caption": "그림 1은 우산의 굽힘 강도 시험 setups를 개념적으로 나타냅니다. 왼쪽의 벽면에 고정된 기구가 있고, 중앙에는 수평으로 설치된 손잡이가 있으며, 우측 끝(갯 부분)에는 아래쪽 방향으로 힘이 가해지는 것을 보여줍니다. 화살표와 라벨을 통해 '고정쇠'가 기구를 벽면에 고정하는 역할을 하고, '하중'이 우산의 갯 부분에 작용함을 명확히 표시합니다.",
+                "breadcrumb": [
+                  "6",
+                  "6.2"
+                ],
+                "level_code": "LF",
+                "level_name": "그림"
+              },
+              {
+                "x0": 0.088,
+                "text": "\\( 12 \\pm 0.5 \\)  m/s의 유속에서 바람의 방향으로  \\( (45 \\pm 1)^{\\circ} \\)  기울여서 20초간 유지하여 시험을 실시한다.",
+                "type": "subsection",
+                "title": "구조 안전성 시험 구조 안전성 시험은",
+                "marker": "6.3",
+                "breadcrumb": [
+                  "6"
+                ],
+                "confidence": 0.9759,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "x0": 0.089,
+                "text": "자외선 차단율 자외선 차단율 시험은 KS K 0850에 따른다. 단, 자외선 광원은 인공 태양광을 사용한다. 시료는 우산 캡으로부터 30 cm이내의 부위에서 10 cm거리를 두고 5개 부위를 채취하여 가장 연한 부위 5회, 무늬 등을 고려한 진한부위 5회를 측정하여 무늬비율을 고려한 평균값으로 한다.",
+                "type": "subsection",
+                "title": "자외선 차단율 자외선 차단율 시험은 KS K 0850에 따른다. 단, 자",
+                "marker": "6.4",
+                "breadcrumb": [
+                  "6"
+                ],
+                "confidence": 0.9943,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "x0": 0.091,
+                "type": "section",
+                "title": "표시사항 및 표시방법",
+                "marker": "7",
+                "confidence": 0.9988,
+                "level_code": "L3",
+                "level_name": "절"
+              },
+              {
+                "x0": 0.097,
+                "text": "또는 최소단위 포장마다 소비자가 알아보기 쉽도록 한글로 스티커 또는 꼬리표에 인쇄하여 표시하여야 한다.",
+                "type": "subsection",
+                "title": "표시 제품",
+                "marker": "7.1",
+                "breadcrumb": [
+                  "7"
+                ],
+                "confidence": 0.9896,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "x0": 0.099,
+                "type": "subsubsection",
+                "title": "모델명",
+                "marker": "7.1.1",
+                "breadcrumb": [
+                  "7",
+                  "7.1"
+                ],
+                "confidence": 0.9991,
+                "level_code": "L5",
+                "level_name": "세부항목"
+              },
+              {
+                "x0": 0.099,
+                "type": "subsubsection",
+                "title": "원단의 조성",
+                "marker": "7.1.2",
+                "breadcrumb": [
+                  "7",
+                  "7.1"
+                ],
+                "confidence": 0.9995,
+                "level_code": "L5",
+                "level_name": "세부항목"
+              },
+              {
+                "x0": 0.099,
+                "type": "subsubsection",
+                "title": "자외선 차단율 : %",
+                "marker": "7.1.3",
+                "breadcrumb": [
+                  "7",
+                  "7.1"
+                ],
+                "confidence": 0.9933,
+                "level_code": "L5",
+                "level_name": "세부항목"
+              },
+              {
+                "x0": 0.099,
+                "type": "subsubsection",
+                "title": "제조자명",
+                "marker": "7.1.4",
+                "breadcrumb": [
+                  "7",
+                  "7.1"
+                ],
+                "confidence": 0.9994,
+                "level_code": "L5",
+                "level_name": "세부항목"
+              },
+              {
+                "x0": 0.099,
+                "type": "subsubsection",
+                "title": "수입자명(수입품에 한함)",
+                "marker": "7.1.5",
+                "breadcrumb": [
+                  "7",
+                  "7.1"
+                ],
+                "confidence": 0.9998,
+                "level_code": "L5",
+                "level_name": "세부항목"
+              },
+              {
+                "x0": 0.099,
+                "type": "subsubsection",
+                "title": "주소 및 전화번호(지역번호 포함)",
+                "marker": "7.1.6",
+                "breadcrumb": [
+                  "7",
+                  "7.1"
+                ],
+                "confidence": 0.9992,
+                "level_code": "L5",
+                "level_name": "세부항목"
+              },
+              {
+                "x0": 0.099,
+                "type": "subsubsection",
+                "title": "제조국명",
+                "marker": "7.1.7",
+                "breadcrumb": [
+                  "7",
+                  "7.1"
+                ],
+                "confidence": 0.9993,
+                "level_code": "L5",
+                "level_name": "세부항목"
+              },
+              {
+                "x0": 0.099,
+                "type": "subsection",
+                "title": "사용상 주의사항",
+                "marker": "7.2",
+                "breadcrumb": [
+                  "7"
+                ],
+                "confidence": 0.9798,
+                "level_code": "L4",
+                "level_name": "소절"
+              }
+            ],
+            "n_nodes": 14,
+            "graph": null
+          },
+          {
+            "page_number": 4,
+            "part_number": null,
+            "keywords": [],
+            "summary": null,
+            "hierarchy": [
+              {
+                "x0": 0.113,
+                "bbox": "0.1130,0.3190,0.5680,0.4700",
+                "type": "table",
+                "title": "표",
+                "caption": "<table><tr><td>개정</td><td>정: 기술표준원고시</td><td>제2009-979호(2009. 12. 30)</td></tr><tr><td>개정</td><td>정: 기술표준원고시</td><td>제2010-221호(2010. 6. 16)</td></tr><tr><td>개정</td><td>정: 기술표준원고시</td><td>제2010-360호(2010. 8. 31)</td></tr><tr><td>개정</td><td>정: 국가기술표준원고시</td><td>제2015-686호(2015. 12. 30)</td></tr><tr><td>개정</td><td>정: 국가기술표준원고시</td><td>제2017-033호(2017. 2. 8)</td></tr><tr><td>개정</td><td>정: 국가기술표준원고시</td><td>제2018-195호(2018. 6. 29)</td></tr><tr><td>개정</td><td>정: 국가기술표준원고시</td><td>제2019-0159호(2019. 7. 18.)</td></tr><tr><td>개정</td><td>정: 국가기술표준원고시</td><td>제2024-0072호(2024. 4. 29.)</td></tr></table>",
+                "breadcrumb": [
+                  "7",
+                  "7.2"
+                ],
+                "confidence": 0.9953,
+                "level_code": "LT",
+                "level_name": "표"
+              }
+            ],
+            "n_nodes": 1,
+            "graph": null
+          }
+        ],
+        "latency_seconds": 0.004245399000865291
+      },
+      "dimension_ocr": {
+        "enabled": true,
+        "model": "dimension_ocr_model",
+        "method": "text-segment",
+        "applied_fixes": null,
+        "pages": [
+          {
+            "page_number": 1,
+            "body_html": "<div data-label=\"title\" data-bbox=\"0.4070,0.0680,0.5240,0.0860\" data-score=\"0.9334\"><h1>안전기준</h1></div>\n<div data-label=\"title\" data-bbox=\"0.4020,0.1020,0.5290,0.1200\" data-score=\"1.0000\"><h1>우산 및 양산</h1></div>\n<div data-label=\"title\" data-bbox=\"0.7170,0.1020,0.8140,0.1200\" data-score=\"0.9992\"><h1>부속서 20</h1></div>\n<div data-label=\"title\" data-bbox=\"0.3640,0.1380,0.5660,0.1560\" data-score=\"0.9987\"><h1>(Umbrella & Parasol)</h1></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.2120,0.9060,0.2470\" data-score=\"0.9972\"><p>1. 적용범위 이 기준은 우산, 양산 및 우산 겸용 양산에 대하여 적용한다. 다만, 일회성의 용도 등으로 제조된 비닐우산 등은 제외한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.2750,0.9060,0.3100\" data-score=\"0.9938\"><p>2. 인용표준 다음에 나타내는 표준은 이 검사기준 및 방법에 인용됨으로써 이 검사기준 및 방법의 일부를 구성한다. 이러한 인용표준은 그 최신표준을 적용한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0990,0.3200,0.2920,0.3350\" data-score=\"0.9935\"><p>KS G 3711 우산·양산</p></div>\n<div data-label=\"text\" data-bbox=\"0.0990,0.3450,0.5850,0.3600\" data-score=\"0.9985\"><p>KS K 0850 텍스타일의 자외선 차단율 및 차단지수 시험방법</p></div>\n<div data-label=\"text\" data-bbox=\"0.0990,0.3690,0.3670,0.3850\" data-score=\"0.9999\"><p>안전확인 안전기준 부속서6 완구</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.4140,0.6600,0.4300\" data-score=\"0.9890\"><p>3. 용어의 정의 이 기준에 사용하는 주된 용어의 정의는 다음에 따른다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0990,0.4390,0.5400,0.4540\" data-score=\"0.9402\"><p>3.1 살 대 살,대 및 부속품들이 조립된 상태를 말한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0980,0.4630,0.9060,0.5170\" data-score=\"0.9782\"><p>3.2 살 윗살, 윗살보조살, 끝살, 받침살, 받침살보조살을 말한다. 윗살은 우산의 천정을 지지하는 살 중에서 가장 힘을 많이 받는 중앙의 살로서, 주로 열처리된 살(Topless형 및 미니형 살대에서는 홈 받침살 및 보조살 아래의 주살을 말한다)을 말한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0980,0.5260,0.9050,0.5610\" data-score=\"0.9932\"><p>3.3 대 손잡이가 달려 있는 중앙의 봉을 말하며 일반식대(일체형)와 1단, 2단, 3단 등으로 접을 수 있는 접이식대가 있다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0980,0.5700,0.9050,0.6050\" data-score=\"0.9156\"><p>3.4 흙살 경강선 또는 FRP 등의 재료로 U자형 또는 오목 형태로 홈을 가공하여 주로 받침살 또는 윗살로 사용되어지는 살을 말한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0980,0.6140,0.7830,0.6300\" data-score=\"0.9868\"><p>3.5 통 살 경강선 또는 FRP 등의 재료를 이용하여 원통형 형태로 가공한 삶을 말한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0990,0.6390,0.6860,0.6550\" data-score=\"0.9760\"><p>3.6 고정쇠 접이식 우산을 펼쳤을때 고정을 하기 위한 고정장치를 말한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.6840,0.4210,0.6990\" data-score=\"0.9981\"><p>4. 종류 우산·양산의 종류는 표 1과 같다.</p></div>\n<div data-label=\"table_caption\" data-bbox=\"0.4550,0.7090,0.5420,0.7240\" data-score=\"0.9778\" style=\"font-weight:600;\">표 1. 종류</div>\n<div data-label=\"table\" data-bbox=\"0.1250,0.7370,0.8750,0.8510\" data-score=\"0.9917\"><table><tr><td>구분</td><td>종류</td></tr><tr><td rowspan=\"2\">일반식</td><td>수동우산(장우산 포함), 수동양산</td></tr><tr><td>자동우산(장우산 포함), 자동양산</td></tr><tr><td rowspan=\"2\">접이식</td><td>수동우산, 수동양산</td></tr><tr><td>자동우산, 자동양산</td></tr></table></div>\n<div data-label=\"text\" data-bbox=\"0.0910,0.8630,0.1850,0.8780\" data-score=\"0.9911\"><p>5. 안전요건</p></div>\n<div data-label=\"text\" data-bbox=\"0.0990,0.8880,0.2450,0.9030\" data-score=\"0.9970\"><p>5.1 부품 조립강도</p></div>\n<div data-label=\"text\" data-bbox=\"0.0980,0.9130,0.9000,0.9470\" data-score=\"0.9965\"><p>5.1.1 손잡이와 대의 강도 손잡이와 대의 강도는 표 2와 같으며 6.1.1에 따라 시험하였을 때 균열·파손·이완 등이 없어야 한다.</p></div>\n<div data-label=\"page_number\" data-bbox=\"0.4740,0.9710,0.5260,0.9820\" data-score=\"0.8524\" style=\"color:#888;font-size:0.9em;\">- 1 -</div>",
+            "page_visual_summary": "문서는 제목과 부제목이 상단에 위치하며, 그 아래로 번호가 매겨진 주요 섹션(1. 적용범위, 2. 인용표준 등)이 차례대로 배치되어 있습니다. 각 섹션은 해당 내용을 설명하는 텍스트로 구성되어 있으며, 하단부에는 문단의 분류를 나타내는 표 1이 삽입되어 있습니다.",
+            "element_analysis": [],
+            "unbound_visual_notes": "문서는 제목과 부제목이 상단에 위치하며, 그 아래로 번호가 매겨진 주요 섹션(1. 적용범위, 2. 인용표준 등)이 차례대로 배치되어 있습니다. 각 섹션은 해당 내용을 설명하는 텍스트로 구성되어 있으며, 하단부에는 문단의 분류를 나타내는 표 1이 삽입되어 있습니다.",
+            "table_markdown": "| 구분 | 종류 |\n| :--- | :--- |\n| 일반식 | 수동우산(장우산 포함), 수동양산<br>자동우산(장우산 포함), 자동양산 |\n| 접이식 | 수동우산, 수동양산<br>자동우산, 자동양산 |",
+            "arbitrated_blocks": 1,
+            "corrected_cells": 0,
+            "format_restored_cells": 0,
+            "name_consistency": null,
+            "applied_rotation": null,
+            "applied_skew": null
+          },
+          {
+            "page_number": 2,
+            "body_html": "<div data-label=\"table_caption\" data-bbox=\"0.3970,0.0700,0.6000,0.0860\" data-score=\"0.9964\" style=\"font-weight:600;\">표 2. 손잡이와 대의 강도</div>\n<div data-label=\"table\" data-bbox=\"0.1210,0.0980,0.8790,0.2430\" data-score=\"0.9928\"><table><tr><td colspan=\"2\">구 분</td><td>기준치(N)</td></tr><tr><td rowspan=\"2\">일반식</td><td>수동</td><td>380 이상</td></tr><tr><td>자동</td><td>420 이상</td></tr><tr><td rowspan=\"2\">접이식</td><td>수동</td><td>250 이상</td></tr><tr><td>자동</td><td>420 이상</td></tr></table></div>\n<div data-label=\"text\" data-bbox=\"0.0980,0.2650,0.9040,0.2990\" data-score=\"0.9913\"><p>5.1.2 끝살과 천의 마무리 강도 끝살과 천의 마무리 강도는 6.1.2에 따라 시험하였을 때 우산 끝살과 천이 분리되지 않아야 한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0980,0.3080,0.9050,0.3620\" data-score=\"0.9944\"><p>5.1.3 손잡이와 캡의 조립강도 우산 손잡이와 캡의 조립 강도는 6.1.3에 따라 시험하였을 때, 견고하게 조립되어 분리되지 않아야 한다. 단, 접이식(수동) 우산 및 양산은 손잡이의 조립강도 안전요건에서 제외된다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0980,0.3710,0.7900,0.3870\" data-score=\"0.9943\"><p>5.2 굽힘강도 굽힘강도는 6.2에 따라 시험하였을 때 절단 또는 구부러짐이 없어야 한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0980,0.3960,0.9040,0.4500\" data-score=\"0.9609\"><p>5.3 구조 안전성 구조안전성은 6.3에 따라 시험하였을 때 절단 또는 구부러짐이 없어야 한다. 또한 손잡이 또는 캡의 월부분 등이 인체에 위해를 미칠 우려가 있는 예리한 돌출부 또는 뽅족한 부분이 없는 구조이어야 한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0980,0.4590,0.8500,0.4750\" data-score=\"0.9966\"><p>5.4 자외선(UV-R) 차단율 자외선(UV-R)차단율은 6.4에 따라 시험하였을 때 표 3과 같아야 한다.</p></div>\n<div data-label=\"table_caption\" data-bbox=\"0.4180,0.4960,0.5780,0.5110\" data-score=\"0.9899\" style=\"font-weight:600;\">표 3. 자외선 차단율</div>\n<div data-label=\"table\" data-bbox=\"0.1230,0.5230,0.8780,0.6240\" data-score=\"0.9824\"><table><tr><td>종 류</td><td>자외선 차단율(%)</td></tr><tr><td>골프용 양산 및 우산·양산 겸용</td><td>90 이상</td></tr><tr><td>양산 및 우산·양산 겸용</td><td>85 이상</td></tr></table></div>\n<div data-label=\"text\" data-bbox=\"0.1230,0.6380,0.8500,0.6530\" data-score=\"0.9944\"><p>비고 1. 골프용 양산 및 우산·양산 겸용제품은 살의 길이가 650 mm 이상인 제품을 말한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1640,0.6630,0.8700,0.6970\" data-score=\"0.9931\"><p>2. 면, 마가 40% 이상 함유된 원단, 자수원단, 번아웃 원단 등은 표 3의 요구사항을 충족하지 않아도 되나 자외선 차단율은 표시하여야 한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.0900,0.7390,0.1850,0.7540\" data-score=\"0.9860\"><h1>6. 시험방법</h1></div>\n<div data-label=\"title\" data-bbox=\"0.0980,0.7640,0.2790,0.7800\" data-score=\"0.9993\"><h1>6.1 부품조립 강도시험</h1></div>\n<div data-label=\"text\" data-bbox=\"0.0980,0.7890,0.9050,0.8240\" data-score=\"0.9813\"><p>6.1.1 손잡이와 대의 강도시험 분당 300 ± 20 mm 속도로 손잡이가 빠지는 방향으로 잡아 당졌을 때, 손잡이의 균열·이완·파손이 발생할 때의 최대강도를 측정한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0970,0.8330,0.9040,0.8680\" data-score=\"0.9939\"><p>6.1.2 끝살과 천의 마무리 강도 우산을 접은상태(단 우산의 끈을 해체한 상태)에서 살대끝 방향으로 20 N의 힘으로 당기어 1분간 유지한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0970,0.8770,0.9050,0.9120\" data-score=\"0.9887\"><p>6.1.3 손잡이와 캡의 조립강도 토오크 게이지로 다음의 상태가 될 때까지 시계방향으로 손잡이에 대하여는 1.0 N·m, 캡에 대하여는 0.3 N·m토크를 2초간 가한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1060,0.9220,0.4460,0.9370\" data-score=\"0.9906\"><p>a) 원래 위치에서 180° 회전할 때까지 또는</p></div>\n<div data-label=\"text\" data-bbox=\"0.1060,0.9460,0.4050,0.9620\" data-score=\"0.9986\"><p>b) 원하는 비틀림 힘에 도달할 때까지</p></div>\n<div data-label=\"page_number\" data-bbox=\"0.4740,0.9710,0.5250,0.9830\" data-score=\"0.9490\" style=\"color:#888;font-size:0.9em;\">- 2 -</div>",
+            "page_visual_summary": "문서의 상단과 중앙에 두 개의 주요 표가 배치되어 있으며, 각 표 주변과 하단에는 해당 표를 설명하는 번호가 매겨진 본문 단락들이 위치하고 있습니다.",
+            "element_analysis": [],
+            "unbound_visual_notes": "문서의 상단과 중앙에 두 개의 주요 표가 배치되어 있으며, 각 표 주변과 하단에는 해당 표를 설명하는 번호가 매겨진 본문 단락들이 위치하고 있습니다.",
+            "table_markdown": "| 구분 | 기준치(N) |\n| :--- | :--- |\n| 일반식 | 수동 | 380 이상 |\n| | 자동 | 420 이상 |\n| 접이식 | 수동 | 250 이상 |\n| | 자동 | 420 이상 |\n\n표 2. 손잡이와 대의 강도",
+            "arbitrated_blocks": 0,
+            "corrected_cells": 0,
+            "format_restored_cells": 0,
+            "name_consistency": null,
+            "applied_rotation": null,
+            "applied_skew": null
+          },
+          {
+            "page_number": 3,
+            "body_html": "<div data-label=\"text\" data-bbox=\"0.0980,0.0710,0.9080,0.1050\" data-score=\"0.9911\"><p>만약 시험 중에 있는 부분이 원하는 힘의 한계보다 적고 계속 회전하여 분리되지 않는다면 시험을 종료한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0970,0.1150,0.9080,0.1500\" data-score=\"0.9950\"><p>6.2 굽힘 강도 그림 1과 같이 고정쇠를 위로 향하게 하여 손잡이를 고정시키고, 일반식은 14 N, 접이식은 7 N 하중을 30초 동안 캡 부분에 가하여 시험한다.</p></div>\n<div data-label=\"image\" data-bbox=\"0.3100,0.1840,0.6910,0.3470\"><figure style=\"text-align:center;\"><img src=\"/v2/api/figures/4a6eded78e684ce3beba5df22c1d997f/3/fig_0.jpg?exp=1788163362&sig=d9b089e51564b8626b8a42c014af6410c7fee474a1b94ba119015c194cf8c517&aid=1e7abe98e7320523\" alt=\"image\" style=\"width:38%;height:auto;\" /><div class=\"vision-caption\">이 이미지는 우산의 굽힘 강도 시험 방법을 설명하는 도면입니다. 우산의 손잡이가 벽면에 고정되어 있고, 우산의 캡 부분에는 아래쪽을 향하는 하중이 가해지고 있습니다. 손잡이와 우산대 사이에는 고정쇠가 설치되어 있으며, 이는 손잡이를 고정하는 역할을 합니다. 하중은 우산의 캡 부분에 가해지며, 이는 우산이 하중에 대해 얼마나 견고한지를 평가하기 위한 것입니다. 이 시험은 우산의 구조적 안전성을 확인하기 위해 수행됩니다.</div></figure></div>\n<div data-label=\"image_caption\" data-bbox=\"0.4050,0.3560,0.5940,0.3720\" data-score=\"0.9915\" style=\"font-weight:600;\">그림 1. 굽힘 강도 시험</div>\n<div data-label=\"text\" data-bbox=\"0.0880,0.4060,0.9080,0.4420\" data-score=\"0.9759\"><p>6.3 구조 안전성 시험 구조 안전성 시험은  \\( 12 \\pm 0.5 \\)  m/s의 유속에서 바람의 방향으로  \\( (45 \\pm 1)^{\\circ} \\)  기울여서 20초간 유지하여 시험을 실시한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.4500,0.9080,0.5030\" data-score=\"0.9943\"><p>6.4 자외선 차단율 자외선 차단율 시험은 KS K 0850에 따른다. 단, 자외선 광원은 인공 태양광을 사용한다. 시료는 우산 캡으로부터 30 cm이내의 부위에서 10 cm거리를 두고 5개 부위를 채취하여 가장 연한 부위 5회, 무늬 등을 고려한 진한부위 5회를 측정하여 무늬비율을 고려한 평균값으로 한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.0910,0.5300,0.2870,0.5460\" data-score=\"0.9988\"><h1>7. 표시사항 및 표시방법</h1></div>\n<div data-label=\"text\" data-bbox=\"0.0970,0.5550,0.9080,0.5900\" data-score=\"0.9896\"><p>7.1 표시 제품 또는 최소단위 포장마다 소비자가 알아보기 쉽도록 한글로 스티커 또는 꼬리표에 인쇄하여 표시하여야 한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0990,0.5990,0.2000,0.6150\" data-score=\"0.9991\"><p>7.1.1 모델명</p></div>\n<div data-label=\"text\" data-bbox=\"0.0990,0.6230,0.2420,0.6390\" data-score=\"0.9995\"><p>7.1.2 원단의 조성</p></div>\n<div data-label=\"text\" data-bbox=\"0.0990,0.6480,0.3120,0.6640\" data-score=\"0.9933\"><p>7.1.3 자외선 차단율 : %</p></div>\n<div data-label=\"text\" data-bbox=\"0.0990,0.6730,0.2160,0.6890\" data-score=\"0.9994\"><p>7.1.4 제조자명</p></div>\n<div data-label=\"text\" data-bbox=\"0.0990,0.6980,0.3370,0.7150\" data-score=\"0.9998\"><p>7.1.5 수입자명(수입품에 한함)</p></div>\n<div data-label=\"text\" data-bbox=\"0.0990,0.7230,0.4030,0.7390\" data-score=\"0.9992\"><p>7.1.6 주소 및 전화번호(지역번호 포함)</p></div>\n<div data-label=\"text\" data-bbox=\"0.0990,0.7480,0.2160,0.7640\" data-score=\"0.9993\"><p>7.1.7 제조국명</p></div>\n<div data-label=\"text\" data-bbox=\"0.0990,0.7730,0.2620,0.7890\" data-score=\"0.9798\"><p>7.2 사용상 주의사항</p></div>\n<div data-label=\"page_number\" data-bbox=\"0.4740,0.9710,0.5260,0.9830\" data-score=\"0.9364\" style=\"color:#888;font-size:0.9em;\">- 3 -</div>",
+            "page_visual_summary": "본문 텍스트의 섹션인 6.2 '굽힘 강도'는 그 직하에 위치한 그림 1을 참조하여 실험 절차를 설명합니다. 또한, 본문 하단의 '7. 표시사항 및 표시방법'은 제품 또는 포장에 명시해야 할 정보들을 열거하고 있습니다.",
+            "element_analysis": [
+              {
+                "kind": "diagram",
+                "fig": "fig_0.jpg",
+                "src": "/v2/api/figures/4a6eded78e684ce3beba5df22c1d997f/3/fig_0.jpg?exp=1788163362&sig=d9b089e51564b8626b8a42c014af6410c7fee474a1b94ba119015c194cf8c517&aid=1e7abe98e7320523",
+                "bbox": "0.3100,0.1840,0.6910,0.3470",
+                "subtype": "flowchart",
+                "title": "우산 굽힘 강도 시험",
+                "axis_x": null,
+                "axis_y": null,
+                "series": [
+                  {
+                    "name": "고정쇠",
+                    "color": null,
+                    "role": "손잡이 고정",
+                    "behavior": null
+                  },
+                  {
+                    "name": "하중",
+                    "color": null,
+                    "role": "우산 캡에 가해지는 힘",
+                    "behavior": null
+                  }
+                ],
+                "relations": [
+                  {
+                    "a": "고정쇠",
+                    "b": "손잡이",
+                    "rel": "flows_to",
+                    "verified": true
+                  },
+                  {
+                    "a": "하중",
+                    "b": "우산 캡",
+                    "rel": "flows_to",
+                    "verified": true
+                  }
+                ],
+                "summary": "이 도면은 우산의 굽힘 강도 시험 방법을 설명하며, 고정쇠와 하중의 역할을 보여줍니다.",
+                "description": "이 이미지는 우산의 굽힘 강도 시험 방법을 설명하는 도면입니다. 우산의 손잡이가 벽면에 고정되어 있고, 우산의 캡 부분에는 아래쪽을 향하는 하중이 가해지고 있습니다. 손잡이와 우산대 사이에는 고정쇠가 설치되어 있으며, 이는 손잡이를 고정하는 역할을 합니다. 하중은 우산의 캡 부분에 가해지며, 이는 우산이 하중에 대해 얼마나 견고한지를 평가하기 위한 것입니다. 이 시험은 우산의 구조적 안전성을 확인하기 위해 수행됩니다.",
+                "extraction": "json",
+                "binding_method": "vlm-crop",
+                "binding_confidence": "high"
+              }
+            ],
+            "unbound_visual_notes": null,
+            "table_markdown": null,
+            "arbitrated_blocks": 0,
+            "corrected_cells": 0,
+            "format_restored_cells": 0,
+            "name_consistency": null,
+            "applied_rotation": null,
+            "applied_skew": null
+          },
+          {
+            "page_number": 4,
+            "body_html": "<div data-label=\"table\" data-bbox=\"0.1130,0.3190,0.5680,0.4700\" data-score=\"0.9953\"><table><tr><td>개정</td><td>정: 기술표준원고시</td><td>제2009-979호(2009. 12. 30)</td></tr><tr><td>개정</td><td>정: 기술표준원고시</td><td>제2010-221호(2010. 6. 16)</td></tr><tr><td>개정</td><td>정: 기술표준원고시</td><td>제2010-360호(2010. 8. 31)</td></tr><tr><td>개정</td><td>정: 국가기술표준원고시</td><td>제2015-686호(2015. 12. 30)</td></tr><tr><td>개정</td><td>정: 국가기술표준원고시</td><td>제2017-033호(2017. 2. 8)</td></tr><tr><td>개정</td><td>정: 국가기술표준원고시</td><td>제2018-195호(2018. 6. 29)</td></tr><tr><td>개정</td><td>정: 국가기술표준원고시</td><td>제2019-0159호(2019. 7. 18.)</td></tr><tr><td>개정</td><td>정: 국가기술표준원고시</td><td>제2024-0072호(2024. 4. 29.)</td></tr></table></div>\n<div data-label=\"page_number\" data-bbox=\"0.4750,0.9710,0.5240,0.9820\" data-score=\"0.9441\" style=\"color:#888;font-size:0.9em;\">- 4 -</div>",
+            "page_visual_summary": "문서의 중앙 하단 부분에는 연혁(제정 및 개정 이력)이 정리된 하나의 사각형 텍스트 박스가 위치해 있습니다.",
+            "element_analysis": [],
+            "unbound_visual_notes": "문서의 중앙 하단 부분에는 연혁(제정 및 개정 이력)이 정리된 하나의 사각형 텍스트 박스가 위치해 있습니다.",
+            "table_markdown": "| 제정 : 기술표준원고시 | 제2009-979호(2009. 12. 30) |\n|---|---|\n| 개정 : 기술표준원고시 | 제2010-221호(2010. 6. 16) |\n| 개정 : 기술표준원고시 | 제2010-360호(2010. 8. 31) |\n| 개정 : 국가기술표준원고시 | 제2015-686호(2015. 12. 30) |\n| 개정 : 국가기술표준원고시 | 제2017-033호(2017. 2. 8) |\n| 개정 : 국가기술표준원고시 | 제2018-195호(2018. 6. 29) |\n| 개정 : 국가기술표준원고시 | 제2019-0159호(2019. 7. 18.) |\n| 개정 : 국가기술표준원고시 | 제2024-0072호(2024. 4. 29.) |",
+            "arbitrated_blocks": 0,
+            "corrected_cells": 0,
+            "format_restored_cells": 0,
+            "name_consistency": null,
+            "applied_rotation": null,
+            "applied_skew": null
+          }
+        ]
+      },
+      "page_classifier": null
+    },
+    "latency_seconds": 10.496885,
+    "parsing_cost": 0.171248
+  },
+  "error_message": null
+}

@@ -1,0 +1,1622 @@
+{
+  "batch_id": "d4f88bf3e0174fe1ab15702703a9245f",
+  "status": "completed",
+  "applied_fixes": null,
+  "filename": "26. KC 60598-2-2.pdf",
+  "mode": "onprem_compose",
+  "tagger": "hierarchy",
+  "translation_ko": false,
+  "total_pages": 12,
+  "total_chunks": 12,
+  "total_latency_seconds": 9.958779,
+  "result": {
+    "filename": "26. KC 60598-2-2.pdf",
+    "content": {
+      "ocr": {
+        "provider": "ocr_model_onprem",
+        "model": "ocr_model_onprem",
+        "text": "<div data-label=\"header\" data-bbox=\"0.1180,0.1000,0.2080,0.1950\" data-score=\"0.6422\" style=\"color:#888;font-size:0.9em;\">K</div>\n<div data-label=\"header\" data-bbox=\"0.5430,0.1170,0.8940,0.1500\" data-score=\"0.9917\" style=\"color:#888;font-size:0.9em;\">KC 60598-2-2</div>\n<div data-label=\"header\" data-bbox=\"0.6280,0.1600,0.8930,0.1820\" data-score=\"0.9965\" style=\"color:#888;font-size:0.9em;\">(개정 : 2022-02-16)</div>\n<div data-label=\"header\" data-bbox=\"0.6230,0.2000,0.8930,0.2200\" data-score=\"0.9955\" style=\"color:#888;font-size:0.9em;\">IEC Ed 3.0 2011-11</div>\n<div data-label=\"title\" data-bbox=\"0.1080,0.2880,0.6030,0.3340\" data-score=\"0.9999\"><h1>전기용품안전기준</h1></div>\n<div data-label=\"title\" data-bbox=\"0.1060,0.3920,0.8890,0.4500\" data-score=\"0.9828\"><h1>Technical Regulations for Electrical and\nTelecommunication Products and Components</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1060,0.5030,0.1870,0.5230\" data-score=\"0.9996\"><p>등기구</p></div>\n<div data-label=\"text\" data-bbox=\"0.1080,0.5260,0.5510,0.5460\" data-score=\"0.9731\"><p>제2-2부: 매입형 등기구-개별요구사항</p></div>\n<div data-label=\"text\" data-bbox=\"0.1070,0.5500,0.6940,0.5670\" data-score=\"0.9898\"><p>Part 2-2: Particular requirements - Recessed luminaires</p></div>\n<div data-label=\"text\" data-bbox=\"0.3450,0.7640,0.5230,0.8010\" data-score=\"0.9860\"><p>KATS</p></div>\n<div data-label=\"text\" data-bbox=\"0.5380,0.7640,0.8890,0.8040\" data-score=\"0.9831\"><p>국가기술표준원</p></div>\n<div data-label=\"text\" data-bbox=\"0.5990,0.8530,0.8930,0.8740\" data-score=\"1.0000\"><p>http://www.kats.go.kr</p></div>\n\n<div data-label=\"header\" data-bbox=\"0.7400,0.0610,0.8950,0.0740\" data-score=\"0.9998\" style=\"color:#888;font-size:0.9em;\">KC 60598-2-2:2022</div>\n<div data-label=\"title\" data-bbox=\"0.4170,0.1090,0.5830,0.1300\" data-score=\"0.9639\"><h1>목 차</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1050,0.1640,0.8620,0.1800\" data-score=\"0.9954\"><p>전기용품안전기준 제정, 개정, 폐지 이력 및 고시현황 1</p></div>\n<div data-label=\"text\" data-bbox=\"0.1050,0.1930,0.8640,0.2090\" data-score=\"0.9253\"><p>서 문 (Foreword) 2</p></div>\n<div data-label=\"text\" data-bbox=\"0.1040,0.2220,0.8640,0.2370\" data-score=\"0.9857\"><p>2.1 적용 범위 (Scope) 3</p></div>\n<div data-label=\"text\" data-bbox=\"0.1050,0.2380,0.8630,0.2500\" data-score=\"0.9815\"><p>2.2 인용 표준 (Normative references) 3</p></div>\n<div data-label=\"text\" data-bbox=\"0.1050,0.2510,0.8630,0.2650\" data-score=\"0.9917\"><p>2.3 일반 시험 요구 사항 (General test requirements) 3</p></div>\n<div data-label=\"text\" data-bbox=\"0.1050,0.2660,0.8630,0.2790\" data-score=\"0.9632\"><p>2.4 정의 (Definitions) 3</p></div>\n<div data-label=\"text\" data-bbox=\"0.1050,0.2800,0.8630,0.2930\" data-score=\"0.9857\"><p>2.5 등기구 분류 (Classification of luminaires) 3</p></div>\n<div data-label=\"text\" data-bbox=\"0.1050,0.2940,0.8630,0.3070\" data-score=\"0.9423\"><p>2.6 표시 (Marking) 3</p></div>\n<div data-label=\"text\" data-bbox=\"0.1050,0.3080,0.8630,0.3210\" data-score=\"0.9586\"><p>2.7 구조 (Construction) 3</p></div>\n<div data-label=\"text\" data-bbox=\"0.1050,0.3220,0.8630,0.3360\" data-score=\"0.9649\"><p>2.8 연면 거리와 공간 거리 (Creepage distances and clearances) 4</p></div>\n<div data-label=\"text\" data-bbox=\"0.1050,0.3370,0.8630,0.3500\" data-score=\"0.9463\"><p>2.9 접지 (Provision for earthing) 4</p></div>\n<div data-label=\"text\" data-bbox=\"0.1050,0.3510,0.8630,0.3640\" data-score=\"0.9012\"><p>2.10 단자 (Terminals) 4</p></div>\n<div data-label=\"text\" data-bbox=\"0.1050,0.3650,0.8630,0.3790\" data-score=\"0.9930\"><p>2.11 내·외부 배선 (External and internal wiring) 4</p></div>\n<div data-label=\"text\" data-bbox=\"0.1050,0.3800,0.8630,0.3930\" data-score=\"0.9784\"><p>2.12 총전부에 대한 감전 보호 (Protection against electric shock) 4</p></div>\n<div data-label=\"text\" data-bbox=\"0.1050,0.3940,0.8630,0.4070\" data-score=\"0.9897\"><p>2.13 내구성 시험 및 내열성 시험 (Endurance tests and thermal tests) 4</p></div>\n<div data-label=\"text\" data-bbox=\"0.1050,0.4080,0.8630,0.4220\" data-score=\"0.9877\"><p>2.14 내진성 및 내습성 (Resistance to dust and moisture) 5</p></div>\n<div data-label=\"text\" data-bbox=\"0.1050,0.4230,0.8630,0.4360\" data-score=\"0.9926\"><p>2.15 절연 저항 및 절연 내력 (Insulation resistance and electric strength) 5</p></div>\n<div data-label=\"text\" data-bbox=\"0.1050,0.4370,0.8630,0.4500\" data-score=\"0.9927\"><p>2.16 내열, 내화 및 내트래킹성 (Resistance to heat, fire and tracking) 5</p></div>\n<div data-label=\"text\" data-bbox=\"0.1040,0.4780,0.8640,0.5070\" data-score=\"0.9772\"><p>부속서 A (참고) 제품의 재시험을 요구하는 심각한/중요한 요구사항을 포함하는 개정된 절의 일정 (Annex A) 6</p></div>\n<div data-label=\"text\" data-bbox=\"0.1050,0.5350,0.8630,0.5500\" data-score=\"0.8432\" data-corrected=\"true\"><p>해설 17</p></div>\n\n<div data-label=\"header\" data-bbox=\"0.1040,0.0610,0.2600,0.0740\" data-score=\"0.9999\" style=\"color:#888;font-size:0.9em;\">KC 60598-2-2:2022</div>\n<div data-label=\"text\" data-bbox=\"0.1030,0.1090,0.5250,0.1250\" data-score=\"0.9912\"><p>전기용품안전기준 제정, 개정, 폐지 이력 및 고시현황</p></div>\n<div data-label=\"text\" data-bbox=\"0.1160,0.1630,0.5280,0.1800\" data-score=\"0.9923\"><p>제정 기술표준원 고시 제2000 - 54호 (2000. 4. 6)</p></div>\n<div data-label=\"text\" data-bbox=\"0.1170,0.1800,0.5370,0.1950\" data-score=\"0.9806\"><p>개정 기술표준원 고시 제2003 - 523호 (2003. 5.24)</p></div>\n<div data-label=\"text\" data-bbox=\"0.1170,0.1960,0.5380,0.2100\" data-score=\"0.9749\"><p>개정 기술표준원 고시 제2006-959호 (2006.12.28)</p></div>\n<div data-label=\"text\" data-bbox=\"0.1170,0.2110,0.5620,0.2250\" data-score=\"0.9758\"><p>개정 국가기술표준원 고시 제2014-0421호 (2014. 9. 3)</p></div>\n<div data-label=\"text\" data-bbox=\"0.1170,0.2260,0.5620,0.2400\" data-score=\"0.9691\"><p>개정 국가기술표준원 고시 제2015-383호 (2015. 9. 23)</p></div>\n<div data-label=\"text\" data-bbox=\"0.1170,0.2420,0.5620,0.2560\" data-score=\"0.9760\"><p>개정 국가기술표준원 고시 제2021-232호 (2021. 8. 11)</p></div>\n<div data-label=\"text\" data-bbox=\"0.1170,0.2570,0.5710,0.2720\" data-score=\"0.9564\"><p>개정 국가기술표준원 고시 제2022-0016호 (2022. 2. 16)</p></div>\n<div data-label=\"text\" data-bbox=\"0.1030,0.4590,0.4330,0.4750\" data-score=\"0.9986\"><p>부 칙(고시 제2022-0016호, 2022.02.16)</p></div>\n<div data-label=\"text\" data-bbox=\"0.1030,0.5090,0.3840,0.5240\" data-score=\"0.9997\"><p>이 고시는 고시한 날부터 시행한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1030,0.5270,0.7340,0.5430\" data-score=\"0.9895\"><p>단, 기존 안전기준(고시 2021.8.11.)은 1년 후(2023.02.15.)까지 병행 적용한다.</p></div>\n<div data-label=\"page_number\" data-bbox=\"0.4750,0.9260,0.5260,0.9370\" data-score=\"0.9970\" style=\"color:#888;font-size:0.9em;\">- 1 -</div>\n\n<div data-label=\"header\" data-bbox=\"0.7400,0.0610,0.8950,0.0740\" data-score=\"0.9998\" style=\"color:#888;font-size:0.9em;\">KC 60598-2-2:2022</div>\n<div data-label=\"title\" data-bbox=\"0.3770,0.1170,0.6230,0.1410\" data-score=\"0.9999\"><h1>전기용품안전기준</h1></div>\n<div data-label=\"text\" data-bbox=\"0.4640,0.1680,0.5340,0.1860\" data-score=\"0.9998\"><p>등기구</p></div>\n<div data-label=\"text\" data-bbox=\"0.3030,0.1880,0.6970,0.2060\" data-score=\"0.9976\"><p>제2-2부: 매입형 등기구-개별요구사항</p></div>\n<div data-label=\"text\" data-bbox=\"0.4510,0.2110,0.5480,0.2250\" data-score=\"1.0000\"><p>Luminaires</p></div>\n<div data-label=\"text\" data-bbox=\"0.2450,0.2280,0.7530,0.2430\" data-score=\"0.9437\"><p>Part 2-2: Particular requirements - Recessed luminaires</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.2590,0.8970,0.3060\" data-score=\"0.9965\"><p>이 안전기준은 2011년 11월에 제3.0판으로 발행된 IEC 60598-2-2, Luminaires - Part 2-2: Particular requirements - Recessed luminaires를 기초로, 기술적 내용 및 대응 국제표준의 구성을 변경하지 않고 작성한 KS C IEC 60598-2-2(2020.12)을 인용 채택한다.</p></div>\n<div data-label=\"page_number\" data-bbox=\"0.4750,0.9260,0.5260,0.9380\" data-score=\"0.8520\" style=\"color:#888;font-size:0.9em;\">- 2 -</div>\n\n<div data-label=\"header\" data-bbox=\"0.1030,0.0610,0.2600,0.0740\" data-score=\"0.9999\" style=\"color:#888;font-size:0.9em;\">KC 60598-2-2:2022</div>\n<div data-label=\"title\" data-bbox=\"0.2550,0.0940,0.7450,0.1190\" data-score=\"0.9929\"><h1>제2-2부: 매입형 등기구-개별요구사항</h1></div>\n<div data-label=\"title\" data-bbox=\"0.1600,0.1380,0.8380,0.1550\" data-score=\"0.9722\"><h1>Luminaires Part 2–2 : Particular requirements – Recessed luminaires</h1></div>\n<div data-label=\"title\" data-bbox=\"0.1020,0.1900,0.2510,0.2080\" data-score=\"0.9995\"><h1>2.1 적용 범위</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1010,0.2240,0.8970,0.2550\" data-score=\"0.9919\"><p>KS C IEC 60598-2의 이 표준은 1 000 V 이하에서 전기적 광원을 사용하는 매입형 등기구에 대한 개별 요구 사항을 규정한다. 이 기준은 공기 조절용 및 액화 냉각형 등기구에는 적용되지 않는다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1020,0.2710,0.2510,0.2880\" data-score=\"0.9969\"><h1>2.2 인용 표준</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.3040,0.8970,0.3360\" data-score=\"0.9968\"><p>다음의 인용표준은 이 표준의 적용을 위해 필수적이다. 발행연도가 표기된 인용표준은 인용된 판만을 적용한다. 발행연도가 표기 되지 않은 인용표준은 최신판(모든 추록을 포함)을 적용한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.3510,0.7010,0.3650\" data-score=\"0.9944\"><p>KS C IEC 60227(모든 부), 정격전압 450/750 V 이하 염화비닐절연 케이블</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.3660,0.6750,0.3810\" data-score=\"0.9963\"><p>KS C IEC 60245(모든 부), 정격전압 450/750 V 이하 고무 절연 케이블</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.3820,0.5980,0.3960\" data-score=\"0.9644\"><p>KS C IEC 60598-1, 등기구 - 제1부 : 일반 요구사항 및 시험</p></div>\n<div data-label=\"title\" data-bbox=\"0.1020,0.4280,0.3530,0.4450\" data-score=\"0.9993\"><h1>2.3 일반 시험 요구 사항</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1010,0.4620,0.8970,0.4930\" data-score=\"0.9845\"><p>KS C IEC 60598-1의 제0절의 규정을 적용한다. 제1부의 각 절에 설명된 이 시험은 제2부의 이 항 목에 기록된 순서에 따라 실시한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.5080,0.4870,0.5230\" data-score=\"0.9999\"><p>설비의 주위 온도 측정 절차는 부속서 A에 있다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1020,0.5610,0.2100,0.5770\" data-score=\"0.9871\"><h1>2.4 정의</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.5950,0.6210,0.6100\" data-score=\"0.9940\"><p>이 표준의 목적을 위해 KS C IEC 60598-1의 제1절을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1020,0.6410,0.2710,0.6580\" data-score=\"0.9998\"><h1>2.5 등기구 분류</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.6760,0.4380,0.6900\" data-score=\"0.9965\"><p>KS C IEC 60598-1의 제2절을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1020,0.7220,0.2100,0.7380\" data-score=\"0.9883\"><h1>2.6 표시</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.7550,0.4380,0.7700\" data-score=\"0.9949\"><p>KS C IEC 60598-1의 제3절을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1020,0.8020,0.2120,0.8180\" data-score=\"0.9769\"><h1>2.7 구조</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.8360,0.4380,0.8510\" data-score=\"0.9959\"><p>KS C IEC 60598-1의 제4절을 적용한다.</p></div>\n<div data-label=\"page_number\" data-bbox=\"0.4750,0.9260,0.5260,0.9380\" data-score=\"0.9147\" style=\"color:#888;font-size:0.9em;\">- 3 -</div>\n\n<div data-label=\"header\" data-bbox=\"0.7390,0.0610,0.8950,0.0740\" data-score=\"0.9999\" style=\"color:#888;font-size:0.9em;\">KC 60598-2-2:2022</div>\n<div data-label=\"title\" data-bbox=\"0.1020,0.0940,0.3720,0.1110\" data-score=\"0.9949\"><h1>2.8 연면 거리와 공간 거리</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.1280,0.4460,0.1420\" data-score=\"0.9962\"><p>KS C IEC 60598-1의 제11절을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1020,0.1740,0.2100,0.1910\" data-score=\"0.9668\"><h1>2.9 접지</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.2080,0.4360,0.2220\" data-score=\"0.9967\"><p>KS C IEC 60598-1의 제7절을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1020,0.2550,0.2240,0.2710\" data-score=\"0.9420\"><h1>2.10 단자</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.2880,0.5320,0.3030\" data-score=\"0.9951\"><p>KS C IEC 60598-1의 제14절 및 제15절을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1020,0.3350,0.3030,0.3510\" data-score=\"0.9853\"><h1>2.11 내·외부 배선</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.3690,0.4360,0.3830\" data-score=\"0.9960\"><p>KS C IEC 60598-1의 제5절을 적용한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.3990,0.8950,0.4610\" data-score=\"0.9983\"><p>전선 케이블이나 코드는 등기구 제조자가 공급할 때 전원에 연결하는 수단으로 사용되는데, 정상 사용 조건에서 노출될 수 있는 가장 높은 온도에서 품질이 저하되지 않고 견딜 수 있는 능력이 있어야하고, 적어도 IEC 60227, IEC 60227A이나 IEC 60245에서 규정된 특성과 기계적이고 전기적인 특성이 같아야 한다. PVC와 고무가 아닌 다른 물질은 위 요구 사항을 만족한다면 적합하다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.4760,0.5180,0.4910\" data-score=\"0.9996\"><p>적합 여부는 2.13에 규정된 시험에 의해서 판정한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.5070,0.8030,0.5210\" data-score=\"0.9994\"><p>비고 매입형 등기구의 전선 케이블과 코드의 사용은 다음 사항을 위해 적합하여야 한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1110,0.5230,0.6600,0.5370\" data-score=\"0.9877\"><p>1) 전선 케이블과 코드는 매입 부분 내에 설치하여 만지기 쉽지 않다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1110,0.5380,0.4270,0.5520\" data-score=\"0.9757\"><p>2) 매입 부분에의 등기구의 용이한 설치</p></div>\n<div data-label=\"text\" data-bbox=\"0.1100,0.5540,0.7030,0.5680\" data-score=\"0.9921\"><p>3)반조절(settable) 및 조절 가능한(adjustable) 매입형 등기구의 조절 허용</p></div>\n<div data-label=\"title\" data-bbox=\"0.1020,0.6000,0.4050,0.6170\" data-score=\"0.9914\"><h1>2.12 충전부에 대한 감전 보호</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.6340,0.4360,0.6480\" data-score=\"0.9965\"><p>KS C IEC 60598-1의 제8절을 적용한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.6650,0.8940,0.6950\" data-score=\"0.9927\"><p>천장이나 빈 공간에서 등기구와 부품의 일부는 천장 아래 등기구 부분과 전기 충격에 대한 보호 등급이 같아야 한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.7110,0.8940,0.7420\" data-score=\"0.9717\"><p>비고 천장이나 빈 공간은 설치와 보수를 위해 접근 가능하며, 벽은 전기 충격에 대한 적절한 보호 장치가 되지 못한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.7580,0.3820,0.7720\" data-score=\"0.9999\"><p>적합 여부는 검사에 의해 판정한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1020,0.8040,0.4320,0.8210\" data-score=\"0.9996\"><h1>2.13 내구성 시험 및 내열성 시험</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.8390,0.5240,0.8530\" data-score=\"0.9975\"><p>KS C IEC 60598-1의 제12절과 2.13.1을 적용한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1010,0.8690,0.8940,0.8990\" data-score=\"0.9985\"><p>2.13.1 전원과의 연결을 위해 등기구 안을 통과하거나 조명 기구와 접촉할 수 있는 배선은 불안전 온도에 도달해서는 안 된다.</p></div>\n<div data-label=\"page_number\" data-bbox=\"0.4750,0.9260,0.5240,0.9370\" data-score=\"0.9062\" style=\"color:#888;font-size:0.9em;\">- 4 -</div>\n\n<div data-label=\"header\" data-bbox=\"0.1030,0.0610,0.2600,0.0740\" data-score=\"0.9999\" style=\"color:#888;font-size:0.9em;\">KC 60598-2-2:2022</div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.1090,0.4250,0.1240\" data-score=\"0.9999\"><p>적합 여부는 다음 시험에 의해 판정한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1010,0.1400,0.8970,0.1870\" data-score=\"0.9994\"><p>등기구는 등기구와 함께 제공된 케이블을 사용하거나 등기구 위에 표시된 것에 따라 케이블을 사용하거나, 표시가 되지 않았다면 제조자의 지침서에 규정된 대로 전원과 연결한다. 한편으로는 IEC 60227을 따르는 PVC 케이블을 사용한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1010,0.2010,0.8950,0.2480\" data-score=\"0.9949\"><p>가장 뜨거운 지점은 사용 중 케이블이 접촉하기 쉬운 지점(등기구의 내부 경로를 따르거나 외부 표면 위)에 있다. 케이블은 이 지점과 접촉한 채로 가법게 고정시키고 KS C IEC 60598-1의 부속서 K에서 설명한 대로 측정점에서 접촉 지점에서 절연체의 온도를 측정한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.2640,0.6110,0.2790\" data-score=\"0.9986\"><p>케이블의 동작 온도는 표 1에 주어진 제한값을 넘어서지 않는다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1010,0.2950,0.8950,0.3400\" data-score=\"0.9960\"><p>IP 20보다 큰 IP 분류를 가진 등기구는 KS C IEC 60598-2의 2.14에 규정된 KS C IEC 60598-1의 9.2의 시험 후, 그러나 9.3의 시험 전에 KS C IEC 60598-1의 12.4, 12.5, 12.6 및 12.7의 관련 시험을 해야 한다.</p></div>\n<div data-label=\"table_caption\" data-bbox=\"0.3890,0.3560,0.6090,0.3710\" data-score=\"0.9433\" style=\"font-weight:600;\">표 1-케이블의 동작 온도</div>\n<div data-label=\"table\" data-bbox=\"0.1390,0.3720,0.8650,0.5210\" data-score=\"0.9914\"><table><tr><td>케이블의 지정</td><td>동작 온도의 제한</td></tr><tr><td>등기구와 함께 제공되는 케이블(슬리이브 관 포함)</td><td>KS C IEC 60598-1의 표 12.2에 정해진 최대 온도</td></tr><tr><td>등기구와 함께 제공되지 않는 케이블 :a) 케이블 온도 표시가 된 등기구b) 케이블 온도 표시가 안 된 등기구</td><td>표시된 온도기계적인 압력이 주어지지 않은 일반 PVC에서 KS C IEC 60598-1의 표 12.2에 규정된 최대 온도</td></tr></table></div>\n<div data-label=\"title\" data-bbox=\"0.1020,0.5500,0.3320,0.5670\" data-score=\"0.9992\"><h1>2.14 내진성 및 내습성</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.5840,0.4370,0.5990\" data-score=\"0.9948\"><p>KS C IEC 60598-1의 제9절을 적용한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1010,0.6150,0.8970,0.6450\" data-score=\"0.9982\"><p>IP 분류가 IP 20보다 큰 등기구의 경우 KS C IEC 60598-1의 제9절의 시험 순서에 따라 KS C IEC 60598-2-2의 2.13의 시험에 규정되어야 한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1020,0.6760,0.3940,0.6940\" data-score=\"0.9995\"><h1>2.15 절연 저항 및 절연 내력</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.7110,0.4460,0.7250\" data-score=\"0.9958\"><p>KS C IEC 60598-1의 제10절을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1020,0.7570,0.4110,0.7740\" data-score=\"0.9970\"><h1>2.16 내열, 내화 및 내트래킹성</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.7910,0.4460,0.8050\" data-score=\"0.9961\"><p>KS C IEC 60598-1의 제13절을 적용한다.</p></div>\n<div data-label=\"page_number\" data-bbox=\"0.4750,0.9260,0.5240,0.9370\" data-score=\"0.9155\" style=\"color:#888;font-size:0.9em;\">- 5 -</div>\n\n<div data-label=\"header\" data-bbox=\"0.7390,0.0610,0.8950,0.0740\" data-score=\"0.9999\" style=\"color:#888;font-size:0.9em;\">KC 60598-2-2:2022</div>\n<div data-label=\"title\" data-bbox=\"0.4550,0.0970,0.5460,0.1140\" data-score=\"0.9996\"><h1>부속서 A</h1></div>\n<div data-label=\"title\" data-bbox=\"0.4710,0.1190,0.5290,0.1370\" data-score=\"0.9999\"><h1>(참고)</h1></div>\n<div data-label=\"title\" data-bbox=\"0.3910,0.1630,0.6060,0.1810\" data-score=\"0.9995\"><h1>설비의 주위 온도 측정</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.2240,0.8960,0.2850\" data-score=\"0.9976\"><p>조명 설비에서 매입형 등기구가 온도 제한 범위 안에서 동작하는지 결정하는 데 상당한 주의가 필요하다. 매입형 등기구가 제안된 설비에서 만족할지 예상하는 것이 더 어려워서 “실물 크기의 모형”을 보통 필요로 한다. 과거에는 예를 들면 천장 판 위에 가열 장치 때문에 등기구가 과열되었던 예가 있다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.3070,0.8940,0.3850\" data-score=\"0.9947\"><p>다음의 과정은 등기구가 작동하는 주위 온도를 측정하기 위한 것이다. 등기구의 ta 평점은 적어도 주위 온도와 같아야 한다. 주위 온도는 전형적인 빈 공간의 중간 점에서 천장의 면(또는 이외의 부착표면)에서 측정되어야 한다. 설비상에서 모든 등기구와 등기구의 열적 상태에 영향을 줄 수 있는 모든 시설이 작동하고 있다는 것은 중요하다. 빈 공간은 측정하는 지점 위에서 보호되어 공기의 비전형적인 교환을 막고 덮개는 등기구로 흡수될 외부열을 흡수할 수 있게 된다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.4070,0.5420,0.4230\" data-score=\"0.9991\"><p>비고 이 목적으로 등기구의 외관을 삽입하면 편리하다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.4450,0.8950,0.5070\" data-score=\"0.9990\"><p>매입형 등기구의 작동 온도를 측정하는 데 필요한 매입 부분에 대한 시험은 서비스 중 경험하기 쉬운 가장 까다로운 밀폐된 매입 부분(다른 열원이 없는)을 나타내기 위해 의도된 것이다. 등기구의 제조자가 작동이 만족스러울 것임을 검증하지 않는다면 매입형 등기구는 매입 부분의 시험에 필요한 공간보다 작은 공간에 설치되어서는 안 된다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.5300,0.8940,0.6220\" data-score=\"0.9885\"><p>많은 양의 공기가 열 방출 설비에 의해 상쇄된다면 매입 부분에 대한 시험은 천장의 온도 조건에 근접한다. 특수한 설비에서는 이보다 더 까다로운 열적 조건이 있을 수 있으므로 실제 점검을 수행하는 게 필수적이다. 반대로 천장 위의 공간에 자유로운 공기의 이동이 있으면서 열 방출 시설은 없을 수 있다. 그러한 설비에 대해 매입 부분에 대한 시험에서 결정된 등기구의 \\(t_a\\)는 온도의 극한 점에 합쳐지게 되는데, 등기구의 제조자가 특수한 설비에서의 작동이 만족스러울 것이라고 입증한다면 ta는 초과할 수 있다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.6450,0.8970,0.6760\" data-score=\"0.9576\"><p>등기구에 대한  \\( t_{a} \\) 값을 결정하고 점검하는 동안 주위 온도의 측정은 KS C IEC 60598-1의 부속서 K 에 따라 방풍 장치가 있는 밀폐된 곳에서 하고 매입 부분 시험은 밖에서 한다.</p></div>\n<div data-label=\"page_number\" data-bbox=\"0.4750,0.9260,0.5260,0.9380\" data-score=\"0.9232\" style=\"color:#888;font-size:0.9em;\">- 6 -</div>\n\n<div data-label=\"header\" data-bbox=\"0.1030,0.0610,0.2600,0.0740\" data-score=\"0.9999\" style=\"color:#888;font-size:0.9em;\">KC 60598-2-2:2022</div>\n<div data-label=\"title\" data-bbox=\"0.2490,0.0940,0.7470,0.1100\" data-score=\"0.9977\"><h1>해설 1 전기용품안전기준의 한국산업표준과 단일화의 취지</h1></div>\n<div data-label=\"title\" data-bbox=\"0.1030,0.1280,0.1680,0.1410\" data-score=\"0.9717\"><h1>1. 개요</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.1440,0.8950,0.1750\" data-score=\"0.9984\"><p>이 기준은 전기용품안전관리법에 따른 안전관리대상 전기제품의 안전관리를 수행함에 있어 국가표준인 한국산업표준(KS)을 최대한 인용하여 단일화한 전기용품안전기준이다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1020,0.1940,0.2340,0.2080\" data-score=\"0.9219\"><h1>2.배경 및 목적</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.2110,0.8950,0.2580\" data-score=\"0.9998\"><p>전기용품안전관리법에 따른 안전관리대상 전기제품의 인증을 위한 시험의 기준은 2000년부터 국제표준을 기반으로 안전성 규격을 도입·인용하여 운영해 왔으며 또한 한국산업표준도 2000년부터 국제표준에 바탕을 두고 있으므로 규격의 내용은 양자가 거의 동일하다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.2600,0.8940,0.2920\" data-score=\"0.9986\"><p>따라서 전기용품안전관리법에 따른 안전기준과 한국산업표준의 중복인증이 발생하였으며, 기준의 단일화가 필요하게 되었다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.2930,0.8940,0.3250\" data-score=\"0.9990\"><p>전기용품 안전인증기준의 단일화는 기업의 인증대상제품의 인증시 시간과 비용을 줄이기 위한 목적이며, 국가표준인 한국산업표준과 IEC 국제표준을 기반으로 단일화를 추진이 필요하다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.3270,0.8940,0.3750\" data-score=\"0.9894\"><p>또한 전기용품 안전인증기준을 한국산업표준을 기반으로 단일화 함으로써 한국산업표준의 위상을 강화하고, 우리나라 각 부처별로 시행하는 법률에 근거한 각 인증의 기준을 국제표준에 근거한 한국 산업표준으로 일원화할 수 있도록 범부처 모범사례가 되도록 하였다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1020,0.3940,0.2270,0.4080\" data-score=\"0.9681\"><h1>3. 단일화 방향</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.4100,0.8940,0.4740\" data-score=\"0.9927\"><p>전기용품안전관리법에서 적용하기 위한 안전기준을 동일한 한국산업표준으로 간단히 전기용품안전기준으로 채택하면 되겠지만, 전기용품안전기준은 그간의 전기용품 안전관리제도를 운용해 오면서 국내기업의 여건에 맞추어 시험항목, 시험방법 및 기준을 여러분의 개정을 통해 변경함으로써 한국산업표준과의 차이를 보이게 되었다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.4760,0.8940,0.5240\" data-score=\"0.9992\"><p>한국산업표준과 전기용품안전기준의 단일화 방향을 두 기준 모두 국제표준에 바탕을 두고 있으므로 전기용품안전기준에서 한국산업표준과 중복되는 부분은 그 내용을 그대로 인용하는 방식으로 구성하고자 한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.5260,0.8930,0.5580\" data-score=\"0.9972\"><p>안전기준에서 그간의 전기용품 안전관리제도를 운용해 오면서 개정된 시험항목과 시험방법, 변경된 기준은 별도의 항을 추가하도록 하였다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.5600,0.8940,0.6240\" data-score=\"0.9891\"><p>한국산업표준과 전기용품안전기준을 비교하여 한국산업표준의 최신판일 경우는 한국산업표준의 내용을 기준으로 전기용품안전기준의 내용을 개정키로 하며, 이 경우 전기용품안전기준의 구판은 병행적용함으로서 그간의 인증받은 제품들이 개정기준에 맞추어 개선할 시간적 여유를 줌으로서 기업의 혼란을 방지하고자 한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.6260,0.8940,0.6740\" data-score=\"0.9816\"><p>그리고 국제표준이 개정되어 판번이 변경되었을 경우는 그 최신판을 한국산업표준으로 개정 요청을 하고 그리고 전기용품안전기준으로 그 내용을 채택함으로써 전기용품안전기준을 국제표준에 신속하게 대응하고자 한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.6760,0.8930,0.7080\" data-score=\"0.9987\"><p>그리고 전기용품안전기준에서만 규정되어 있는 고유기준은 한국산업표준에도 제정요청하고, 아울러 필요시 국제표준에도 제안하여 우리기술을 국제표준에 반영하고자 한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1020,0.7260,0.1680,0.7400\" data-score=\"0.9942\"><h1>4. 향후</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.7420,0.8940,0.7730\" data-score=\"0.9976\"><p>한국산업표준과 전기용품안전기준의 중복시험 항목을 없애고 단일화 함으로써 표준과 기준의 이원화에 따른 중복인증의 기업부담을 경감시키고, KS표준의 위상을 강화하고자 한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.7760,0.8940,0.8070\" data-score=\"0.9996\"><p>아울러 우리나라 각 부처별로 시행하는 법률에 근거한 각 인증의 기준을 국제표준에 근거한 한국산업표준으로 일원화할 수 있도록 범부처 모범사례가 되도록 한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.8090,0.8940,0.8570\" data-score=\"0.9997\"><p>또한 국제인증기구는 국제표준 인증체계를 확대하는 추세에 있으며, 표준을 활용하여 자국 기업의 경쟁력을 강화하는 추세에 있다. 이에 대응하여 국가표준과 안전기준이 국제표준에 신속히 대응함으로서 우리나라의 수출기업이 인증에 애로사항을 감소하도록 한다.</p></div>\n<div data-label=\"page_number\" data-bbox=\"0.4750,0.9260,0.5240,0.9370\" data-score=\"0.9234\" style=\"color:#888;font-size:0.9em;\">- 7 -</div>\n\n<div data-label=\"header\" data-bbox=\"0.7400,0.0610,0.8950,0.0740\" data-score=\"0.9998\" style=\"color:#888;font-size:0.9em;\">KC 60598-2-2:2022</div>\n<div data-label=\"text\" data-bbox=\"0.3590,0.0930,0.6390,0.1090\" data-score=\"0.9135\"><p>심의:조명기기 분야 전문위원회</p></div>\n<div data-label=\"text\" data-bbox=\"0.1580,0.1320,0.4600,0.1480\" data-score=\"0.9253\"><p>구 분 성 명 근 무 처</p></div>\n<div data-label=\"text\" data-bbox=\"0.8050,0.1320,0.8760,0.1470\" data-score=\"0.8600\"><p>직위</p></div>\n<div data-label=\"text\" data-bbox=\"0.1590,0.1500,0.2580,0.1660\" data-score=\"0.7906\" data-corrected=\"true\"><p>위원장</p></div>\n<div data-label=\"text\" data-bbox=\"0.1590,0.1690,0.2580,0.1840\" data-score=\"0.9542\"><p>(위 원)</p></div>\n<div data-label=\"text\" data-bbox=\"0.1570,0.4050,0.2590,0.4210\" data-score=\"0.9832\"><p>(간 사)</p></div>\n<div data-label=\"text\" data-bbox=\"0.3130,0.4790,0.6850,0.4940\" data-score=\"0.9667\"><p>원안작성협력 : 시험 인증기관 담당자 연구포럼</p></div>\n<div data-label=\"text\" data-bbox=\"0.1520,0.5200,0.4600,0.5360\" data-score=\"0.9179\"><p>구 분 성 명 근 무 처</p></div>\n<div data-label=\"text\" data-bbox=\"0.8040,0.5200,0.8760,0.5350\" data-score=\"0.8586\"><p>직위</p></div>\n<div data-label=\"text\" data-bbox=\"0.1580,0.5420,0.2590,0.5570\" data-score=\"0.9999\"><p>(연구책임자)</p></div>\n<div data-label=\"text\" data-bbox=\"0.1580,0.5640,0.5080,0.5800\" data-score=\"0.9997\"><p>(참여연구원) 이대도 한국산업기술시험원</p></div>\n<div data-label=\"text\" data-bbox=\"0.8130,0.5650,0.8660,0.5790\" data-score=\"1.0000\"><p>연구원</p></div>\n<div data-label=\"text\" data-bbox=\"0.1260,0.6970,0.8550,0.7590\" data-score=\"0.9894\"><p>전기용품안전기준의 열람은 국가기술표준원 홈페이지(http://www.kats.go.kr), 및 제품안전정보센터(http://www.safety.korea.kr)를 이용하여 주시고, 이 전기용품안전기준에 대한 의견 또는 질문은 산업통상자원부 국가기술표준원 제품안전정책국 전기통신제품안전과(043-870-5441~9)으로 연락하여 주십시오.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1260,0.7740,0.8530,0.8090\" data-score=\"0.9992\"><p>이 안전기준은 전기용품안전관리법 제3조의 규정에 따라 매 5년마다 안전기준전문위원회에서 심의되어 제정, 개정 또는 폐지됩니다.</p></div>\n\n<div data-label=\"title\" data-bbox=\"0.3100,0.3250,0.6880,0.3440\" data-score=\"0.9992\"><h1>KC 60598-2-2 : 2022-02-16</h1></div>\n<div data-label=\"title\" data-bbox=\"0.4220,0.3610,0.5780,0.3820\" data-score=\"1.0000\"><h1>Luminaires</h1></div>\n<div data-label=\"title\" data-bbox=\"0.2950,0.3990,0.7090,0.4370\" data-score=\"0.9571\"><h1>- Part 2-2: Particular requirements - Recessed luminaires</h1></div>\n<div data-label=\"text\" data-bbox=\"0.2670,0.4550,0.3750,0.4680\" data-score=\"1.0000\"><p>ICS 29.140.40</p></div>\n<div data-label=\"text\" data-bbox=\"0.2140,0.5450,0.7850,0.5650\" data-score=\"1.0000\"><p>Korean Agency for Technology and Standards</p></div>\n<div data-label=\"text\" data-bbox=\"0.4130,0.5660,0.5890,0.5810\" data-score=\"1.0000\"><p>http://www.kats.go.kr</p></div>\n\n<div data-label=\"header\" data-bbox=\"0.1080,0.0970,0.2070,0.2000\" data-score=\"0.6673\" style=\"color:#888;font-size:0.9em;\">K</div>\n<div data-label=\"title\" data-bbox=\"0.1070,0.4110,0.2870,0.4440\" data-score=\"0.9931\"><h1>KATS</h1></div>\n<div data-label=\"title\" data-bbox=\"0.1060,0.4490,0.3510,0.4640\" data-score=\"0.9889\"><h1>산업통상자원부 국가기술표준원</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1050,0.4660,0.4830,0.4790\" data-score=\"1.0000\"><p>Korean Agency for Technology and Standards</p></div>\n<div data-label=\"text\" data-bbox=\"0.1060,0.4810,0.4010,0.4950\" data-score=\"1.0000\"><p>Ministry of Trade, Industry & Energy</p></div>\n<div data-label=\"text\" data-bbox=\"0.1060,0.4960,0.5170,0.5100\" data-score=\"0.9591\"><p>주소:(우)369-811충북 음성군 맹동면 이수로 93</p></div>\n<div data-label=\"text\" data-bbox=\"0.1060,0.5120,0.4820,0.5260\" data-score=\"0.9823\"><p>TEL : 043-870-5441~9 http://www.kats.go.kr</p></div>\n<div data-label=\"image\" data-bbox=\"0.1070,0.5400,0.8120,0.9000\"><figure style=\"text-align:center;\"><img src=\"/v2/api/figures/d4f88bf3e0174fe1ab15702703a9245f/12/fig_0.jpg?exp=1788163220&sig=c5ab76fef7b35aa0a288d4be0411a0af64b32cf21aa8b80a82e3592ee281e170&aid=1e7abe98e7320523\" alt=\"image\" style=\"width:70%;height:auto;\" /></figure></div>",
+        "text_ko": null,
+        "pages": [
+          {
+            "page_number": 1,
+            "part_number": null,
+            "text": "<div data-label=\"header\" data-bbox=\"0.1180,0.1000,0.2080,0.1950\" data-score=\"0.6422\" style=\"color:#888;font-size:0.9em;\">K</div>\n<div data-label=\"header\" data-bbox=\"0.5430,0.1170,0.8940,0.1500\" data-score=\"0.9917\" style=\"color:#888;font-size:0.9em;\">KC 60598-2-2</div>\n<div data-label=\"header\" data-bbox=\"0.6280,0.1600,0.8930,0.1820\" data-score=\"0.9965\" style=\"color:#888;font-size:0.9em;\">(개정 : 2022-02-16)</div>\n<div data-label=\"header\" data-bbox=\"0.6230,0.2000,0.8930,0.2200\" data-score=\"0.9955\" style=\"color:#888;font-size:0.9em;\">IEC Ed 3.0 2011-11</div>\n<div data-label=\"title\" data-bbox=\"0.1080,0.2880,0.6030,0.3340\" data-score=\"0.9999\"><h1>전기용품안전기준</h1></div>\n<div data-label=\"title\" data-bbox=\"0.1060,0.3920,0.8890,0.4500\" data-score=\"0.9828\"><h1>Technical Regulations for Electrical and\nTelecommunication Products and Components</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1060,0.5030,0.1870,0.5230\" data-score=\"0.9996\"><p>등기구</p></div>\n<div data-label=\"text\" data-bbox=\"0.1080,0.5260,0.5510,0.5460\" data-score=\"0.9731\"><p>제2-2부: 매입형 등기구-개별요구사항</p></div>\n<div data-label=\"text\" data-bbox=\"0.1070,0.5500,0.6940,0.5670\" data-score=\"0.9898\"><p>Part 2-2: Particular requirements - Recessed luminaires</p></div>\n<div data-label=\"text\" data-bbox=\"0.3450,0.7640,0.5230,0.8010\" data-score=\"0.9860\"><p>KATS</p></div>\n<div data-label=\"text\" data-bbox=\"0.5380,0.7640,0.8890,0.8040\" data-score=\"0.9831\"><p>국가기술표준원</p></div>\n<div data-label=\"text\" data-bbox=\"0.5990,0.8530,0.8930,0.8740\" data-score=\"1.0000\"><p>http://www.kats.go.kr</p></div>",
+            "text_ko": null,
+            "links": [
+              {
+                "uri": "http://www.kats.go.kr",
+                "data_bbox": "0.6038,0.8524,0.8917,0.8702"
+              }
+            ],
+            "confidence": 0.9617
+          },
+          {
+            "page_number": 2,
+            "part_number": null,
+            "text": "<div data-label=\"header\" data-bbox=\"0.7400,0.0610,0.8950,0.0740\" data-score=\"0.9998\" style=\"color:#888;font-size:0.9em;\">KC 60598-2-2:2022</div>\n<div data-label=\"title\" data-bbox=\"0.4170,0.1090,0.5830,0.1300\" data-score=\"0.9639\"><h1>목 차</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1050,0.1640,0.8620,0.1800\" data-score=\"0.9954\"><p>전기용품안전기준 제정, 개정, 폐지 이력 및 고시현황 1</p></div>\n<div data-label=\"text\" data-bbox=\"0.1050,0.1930,0.8640,0.2090\" data-score=\"0.9253\"><p>서 문 (Foreword) 2</p></div>\n<div data-label=\"text\" data-bbox=\"0.1040,0.2220,0.8640,0.2370\" data-score=\"0.9857\"><p>2.1 적용 범위 (Scope) 3</p></div>\n<div data-label=\"text\" data-bbox=\"0.1050,0.2380,0.8630,0.2500\" data-score=\"0.9815\"><p>2.2 인용 표준 (Normative references) 3</p></div>\n<div data-label=\"text\" data-bbox=\"0.1050,0.2510,0.8630,0.2650\" data-score=\"0.9917\"><p>2.3 일반 시험 요구 사항 (General test requirements) 3</p></div>\n<div data-label=\"text\" data-bbox=\"0.1050,0.2660,0.8630,0.2790\" data-score=\"0.9632\"><p>2.4 정의 (Definitions) 3</p></div>\n<div data-label=\"text\" data-bbox=\"0.1050,0.2800,0.8630,0.2930\" data-score=\"0.9857\"><p>2.5 등기구 분류 (Classification of luminaires) 3</p></div>\n<div data-label=\"text\" data-bbox=\"0.1050,0.2940,0.8630,0.3070\" data-score=\"0.9423\"><p>2.6 표시 (Marking) 3</p></div>\n<div data-label=\"text\" data-bbox=\"0.1050,0.3080,0.8630,0.3210\" data-score=\"0.9586\"><p>2.7 구조 (Construction) 3</p></div>\n<div data-label=\"text\" data-bbox=\"0.1050,0.3220,0.8630,0.3360\" data-score=\"0.9649\"><p>2.8 연면 거리와 공간 거리 (Creepage distances and clearances) 4</p></div>\n<div data-label=\"text\" data-bbox=\"0.1050,0.3370,0.8630,0.3500\" data-score=\"0.9463\"><p>2.9 접지 (Provision for earthing) 4</p></div>\n<div data-label=\"text\" data-bbox=\"0.1050,0.3510,0.8630,0.3640\" data-score=\"0.9012\"><p>2.10 단자 (Terminals) 4</p></div>\n<div data-label=\"text\" data-bbox=\"0.1050,0.3650,0.8630,0.3790\" data-score=\"0.9930\"><p>2.11 내·외부 배선 (External and internal wiring) 4</p></div>\n<div data-label=\"text\" data-bbox=\"0.1050,0.3800,0.8630,0.3930\" data-score=\"0.9784\"><p>2.12 총전부에 대한 감전 보호 (Protection against electric shock) 4</p></div>\n<div data-label=\"text\" data-bbox=\"0.1050,0.3940,0.8630,0.4070\" data-score=\"0.9897\"><p>2.13 내구성 시험 및 내열성 시험 (Endurance tests and thermal tests) 4</p></div>\n<div data-label=\"text\" data-bbox=\"0.1050,0.4080,0.8630,0.4220\" data-score=\"0.9877\"><p>2.14 내진성 및 내습성 (Resistance to dust and moisture) 5</p></div>\n<div data-label=\"text\" data-bbox=\"0.1050,0.4230,0.8630,0.4360\" data-score=\"0.9926\"><p>2.15 절연 저항 및 절연 내력 (Insulation resistance and electric strength) 5</p></div>\n<div data-label=\"text\" data-bbox=\"0.1050,0.4370,0.8630,0.4500\" data-score=\"0.9927\"><p>2.16 내열, 내화 및 내트래킹성 (Resistance to heat, fire and tracking) 5</p></div>\n<div data-label=\"text\" data-bbox=\"0.1040,0.4780,0.8640,0.5070\" data-score=\"0.9772\"><p>부속서 A (참고) 제품의 재시험을 요구하는 심각한/중요한 요구사항을 포함하는 개정된 절의 일정 (Annex A) 6</p></div>\n<div data-label=\"text\" data-bbox=\"0.1050,0.5350,0.8630,0.5500\" data-score=\"0.8432\" data-corrected=\"true\"><p>해설 17</p></div>",
+            "text_ko": null,
+            "links": null,
+            "confidence": 0.9664
+          },
+          {
+            "page_number": 3,
+            "part_number": null,
+            "text": "<div data-label=\"header\" data-bbox=\"0.1040,0.0610,0.2600,0.0740\" data-score=\"0.9999\" style=\"color:#888;font-size:0.9em;\">KC 60598-2-2:2022</div>\n<div data-label=\"text\" data-bbox=\"0.1030,0.1090,0.5250,0.1250\" data-score=\"0.9912\"><p>전기용품안전기준 제정, 개정, 폐지 이력 및 고시현황</p></div>\n<div data-label=\"text\" data-bbox=\"0.1160,0.1630,0.5280,0.1800\" data-score=\"0.9923\"><p>제정 기술표준원 고시 제2000 - 54호 (2000. 4. 6)</p></div>\n<div data-label=\"text\" data-bbox=\"0.1170,0.1800,0.5370,0.1950\" data-score=\"0.9806\"><p>개정 기술표준원 고시 제2003 - 523호 (2003. 5.24)</p></div>\n<div data-label=\"text\" data-bbox=\"0.1170,0.1960,0.5380,0.2100\" data-score=\"0.9749\"><p>개정 기술표준원 고시 제2006-959호 (2006.12.28)</p></div>\n<div data-label=\"text\" data-bbox=\"0.1170,0.2110,0.5620,0.2250\" data-score=\"0.9758\"><p>개정 국가기술표준원 고시 제2014-0421호 (2014. 9. 3)</p></div>\n<div data-label=\"text\" data-bbox=\"0.1170,0.2260,0.5620,0.2400\" data-score=\"0.9691\"><p>개정 국가기술표준원 고시 제2015-383호 (2015. 9. 23)</p></div>\n<div data-label=\"text\" data-bbox=\"0.1170,0.2420,0.5620,0.2560\" data-score=\"0.9760\"><p>개정 국가기술표준원 고시 제2021-232호 (2021. 8. 11)</p></div>\n<div data-label=\"text\" data-bbox=\"0.1170,0.2570,0.5710,0.2720\" data-score=\"0.9564\"><p>개정 국가기술표준원 고시 제2022-0016호 (2022. 2. 16)</p></div>\n<div data-label=\"text\" data-bbox=\"0.1030,0.4590,0.4330,0.4750\" data-score=\"0.9986\"><p>부 칙(고시 제2022-0016호, 2022.02.16)</p></div>\n<div data-label=\"text\" data-bbox=\"0.1030,0.5090,0.3840,0.5240\" data-score=\"0.9997\"><p>이 고시는 고시한 날부터 시행한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1030,0.5270,0.7340,0.5430\" data-score=\"0.9895\"><p>단, 기존 안전기준(고시 2021.8.11.)은 1년 후(2023.02.15.)까지 병행 적용한다.</p></div>\n<div data-label=\"page_number\" data-bbox=\"0.4750,0.9260,0.5260,0.9370\" data-score=\"0.9970\" style=\"color:#888;font-size:0.9em;\">- 1 -</div>",
+            "text_ko": null,
+            "links": null,
+            "confidence": 0.9847
+          },
+          {
+            "page_number": 4,
+            "part_number": null,
+            "text": "<div data-label=\"header\" data-bbox=\"0.7400,0.0610,0.8950,0.0740\" data-score=\"0.9998\" style=\"color:#888;font-size:0.9em;\">KC 60598-2-2:2022</div>\n<div data-label=\"title\" data-bbox=\"0.3770,0.1170,0.6230,0.1410\" data-score=\"0.9999\"><h1>전기용품안전기준</h1></div>\n<div data-label=\"text\" data-bbox=\"0.4640,0.1680,0.5340,0.1860\" data-score=\"0.9998\"><p>등기구</p></div>\n<div data-label=\"text\" data-bbox=\"0.3030,0.1880,0.6970,0.2060\" data-score=\"0.9976\"><p>제2-2부: 매입형 등기구-개별요구사항</p></div>\n<div data-label=\"text\" data-bbox=\"0.4510,0.2110,0.5480,0.2250\" data-score=\"1.0000\"><p>Luminaires</p></div>\n<div data-label=\"text\" data-bbox=\"0.2450,0.2280,0.7530,0.2430\" data-score=\"0.9437\"><p>Part 2-2: Particular requirements - Recessed luminaires</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.2590,0.8970,0.3060\" data-score=\"0.9965\"><p>이 안전기준은 2011년 11월에 제3.0판으로 발행된 IEC 60598-2-2, Luminaires - Part 2-2: Particular requirements - Recessed luminaires를 기초로, 기술적 내용 및 대응 국제표준의 구성을 변경하지 않고 작성한 KS C IEC 60598-2-2(2020.12)을 인용 채택한다.</p></div>\n<div data-label=\"page_number\" data-bbox=\"0.4750,0.9260,0.5260,0.9380\" data-score=\"0.8520\" style=\"color:#888;font-size:0.9em;\">- 2 -</div>",
+            "text_ko": null,
+            "links": null,
+            "confidence": 0.9737
+          },
+          {
+            "page_number": 5,
+            "part_number": null,
+            "text": "<div data-label=\"header\" data-bbox=\"0.1030,0.0610,0.2600,0.0740\" data-score=\"0.9999\" style=\"color:#888;font-size:0.9em;\">KC 60598-2-2:2022</div>\n<div data-label=\"title\" data-bbox=\"0.2550,0.0940,0.7450,0.1190\" data-score=\"0.9929\"><h1>제2-2부: 매입형 등기구-개별요구사항</h1></div>\n<div data-label=\"title\" data-bbox=\"0.1600,0.1380,0.8380,0.1550\" data-score=\"0.9722\"><h1>Luminaires Part 2–2 : Particular requirements – Recessed luminaires</h1></div>\n<div data-label=\"title\" data-bbox=\"0.1020,0.1900,0.2510,0.2080\" data-score=\"0.9995\"><h1>2.1 적용 범위</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1010,0.2240,0.8970,0.2550\" data-score=\"0.9919\"><p>KS C IEC 60598-2의 이 표준은 1 000 V 이하에서 전기적 광원을 사용하는 매입형 등기구에 대한 개별 요구 사항을 규정한다. 이 기준은 공기 조절용 및 액화 냉각형 등기구에는 적용되지 않는다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1020,0.2710,0.2510,0.2880\" data-score=\"0.9969\"><h1>2.2 인용 표준</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.3040,0.8970,0.3360\" data-score=\"0.9968\"><p>다음의 인용표준은 이 표준의 적용을 위해 필수적이다. 발행연도가 표기된 인용표준은 인용된 판만을 적용한다. 발행연도가 표기 되지 않은 인용표준은 최신판(모든 추록을 포함)을 적용한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.3510,0.7010,0.3650\" data-score=\"0.9944\"><p>KS C IEC 60227(모든 부), 정격전압 450/750 V 이하 염화비닐절연 케이블</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.3660,0.6750,0.3810\" data-score=\"0.9963\"><p>KS C IEC 60245(모든 부), 정격전압 450/750 V 이하 고무 절연 케이블</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.3820,0.5980,0.3960\" data-score=\"0.9644\"><p>KS C IEC 60598-1, 등기구 - 제1부 : 일반 요구사항 및 시험</p></div>\n<div data-label=\"title\" data-bbox=\"0.1020,0.4280,0.3530,0.4450\" data-score=\"0.9993\"><h1>2.3 일반 시험 요구 사항</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1010,0.4620,0.8970,0.4930\" data-score=\"0.9845\"><p>KS C IEC 60598-1의 제0절의 규정을 적용한다. 제1부의 각 절에 설명된 이 시험은 제2부의 이 항 목에 기록된 순서에 따라 실시한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.5080,0.4870,0.5230\" data-score=\"0.9999\"><p>설비의 주위 온도 측정 절차는 부속서 A에 있다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1020,0.5610,0.2100,0.5770\" data-score=\"0.9871\"><h1>2.4 정의</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.5950,0.6210,0.6100\" data-score=\"0.9940\"><p>이 표준의 목적을 위해 KS C IEC 60598-1의 제1절을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1020,0.6410,0.2710,0.6580\" data-score=\"0.9998\"><h1>2.5 등기구 분류</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.6760,0.4380,0.6900\" data-score=\"0.9965\"><p>KS C IEC 60598-1의 제2절을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1020,0.7220,0.2100,0.7380\" data-score=\"0.9883\"><h1>2.6 표시</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.7550,0.4380,0.7700\" data-score=\"0.9949\"><p>KS C IEC 60598-1의 제3절을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1020,0.8020,0.2120,0.8180\" data-score=\"0.9769\"><h1>2.7 구조</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.8360,0.4380,0.8510\" data-score=\"0.9959\"><p>KS C IEC 60598-1의 제4절을 적용한다.</p></div>\n<div data-label=\"page_number\" data-bbox=\"0.4750,0.9260,0.5260,0.9380\" data-score=\"0.9147\" style=\"color:#888;font-size:0.9em;\">- 3 -</div>",
+            "text_ko": null,
+            "links": null,
+            "confidence": 0.9881
+          },
+          {
+            "page_number": 6,
+            "part_number": null,
+            "text": "<div data-label=\"header\" data-bbox=\"0.7390,0.0610,0.8950,0.0740\" data-score=\"0.9999\" style=\"color:#888;font-size:0.9em;\">KC 60598-2-2:2022</div>\n<div data-label=\"title\" data-bbox=\"0.1020,0.0940,0.3720,0.1110\" data-score=\"0.9949\"><h1>2.8 연면 거리와 공간 거리</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.1280,0.4460,0.1420\" data-score=\"0.9962\"><p>KS C IEC 60598-1의 제11절을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1020,0.1740,0.2100,0.1910\" data-score=\"0.9668\"><h1>2.9 접지</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.2080,0.4360,0.2220\" data-score=\"0.9967\"><p>KS C IEC 60598-1의 제7절을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1020,0.2550,0.2240,0.2710\" data-score=\"0.9420\"><h1>2.10 단자</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.2880,0.5320,0.3030\" data-score=\"0.9951\"><p>KS C IEC 60598-1의 제14절 및 제15절을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1020,0.3350,0.3030,0.3510\" data-score=\"0.9853\"><h1>2.11 내·외부 배선</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.3690,0.4360,0.3830\" data-score=\"0.9960\"><p>KS C IEC 60598-1의 제5절을 적용한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.3990,0.8950,0.4610\" data-score=\"0.9983\"><p>전선 케이블이나 코드는 등기구 제조자가 공급할 때 전원에 연결하는 수단으로 사용되는데, 정상 사용 조건에서 노출될 수 있는 가장 높은 온도에서 품질이 저하되지 않고 견딜 수 있는 능력이 있어야하고, 적어도 IEC 60227, IEC 60227A이나 IEC 60245에서 규정된 특성과 기계적이고 전기적인 특성이 같아야 한다. PVC와 고무가 아닌 다른 물질은 위 요구 사항을 만족한다면 적합하다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.4760,0.5180,0.4910\" data-score=\"0.9996\"><p>적합 여부는 2.13에 규정된 시험에 의해서 판정한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.5070,0.8030,0.5210\" data-score=\"0.9994\"><p>비고 매입형 등기구의 전선 케이블과 코드의 사용은 다음 사항을 위해 적합하여야 한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1110,0.5230,0.6600,0.5370\" data-score=\"0.9877\"><p>1) 전선 케이블과 코드는 매입 부분 내에 설치하여 만지기 쉽지 않다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1110,0.5380,0.4270,0.5520\" data-score=\"0.9757\"><p>2) 매입 부분에의 등기구의 용이한 설치</p></div>\n<div data-label=\"text\" data-bbox=\"0.1100,0.5540,0.7030,0.5680\" data-score=\"0.9921\"><p>3)반조절(settable) 및 조절 가능한(adjustable) 매입형 등기구의 조절 허용</p></div>\n<div data-label=\"title\" data-bbox=\"0.1020,0.6000,0.4050,0.6170\" data-score=\"0.9914\"><h1>2.12 충전부에 대한 감전 보호</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.6340,0.4360,0.6480\" data-score=\"0.9965\"><p>KS C IEC 60598-1의 제8절을 적용한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.6650,0.8940,0.6950\" data-score=\"0.9927\"><p>천장이나 빈 공간에서 등기구와 부품의 일부는 천장 아래 등기구 부분과 전기 충격에 대한 보호 등급이 같아야 한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.7110,0.8940,0.7420\" data-score=\"0.9717\"><p>비고 천장이나 빈 공간은 설치와 보수를 위해 접근 가능하며, 벽은 전기 충격에 대한 적절한 보호 장치가 되지 못한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.7580,0.3820,0.7720\" data-score=\"0.9999\"><p>적합 여부는 검사에 의해 판정한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1020,0.8040,0.4320,0.8210\" data-score=\"0.9996\"><h1>2.13 내구성 시험 및 내열성 시험</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.8390,0.5240,0.8530\" data-score=\"0.9975\"><p>KS C IEC 60598-1의 제12절과 2.13.1을 적용한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1010,0.8690,0.8940,0.8990\" data-score=\"0.9985\"><p>2.13.1 전원과의 연결을 위해 등기구 안을 통과하거나 조명 기구와 접촉할 수 있는 배선은 불안전 온도에 도달해서는 안 된다.</p></div>\n<div data-label=\"page_number\" data-bbox=\"0.4750,0.9260,0.5240,0.9370\" data-score=\"0.9062\" style=\"color:#888;font-size:0.9em;\">- 4 -</div>",
+            "text_ko": null,
+            "links": null,
+            "confidence": 0.9867
+          },
+          {
+            "page_number": 7,
+            "part_number": null,
+            "text": "<div data-label=\"header\" data-bbox=\"0.1030,0.0610,0.2600,0.0740\" data-score=\"0.9999\" style=\"color:#888;font-size:0.9em;\">KC 60598-2-2:2022</div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.1090,0.4250,0.1240\" data-score=\"0.9999\"><p>적합 여부는 다음 시험에 의해 판정한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1010,0.1400,0.8970,0.1870\" data-score=\"0.9994\"><p>등기구는 등기구와 함께 제공된 케이블을 사용하거나 등기구 위에 표시된 것에 따라 케이블을 사용하거나, 표시가 되지 않았다면 제조자의 지침서에 규정된 대로 전원과 연결한다. 한편으로는 IEC 60227을 따르는 PVC 케이블을 사용한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1010,0.2010,0.8950,0.2480\" data-score=\"0.9949\"><p>가장 뜨거운 지점은 사용 중 케이블이 접촉하기 쉬운 지점(등기구의 내부 경로를 따르거나 외부 표면 위)에 있다. 케이블은 이 지점과 접촉한 채로 가법게 고정시키고 KS C IEC 60598-1의 부속서 K에서 설명한 대로 측정점에서 접촉 지점에서 절연체의 온도를 측정한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.2640,0.6110,0.2790\" data-score=\"0.9986\"><p>케이블의 동작 온도는 표 1에 주어진 제한값을 넘어서지 않는다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1010,0.2950,0.8950,0.3400\" data-score=\"0.9960\"><p>IP 20보다 큰 IP 분류를 가진 등기구는 KS C IEC 60598-2의 2.14에 규정된 KS C IEC 60598-1의 9.2의 시험 후, 그러나 9.3의 시험 전에 KS C IEC 60598-1의 12.4, 12.5, 12.6 및 12.7의 관련 시험을 해야 한다.</p></div>\n<div data-label=\"table_caption\" data-bbox=\"0.3890,0.3560,0.6090,0.3710\" data-score=\"0.9433\" style=\"font-weight:600;\">표 1-케이블의 동작 온도</div>\n<div data-label=\"table\" data-bbox=\"0.1390,0.3720,0.8650,0.5210\" data-score=\"0.9914\"><table><tr><td>케이블의 지정</td><td>동작 온도의 제한</td></tr><tr><td>등기구와 함께 제공되는 케이블(슬리이브 관 포함)</td><td>KS C IEC 60598-1의 표 12.2에 정해진 최대 온도</td></tr><tr><td>등기구와 함께 제공되지 않는 케이블 :a) 케이블 온도 표시가 된 등기구b) 케이블 온도 표시가 안 된 등기구</td><td>표시된 온도기계적인 압력이 주어지지 않은 일반 PVC에서 KS C IEC 60598-1의 표 12.2에 규정된 최대 온도</td></tr></table></div>\n<div data-label=\"title\" data-bbox=\"0.1020,0.5500,0.3320,0.5670\" data-score=\"0.9992\"><h1>2.14 내진성 및 내습성</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.5840,0.4370,0.5990\" data-score=\"0.9948\"><p>KS C IEC 60598-1의 제9절을 적용한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1010,0.6150,0.8970,0.6450\" data-score=\"0.9982\"><p>IP 분류가 IP 20보다 큰 등기구의 경우 KS C IEC 60598-1의 제9절의 시험 순서에 따라 KS C IEC 60598-2-2의 2.13의 시험에 규정되어야 한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1020,0.6760,0.3940,0.6940\" data-score=\"0.9995\"><h1>2.15 절연 저항 및 절연 내력</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.7110,0.4460,0.7250\" data-score=\"0.9958\"><p>KS C IEC 60598-1의 제10절을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1020,0.7570,0.4110,0.7740\" data-score=\"0.9970\"><h1>2.16 내열, 내화 및 내트래킹성</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.7910,0.4460,0.8050\" data-score=\"0.9961\"><p>KS C IEC 60598-1의 제13절을 적용한다.</p></div>\n<div data-label=\"page_number\" data-bbox=\"0.4750,0.9260,0.5240,0.9370\" data-score=\"0.9155\" style=\"color:#888;font-size:0.9em;\">- 5 -</div>",
+            "text_ko": null,
+            "links": null,
+            "confidence": 0.9887
+          },
+          {
+            "page_number": 8,
+            "part_number": null,
+            "text": "<div data-label=\"header\" data-bbox=\"0.7390,0.0610,0.8950,0.0740\" data-score=\"0.9999\" style=\"color:#888;font-size:0.9em;\">KC 60598-2-2:2022</div>\n<div data-label=\"title\" data-bbox=\"0.4550,0.0970,0.5460,0.1140\" data-score=\"0.9996\"><h1>부속서 A</h1></div>\n<div data-label=\"title\" data-bbox=\"0.4710,0.1190,0.5290,0.1370\" data-score=\"0.9999\"><h1>(참고)</h1></div>\n<div data-label=\"title\" data-bbox=\"0.3910,0.1630,0.6060,0.1810\" data-score=\"0.9995\"><h1>설비의 주위 온도 측정</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.2240,0.8960,0.2850\" data-score=\"0.9976\"><p>조명 설비에서 매입형 등기구가 온도 제한 범위 안에서 동작하는지 결정하는 데 상당한 주의가 필요하다. 매입형 등기구가 제안된 설비에서 만족할지 예상하는 것이 더 어려워서 “실물 크기의 모형”을 보통 필요로 한다. 과거에는 예를 들면 천장 판 위에 가열 장치 때문에 등기구가 과열되었던 예가 있다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.3070,0.8940,0.3850\" data-score=\"0.9947\"><p>다음의 과정은 등기구가 작동하는 주위 온도를 측정하기 위한 것이다. 등기구의 ta 평점은 적어도 주위 온도와 같아야 한다. 주위 온도는 전형적인 빈 공간의 중간 점에서 천장의 면(또는 이외의 부착표면)에서 측정되어야 한다. 설비상에서 모든 등기구와 등기구의 열적 상태에 영향을 줄 수 있는 모든 시설이 작동하고 있다는 것은 중요하다. 빈 공간은 측정하는 지점 위에서 보호되어 공기의 비전형적인 교환을 막고 덮개는 등기구로 흡수될 외부열을 흡수할 수 있게 된다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.4070,0.5420,0.4230\" data-score=\"0.9991\"><p>비고 이 목적으로 등기구의 외관을 삽입하면 편리하다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.4450,0.8950,0.5070\" data-score=\"0.9990\"><p>매입형 등기구의 작동 온도를 측정하는 데 필요한 매입 부분에 대한 시험은 서비스 중 경험하기 쉬운 가장 까다로운 밀폐된 매입 부분(다른 열원이 없는)을 나타내기 위해 의도된 것이다. 등기구의 제조자가 작동이 만족스러울 것임을 검증하지 않는다면 매입형 등기구는 매입 부분의 시험에 필요한 공간보다 작은 공간에 설치되어서는 안 된다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.5300,0.8940,0.6220\" data-score=\"0.9885\"><p>많은 양의 공기가 열 방출 설비에 의해 상쇄된다면 매입 부분에 대한 시험은 천장의 온도 조건에 근접한다. 특수한 설비에서는 이보다 더 까다로운 열적 조건이 있을 수 있으므로 실제 점검을 수행하는 게 필수적이다. 반대로 천장 위의 공간에 자유로운 공기의 이동이 있으면서 열 방출 시설은 없을 수 있다. 그러한 설비에 대해 매입 부분에 대한 시험에서 결정된 등기구의 \\(t_a\\)는 온도의 극한 점에 합쳐지게 되는데, 등기구의 제조자가 특수한 설비에서의 작동이 만족스러울 것이라고 입증한다면 ta는 초과할 수 있다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.6450,0.8970,0.6760\" data-score=\"0.9576\"><p>등기구에 대한  \\( t_{a} \\) 값을 결정하고 점검하는 동안 주위 온도의 측정은 KS C IEC 60598-1의 부속서 K 에 따라 방풍 장치가 있는 밀폐된 곳에서 하고 매입 부분 시험은 밖에서 한다.</p></div>\n<div data-label=\"page_number\" data-bbox=\"0.4750,0.9260,0.5260,0.9380\" data-score=\"0.9232\" style=\"color:#888;font-size:0.9em;\">- 6 -</div>",
+            "text_ko": null,
+            "links": null,
+            "confidence": 0.9871
+          },
+          {
+            "page_number": 9,
+            "part_number": null,
+            "text": "<div data-label=\"header\" data-bbox=\"0.1030,0.0610,0.2600,0.0740\" data-score=\"0.9999\" style=\"color:#888;font-size:0.9em;\">KC 60598-2-2:2022</div>\n<div data-label=\"title\" data-bbox=\"0.2490,0.0940,0.7470,0.1100\" data-score=\"0.9977\"><h1>해설 1 전기용품안전기준의 한국산업표준과 단일화의 취지</h1></div>\n<div data-label=\"title\" data-bbox=\"0.1030,0.1280,0.1680,0.1410\" data-score=\"0.9717\"><h1>1. 개요</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.1440,0.8950,0.1750\" data-score=\"0.9984\"><p>이 기준은 전기용품안전관리법에 따른 안전관리대상 전기제품의 안전관리를 수행함에 있어 국가표준인 한국산업표준(KS)을 최대한 인용하여 단일화한 전기용품안전기준이다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1020,0.1940,0.2340,0.2080\" data-score=\"0.9219\"><h1>2.배경 및 목적</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.2110,0.8950,0.2580\" data-score=\"0.9998\"><p>전기용품안전관리법에 따른 안전관리대상 전기제품의 인증을 위한 시험의 기준은 2000년부터 국제표준을 기반으로 안전성 규격을 도입·인용하여 운영해 왔으며 또한 한국산업표준도 2000년부터 국제표준에 바탕을 두고 있으므로 규격의 내용은 양자가 거의 동일하다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.2600,0.8940,0.2920\" data-score=\"0.9986\"><p>따라서 전기용품안전관리법에 따른 안전기준과 한국산업표준의 중복인증이 발생하였으며, 기준의 단일화가 필요하게 되었다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.2930,0.8940,0.3250\" data-score=\"0.9990\"><p>전기용품 안전인증기준의 단일화는 기업의 인증대상제품의 인증시 시간과 비용을 줄이기 위한 목적이며, 국가표준인 한국산업표준과 IEC 국제표준을 기반으로 단일화를 추진이 필요하다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.3270,0.8940,0.3750\" data-score=\"0.9894\"><p>또한 전기용품 안전인증기준을 한국산업표준을 기반으로 단일화 함으로써 한국산업표준의 위상을 강화하고, 우리나라 각 부처별로 시행하는 법률에 근거한 각 인증의 기준을 국제표준에 근거한 한국 산업표준으로 일원화할 수 있도록 범부처 모범사례가 되도록 하였다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1020,0.3940,0.2270,0.4080\" data-score=\"0.9681\"><h1>3. 단일화 방향</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.4100,0.8940,0.4740\" data-score=\"0.9927\"><p>전기용품안전관리법에서 적용하기 위한 안전기준을 동일한 한국산업표준으로 간단히 전기용품안전기준으로 채택하면 되겠지만, 전기용품안전기준은 그간의 전기용품 안전관리제도를 운용해 오면서 국내기업의 여건에 맞추어 시험항목, 시험방법 및 기준을 여러분의 개정을 통해 변경함으로써 한국산업표준과의 차이를 보이게 되었다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.4760,0.8940,0.5240\" data-score=\"0.9992\"><p>한국산업표준과 전기용품안전기준의 단일화 방향을 두 기준 모두 국제표준에 바탕을 두고 있으므로 전기용품안전기준에서 한국산업표준과 중복되는 부분은 그 내용을 그대로 인용하는 방식으로 구성하고자 한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.5260,0.8930,0.5580\" data-score=\"0.9972\"><p>안전기준에서 그간의 전기용품 안전관리제도를 운용해 오면서 개정된 시험항목과 시험방법, 변경된 기준은 별도의 항을 추가하도록 하였다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.5600,0.8940,0.6240\" data-score=\"0.9891\"><p>한국산업표준과 전기용품안전기준을 비교하여 한국산업표준의 최신판일 경우는 한국산업표준의 내용을 기준으로 전기용품안전기준의 내용을 개정키로 하며, 이 경우 전기용품안전기준의 구판은 병행적용함으로서 그간의 인증받은 제품들이 개정기준에 맞추어 개선할 시간적 여유를 줌으로서 기업의 혼란을 방지하고자 한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.6260,0.8940,0.6740\" data-score=\"0.9816\"><p>그리고 국제표준이 개정되어 판번이 변경되었을 경우는 그 최신판을 한국산업표준으로 개정 요청을 하고 그리고 전기용품안전기준으로 그 내용을 채택함으로써 전기용품안전기준을 국제표준에 신속하게 대응하고자 한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.6760,0.8930,0.7080\" data-score=\"0.9987\"><p>그리고 전기용품안전기준에서만 규정되어 있는 고유기준은 한국산업표준에도 제정요청하고, 아울러 필요시 국제표준에도 제안하여 우리기술을 국제표준에 반영하고자 한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1020,0.7260,0.1680,0.7400\" data-score=\"0.9942\"><h1>4. 향후</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.7420,0.8940,0.7730\" data-score=\"0.9976\"><p>한국산업표준과 전기용품안전기준의 중복시험 항목을 없애고 단일화 함으로써 표준과 기준의 이원화에 따른 중복인증의 기업부담을 경감시키고, KS표준의 위상을 강화하고자 한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.7760,0.8940,0.8070\" data-score=\"0.9996\"><p>아울러 우리나라 각 부처별로 시행하는 법률에 근거한 각 인증의 기준을 국제표준에 근거한 한국산업표준으로 일원화할 수 있도록 범부처 모범사례가 되도록 한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.8090,0.8940,0.8570\" data-score=\"0.9997\"><p>또한 국제인증기구는 국제표준 인증체계를 확대하는 추세에 있으며, 표준을 활용하여 자국 기업의 경쟁력을 강화하는 추세에 있다. 이에 대응하여 국가표준과 안전기준이 국제표준에 신속히 대응함으로서 우리나라의 수출기업이 인증에 애로사항을 감소하도록 한다.</p></div>\n<div data-label=\"page_number\" data-bbox=\"0.4750,0.9260,0.5240,0.9370\" data-score=\"0.9234\" style=\"color:#888;font-size:0.9em;\">- 7 -</div>",
+            "text_ko": null,
+            "links": null,
+            "confidence": 0.9866
+          },
+          {
+            "page_number": 10,
+            "part_number": null,
+            "text": "<div data-label=\"header\" data-bbox=\"0.7400,0.0610,0.8950,0.0740\" data-score=\"0.9998\" style=\"color:#888;font-size:0.9em;\">KC 60598-2-2:2022</div>\n<div data-label=\"text\" data-bbox=\"0.3590,0.0930,0.6390,0.1090\" data-score=\"0.9135\"><p>심의:조명기기 분야 전문위원회</p></div>\n<div data-label=\"text\" data-bbox=\"0.1580,0.1320,0.4600,0.1480\" data-score=\"0.9253\"><p>구 분 성 명 근 무 처</p></div>\n<div data-label=\"text\" data-bbox=\"0.8050,0.1320,0.8760,0.1470\" data-score=\"0.8600\"><p>직위</p></div>\n<div data-label=\"text\" data-bbox=\"0.1590,0.1500,0.2580,0.1660\" data-score=\"0.7906\" data-corrected=\"true\"><p>위원장</p></div>\n<div data-label=\"text\" data-bbox=\"0.1590,0.1690,0.2580,0.1840\" data-score=\"0.9542\"><p>(위 원)</p></div>\n<div data-label=\"text\" data-bbox=\"0.1570,0.4050,0.2590,0.4210\" data-score=\"0.9832\"><p>(간 사)</p></div>\n<div data-label=\"text\" data-bbox=\"0.3130,0.4790,0.6850,0.4940\" data-score=\"0.9667\"><p>원안작성협력 : 시험 인증기관 담당자 연구포럼</p></div>\n<div data-label=\"text\" data-bbox=\"0.1520,0.5200,0.4600,0.5360\" data-score=\"0.9179\"><p>구 분 성 명 근 무 처</p></div>\n<div data-label=\"text\" data-bbox=\"0.8040,0.5200,0.8760,0.5350\" data-score=\"0.8586\"><p>직위</p></div>\n<div data-label=\"text\" data-bbox=\"0.1580,0.5420,0.2590,0.5570\" data-score=\"0.9999\"><p>(연구책임자)</p></div>\n<div data-label=\"text\" data-bbox=\"0.1580,0.5640,0.5080,0.5800\" data-score=\"0.9997\"><p>(참여연구원) 이대도 한국산업기술시험원</p></div>\n<div data-label=\"text\" data-bbox=\"0.8130,0.5650,0.8660,0.5790\" data-score=\"1.0000\"><p>연구원</p></div>\n<div data-label=\"text\" data-bbox=\"0.1260,0.6970,0.8550,0.7590\" data-score=\"0.9894\"><p>전기용품안전기준의 열람은 국가기술표준원 홈페이지(http://www.kats.go.kr), 및 제품안전정보센터(http://www.safety.korea.kr)를 이용하여 주시고, 이 전기용품안전기준에 대한 의견 또는 질문은 산업통상자원부 국가기술표준원 제품안전정책국 전기통신제품안전과(043-870-5441~9)으로 연락하여 주십시오.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1260,0.7740,0.8530,0.8090\" data-score=\"0.9992\"><p>이 안전기준은 전기용품안전관리법 제3조의 규정에 따라 매 5년마다 안전기준전문위원회에서 심의되어 제정, 개정 또는 폐지됩니다.</p></div>",
+            "text_ko": null,
+            "links": [
+              {
+                "uri": "http://www.kats.go.kr",
+                "data_bbox": "0.5497,0.6977,0.7211,0.7096"
+              },
+              {
+                "uri": "http://www.safety.korea.kr",
+                "data_bbox": "0.1877,0.7132,0.3968,0.7251"
+              }
+            ],
+            "confidence": 0.9439
+          },
+          {
+            "page_number": 11,
+            "part_number": null,
+            "text": "<div data-label=\"title\" data-bbox=\"0.3100,0.3250,0.6880,0.3440\" data-score=\"0.9992\"><h1>KC 60598-2-2 : 2022-02-16</h1></div>\n<div data-label=\"title\" data-bbox=\"0.4220,0.3610,0.5780,0.3820\" data-score=\"1.0000\"><h1>Luminaires</h1></div>\n<div data-label=\"title\" data-bbox=\"0.2950,0.3990,0.7090,0.4370\" data-score=\"0.9571\"><h1>- Part 2-2: Particular requirements - Recessed luminaires</h1></div>\n<div data-label=\"text\" data-bbox=\"0.2670,0.4550,0.3750,0.4680\" data-score=\"1.0000\"><p>ICS 29.140.40</p></div>\n<div data-label=\"text\" data-bbox=\"0.2140,0.5450,0.7850,0.5650\" data-score=\"1.0000\"><p>Korean Agency for Technology and Standards</p></div>\n<div data-label=\"text\" data-bbox=\"0.4130,0.5660,0.5890,0.5810\" data-score=\"1.0000\"><p>http://www.kats.go.kr</p></div>",
+            "text_ko": null,
+            "links": null,
+            "confidence": 0.9927
+          },
+          {
+            "page_number": 12,
+            "part_number": null,
+            "text": "<div data-label=\"header\" data-bbox=\"0.1080,0.0970,0.2070,0.2000\" data-score=\"0.6673\" style=\"color:#888;font-size:0.9em;\">K</div>\n<div data-label=\"title\" data-bbox=\"0.1070,0.4110,0.2870,0.4440\" data-score=\"0.9931\"><h1>KATS</h1></div>\n<div data-label=\"title\" data-bbox=\"0.1060,0.4490,0.3510,0.4640\" data-score=\"0.9889\"><h1>산업통상자원부 국가기술표준원</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1050,0.4660,0.4830,0.4790\" data-score=\"1.0000\"><p>Korean Agency for Technology and Standards</p></div>\n<div data-label=\"text\" data-bbox=\"0.1060,0.4810,0.4010,0.4950\" data-score=\"1.0000\"><p>Ministry of Trade, Industry & Energy</p></div>\n<div data-label=\"text\" data-bbox=\"0.1060,0.4960,0.5170,0.5100\" data-score=\"0.9591\"><p>주소:(우)369-811충북 음성군 맹동면 이수로 93</p></div>\n<div data-label=\"text\" data-bbox=\"0.1060,0.5120,0.4820,0.5260\" data-score=\"0.9823\"><p>TEL : 043-870-5441~9 http://www.kats.go.kr</p></div>\n<div data-label=\"image\" data-bbox=\"0.1070,0.5400,0.8120,0.9000\"><figure style=\"text-align:center;\"><img src=\"/v2/api/figures/d4f88bf3e0174fe1ab15702703a9245f/12/fig_0.jpg?exp=1788163220&sig=c5ab76fef7b35aa0a288d4be0411a0af64b32cf21aa8b80a82e3592ee281e170&aid=1e7abe98e7320523\" alt=\"image\" style=\"width:70%;height:auto;\" /></figure></div>",
+            "text_ko": null,
+            "links": [
+              {
+                "uri": "http://www.kats.go.kr",
+                "data_bbox": "0.3086,0.5107,0.4799,0.5226"
+              }
+            ],
+            "confidence": 0.9415
+          }
+        ],
+        "latency_seconds": 20.374366123000755,
+        "confidence": 0.9752,
+        "truncated": false,
+        "full_text_length": null
+      },
+      "caption": {
+        "provider": "inference_provider",
+        "model": "caption_model_onprem",
+        "pages": [
+          {
+            "page_number": 1,
+            "part_number": null,
+            "entities": {
+              "text": "KC\n\nKC 60598-2-2\n(개정 : 2022-02-16)\n\nIEC Ed 3.0 2011-11\n\n전기용품안전기준\n\nTechnical Regulations for Electrical and\nTelecommunication Products and Components\n\n등기구\n제2-2부: 매입형 등기구 - 개별요구사항\nPart 2-2: Particular requirements - Recessed luminaires\n\nKATS 국가기술표준원\nhttp://www.kats.go.kr",
+              "graph": "",
+              "diagram": "",
+              "image_overview": "왼쪽 상단에는 굵은 테두리의 K자로 보임하는 KC 인증 마크가 있습니다. 하단 중앙에는 P자의 뒤쪽에 KATS 텍스트와 파란색 물결무늬 로고가 있는 KATS(국가기술표준원) 로고와 웹사이트 주소(http://www.kats.go.kr)를 위한 공간이 있으며, 배경에는 회색조의 추상적인 곡선이 그려져 있습니다.",
+              "table_markdown": "",
+              "visual_elements": "문서는 위쪽부터 KC 마크와 규격 번호(KC 60598-2-2 및 IEC Ed 3.0 2011-11), 그리고 수정일자를 나타내는 텍스트 순으로 배열되어 있습니다. 그 아래에는 회색 사각형 배경 안에 문서의 전체 제목과 주요 서브제목이 배치되어 있고, 페이지 맨 하단에 발행 기관인 국가기술표준원의 로고와 웹사이트 주소가 함께 포함되어 있습니다."
+            },
+            "entities_ko": null
+          },
+          {
+            "page_number": 2,
+            "part_number": null,
+            "entities": {
+              "text": "KC 60598-2-2:2022\n\n목 차\n\n전기용품안전기준 제정, 개정, 폐지 이력 및 고시현황 .................................................................................... 1\n서   문 (Foreword) ....................................................................................................................................................................... 2\n\n2.1 적용 범위 (Scope) ............................................................................................................................................................. 3\n2.2 인용 표준 (Normative references) ................................................................................................................................. 3\n2.3 일반 시험 요구 사항 (General test requirements) ................................................... ............................................. 3\n2.4 정 의 (Definitions) .................................................................................................................................................................. 3\n2.5 등기구 분류 (Classification of luminaires) ........................................................................ ...................................... 3\n2.6 표 시 (Marking) ........................................................................................................................................................................ 3\n2.7 구 조 (Construction) ............................................................................................................................................................ 3\n2.8 연면 거리와 공간 거리 (Creepage distances and clearances) .................. ............................................ 4\n2.9 접 지 (Provision for earthing) .............................................................................................................................................. 4\n2.10 단 자 (Terminals) ............................................................................................................................................................... 4\n2.11 내·외부 배선 (External and internal wiring) ........................................... .................................................. 4\n2.12 충전부에 대한 감전 보호 (Protection against electric shock) ................... ...................................... 4\n2.13 내구성 시험 및 내열성 시험 (Endurance tests and thermal tests) ................ .......................... 4\n2.14 내진성 및 내습성 (Resistance to dust and moisture) .................................................. ........................... 5\n2.15 절연 저항 및 절연 내력 (Insulation resistance and electric strength) ................. ..................... 5\n2.16 내열, 내화 및 네트래킹 (Resistance to heat, fire and tracking) ............................ ........................ 5\n\n부속서 A (참고) 제품의 재시험을 요구하는 심각한/중요한 요구사항을 포함하는 개정된 절차의 일정 (Annex A) ........................................................................................................................................... 6\n\n해 설 1 .............................................................................................................................................................................................. 7",
+              "graph": "",
+              "diagram": "",
+              "image_overview": "",
+              "table_markdown": "",
+              "visual_elements": ""
+            },
+            "entities_ko": null
+          },
+          {
+            "page_number": 3,
+            "part_number": null,
+            "entities": {
+              "text": "KC 60598-2-2:2022\n\n전기용품안전기준 제정, 개정, 폐지 이력 및 고시현황\n\n제정 기술표준원 고시 제2000 - 54호 (2000. 4. 6)\n개정 기술표준원 고시 제2003 - 523호 (2003. 5.24)\n개정 기술표준원 고시 제2006 - 959호 (2006.12.28)\n개정 국가기술표준원 고시 제2014-0421호 (2014. 9. 3)\n개정 국가기술표준원 고시 제2015-383호 (2015. 9. 23)\n개정 국가기술표준원 고시 제2021-232호 (2021. 8. 11)\n개정 국가기술표준원 고시 제2022-0016호 (2022. 2. 16)\n\n부 칙(고시 제2022-0016호, 2022.02.16)\n\n이 고시는 고시한 날부터 시행한다.\n단, 기존 안전기준(고시 2021.8.11.)은 1년 후(2023.02.15.)까지 병행 적용한다.",
+              "graph": "",
+              "diagram": "",
+              "image_overview": "",
+              "table_markdown": "",
+              "visual_elements": ""
+            },
+            "entities_ko": null
+          },
+          {
+            "page_number": 4,
+            "part_number": null,
+            "entities": {
+              "text": "KC 60598-2-2:2022\n전기용품안전기준\ndgigu\n제2-2부: 매입형 등기구-개별요구사항\nLuminaires\nPart 2-2: Particular requirements - Recessed luminaires\n이 안전기준은 2011년 11월에 제3.0판으로 발행된 IEC 60598-2-2, Luminaires - Part 2-2:\nParticular requirements - Recessed luminaires를 기초로, 기술적 내용 및 대응 국제표준의 구성을\n변경하지 않고 작성한 KS C IEC 60598-2-2(2020.12)을 인용 채택한다.\n- 2 -",
+              "graph": "",
+              "diagram": "",
+              "image_overview": "",
+              "table_markdown": "",
+              "visual_elements": ""
+            },
+            "entities_ko": null
+          },
+          {
+            "page_number": 5,
+            "part_number": null,
+            "entities": {
+              "text": "KC 60598-2-2:2022\n제2-2부: 매입형 등기구-개별요구사항\nLuminaires Part 2-2 : Particular requirements - Recessed luminaires\n\n2.1 적용 범위\nKS C IEC 60598-2의 이 표준은 1 000 V 이하에서 전기적 광원을 사용하는 매입형 등기구에 대한 개별 요구 사항을 규정한다. 이 기준은 공기 조절용 및 액화 냉각형 등기구에는 적용되지 않는다.\n\n2.2 인용 표준\n다음의 인용표준은 이 표준의 적용을 위해 필수적이다. 발행연도가 표기된 인용표준은 인용된 판만을 적용한다. 발행연도가 표기 되지 않은 인용표준은 최신판(모든 추록을 포함)을 적용한다.\nKS C IEC 60227(모든 부), 정격전압 450/750 V 이하 염화비닐절연 케이블\nKS C IEC 60245(모든 부), 정격전압 450/750 V 이하 고무 절연 케이블\nKS C IEC 60598-1, 등기구 - 제1부 : 일반 요구사항 및 시험\n\n2.3 일반 시험 요구 사항\nKS C IEC 60598-1의 제0정의 규정을 적용한다. 제1부의 각 절에 설명된 이 시험은 제2부의 이 항목에 기록된 순서에 따라 실시한다.\n설비의 주위 온도 측정 절차는 부속서 A에 있다.\n\n2.4 정의\n이 표준의 목적으로 KS C IEC 60598-1의 제1절을 적용한다.\n\n2.5 등기구 분류\nKS C IEC 60598-1의 제2절을 적용한다.\n\n2.6 표시\nKS C IEC 60598-1의 제3절을 적용한다.\n\n2.7 구조\nKS C IEC 60598-1의 제4절을 적용한다.\n\n- 3 -",
+              "graph": "",
+              "diagram": "",
+              "image_overview": "",
+              "table_markdown": "",
+              "visual_elements": ""
+            },
+            "entities_ko": null
+          },
+          {
+            "page_number": 6,
+            "part_number": null,
+            "entities": {
+              "text": "- 4 -\n2.13 내구성 시험 및 내열성 시험\nKS C IEC 60598-1의 제12절과 2.13.1을 적용한다.\n2.13.1 전원과의 연결을 위해 등기구 안을 통과하거나 조명 기구와 접촉할 수 있는 배선은 불안안전 온도에 도달해서는 안 된다.\n적합 여부는 검사에 의해 판정한다.\n비고 천장이나 빈 공간은 설치와 보수를 위해 접근 가능하며, 벽은 전기 충격에 대한 적절한 보호 장치가 되지 못한다.\n천장이나 빈 공간에서 등기구와 부품의 일부는 천장 아래 등기구 부분과 전기 충격에 대한 보호 등급이 같아야 한다.\n2.12 충전부에 대한 감전 보호\nKS C IEC 60598-1의 제8절을 적용한다.\n비고 매입형 등기구의 전선 케이블과 코드의 사용은 다음 사항을 위해 적합하여야 한다.\n1) 전선 케이블과 코드는 매입 부분 내에 설치하여 만지기 쉽지 않다.\n2) 매입 부분에의 등기구의 용이한 설치\n3) 반조절(settable) 및 조절 가능한(adjustable) 매입형 등기구의 조절 허용\n적합 여부는 2.13에 규정된 시험에 의해서 판정한다.\n전선 케이블이나 코드는 등기구 제조자가 공급할 때 원전에 연결하는 수단으로 사용되는데, 정상 사용 조건에서 노출될 수 있는 가장 높은 온도에서 품질이 저하되지 않고 견딜 수 있는 능력을 가져야 하고, 적어도 IEC 60227, IEC 60227A이나 IEC 60245에서 규정된 특성과 기계적이고 전기적인 특성이 같아야 한다. PVC와 고무가 아닌 다른 물질은 위 요구 사항을 만족한다면 적합하다.\n2.11 내·외부 배선\nKS C IEC 60598-1의 제5절을 적용한다.\n2.10 단자\nKS C IEC 60598-1의 제14절 및 제15절을 적용한다.\n2.9 접지\nKS C IEC 60598-1의 제7절을 적용한다.\n2.8 연면 거리와 공간 거리\nKS C IEC 60598-1의 제11절을 적용한다.\nKC 60598-2-2:2022",
+              "graph": "",
+              "diagram": "",
+              "image_overview": "",
+              "table_markdown": "",
+              "visual_elements": ""
+            },
+            "entities_ko": null
+          },
+          {
+            "page_number": 7,
+            "part_number": null,
+            "entities": {
+              "text": "KC 60598-2-2:2022\n\n적합 여부는 다음 시험에 의해 판정한다.\n\n등기구는 등기구와 함께 제공된 케이블을 사용하거나 등기구 위에 표시된 것에 따라 케이블을 사용하거나, 표시가 되지 않았다면 제조자의 지침서에 규정한 대로 전원과 연결한다. 한편으로는 IEC 60227을 따르는 PVC 케이블을 사용한다.\n\n가장 뜨거운 지점은 사용 중 케이블이 접촉하기 쉬운 지점(등기구의 내부 경로를 따르거나 외부 표면 위)에 있다. 케이블은 이 지점과 접촉한 채로 가볍게 고정시키고 KS C IEC 60598-1의 부속서 K에서 설명한 대로 측정점에서 접촉 지점에서 절연체의 온도를 측정한다.\n\n케이블의 동작 온도는 표 1에 주어진 제한값을 넘어서지 않는다.\n\nIP 20보다 큰 IP 분류를 가진 등기구는 KS C IEC 60598-2의 2.14에 규정된 KS C IEC 60598-1의 9.2의 시험 후, 그러나 9.3의 시험 전에 KS C IEC 60598-1의 12.4, 12.5, 12.6 및 12.7의 관련 시험을 해야 한다.\n\n표 1 - 케이블의 동작 온도\n\n2.14 내진성 및 내습성\nKS C IEC 60598-1의 제9절을 적용한다.\nIP 분류가 IP 20보다 큰 등기구의 경우 KS C IEC 60598-1의 제9절의 시험 순서에 따라 KS C IEC 60598-2-2의 2.13의 시험에 규정되어야 한다.\n\n2.15 절연 저항 및 절연 내력\nKS C IEC 60598-1의 제10절을 적용한다.\n\n2.16 내열, 내화 및 내트래킹성\nKS C IEC 60598-1의 제13절을 적용한다.\n\n- 5 -",
+              "graph": "",
+              "diagram": "",
+              "image_overview": "",
+              "table_markdown": "| 케이블의 지정 | 동작 온도의 제한 |\n| :--- | :--- |\n| 등기구와 함께 제공되는 케이블<br>(슬리브 관 포함) | KS C IEC 60598-1의 표 12.2에 정해진<br>최대 온도 |\n| 등기구와 함께 제공되지 않는 케이블 :<br>a) 케이블 온도 표시가 된 등기구<br><br>b) 케이블 온도 표시가 안 된 등기구 | 표시된 온도<br><br>기계적인 압력이 주어지지 않은 일반 PVC에서 KS C IEC 60598-1의 표 12.2에 규정된 최대 온도 |",
+              "visual_elements": "문서의 상단에는 'KC 60598-2-2:2022'라는 표준 식별자 제목이 위치합니다. 그 아래로는 적합성 판정 기준에 대한 설명 문단이 이어지며, 중앙에는 케이블의 동작 온도를 규정하는 표(Table 1)가 있습니다. 표 하단에는 각절(Section) 형식의 항목들이 나열되어 있는데, 각각의 제목(예: 내진성 및 내습성 등)이 굵은 글씨로 강조되어 있으며 본문은 해당 기술 사양을 참조하도록 안내하고 있습니다."
+            },
+            "entities_ko": null
+          },
+          {
+            "page_number": 8,
+            "part_number": null,
+            "entities": {
+              "text": "KC 60598-2-2:2022\n\n부속서 A\n(참고)\n\n설비의 주위 온도 측정\n\n조명 설비에서 매입형 등기구가 온도 제한 범위 안에서 동작하는지 결정하는 데 상당한 주의가 필요하다. 매입형 등기구가 제안된 설비에서 만족할지 예상하는 것이 더 어려워서 \"실물 크기의 모델\"을 보통 필요로 한다. 과거에는 예를 들면 천장 판 위에 가열 장치 때문에 등기구가 과열되었던 예가 있다.\n\n다음의 과정은 등기구가 작동하는 주위 온도를 측정하기 위한 것이다. 등기구의 ta 평점은 적어도 주위 온도와 같아야 한다. 주위 온도는 전형적인 빈 공간의 중간 점에서 천장의 면(또는 이외의 부착 표면)에서 측정되어야 한다. 설비상에서 모든 등기구와 등기구의 열적 상태에 영향을 줄 수 있는 모든 시설이 작동하고 있다는 것은 중요하다. 빈 공간은 측정하는 지점 위에서 보호되어 공기의 비전형적인 교환을 막고 덮이는 등기구로 흡수될 외부열을 흡수할 수 있게 된다.\n\n비고 이 목적으로 등기구의 외관을 삽입하면 편리하다.\n\n매입형 등기구의 작동 온도를 측정하는 데 필요한 매입 부분에 대한 시험은 서비스 중 경험하기 쉬운 가장 까다로운 밀폐된 매입 부분(다른 열원이 없는)을 나타내기 위해 의도된 것이다. 등기구의 제조자가 작동이 만족스러울 것임을 검증하지 않는다면 매입형 등기구는 매입 부분의 시험에 필요한 공간보다 작은 공간에 설치되어서는 안 된다.\n\n많은 양의 공기가 열 방출 설비에 의해 상쇄된다면 매입 부분에 대한 시험은 천장의 온도 조건에 근접한다. 특수한 설비에서는 이보다 더 까다로운 열적 조건이 있을 수 있으므로 실제 점검을 수행하는 게 필수적이다. 반대로 천장 위의 공간에 자유로운 공기의 이동이 있으면서 열 방출 설비는 없을 수 있다. 그러한 설비에 대해 매입 부분에 대한 시험에서 결정된 등기구의 ta는 온도의 극한 점에 합쳐지게 되는데, 등기구의 제조자가 특수한 설비에서의 작동이 만족스러울 것이라고 입증한다면 ta는 초과할 수 있다.\n\ndt등기구에 대한 t값을 결정하고 점검하는 동안 주위 온도의 측정은 KS C IEC 60598-1의 부속서 K에 따라 방풍 장치가 있는 밀폐된 곳에서 하고 매입 부분 시험은 밖에서 한다.\n\n - 6 -",
+              "graph": "",
+              "diagram": "",
+              "image_overview": "",
+              "table_markdown": "",
+              "visual_elements": "페이지 상단에는 문서 식별 번호와 부속서 정보가 있습니다. 중앙에 큰 제목과 소제목이 배치되어 있으며, 그 아래 본문 paragraphs이 수직으로 배열되어 있습니다."
+            },
+            "entities_ko": null
+          },
+          {
+            "page_number": 9,
+            "part_number": null,
+            "entities": {
+              "text": "KC 60598-2-2:2022\n해설 1 전기용품안전기준의 한국산업표준과 단일화의 취지\n\n1. 개요\n이 기준은 전기용품안전관리법에 따른 안전관리대상 전기제품의 안전관리를 수행함에 있어 국가표준인 한국산업표준(KS)을 최대한 인용하여 단일화한 전기용품안전기준이다.\n\n2. 배경 및 목적\n전기용품안전관리법에 따른 안전관리대상 전기제품의 인증을 위한 시험의 기준은 2000년부터 국제표를 바탕으로 안전성 규격을 도입·인용하여 운영해 왔으며 또한 한국산업표준도 2000년부터 국제표준에 바탕을 두고 있으므로 규격의 내용은 양자가 거의 동일하다.\n따라서 전기용품안전관리법에 따른 안전기준과 한국산업표준의 중복인증이 발생하였으며, 기준의 단일화가 필요하게 되었다.\n전기용품 안전인증기준의 단일화는 기업의 인증대상제품의 인증시 시간과 비용을 줄이기 위한 목적이며, 국가표준인 한국산업표준과 IEC 국제표준을 기반으로 단일화를 추진할 필요가 있다.\n또한 전기용품 안전인증기준을 한국산업표준을 기반으로 단일화 함으로써 한국산업표준의 위상을 강화하고, 우리나라 각 부처별로 시행하는 법률에 근거한 각 인증의 기준을 국제표준에 근거한 한국산업표준으로 일원화할 수 있도록 법부처 모범사례가 되도록 하였다.\n\n3. 단일화 방향\n전기용품안전관리법에서 적용하기 위한 안전기준을 동일한 한국산업표준으로 간단히 전기용품안전기준으로 채택하면 되겠지만, 전기용품안전기준은 그간의 전기용품 안전관리제도를 운용해 오면서 국내기업의 여건에 맞추어 시험항목, 시험방법 및 기준을 여러번의 개정을 통해 변경함으로써 한국산업표준과의 차이를 보이게 되었다.\n한국산업표준과 전기용품안전기준의 단일화 방향을 두 기준 모두 국제표준에 바탕을 두고 있으므로 전기용품안전기준에서 한국산업표준과 중복되는 부분은 그 내용을 그대로 인용하는 방식으로 구성하고자 한다.\n안전기준에서 그간의 전기용품 안전관리제도를 운용해오면서 개정된 시험항목과 시험방법, 변경된 기준은 별도의 항을 추가하도록 하였다.\n한국산업표준과 전기용품안전기준을 비교하여 한국산업표준의 최신판일 경우는 한국산업표준의 내용을 기준으로 전기용품안전기준의 내용을 개정키로 하며 이 경우 전기용품안전기준의 구판은 병행적용함으로서 그간의 인증받은 제품들이 개정기준에 맞추어 개선할 시간적 여유를 줌으로서 기업의 혼란을 방지하고자 한다.\n그리고 국제표준이 개정되어 판변이 변경되었을 경우는 그 최신판을 한국산업표준으로 개정 요청을 하고 그리고 전기용품안전기준으로 그 내용을 채택함으로써 전기용품안전기준을 국제표준에 신속하게 대응하고자 한다.\n그리고 전기용품안전기준에서만 규정되어 있는 고유기준은 한국산업표준에도 제정요청하고 아울러 필수시 국제표준에도 제안하여 우리기술을 국제표준에 반영하고자 한다.\n\n4. 향후\n한국산업표준과 전기용품안전기준의 중복시험 항목을 없애고 단일화 합으로써 표준과 기준의 이원화에 따른 중복인증의 기업부담을 경감시키고, KS표준의 위상을 강화하고자 한다.\n아울러 우리나라 각 부처별로 시행하는 법률에 근거한 각 인증의 기준을 국제표준에 근거한 한국산업표준으로 일원화할 수 있도록 법부처 모범사례가 되도록 한다.\n또한 국제인증기구는 국제표준 인증체계를 확대하는 추세에 있으며, 표준을 활용하여 자국 기업의 경쟁력을 강화하는 추세에 있다. 이에 대응하여 국가표준과 안전기준이 국제표준에 신속히 대응함으로서 우리나라의 수출기업이 인증에 애로사항을 감소하도록 한다.\n- 7 -",
+              "graph": "",
+              "diagram": "",
+              "image_overview": "",
+              "table_markdown": "",
+              "visual_elements": ""
+            },
+            "entities_ko": null
+          },
+          {
+            "page_number": 10,
+            "part_number": null,
+            "entities": {
+              "text": "KC 60598-2-2:2022\n\n심의 : 조명기기 분야 전문위원회\n\n구분 성명 근무처 직위\n(위원장)\n(위원)\n\n(간사)\n\n원안작성협력 : 시험 인증기관 담당자 연구포럼\n\n구분 성명 근무처 직무\n(연구책임자)\n(참여연구원) 이대도 한국산업기술시험원 연구원\n\n전기용품안전기준의 열람은 국가기술표준원 홈페이지(http://www.kats.go.kr), 및 제품안전정보센터(http://www.safety.korea.kr)를 이용하여 주시고, 이 전기용품안전기준에 대한 의견 또는 질문은 산업통상자원부 국가기술표준원 제품안전정책국 전기통신제품안전과(☎043-870-5441~9)로 연락하여 주십시오.\n\n이 안전기준은 전기용품안전관리법 제3조의 규정에 따라 매 5년마다 안전기준전문위원회에서 심의되어 제정, 개정 또는 폐지됩니다.",
+              "graph": "",
+              "diagram": "",
+              "image_overview": "",
+              "table_markdown": "| 구 분 | 성명 | 근무처 | 직위 |\n| :--- | :--- | :--- | :--- |\n| (위원장) | | | |\n| (위원) | | | |\n\n---\n| 구분 | 성명 | 근무처 | 직무 |\n| :--- | :--- | :--- | :--- |\n| (연구책임자) | | | |\n| (참여연구원) | 이대도 | 한국산업기술시험원 | 연구원 |",
+              "visual_elements": "문서는 상단에 기준(KC 60598-2-2:2022) 및 심의 위원회 명단, 중간에 원안 작성 협력 연구 Forum 구성원 및 참여 연구자 정보(이대도), 하단에 전기용품안전기준 열람 안내와 안전관리법 개정 주기에 대한 설명이 포함된 구조로 되어 있습니다."
+            },
+            "entities_ko": null
+          },
+          {
+            "page_number": 11,
+            "part_number": null,
+            "entities": {
+              "text": "KC 60598-2-2 : 2022-02-16\nLuminaires\n– Part 2-2: Particular requirements -\nRecessed luminaires\nICS 29.140.40\nKorean Agency for Technology and Standards\nhttp://www.kats.go.kr",
+              "graph": "",
+              "diagram": "",
+              "image_overview": "",
+              "table_markdown": "",
+              "visual_elements": "문서 상단 중앙에 표준 문서의 제목 정보가 세로로 배치되어 있습니다. 가장 위에 'KC 60598-2-2 : 2022-02-16'이 굵은 글씨로 표시되고, 그 아래 'Luminaires', 하위 부분 'Part 2-2...', 그리고 분류 코드 'ICS 29.140.40'이 차례로 나열됩니다. 이 텍스트 그룹의 하단에는 회색 배경의 'Korean Agency for Technology and Standards' 로고가 위치하고 있어 문서를 발행한 기관을 명시합니다."
+            },
+            "entities_ko": null
+          },
+          {
+            "page_number": 12,
+            "part_number": null,
+            "entities": {
+              "text": "K\nKATS\n산업통상자원부 국가기술표준원\nKorean Agency for Technology and Standards\nMinistry of Trade, Industry & Energy\n주소 : (우) 369-811 충북 음성군 맹동면 이수로 93\nTEL : 043-870-5441~9 http://www.kats.go.kr",
+              "graph": "",
+              "diagram": "",
+              "image_overview": "페이지의 중앙 하단에는 밝은 회색 계열의 추상적인 배경 이미지가 있습니다. 이 이미지에는 얇고 곡선적인 선들이 겹치며 흐름과 움직임을 나타내는 듯한 패턴을 형성하고 있으며, 전체적으로 미래지향적이고 기술적인 느낌을 줍니다.",
+              "table_markdown": "",
+              "visual_elements": "페이지 상단 왼쪽에 기관 로고가 배치되어 있습니다. 바로 아래에는 기관명 및 연락처 정보를 담은 텍스트 블록이 있습니다. 페이지 하단의 시각적 요소인 추상적인 그림은 페이지의 디자인을 완성하는 배경 역할을 합니다."
+            },
+            "entities_ko": null
+          }
+        ],
+        "latency_seconds": 51.09312357700105
+      },
+      "tagger": {
+        "provider": "hierarchy",
+        "model": "hierarchy-ko",
+        "pages": [
+          {
+            "page_number": 1,
+            "part_number": null,
+            "keywords": [],
+            "summary": null,
+            "hierarchy": [
+              {
+                "x0": 0.108,
+                "part": "제2-2부",
+                "text": "Part 2-2: Particular requirements - Recessed luminaires\nKATS\n국가기술표준원\nhttp://www.kats.go.kr",
+                "type": "part",
+                "title": "제2-2부: 매입형 등기구-개별요구사항",
+                "marker": "2-2",
+                "confidence": 0.9731,
+                "level_code": "L2",
+                "level_name": "부"
+              }
+            ],
+            "n_nodes": 1,
+            "graph": {
+              "edges": [
+                {
+                  "to": "5:5",
+                  "from": "5:6",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "5:5",
+                  "from": "5:7",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "5:5",
+                  "from": "5:8",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "5:5",
+                  "from": "5:9",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "5:5",
+                  "from": "5:10",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "5:5",
+                  "from": "5:11",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "5:5",
+                  "from": "6:12",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "6:13",
+                  "from": "6:14",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "6:13",
+                  "from": "6:15",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "6:13",
+                  "from": "6:16",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "6:17",
+                  "from": "6:16",
+                  "type": "HAS_NOTE"
+                },
+                {
+                  "to": "6:16",
+                  "from": "6:18",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "6:16",
+                  "from": "6:19",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "6:13",
+                  "from": "6:20",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "6:21",
+                  "from": "6:20",
+                  "type": "HAS_NOTE"
+                },
+                {
+                  "to": "6:13",
+                  "from": "6:22",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "6:22",
+                  "from": "6:23",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "7:24",
+                  "from": "6:23",
+                  "type": "HAS_TABLE"
+                },
+                {
+                  "to": "6:13",
+                  "from": "7:25",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "7:26",
+                  "from": "7:27",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "7:26",
+                  "from": "7:28",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "8:30",
+                  "from": "8:29",
+                  "type": "HAS_NOTE"
+                },
+                {
+                  "to": "8:29",
+                  "from": "11:31",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "12:32",
+                  "from": "8:29",
+                  "type": "HAS_FIGURE"
+                }
+              ],
+              "nodes": [
+                {
+                  "id": "1:0",
+                  "page": 1,
+                  "part": "제2-2부",
+                  "type": "part",
+                  "order": 0,
+                  "title": "제2-2부: 매입형 등기구-개별요구사항",
+                  "confidence": 0.9731,
+                  "level_code": "L2",
+                  "level_name": "부",
+                  "number_path": [
+                    "2-2"
+                  ]
+                },
+                {
+                  "id": "2:1",
+                  "page": 2,
+                  "part": "제2-2부",
+                  "type": "preamble",
+                  "order": 1,
+                  "title": "서 문 (Foreword) 2",
+                  "confidence": 0.9253,
+                  "level_code": "L1",
+                  "level_name": "서문",
+                  "number_path": [
+                    "서문"
+                  ]
+                },
+                {
+                  "id": "4:2",
+                  "page": 4,
+                  "part": "제2-2부",
+                  "type": "part",
+                  "order": 2,
+                  "title": "제2-2부: 매입형 등기구-개별요구사항",
+                  "confidence": 0.9976,
+                  "level_code": "L2",
+                  "level_name": "부",
+                  "number_path": [
+                    "2-2"
+                  ]
+                },
+                {
+                  "id": "5:3",
+                  "page": 5,
+                  "part": "제2-2부",
+                  "type": "part",
+                  "order": 3,
+                  "title": "제2-2부: 매입형 등기구-개별요구사항",
+                  "confidence": 0.9929,
+                  "level_code": "L2",
+                  "level_name": "부",
+                  "number_path": [
+                    "2-2"
+                  ]
+                },
+                {
+                  "id": "5:4",
+                  "page": 5,
+                  "part": "제2-2부",
+                  "type": "subsection",
+                  "order": 4,
+                  "title": "적용 범위",
+                  "confidence": 0.9995,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "2",
+                    "1"
+                  ]
+                },
+                {
+                  "id": "5:5",
+                  "page": 5,
+                  "part": "제2-2부",
+                  "type": "section",
+                  "order": 5,
+                  "title": "2 (가상 절 — 2.y 하위절에서 합성)",
+                  "confidence": null,
+                  "level_code": "L3",
+                  "level_name": "절",
+                  "number_path": [
+                    "2"
+                  ]
+                },
+                {
+                  "id": "5:6",
+                  "page": 5,
+                  "part": "제2-2부",
+                  "type": "subsection",
+                  "order": 6,
+                  "title": "인용 표준",
+                  "confidence": 0.9969,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "2",
+                    "2"
+                  ]
+                },
+                {
+                  "id": "5:7",
+                  "page": 5,
+                  "part": "제2-2부",
+                  "type": "subsection",
+                  "order": 7,
+                  "title": "일반 시험 요구 사항",
+                  "confidence": 0.9993,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "2",
+                    "3"
+                  ]
+                },
+                {
+                  "id": "5:8",
+                  "page": 5,
+                  "part": "제2-2부",
+                  "type": "subsection",
+                  "order": 8,
+                  "title": "정의",
+                  "confidence": 0.9871,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "2",
+                    "4"
+                  ]
+                },
+                {
+                  "id": "5:9",
+                  "page": 5,
+                  "part": "제2-2부",
+                  "type": "subsection",
+                  "order": 9,
+                  "title": "등기구 분류",
+                  "confidence": 0.9998,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "2",
+                    "5"
+                  ]
+                },
+                {
+                  "id": "5:10",
+                  "page": 5,
+                  "part": "제2-2부",
+                  "type": "subsection",
+                  "order": 10,
+                  "title": "표시",
+                  "confidence": 0.9883,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "2",
+                    "6"
+                  ]
+                },
+                {
+                  "id": "5:11",
+                  "page": 5,
+                  "part": "제2-2부",
+                  "type": "subsection",
+                  "order": 11,
+                  "title": "구조",
+                  "confidence": 0.9769,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "2",
+                    "7"
+                  ]
+                },
+                {
+                  "id": "6:12",
+                  "page": 6,
+                  "part": "제2-2부",
+                  "type": "subsection",
+                  "order": 12,
+                  "title": "연면 거리와 공간 거리",
+                  "confidence": 0.9949,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "2",
+                    "8"
+                  ]
+                },
+                {
+                  "id": "6:13",
+                  "page": 6,
+                  "part": "제2-2부",
+                  "type": "section",
+                  "order": 13,
+                  "title": "2 (개정 대상 상위 — 베이스표준 참조)",
+                  "confidence": null,
+                  "level_code": "L3",
+                  "level_name": "절",
+                  "number_path": [
+                    "2"
+                  ]
+                },
+                {
+                  "id": "6:14",
+                  "page": 6,
+                  "part": "제2-2부",
+                  "type": "subsection",
+                  "order": 14,
+                  "title": "접지",
+                  "confidence": 0.9668,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "2",
+                    "9"
+                  ]
+                },
+                {
+                  "id": "6:15",
+                  "page": 6,
+                  "part": "제2-2부",
+                  "type": "subsection",
+                  "order": 15,
+                  "title": "단자",
+                  "confidence": 0.942,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "2",
+                    "10"
+                  ]
+                },
+                {
+                  "id": "6:16",
+                  "page": 6,
+                  "part": "제2-2부",
+                  "type": "subsection",
+                  "order": 16,
+                  "title": "내·외부 배선",
+                  "confidence": 0.9853,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "2",
+                    "11"
+                  ]
+                },
+                {
+                  "id": "6:17",
+                  "page": 6,
+                  "part": "제2-2부",
+                  "type": "note",
+                  "order": 17,
+                  "title": "비고 매입형 등기구의 전선 케이블과 코드의 사용은 다음 사항을 위해 적합하여야 한다.",
+                  "confidence": 0.9994,
+                  "level_code": "LN",
+                  "level_name": "주석",
+                  "number_path": []
+                },
+                {
+                  "id": "6:18",
+                  "page": 6,
+                  "part": "제2-2부",
+                  "type": "item",
+                  "order": 18,
+                  "title": "1) 전선 케이블과 코드는 매입 부분 내에 설치하여 만지기 쉽지 않다.",
+                  "confidence": 0.9877,
+                  "level_code": "L7",
+                  "level_name": "열거항목",
+                  "number_path": []
+                },
+                {
+                  "id": "6:19",
+                  "page": 6,
+                  "part": "제2-2부",
+                  "type": "item",
+                  "order": 19,
+                  "title": "2) 매입 부분에의 등기구의 용이한 설치",
+                  "confidence": 0.9757,
+                  "level_code": "L7",
+                  "level_name": "열거항목",
+                  "number_path": []
+                },
+                {
+                  "id": "6:20",
+                  "page": 6,
+                  "part": "제2-2부",
+                  "type": "subsection",
+                  "order": 20,
+                  "title": "충전부에 대한 감전 보호",
+                  "confidence": 0.9914,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "2",
+                    "12"
+                  ]
+                },
+                {
+                  "id": "6:21",
+                  "page": 6,
+                  "part": "제2-2부",
+                  "type": "note",
+                  "order": 21,
+                  "title": "비고 천장이나 빈 공간은 설치와 보수를 위해 접근 가능하며, 벽은 전기 충격에 대한 적절한 보호 장치가 되지 못한다.",
+                  "confidence": 0.9717,
+                  "level_code": "LN",
+                  "level_name": "주석",
+                  "number_path": []
+                },
+                {
+                  "id": "6:22",
+                  "page": 6,
+                  "part": "제2-2부",
+                  "type": "subsection",
+                  "order": 22,
+                  "title": "내구성 시험 및 내열성 시험",
+                  "confidence": 0.9996,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "2",
+                    "13"
+                  ]
+                },
+                {
+                  "id": "6:23",
+                  "page": 6,
+                  "part": "제2-2부",
+                  "type": "subsubsection",
+                  "order": 23,
+                  "title": "전원과의 연결을 위해 등기구 안을 통과하거나 조명 기구와 접촉할 수 있는",
+                  "confidence": 0.9985,
+                  "level_code": "L5",
+                  "level_name": "세부항목",
+                  "number_path": [
+                    "2",
+                    "13",
+                    "1"
+                  ]
+                },
+                {
+                  "id": "7:24",
+                  "page": 7,
+                  "part": "제2-2부",
+                  "type": "table",
+                  "order": 24,
+                  "title": "표 1-케이블의 동작 온도",
+                  "confidence": 0.9914,
+                  "level_code": "LT",
+                  "level_name": "표",
+                  "number_path": []
+                },
+                {
+                  "id": "7:25",
+                  "page": 7,
+                  "part": "제2-2부",
+                  "type": "subsection",
+                  "order": 25,
+                  "title": "내진성 및 내습성",
+                  "confidence": 0.9992,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "2",
+                    "14"
+                  ]
+                },
+                {
+                  "id": "7:26",
+                  "page": 7,
+                  "part": "제2-2부",
+                  "type": "section",
+                  "order": 26,
+                  "title": "2 (개정 대상 상위 — 베이스표준 참조)",
+                  "confidence": null,
+                  "level_code": "L3",
+                  "level_name": "절",
+                  "number_path": [
+                    "2"
+                  ]
+                },
+                {
+                  "id": "7:27",
+                  "page": 7,
+                  "part": "제2-2부",
+                  "type": "subsection",
+                  "order": 27,
+                  "title": "절연 저항 및 절연 내력",
+                  "confidence": 0.9995,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "2",
+                    "15"
+                  ]
+                },
+                {
+                  "id": "7:28",
+                  "page": 7,
+                  "part": "제2-2부",
+                  "type": "subsection",
+                  "order": 28,
+                  "title": "내열, 내화 및 내트래킹성",
+                  "confidence": 0.997,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "2",
+                    "16"
+                  ]
+                },
+                {
+                  "id": "8:29",
+                  "page": 8,
+                  "part": "부속서 A",
+                  "type": "appendix",
+                  "order": 29,
+                  "title": "부속서 A",
+                  "confidence": 0.9996,
+                  "level_code": "LA",
+                  "level_name": "부록",
+                  "number_path": [
+                    "A"
+                  ]
+                },
+                {
+                  "id": "8:30",
+                  "page": 8,
+                  "part": "부속서 A",
+                  "type": "note",
+                  "order": 30,
+                  "title": "비고 이 목적으로 등기구의 외관을 삽입하면 편리하다.",
+                  "confidence": 0.9991,
+                  "level_code": "LN",
+                  "level_name": "주석",
+                  "number_path": []
+                },
+                {
+                  "id": "11:31",
+                  "page": 11,
+                  "part": "부속서 A",
+                  "type": "item",
+                  "order": 31,
+                  "title": "- Part 2-2: Particular requirements - Recessed luminaires",
+                  "confidence": 0.9571,
+                  "level_code": "L7",
+                  "level_name": "열거항목",
+                  "number_path": []
+                },
+                {
+                  "id": "12:32",
+                  "page": 12,
+                  "part": "부속서 A",
+                  "type": "figure",
+                  "order": 32,
+                  "title": null,
+                  "confidence": null,
+                  "level_code": "LF",
+                  "level_name": "그림",
+                  "number_path": []
+                }
+              ]
+            }
+          },
+          {
+            "page_number": 2,
+            "part_number": null,
+            "keywords": [],
+            "summary": null,
+            "hierarchy": [
+              {
+                "x0": 0.105,
+                "part": "제2-2부",
+                "text": "부속서 A (참고) 제품의 재시험을 요구하는 심각한/중요한 요구사항을 포함하는 개정된 절의 일정 (Annex A) 6\n해설 17",
+                "type": "preamble",
+                "title": "서 문 (Foreword) 2",
+                "marker": "서문",
+                "confidence": 0.9253,
+                "level_code": "L1",
+                "level_name": "서문"
+              }
+            ],
+            "n_nodes": 1,
+            "graph": null
+          },
+          {
+            "page_number": 3,
+            "part_number": null,
+            "keywords": [],
+            "summary": null,
+            "hierarchy": [],
+            "n_nodes": 0,
+            "graph": null
+          },
+          {
+            "page_number": 4,
+            "part_number": null,
+            "keywords": [],
+            "summary": null,
+            "hierarchy": [
+              {
+                "x0": 0.303,
+                "part": "제2-2부",
+                "text": "Luminaires\nPart 2-2: Particular requirements - Recessed luminaires\n이 안전기준은 2011년 11월에 제3.0판으로 발행된 IEC 60598-2-2, Luminaires - Part 2-2: Particular requirements - Recessed luminaires를 기초로, 기술적 내용 및 대응 국제표준의 구성을 변경하지 않고 작성한 KS C IEC 60598-2-2(2020.12)을 인용 채택한다.",
+                "type": "part",
+                "title": "제2-2부: 매입형 등기구-개별요구사항",
+                "marker": "2-2",
+                "confidence": 0.9976,
+                "level_code": "L2",
+                "level_name": "부"
+              }
+            ],
+            "n_nodes": 1,
+            "graph": null
+          },
+          {
+            "page_number": 5,
+            "part_number": null,
+            "keywords": [],
+            "summary": null,
+            "hierarchy": [
+              {
+                "x0": 0.255,
+                "part": "제2-2부",
+                "text": "Luminaires Part 2–2 : Particular requirements – Recessed luminaires",
+                "type": "part",
+                "title": "제2-2부: 매입형 등기구-개별요구사항",
+                "marker": "2-2",
+                "confidence": 0.9929,
+                "level_code": "L2",
+                "level_name": "부"
+              },
+              {
+                "x0": 0.102,
+                "part": "제2-2부",
+                "text": "KS C IEC 60598-2의 이 표준은 1 000 V 이하에서 전기적 광원을 사용하는 매입형 등기구에 대한 개별 요구 사항을 규정한다. 이 기준은 공기 조절용 및 액화 냉각형 등기구에는 적용되지 않는다.",
+                "type": "subsection",
+                "title": "적용 범위",
+                "marker": "2.1",
+                "breadcrumb": [
+                  "2"
+                ],
+                "confidence": 0.9995,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "part": "제2-2부",
+                "type": "section",
+                "title": "2 (가상 절 — 2.y 하위절에서 합성)",
+                "marker": "2",
+                "level_code": "L3",
+                "level_name": "절"
+              },
+              {
+                "x0": 0.102,
+                "part": "제2-2부",
+                "text": "다음의 인용표준은 이 표준의 적용을 위해 필수적이다. 발행연도가 표기된 인용표준은 인용된 판만을 적용한다. 발행연도가 표기 되지 않은 인용표준은 최신판(모든 추록을 포함)을 적용한다.\nKS C IEC 60227(모든 부), 정격전압 450/750 V 이하 염화비닐절연 케이블\nKS C IEC 60245(모든 부), 정격전압 450/750 V 이하 고무 절연 케이블\nKS C IEC 60598-1, 등기구 - 제1부 : 일반 요구사항 및 시험",
+                "type": "subsection",
+                "title": "인용 표준",
+                "marker": "2.2",
+                "breadcrumb": [
+                  "2"
+                ],
+                "confidence": 0.9969,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "x0": 0.102,
+                "part": "제2-2부",
+                "text": "KS C IEC 60598-1의 제0절의 규정을 적용한다. 제1부의 각 절에 설명된 이 시험은 제2부의 이 항 목에 기록된 순서에 따라 실시한다.\n설비의 주위 온도 측정 절차는 부속서 A에 있다.",
+                "type": "subsection",
+                "title": "일반 시험 요구 사항",
+                "marker": "2.3",
+                "breadcrumb": [
+                  "2"
+                ],
+                "confidence": 0.9993,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "x0": 0.102,
+                "part": "제2-2부",
+                "text": "이 표준의 목적을 위해 KS C IEC 60598-1의 제1절을 적용한다.",
+                "type": "subsection",
+                "title": "정의",
+                "marker": "2.4",
+                "breadcrumb": [
+                  "2"
+                ],
+                "confidence": 0.9871,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "x0": 0.102,
+                "part": "제2-2부",
+                "text": "KS C IEC 60598-1의 제2절을 적용한다.",
+                "type": "subsection",
+                "title": "등기구 분류",
+                "marker": "2.5",
+                "breadcrumb": [
+                  "2"
+                ],
+                "confidence": 0.9998,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "x0": 0.102,
+                "part": "제2-2부",
+                "text": "KS C IEC 60598-1의 제3절을 적용한다.",
+                "type": "subsection",
+                "title": "표시",
+                "marker": "2.6",
+                "breadcrumb": [
+                  "2"
+                ],
+                "confidence": 0.9883,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "x0": 0.102,
+                "part": "제2-2부",
+                "text": "KS C IEC 60598-1의 제4절을 적용한다.",
+                "type": "subsection",
+                "title": "구조",
+                "marker": "2.7",
+                "breadcrumb": [
+                  "2"
+                ],
+                "confidence": 0.9769,
+                "level_code": "L4",
+                "level_name": "소절"
+              }
+            ],
+            "n_nodes": 9,
+            "graph": null
+          },
+          {
+            "page_number": 6,
+            "part_number": null,
+            "keywords": [],
+            "summary": null,
+            "hierarchy": [
+              {
+                "x0": 0.102,
+                "part": "제2-2부",
+                "text": "KS C IEC 60598-1의 제11절을 적용한다.",
+                "type": "subsection",
+                "title": "연면 거리와 공간 거리",
+                "marker": "2.8",
+                "breadcrumb": [
+                  "2"
+                ],
+                "confidence": 0.9949,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "part": "제2-2부",
+                "type": "section",
+                "title": "2 (개정 대상 상위 — 베이스표준 참조)",
+                "marker": "2",
+                "level_code": "L3",
+                "level_name": "절"
+              },
+              {
+                "x0": 0.102,
+                "part": "제2-2부",
+                "text": "KS C IEC 60598-1의 제7절을 적용한다.",
+                "type": "subsection",
+                "title": "접지",
+                "marker": "2.9",
+                "breadcrumb": [
+                  "2"
+                ],
+                "confidence": 0.9668,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "x0": 0.102,
+                "part": "제2-2부",
+                "text": "KS C IEC 60598-1의 제14절 및 제15절을 적용한다.",
+                "type": "subsection",
+                "title": "단자",
+                "marker": "2.10",
+                "breadcrumb": [
+                  "2"
+                ],
+                "confidence": 0.942,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "x0": 0.102,
+                "part": "제2-2부",
+                "text": "KS C IEC 60598-1의 제5절을 적용한다.\n전선 케이블이나 코드는 등기구 제조자가 공급할 때 전원에 연결하는 수단으로 사용되는데, 정상 사용 조건에서 노출될 수 있는 가장 높은 온도에서 품질이 저하되지 않고 견딜 수 있는 능력이 있어야하고, 적어도 IEC 60227, IEC 60227A이나 IEC 60245에서 규정된 특성과 기계적이고 전기적인 특성이 같아야 한다. PVC와 고무가 아닌 다른 물질은 위 요구 사항을 만족한다면 적합하다.\n적합 여부는 2.13에 규정된 시험에 의해서 판정한다.\n3)반조절(settable) 및 조절 가능한(adjustable) 매입형 등기구의 조절 허용",
+                "type": "subsection",
+                "title": "내·외부 배선",
+                "marker": "2.11",
+                "breadcrumb": [
+                  "2"
+                ],
+                "confidence": 0.9853,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "x0": 0.102,
+                "part": "제2-2부",
+                "type": "note",
+                "title": "비고 매입형 등기구의 전선 케이블과 코드의 사용은 다음 사항을 위해 적합하여야 한다.",
+                "breadcrumb": [
+                  "2",
+                  "2.11"
+                ],
+                "confidence": 0.9994,
+                "level_code": "LN",
+                "level_name": "주석"
+              },
+              {
+                "x0": 0.111,
+                "part": "제2-2부",
+                "type": "item",
+                "title": "1) 전선 케이블과 코드는 매입 부분 내에 설치하여 만지기 쉽지 않다.",
+                "breadcrumb": [
+                  "2",
+                  "2.11"
+                ],
+                "confidence": 0.9877,
+                "level_code": "L7",
+                "level_name": "열거항목"
+              },
+              {
+                "x0": 0.111,
+                "part": "제2-2부",
+                "type": "item",
+                "title": "2) 매입 부분에의 등기구의 용이한 설치",
+                "breadcrumb": [
+                  "2",
+                  "2.11"
+                ],
+                "confidence": 0.9757,
+                "level_code": "L7",
+                "level_name": "열거항목"
+              },
+              {
+                "x0": 0.102,
+                "part": "제2-2부",
+                "text": "KS C IEC 60598-1의 제8절을 적용한다.\n천장이나 빈 공간에서 등기구와 부품의 일부는 천장 아래 등기구 부분과 전기 충격에 대한 보호 등급이 같아야 한다.\n적합 여부는 검사에 의해 판정한다.",
+                "type": "subsection",
+                "title": "충전부에 대한 감전 보호",
+                "marker": "2.12",
+                "breadcrumb": [
+                  "2"
+                ],
+                "confidence": 0.9914,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "x0": 0.102,
+                "part": "제2-2부",
+                "type": "note",
+                "title": "비고 천장이나 빈 공간은 설치와 보수를 위해 접근 가능하며, 벽은 전기 충격에 대한 적절한 보호 장치가 되지 못한다.",
+                "breadcrumb": [
+                  "2",
+                  "2.12"
+                ],
+                "confidence": 0.9717,
+                "level_code": "LN",
+                "level_name": "주석"
+              },
+              {
+                "x0": 0.102,
+                "part": "제2-2부",
+                "text": "KS C IEC 60598-1의 제12절과 2.13.1을 적용한다.",
+                "type": "subsection",
+                "title": "내구성 시험 및 내열성 시험",
+                "marker": "2.13",
+                "breadcrumb": [
+                  "2"
+                ],
+                "confidence": 0.9996,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "x0": 0.101,
+                "part": "제2-2부",
+                "text": "전원과의 연결을 위해 등기구 안을 통과하거나 조명 기구와 접촉할 수 있는 배선은 불안전 온도에 도달해서는 안 된다.",
+                "type": "subsubsection",
+                "title": "전원과의 연결을 위해 등기구 안을 통과하거나 조명 기구와 접촉할 수 있는",
+                "marker": "2.13.1",
+                "breadcrumb": [
+                  "2",
+                  "2.13"
+                ],
+                "confidence": 0.9985,
+                "level_code": "L5",
+                "level_name": "세부항목"
+              }
+            ],
+            "n_nodes": 12,
+            "graph": null
+          },
+          {
+            "page_number": 7,
+            "part_number": null,
+            "keywords": [],
+            "summary": null,
+            "hierarchy": [
+              {
+                "x0": 0.139,
+                "bbox": "0.1390,0.3720,0.8650,0.5210",
+                "part": "제2-2부",
+                "type": "table",
+                "title": "표 1-케이블의 동작 온도",
+                "caption": "<table><tr><td>케이블의 지정</td><td>동작 온도의 제한</td></tr><tr><td>등기구와 함께 제공되는 케이블(슬리이브 관 포함)</td><td>KS C IEC 60598-1의 표 12.2에 정해진 최대 온도</td></tr><tr><td>등기구와 함께 제공되지 않는 케이블 :a) 케이블 온도 표시가 된 등기구b) 케이블 온도 표시가 안 된 등기구</td><td>표시된 온도기계적인 압력이 주어지지 않은 일반 PVC에서 KS C IEC 60598-1의 표 12.2에 규정된 최대 온도</td></tr></table>",
+                "breadcrumb": [
+                  "2",
+                  "2.13",
+                  "2.13.1"
+                ],
+                "confidence": 0.9914,
+                "level_code": "LT",
+                "level_name": "표"
+              },
+              {
+                "x0": 0.102,
+                "part": "제2-2부",
+                "text": "KS C IEC 60598-1의 제9절을 적용한다.\nIP 분류가 IP 20보다 큰 등기구의 경우 KS C IEC 60598-1의 제9절의 시험 순서에 따라 KS C IEC 60598-2-2의 2.13의 시험에 규정되어야 한다.",
+                "type": "subsection",
+                "title": "내진성 및 내습성",
+                "marker": "2.14",
+                "breadcrumb": [
+                  "2"
+                ],
+                "confidence": 0.9992,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "part": "제2-2부",
+                "type": "section",
+                "title": "2 (개정 대상 상위 — 베이스표준 참조)",
+                "marker": "2",
+                "level_code": "L3",
+                "level_name": "절"
+              },
+              {
+                "x0": 0.102,
+                "part": "제2-2부",
+                "text": "KS C IEC 60598-1의 제10절을 적용한다.",
+                "type": "subsection",
+                "title": "절연 저항 및 절연 내력",
+                "marker": "2.15",
+                "breadcrumb": [
+                  "2"
+                ],
+                "confidence": 0.9995,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "x0": 0.102,
+                "part": "제2-2부",
+                "text": "KS C IEC 60598-1의 제13절을 적용한다.",
+                "type": "subsection",
+                "title": "내열, 내화 및 내트래킹성",
+                "marker": "2.16",
+                "breadcrumb": [
+                  "2"
+                ],
+                "confidence": 0.997,
+                "level_code": "L4",
+                "level_name": "소절"
+              }
+            ],
+            "n_nodes": 5,
+            "graph": null
+          },
+          {
+            "page_number": 8,
+            "part_number": null,
+            "keywords": [],
+            "summary": null,
+            "hierarchy": [
+              {
+                "x0": 0.455,
+                "part": "부속서 A",
+                "text": "(참고)\n설비의 주위 온도 측정\n조명 설비에서 매입형 등기구가 온도 제한 범위 안에서 동작하는지 결정하는 데 상당한 주의가 필요하다. 매입형 등기구가 제안된 설비에서 만족할지 예상하는 것이 더 어려워서 “실물 크기의 모형”을 보통 필요로 한다. 과거에는 예를 들면 천장 판 위에 가열 장치 때문에 등기구가 과열되었던 예가 있다.\n다음의 과정은 등기구가 작동하는 주위 온도를 측정하기 위한 것이다. 등기구의 ta 평점은 적어도 주위 온도와 같아야 한다. 주위 온도는 전형적인 빈 공간의 중간 점에서 천장의 면(또는 이외의 부착표면)에서 측정되어야 한다. 설비상에서 모든 등기구와 등기구의 열적 상태에 영향을 줄 수 있는 모든 시설이 작동하고 있다는 것은 중요하다. 빈 공간은 측정하는 지점 위에서 보호되어 공기의 비전형적인 교환을 막고 덮개는 등기구로 흡수될 외부열을 흡수할 수 있게 된다.\n매입형 등기구의 작동 온도를 측정하는 데 필요한 매입 부분에 대한 시험은 서비스 중 경험하기 쉬운 가장 까다로운 밀폐된 매입 부분(다른 열원이 없는)을 나타내기 위해 의도된 것이다. 등기구의 제조자가 작동이 만족스러울 것임을 검증하지 않는다면 매입형 등기구는 매입 부분의 시험에 필요한 공간보다 작은 공간에 설치되어서는 안 된다.\n많은 양의 공기가 열 방출 설비에 의해 상쇄된다면 매입 부분에 대한 시험은 천장의 온도 조건에 근접한다. 특수한 설비에서는 이보다 더 까다로운 열적 조건이 있을 수 있으므로 실제 점검을 수행하는 게 필수적이다. 반대로 천장 위의 공간에 자유로운 공기의 이동이 있으면서 열 방출 시설은 없을 수 있다. 그러한 설비에 대해 매입 부분에 대한 시험에서 결정된 등기구의 \\(t_a\\)는 온도의 극한 점에 합쳐지게 되는데, 등기구의 제조자가 특수한 설비에서의 작동이 만족스러울 것이라고 입증한다면 ta는 초과할 수 있다.\n등기구에 대한  \\( t_{a} \\) 값을 결정하고 점검하는 동안 주위 온도의 측정은 KS C IEC 60598-1의 부속서 K 에 따라 방풍 장치가 있는 밀폐된 곳에서 하고 매입 부분 시험은 밖에서 한다.",
+                "type": "appendix",
+                "title": "부속서 A",
+                "marker": "A",
+                "confidence": 0.9996,
+                "level_code": "LA",
+                "level_name": "부록"
+              },
+              {
+                "x0": 0.102,
+                "part": "부속서 A",
+                "type": "note",
+                "title": "비고 이 목적으로 등기구의 외관을 삽입하면 편리하다.",
+                "breadcrumb": [
+                  "A"
+                ],
+                "confidence": 0.9991,
+                "level_code": "LN",
+                "level_name": "주석"
+              }
+            ],
+            "n_nodes": 2,
+            "graph": null
+          },
+          {
+            "page_number": 9,
+            "part_number": null,
+            "keywords": [],
+            "summary": null,
+            "hierarchy": [],
+            "n_nodes": 0,
+            "graph": null
+          },
+          {
+            "page_number": 10,
+            "part_number": null,
+            "keywords": [],
+            "summary": null,
+            "hierarchy": [],
+            "n_nodes": 0,
+            "graph": null
+          },
+          {
+            "page_number": 11,
+            "part_number": null,
+            "keywords": [],
+            "summary": null,
+            "hierarchy": [
+              {
+                "x0": 0.295,
+                "part": "부속서 A",
+                "type": "item",
+                "title": "- Part 2-2: Particular requirements - Recessed luminaires",
+                "breadcrumb": [
+                  "A"
+                ],
+                "confidence": 0.9571,
+                "level_code": "L7",
+                "level_name": "열거항목"
+              }
+            ],
+            "n_nodes": 1,
+            "graph": null
+          },
+          {
+            "page_number": 12,
+            "part_number": null,
+            "keywords": [],
+            "summary": null,
+            "hierarchy": [
+              {
+                "x0": 0.107,
+                "bbox": "0.1070,0.5400,0.8120,0.9000",
+                "part": "부속서 A",
+                "type": "figure",
+                "caption": "페이지 상단 왼쪽에 기관 로고가 배치되어 있습니다. 바로 아래에는 기관명 및 연락처 정보를 담은 텍스트 블록이 있습니다. 페이지 하단의 시각적 요소인 추상적인 그림은 페이지의 디자인을 완성하는 배경 역할을 합니다.",
+                "breadcrumb": [
+                  "A"
+                ],
+                "level_code": "LF",
+                "level_name": "그림"
+              }
+            ],
+            "n_nodes": 1,
+            "graph": null
+          }
+        ],
+        "latency_seconds": 0.00893123499668036
+      },
+      "dimension_ocr": {
+        "enabled": true,
+        "model": "dimension_ocr_model",
+        "method": "text-segment",
+        "applied_fixes": null,
+        "pages": [
+          {
+            "page_number": 1,
+            "body_html": "<div data-label=\"header\" data-bbox=\"0.1180,0.1000,0.2080,0.1950\" data-score=\"0.6422\" style=\"color:#888;font-size:0.9em;\">K</div>\n<div data-label=\"header\" data-bbox=\"0.5430,0.1170,0.8940,0.1500\" data-score=\"0.9917\" style=\"color:#888;font-size:0.9em;\">KC 60598-2-2</div>\n<div data-label=\"header\" data-bbox=\"0.6280,0.1600,0.8930,0.1820\" data-score=\"0.9965\" style=\"color:#888;font-size:0.9em;\">(개정 : 2022-02-16)</div>\n<div data-label=\"header\" data-bbox=\"0.6230,0.2000,0.8930,0.2200\" data-score=\"0.9955\" style=\"color:#888;font-size:0.9em;\">IEC Ed 3.0 2011-11</div>\n<div data-label=\"title\" data-bbox=\"0.1080,0.2880,0.6030,0.3340\" data-score=\"0.9999\"><h1>전기용품안전기준</h1></div>\n<div data-label=\"title\" data-bbox=\"0.1060,0.3920,0.8890,0.4500\" data-score=\"0.9828\"><h1>Technical Regulations for Electrical and\nTelecommunication Products and Components</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1060,0.5030,0.1870,0.5230\" data-score=\"0.9996\"><p>등기구</p></div>\n<div data-label=\"text\" data-bbox=\"0.1080,0.5260,0.5510,0.5460\" data-score=\"0.9731\"><p>제2-2부: 매입형 등기구-개별요구사항</p></div>\n<div data-label=\"text\" data-bbox=\"0.1070,0.5500,0.6940,0.5670\" data-score=\"0.9898\"><p>Part 2-2: Particular requirements - Recessed luminaires</p></div>\n<div data-label=\"text\" data-bbox=\"0.3450,0.7640,0.5230,0.8010\" data-score=\"0.9860\"><p>KATS</p></div>\n<div data-label=\"text\" data-bbox=\"0.5380,0.7640,0.8890,0.8040\" data-score=\"0.9831\"><p>국가기술표준원</p></div>\n<div data-label=\"text\" data-bbox=\"0.5990,0.8530,0.8930,0.8740\" data-score=\"1.0000\"><p>http://www.kats.go.kr</p></div>",
+            "page_visual_summary": "왼쪽 상단에는 굵은 테두리의 K자로 보임하는 KC 인증 마크가 있습니다. 하단 중앙에는 P자의 뒤쪽에 KATS 텍스트와 파란색 물결무늬 로고가 있는 KATS(국가기술표준원) 로고와 웹사이트 주소(http://www.kats.go.kr)를 위한 공간이 있으며, 배경에는 회색조의 추상적인 곡선이 그려져 있습니다. 문서는 위쪽부터 KC 마크와 규격 번호(KC 60598-2-2 및 IEC Ed 3.0 2011-11), 그리고 수정일자를 나타내는 텍스트 순으로 배열되어 있습니다. 그 아래에는 회색 사각형 배경 안에 문서의 전체 제목과 주요 서브제목이 배치되어 있고, 페이지 맨 하단에 발행 기관인 국가기술표준원의 로고와 웹사이트 주소가 함께 포함되어 있습니다.",
+            "element_analysis": [],
+            "unbound_visual_notes": "왼쪽 상단에는 굵은 테두리의 K자로 보임하는 KC 인증 마크가 있습니다. 하단 중앙에는 P자의 뒤쪽에 KATS 텍스트와 파란색 물결무늬 로고가 있는 KATS(국가기술표준원) 로고와 웹사이트 주소(http://www.kats.go.kr)를 위한 공간이 있으며, 배경에는 회색조의 추상적인 곡선이 그려져 있습니다.",
+            "table_markdown": null,
+            "arbitrated_blocks": 1,
+            "corrected_cells": 0,
+            "format_restored_cells": 0,
+            "name_consistency": null,
+            "applied_rotation": null,
+            "applied_skew": null
+          },
+          {
+            "page_number": 2,
+            "body_html": "<div data-label=\"header\" data-bbox=\"0.7400,0.0610,0.8950,0.0740\" data-score=\"0.9998\" style=\"color:#888;font-size:0.9em;\">KC 60598-2-2:2022</div>\n<div data-label=\"title\" data-bbox=\"0.4170,0.1090,0.5830,0.1300\" data-score=\"0.9639\"><h1>목 차</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1050,0.1640,0.8620,0.1800\" data-score=\"0.9954\"><p>전기용품안전기준 제정, 개정, 폐지 이력 및 고시현황 1</p></div>\n<div data-label=\"text\" data-bbox=\"0.1050,0.1930,0.8640,0.2090\" data-score=\"0.9253\"><p>서 문 (Foreword) 2</p></div>\n<div data-label=\"text\" data-bbox=\"0.1040,0.2220,0.8640,0.2370\" data-score=\"0.9857\"><p>2.1 적용 범위 (Scope) 3</p></div>\n<div data-label=\"text\" data-bbox=\"0.1050,0.2380,0.8630,0.2500\" data-score=\"0.9815\"><p>2.2 인용 표준 (Normative references) 3</p></div>\n<div data-label=\"text\" data-bbox=\"0.1050,0.2510,0.8630,0.2650\" data-score=\"0.9917\"><p>2.3 일반 시험 요구 사항 (General test requirements) 3</p></div>\n<div data-label=\"text\" data-bbox=\"0.1050,0.2660,0.8630,0.2790\" data-score=\"0.9632\"><p>2.4 정의 (Definitions) 3</p></div>\n<div data-label=\"text\" data-bbox=\"0.1050,0.2800,0.8630,0.2930\" data-score=\"0.9857\"><p>2.5 등기구 분류 (Classification of luminaires) 3</p></div>\n<div data-label=\"text\" data-bbox=\"0.1050,0.2940,0.8630,0.3070\" data-score=\"0.9423\"><p>2.6 표시 (Marking) 3</p></div>\n<div data-label=\"text\" data-bbox=\"0.1050,0.3080,0.8630,0.3210\" data-score=\"0.9586\"><p>2.7 구조 (Construction) 3</p></div>\n<div data-label=\"text\" data-bbox=\"0.1050,0.3220,0.8630,0.3360\" data-score=\"0.9649\"><p>2.8 연면 거리와 공간 거리 (Creepage distances and clearances) 4</p></div>\n<div data-label=\"text\" data-bbox=\"0.1050,0.3370,0.8630,0.3500\" data-score=\"0.9463\"><p>2.9 접지 (Provision for earthing) 4</p></div>\n<div data-label=\"text\" data-bbox=\"0.1050,0.3510,0.8630,0.3640\" data-score=\"0.9012\"><p>2.10 단자 (Terminals) 4</p></div>\n<div data-label=\"text\" data-bbox=\"0.1050,0.3650,0.8630,0.3790\" data-score=\"0.9930\"><p>2.11 내·외부 배선 (External and internal wiring) 4</p></div>\n<div data-label=\"text\" data-bbox=\"0.1050,0.3800,0.8630,0.3930\" data-score=\"0.9784\"><p>2.12 총전부에 대한 감전 보호 (Protection against electric shock) 4</p></div>\n<div data-label=\"text\" data-bbox=\"0.1050,0.3940,0.8630,0.4070\" data-score=\"0.9897\"><p>2.13 내구성 시험 및 내열성 시험 (Endurance tests and thermal tests) 4</p></div>\n<div data-label=\"text\" data-bbox=\"0.1050,0.4080,0.8630,0.4220\" data-score=\"0.9877\"><p>2.14 내진성 및 내습성 (Resistance to dust and moisture) 5</p></div>\n<div data-label=\"text\" data-bbox=\"0.1050,0.4230,0.8630,0.4360\" data-score=\"0.9926\"><p>2.15 절연 저항 및 절연 내력 (Insulation resistance and electric strength) 5</p></div>\n<div data-label=\"text\" data-bbox=\"0.1050,0.4370,0.8630,0.4500\" data-score=\"0.9927\"><p>2.16 내열, 내화 및 내트래킹성 (Resistance to heat, fire and tracking) 5</p></div>\n<div data-label=\"text\" data-bbox=\"0.1040,0.4780,0.8640,0.5070\" data-score=\"0.9772\"><p>부속서 A (참고) 제품의 재시험을 요구하는 심각한/중요한 요구사항을 포함하는 개정된 절의 일정 (Annex A) 6</p></div>\n<div data-label=\"text\" data-bbox=\"0.1050,0.5350,0.8630,0.5500\" data-score=\"0.8432\" data-corrected=\"true\"><p>해설 17</p></div>",
+            "page_visual_summary": "",
+            "element_analysis": [],
+            "unbound_visual_notes": null,
+            "table_markdown": null,
+            "arbitrated_blocks": 0,
+            "corrected_cells": 0,
+            "format_restored_cells": 0,
+            "name_consistency": null,
+            "applied_rotation": null,
+            "applied_skew": null
+          },
+          {
+            "page_number": 3,
+            "body_html": "<div data-label=\"header\" data-bbox=\"0.1040,0.0610,0.2600,0.0740\" data-score=\"0.9999\" style=\"color:#888;font-size:0.9em;\">KC 60598-2-2:2022</div>\n<div data-label=\"text\" data-bbox=\"0.1030,0.1090,0.5250,0.1250\" data-score=\"0.9912\"><p>전기용품안전기준 제정, 개정, 폐지 이력 및 고시현황</p></div>\n<div data-label=\"text\" data-bbox=\"0.1160,0.1630,0.5280,0.1800\" data-score=\"0.9923\"><p>제정 기술표준원 고시 제2000 - 54호 (2000. 4. 6)</p></div>\n<div data-label=\"text\" data-bbox=\"0.1170,0.1800,0.5370,0.1950\" data-score=\"0.9806\"><p>개정 기술표준원 고시 제2003 - 523호 (2003. 5.24)</p></div>\n<div data-label=\"text\" data-bbox=\"0.1170,0.1960,0.5380,0.2100\" data-score=\"0.9749\"><p>개정 기술표준원 고시 제2006-959호 (2006.12.28)</p></div>\n<div data-label=\"text\" data-bbox=\"0.1170,0.2110,0.5620,0.2250\" data-score=\"0.9758\"><p>개정 국가기술표준원 고시 제2014-0421호 (2014. 9. 3)</p></div>\n<div data-label=\"text\" data-bbox=\"0.1170,0.2260,0.5620,0.2400\" data-score=\"0.9691\"><p>개정 국가기술표준원 고시 제2015-383호 (2015. 9. 23)</p></div>\n<div data-label=\"text\" data-bbox=\"0.1170,0.2420,0.5620,0.2560\" data-score=\"0.9760\"><p>개정 국가기술표준원 고시 제2021-232호 (2021. 8. 11)</p></div>\n<div data-label=\"text\" data-bbox=\"0.1170,0.2570,0.5710,0.2720\" data-score=\"0.9564\"><p>개정 국가기술표준원 고시 제2022-0016호 (2022. 2. 16)</p></div>\n<div data-label=\"text\" data-bbox=\"0.1030,0.4590,0.4330,0.4750\" data-score=\"0.9986\"><p>부 칙(고시 제2022-0016호, 2022.02.16)</p></div>\n<div data-label=\"text\" data-bbox=\"0.1030,0.5090,0.3840,0.5240\" data-score=\"0.9997\"><p>이 고시는 고시한 날부터 시행한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1030,0.5270,0.7340,0.5430\" data-score=\"0.9895\"><p>단, 기존 안전기준(고시 2021.8.11.)은 1년 후(2023.02.15.)까지 병행 적용한다.</p></div>\n<div data-label=\"page_number\" data-bbox=\"0.4750,0.9260,0.5260,0.9370\" data-score=\"0.9970\" style=\"color:#888;font-size:0.9em;\">- 1 -</div>",
+            "page_visual_summary": "",
+            "element_analysis": [],
+            "unbound_visual_notes": null,
+            "table_markdown": null,
+            "arbitrated_blocks": 0,
+            "corrected_cells": 0,
+            "format_restored_cells": 0,
+            "name_consistency": null,
+            "applied_rotation": null,
+            "applied_skew": null
+          },
+          {
+            "page_number": 4,
+            "body_html": "<div data-label=\"header\" data-bbox=\"0.7400,0.0610,0.8950,0.0740\" data-score=\"0.9998\" style=\"color:#888;font-size:0.9em;\">KC 60598-2-2:2022</div>\n<div data-label=\"title\" data-bbox=\"0.3770,0.1170,0.6230,0.1410\" data-score=\"0.9999\"><h1>전기용품안전기준</h1></div>\n<div data-label=\"text\" data-bbox=\"0.4640,0.1680,0.5340,0.1860\" data-score=\"0.9998\"><p>등기구</p></div>\n<div data-label=\"text\" data-bbox=\"0.3030,0.1880,0.6970,0.2060\" data-score=\"0.9976\"><p>제2-2부: 매입형 등기구-개별요구사항</p></div>\n<div data-label=\"text\" data-bbox=\"0.4510,0.2110,0.5480,0.2250\" data-score=\"1.0000\"><p>Luminaires</p></div>\n<div data-label=\"text\" data-bbox=\"0.2450,0.2280,0.7530,0.2430\" data-score=\"0.9437\"><p>Part 2-2: Particular requirements - Recessed luminaires</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.2590,0.8970,0.3060\" data-score=\"0.9965\"><p>이 안전기준은 2011년 11월에 제3.0판으로 발행된 IEC 60598-2-2, Luminaires - Part 2-2: Particular requirements - Recessed luminaires를 기초로, 기술적 내용 및 대응 국제표준의 구성을 변경하지 않고 작성한 KS C IEC 60598-2-2(2020.12)을 인용 채택한다.</p></div>\n<div data-label=\"page_number\" data-bbox=\"0.4750,0.9260,0.5260,0.9380\" data-score=\"0.8520\" style=\"color:#888;font-size:0.9em;\">- 2 -</div>",
+            "page_visual_summary": "",
+            "element_analysis": [],
+            "unbound_visual_notes": null,
+            "table_markdown": null,
+            "arbitrated_blocks": 1,
+            "corrected_cells": 0,
+            "format_restored_cells": 0,
+            "name_consistency": null,
+            "applied_rotation": null,
+            "applied_skew": null
+          },
+          {
+            "page_number": 5,
+            "body_html": "<div data-label=\"header\" data-bbox=\"0.1030,0.0610,0.2600,0.0740\" data-score=\"0.9999\" style=\"color:#888;font-size:0.9em;\">KC 60598-2-2:2022</div>\n<div data-label=\"title\" data-bbox=\"0.2550,0.0940,0.7450,0.1190\" data-score=\"0.9929\"><h1>제2-2부: 매입형 등기구-개별요구사항</h1></div>\n<div data-label=\"title\" data-bbox=\"0.1600,0.1380,0.8380,0.1550\" data-score=\"0.9722\"><h1>Luminaires Part 2–2 : Particular requirements – Recessed luminaires</h1></div>\n<div data-label=\"title\" data-bbox=\"0.1020,0.1900,0.2510,0.2080\" data-score=\"0.9995\"><h1>2.1 적용 범위</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1010,0.2240,0.8970,0.2550\" data-score=\"0.9919\"><p>KS C IEC 60598-2의 이 표준은 1 000 V 이하에서 전기적 광원을 사용하는 매입형 등기구에 대한 개별 요구 사항을 규정한다. 이 기준은 공기 조절용 및 액화 냉각형 등기구에는 적용되지 않는다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1020,0.2710,0.2510,0.2880\" data-score=\"0.9969\"><h1>2.2 인용 표준</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.3040,0.8970,0.3360\" data-score=\"0.9968\"><p>다음의 인용표준은 이 표준의 적용을 위해 필수적이다. 발행연도가 표기된 인용표준은 인용된 판만을 적용한다. 발행연도가 표기 되지 않은 인용표준은 최신판(모든 추록을 포함)을 적용한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.3510,0.7010,0.3650\" data-score=\"0.9944\"><p>KS C IEC 60227(모든 부), 정격전압 450/750 V 이하 염화비닐절연 케이블</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.3660,0.6750,0.3810\" data-score=\"0.9963\"><p>KS C IEC 60245(모든 부), 정격전압 450/750 V 이하 고무 절연 케이블</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.3820,0.5980,0.3960\" data-score=\"0.9644\"><p>KS C IEC 60598-1, 등기구 - 제1부 : 일반 요구사항 및 시험</p></div>\n<div data-label=\"title\" data-bbox=\"0.1020,0.4280,0.3530,0.4450\" data-score=\"0.9993\"><h1>2.3 일반 시험 요구 사항</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1010,0.4620,0.8970,0.4930\" data-score=\"0.9845\"><p>KS C IEC 60598-1의 제0절의 규정을 적용한다. 제1부의 각 절에 설명된 이 시험은 제2부의 이 항 목에 기록된 순서에 따라 실시한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.5080,0.4870,0.5230\" data-score=\"0.9999\"><p>설비의 주위 온도 측정 절차는 부속서 A에 있다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1020,0.5610,0.2100,0.5770\" data-score=\"0.9871\"><h1>2.4 정의</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.5950,0.6210,0.6100\" data-score=\"0.9940\"><p>이 표준의 목적을 위해 KS C IEC 60598-1의 제1절을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1020,0.6410,0.2710,0.6580\" data-score=\"0.9998\"><h1>2.5 등기구 분류</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.6760,0.4380,0.6900\" data-score=\"0.9965\"><p>KS C IEC 60598-1의 제2절을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1020,0.7220,0.2100,0.7380\" data-score=\"0.9883\"><h1>2.6 표시</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.7550,0.4380,0.7700\" data-score=\"0.9949\"><p>KS C IEC 60598-1의 제3절을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1020,0.8020,0.2120,0.8180\" data-score=\"0.9769\"><h1>2.7 구조</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.8360,0.4380,0.8510\" data-score=\"0.9959\"><p>KS C IEC 60598-1의 제4절을 적용한다.</p></div>\n<div data-label=\"page_number\" data-bbox=\"0.4750,0.9260,0.5260,0.9380\" data-score=\"0.9147\" style=\"color:#888;font-size:0.9em;\">- 3 -</div>",
+            "page_visual_summary": "",
+            "element_analysis": [],
+            "unbound_visual_notes": null,
+            "table_markdown": null,
+            "arbitrated_blocks": 0,
+            "corrected_cells": 0,
+            "format_restored_cells": 0,
+            "name_consistency": null,
+            "applied_rotation": null,
+            "applied_skew": null
+          },
+          {
+            "page_number": 6,
+            "body_html": "<div data-label=\"header\" data-bbox=\"0.7390,0.0610,0.8950,0.0740\" data-score=\"0.9999\" style=\"color:#888;font-size:0.9em;\">KC 60598-2-2:2022</div>\n<div data-label=\"title\" data-bbox=\"0.1020,0.0940,0.3720,0.1110\" data-score=\"0.9949\"><h1>2.8 연면 거리와 공간 거리</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.1280,0.4460,0.1420\" data-score=\"0.9962\"><p>KS C IEC 60598-1의 제11절을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1020,0.1740,0.2100,0.1910\" data-score=\"0.9668\"><h1>2.9 접지</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.2080,0.4360,0.2220\" data-score=\"0.9967\"><p>KS C IEC 60598-1의 제7절을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1020,0.2550,0.2240,0.2710\" data-score=\"0.9420\"><h1>2.10 단자</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.2880,0.5320,0.3030\" data-score=\"0.9951\"><p>KS C IEC 60598-1의 제14절 및 제15절을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1020,0.3350,0.3030,0.3510\" data-score=\"0.9853\"><h1>2.11 내·외부 배선</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.3690,0.4360,0.3830\" data-score=\"0.9960\"><p>KS C IEC 60598-1의 제5절을 적용한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.3990,0.8950,0.4610\" data-score=\"0.9983\"><p>전선 케이블이나 코드는 등기구 제조자가 공급할 때 전원에 연결하는 수단으로 사용되는데, 정상 사용 조건에서 노출될 수 있는 가장 높은 온도에서 품질이 저하되지 않고 견딜 수 있는 능력이 있어야하고, 적어도 IEC 60227, IEC 60227A이나 IEC 60245에서 규정된 특성과 기계적이고 전기적인 특성이 같아야 한다. PVC와 고무가 아닌 다른 물질은 위 요구 사항을 만족한다면 적합하다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.4760,0.5180,0.4910\" data-score=\"0.9996\"><p>적합 여부는 2.13에 규정된 시험에 의해서 판정한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.5070,0.8030,0.5210\" data-score=\"0.9994\"><p>비고 매입형 등기구의 전선 케이블과 코드의 사용은 다음 사항을 위해 적합하여야 한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1110,0.5230,0.6600,0.5370\" data-score=\"0.9877\"><p>1) 전선 케이블과 코드는 매입 부분 내에 설치하여 만지기 쉽지 않다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1110,0.5380,0.4270,0.5520\" data-score=\"0.9757\"><p>2) 매입 부분에의 등기구의 용이한 설치</p></div>\n<div data-label=\"text\" data-bbox=\"0.1100,0.5540,0.7030,0.5680\" data-score=\"0.9921\"><p>3)반조절(settable) 및 조절 가능한(adjustable) 매입형 등기구의 조절 허용</p></div>\n<div data-label=\"title\" data-bbox=\"0.1020,0.6000,0.4050,0.6170\" data-score=\"0.9914\"><h1>2.12 충전부에 대한 감전 보호</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.6340,0.4360,0.6480\" data-score=\"0.9965\"><p>KS C IEC 60598-1의 제8절을 적용한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.6650,0.8940,0.6950\" data-score=\"0.9927\"><p>천장이나 빈 공간에서 등기구와 부품의 일부는 천장 아래 등기구 부분과 전기 충격에 대한 보호 등급이 같아야 한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.7110,0.8940,0.7420\" data-score=\"0.9717\"><p>비고 천장이나 빈 공간은 설치와 보수를 위해 접근 가능하며, 벽은 전기 충격에 대한 적절한 보호 장치가 되지 못한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.7580,0.3820,0.7720\" data-score=\"0.9999\"><p>적합 여부는 검사에 의해 판정한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1020,0.8040,0.4320,0.8210\" data-score=\"0.9996\"><h1>2.13 내구성 시험 및 내열성 시험</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.8390,0.5240,0.8530\" data-score=\"0.9975\"><p>KS C IEC 60598-1의 제12절과 2.13.1을 적용한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1010,0.8690,0.8940,0.8990\" data-score=\"0.9985\"><p>2.13.1 전원과의 연결을 위해 등기구 안을 통과하거나 조명 기구와 접촉할 수 있는 배선은 불안전 온도에 도달해서는 안 된다.</p></div>\n<div data-label=\"page_number\" data-bbox=\"0.4750,0.9260,0.5240,0.9370\" data-score=\"0.9062\" style=\"color:#888;font-size:0.9em;\">- 4 -</div>",
+            "page_visual_summary": "",
+            "element_analysis": [],
+            "unbound_visual_notes": null,
+            "table_markdown": null,
+            "arbitrated_blocks": 8,
+            "corrected_cells": 0,
+            "format_restored_cells": 0,
+            "name_consistency": null,
+            "applied_rotation": null,
+            "applied_skew": null
+          },
+          {
+            "page_number": 7,
+            "body_html": "<div data-label=\"header\" data-bbox=\"0.1030,0.0610,0.2600,0.0740\" data-score=\"0.9999\" style=\"color:#888;font-size:0.9em;\">KC 60598-2-2:2022</div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.1090,0.4250,0.1240\" data-score=\"0.9999\"><p>적합 여부는 다음 시험에 의해 판정한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1010,0.1400,0.8970,0.1870\" data-score=\"0.9994\"><p>등기구는 등기구와 함께 제공된 케이블을 사용하거나 등기구 위에 표시된 것에 따라 케이블을 사용하거나, 표시가 되지 않았다면 제조자의 지침서에 규정된 대로 전원과 연결한다. 한편으로는 IEC 60227을 따르는 PVC 케이블을 사용한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1010,0.2010,0.8950,0.2480\" data-score=\"0.9949\"><p>가장 뜨거운 지점은 사용 중 케이블이 접촉하기 쉬운 지점(등기구의 내부 경로를 따르거나 외부 표면 위)에 있다. 케이블은 이 지점과 접촉한 채로 가법게 고정시키고 KS C IEC 60598-1의 부속서 K에서 설명한 대로 측정점에서 접촉 지점에서 절연체의 온도를 측정한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.2640,0.6110,0.2790\" data-score=\"0.9986\"><p>케이블의 동작 온도는 표 1에 주어진 제한값을 넘어서지 않는다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1010,0.2950,0.8950,0.3400\" data-score=\"0.9960\"><p>IP 20보다 큰 IP 분류를 가진 등기구는 KS C IEC 60598-2의 2.14에 규정된 KS C IEC 60598-1의 9.2의 시험 후, 그러나 9.3의 시험 전에 KS C IEC 60598-1의 12.4, 12.5, 12.6 및 12.7의 관련 시험을 해야 한다.</p></div>\n<div data-label=\"table_caption\" data-bbox=\"0.3890,0.3560,0.6090,0.3710\" data-score=\"0.9433\" style=\"font-weight:600;\">표 1-케이블의 동작 온도</div>\n<div data-label=\"table\" data-bbox=\"0.1390,0.3720,0.8650,0.5210\" data-score=\"0.9914\"><table><tr><td>케이블의 지정</td><td>동작 온도의 제한</td></tr><tr><td>등기구와 함께 제공되는 케이블(슬리이브 관 포함)</td><td>KS C IEC 60598-1의 표 12.2에 정해진 최대 온도</td></tr><tr><td>등기구와 함께 제공되지 않는 케이블 :a) 케이블 온도 표시가 된 등기구b) 케이블 온도 표시가 안 된 등기구</td><td>표시된 온도기계적인 압력이 주어지지 않은 일반 PVC에서 KS C IEC 60598-1의 표 12.2에 규정된 최대 온도</td></tr></table></div>\n<div data-label=\"title\" data-bbox=\"0.1020,0.5500,0.3320,0.5670\" data-score=\"0.9992\"><h1>2.14 내진성 및 내습성</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.5840,0.4370,0.5990\" data-score=\"0.9948\"><p>KS C IEC 60598-1의 제9절을 적용한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1010,0.6150,0.8970,0.6450\" data-score=\"0.9982\"><p>IP 분류가 IP 20보다 큰 등기구의 경우 KS C IEC 60598-1의 제9절의 시험 순서에 따라 KS C IEC 60598-2-2의 2.13의 시험에 규정되어야 한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1020,0.6760,0.3940,0.6940\" data-score=\"0.9995\"><h1>2.15 절연 저항 및 절연 내력</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.7110,0.4460,0.7250\" data-score=\"0.9958\"><p>KS C IEC 60598-1의 제10절을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1020,0.7570,0.4110,0.7740\" data-score=\"0.9970\"><h1>2.16 내열, 내화 및 내트래킹성</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.7910,0.4460,0.8050\" data-score=\"0.9961\"><p>KS C IEC 60598-1의 제13절을 적용한다.</p></div>\n<div data-label=\"page_number\" data-bbox=\"0.4750,0.9260,0.5240,0.9370\" data-score=\"0.9155\" style=\"color:#888;font-size:0.9em;\">- 5 -</div>",
+            "page_visual_summary": "문서의 상단에는 'KC 60598-2-2:2022'라는 표준 식별자 제목이 위치합니다. 그 아래로는 적합성 판정 기준에 대한 설명 문단이 이어지며, 중앙에는 케이블의 동작 온도를 규정하는 표(Table 1)가 있습니다. 표 하단에는 각절(Section) 형식의 항목들이 나열되어 있는데, 각각의 제목(예: 내진성 및 내습성 등)이 굵은 글씨로 강조되어 있으며 본문은 해당 기술 사양을 참조하도록 안내하고 있습니다.",
+            "element_analysis": [],
+            "unbound_visual_notes": "문서의 상단에는 'KC 60598-2-2:2022'라는 표준 식별자 제목이 위치합니다. 그 아래로는 적합성 판정 기준에 대한 설명 문단이 이어지며, 중앙에는 케이블의 동작 온도를 규정하는 표(Table 1)가 있습니다. 표 하단에는 각절(Section) 형식의 항목들이 나열되어 있는데, 각각의 제목(예: 내진성 및 내습성 등)이 굵은 글씨로 강조되어 있으며 본문은 해당 기술 사양을 참조하도록 안내하고 있습니다.",
+            "table_markdown": "| 케이블의 지정 | 동작 온도의 제한 |\n| :--- | :--- |\n| 등기구와 함께 제공되는 케이블<br>(슬리브 관 포함) | KS C IEC 60598-1의 표 12.2에 정해진<br>최대 온도 |\n| 등기구와 함께 제공되지 않는 케이블 :<br>a) 케이블 온도 표시가 된 등기구<br><br>b) 케이블 온도 표시가 안 된 등기구 | 표시된 온도<br><br>기계적인 압력이 주어지지 않은 일반 PVC에서 KS C IEC 60598-1의 표 12.2에 규정된 최대 온도 |",
+            "arbitrated_blocks": 0,
+            "corrected_cells": 0,
+            "format_restored_cells": 0,
+            "name_consistency": null,
+            "applied_rotation": null,
+            "applied_skew": null
+          },
+          {
+            "page_number": 8,
+            "body_html": "<div data-label=\"header\" data-bbox=\"0.7390,0.0610,0.8950,0.0740\" data-score=\"0.9999\" style=\"color:#888;font-size:0.9em;\">KC 60598-2-2:2022</div>\n<div data-label=\"title\" data-bbox=\"0.4550,0.0970,0.5460,0.1140\" data-score=\"0.9996\"><h1>부속서 A</h1></div>\n<div data-label=\"title\" data-bbox=\"0.4710,0.1190,0.5290,0.1370\" data-score=\"0.9999\"><h1>(참고)</h1></div>\n<div data-label=\"title\" data-bbox=\"0.3910,0.1630,0.6060,0.1810\" data-score=\"0.9995\"><h1>설비의 주위 온도 측정</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.2240,0.8960,0.2850\" data-score=\"0.9976\"><p>조명 설비에서 매입형 등기구가 온도 제한 범위 안에서 동작하는지 결정하는 데 상당한 주의가 필요하다. 매입형 등기구가 제안된 설비에서 만족할지 예상하는 것이 더 어려워서 “실물 크기의 모형”을 보통 필요로 한다. 과거에는 예를 들면 천장 판 위에 가열 장치 때문에 등기구가 과열되었던 예가 있다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.3070,0.8940,0.3850\" data-score=\"0.9947\"><p>다음의 과정은 등기구가 작동하는 주위 온도를 측정하기 위한 것이다. 등기구의 ta 평점은 적어도 주위 온도와 같아야 한다. 주위 온도는 전형적인 빈 공간의 중간 점에서 천장의 면(또는 이외의 부착표면)에서 측정되어야 한다. 설비상에서 모든 등기구와 등기구의 열적 상태에 영향을 줄 수 있는 모든 시설이 작동하고 있다는 것은 중요하다. 빈 공간은 측정하는 지점 위에서 보호되어 공기의 비전형적인 교환을 막고 덮개는 등기구로 흡수될 외부열을 흡수할 수 있게 된다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.4070,0.5420,0.4230\" data-score=\"0.9991\"><p>비고 이 목적으로 등기구의 외관을 삽입하면 편리하다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.4450,0.8950,0.5070\" data-score=\"0.9990\"><p>매입형 등기구의 작동 온도를 측정하는 데 필요한 매입 부분에 대한 시험은 서비스 중 경험하기 쉬운 가장 까다로운 밀폐된 매입 부분(다른 열원이 없는)을 나타내기 위해 의도된 것이다. 등기구의 제조자가 작동이 만족스러울 것임을 검증하지 않는다면 매입형 등기구는 매입 부분의 시험에 필요한 공간보다 작은 공간에 설치되어서는 안 된다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.5300,0.8940,0.6220\" data-score=\"0.9885\"><p>많은 양의 공기가 열 방출 설비에 의해 상쇄된다면 매입 부분에 대한 시험은 천장의 온도 조건에 근접한다. 특수한 설비에서는 이보다 더 까다로운 열적 조건이 있을 수 있으므로 실제 점검을 수행하는 게 필수적이다. 반대로 천장 위의 공간에 자유로운 공기의 이동이 있으면서 열 방출 시설은 없을 수 있다. 그러한 설비에 대해 매입 부분에 대한 시험에서 결정된 등기구의 \\(t_a\\)는 온도의 극한 점에 합쳐지게 되는데, 등기구의 제조자가 특수한 설비에서의 작동이 만족스러울 것이라고 입증한다면 ta는 초과할 수 있다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.6450,0.8970,0.6760\" data-score=\"0.9576\"><p>등기구에 대한  \\( t_{a} \\) 값을 결정하고 점검하는 동안 주위 온도의 측정은 KS C IEC 60598-1의 부속서 K 에 따라 방풍 장치가 있는 밀폐된 곳에서 하고 매입 부분 시험은 밖에서 한다.</p></div>\n<div data-label=\"page_number\" data-bbox=\"0.4750,0.9260,0.5260,0.9380\" data-score=\"0.9232\" style=\"color:#888;font-size:0.9em;\">- 6 -</div>",
+            "page_visual_summary": "페이지 상단에는 문서 식별 번호와 부속서 정보가 있습니다. 중앙에 큰 제목과 소제목이 배치되어 있으며, 그 아래 본문 paragraphs이 수직으로 배열되어 있습니다.",
+            "element_analysis": [],
+            "unbound_visual_notes": "페이지 상단에는 문서 식별 번호와 부속서 정보가 있습니다. 중앙에 큰 제목과 소제목이 배치되어 있으며, 그 아래 본문 paragraphs이 수직으로 배열되어 있습니다.",
+            "table_markdown": null,
+            "arbitrated_blocks": 0,
+            "corrected_cells": 0,
+            "format_restored_cells": 0,
+            "name_consistency": null,
+            "applied_rotation": null,
+            "applied_skew": null
+          },
+          {
+            "page_number": 9,
+            "body_html": "<div data-label=\"header\" data-bbox=\"0.1030,0.0610,0.2600,0.0740\" data-score=\"0.9999\" style=\"color:#888;font-size:0.9em;\">KC 60598-2-2:2022</div>\n<div data-label=\"title\" data-bbox=\"0.2490,0.0940,0.7470,0.1100\" data-score=\"0.9977\"><h1>해설 1 전기용품안전기준의 한국산업표준과 단일화의 취지</h1></div>\n<div data-label=\"title\" data-bbox=\"0.1030,0.1280,0.1680,0.1410\" data-score=\"0.9717\"><h1>1. 개요</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.1440,0.8950,0.1750\" data-score=\"0.9984\"><p>이 기준은 전기용품안전관리법에 따른 안전관리대상 전기제품의 안전관리를 수행함에 있어 국가표준인 한국산업표준(KS)을 최대한 인용하여 단일화한 전기용품안전기준이다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1020,0.1940,0.2340,0.2080\" data-score=\"0.9219\"><h1>2.배경 및 목적</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.2110,0.8950,0.2580\" data-score=\"0.9998\"><p>전기용품안전관리법에 따른 안전관리대상 전기제품의 인증을 위한 시험의 기준은 2000년부터 국제표준을 기반으로 안전성 규격을 도입·인용하여 운영해 왔으며 또한 한국산업표준도 2000년부터 국제표준에 바탕을 두고 있으므로 규격의 내용은 양자가 거의 동일하다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.2600,0.8940,0.2920\" data-score=\"0.9986\"><p>따라서 전기용품안전관리법에 따른 안전기준과 한국산업표준의 중복인증이 발생하였으며, 기준의 단일화가 필요하게 되었다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.2930,0.8940,0.3250\" data-score=\"0.9990\"><p>전기용품 안전인증기준의 단일화는 기업의 인증대상제품의 인증시 시간과 비용을 줄이기 위한 목적이며, 국가표준인 한국산업표준과 IEC 국제표준을 기반으로 단일화를 추진이 필요하다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.3270,0.8940,0.3750\" data-score=\"0.9894\"><p>또한 전기용품 안전인증기준을 한국산업표준을 기반으로 단일화 함으로써 한국산업표준의 위상을 강화하고, 우리나라 각 부처별로 시행하는 법률에 근거한 각 인증의 기준을 국제표준에 근거한 한국 산업표준으로 일원화할 수 있도록 범부처 모범사례가 되도록 하였다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1020,0.3940,0.2270,0.4080\" data-score=\"0.9681\"><h1>3. 단일화 방향</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.4100,0.8940,0.4740\" data-score=\"0.9927\"><p>전기용품안전관리법에서 적용하기 위한 안전기준을 동일한 한국산업표준으로 간단히 전기용품안전기준으로 채택하면 되겠지만, 전기용품안전기준은 그간의 전기용품 안전관리제도를 운용해 오면서 국내기업의 여건에 맞추어 시험항목, 시험방법 및 기준을 여러분의 개정을 통해 변경함으로써 한국산업표준과의 차이를 보이게 되었다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.4760,0.8940,0.5240\" data-score=\"0.9992\"><p>한국산업표준과 전기용품안전기준의 단일화 방향을 두 기준 모두 국제표준에 바탕을 두고 있으므로 전기용품안전기준에서 한국산업표준과 중복되는 부분은 그 내용을 그대로 인용하는 방식으로 구성하고자 한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.5260,0.8930,0.5580\" data-score=\"0.9972\"><p>안전기준에서 그간의 전기용품 안전관리제도를 운용해 오면서 개정된 시험항목과 시험방법, 변경된 기준은 별도의 항을 추가하도록 하였다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.5600,0.8940,0.6240\" data-score=\"0.9891\"><p>한국산업표준과 전기용품안전기준을 비교하여 한국산업표준의 최신판일 경우는 한국산업표준의 내용을 기준으로 전기용품안전기준의 내용을 개정키로 하며, 이 경우 전기용품안전기준의 구판은 병행적용함으로서 그간의 인증받은 제품들이 개정기준에 맞추어 개선할 시간적 여유를 줌으로서 기업의 혼란을 방지하고자 한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.6260,0.8940,0.6740\" data-score=\"0.9816\"><p>그리고 국제표준이 개정되어 판번이 변경되었을 경우는 그 최신판을 한국산업표준으로 개정 요청을 하고 그리고 전기용품안전기준으로 그 내용을 채택함으로써 전기용품안전기준을 국제표준에 신속하게 대응하고자 한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.6760,0.8930,0.7080\" data-score=\"0.9987\"><p>그리고 전기용품안전기준에서만 규정되어 있는 고유기준은 한국산업표준에도 제정요청하고, 아울러 필요시 국제표준에도 제안하여 우리기술을 국제표준에 반영하고자 한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1020,0.7260,0.1680,0.7400\" data-score=\"0.9942\"><h1>4. 향후</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.7420,0.8940,0.7730\" data-score=\"0.9976\"><p>한국산업표준과 전기용품안전기준의 중복시험 항목을 없애고 단일화 함으로써 표준과 기준의 이원화에 따른 중복인증의 기업부담을 경감시키고, KS표준의 위상을 강화하고자 한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.7760,0.8940,0.8070\" data-score=\"0.9996\"><p>아울러 우리나라 각 부처별로 시행하는 법률에 근거한 각 인증의 기준을 국제표준에 근거한 한국산업표준으로 일원화할 수 있도록 범부처 모범사례가 되도록 한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1020,0.8090,0.8940,0.8570\" data-score=\"0.9997\"><p>또한 국제인증기구는 국제표준 인증체계를 확대하는 추세에 있으며, 표준을 활용하여 자국 기업의 경쟁력을 강화하는 추세에 있다. 이에 대응하여 국가표준과 안전기준이 국제표준에 신속히 대응함으로서 우리나라의 수출기업이 인증에 애로사항을 감소하도록 한다.</p></div>\n<div data-label=\"page_number\" data-bbox=\"0.4750,0.9260,0.5240,0.9370\" data-score=\"0.9234\" style=\"color:#888;font-size:0.9em;\">- 7 -</div>",
+            "page_visual_summary": "",
+            "element_analysis": [],
+            "unbound_visual_notes": null,
+            "table_markdown": null,
+            "arbitrated_blocks": 0,
+            "corrected_cells": 0,
+            "format_restored_cells": 0,
+            "name_consistency": null,
+            "applied_rotation": null,
+            "applied_skew": null
+          },
+          {
+            "page_number": 10,
+            "body_html": "<div data-label=\"header\" data-bbox=\"0.7400,0.0610,0.8950,0.0740\" data-score=\"0.9998\" style=\"color:#888;font-size:0.9em;\">KC 60598-2-2:2022</div>\n<div data-label=\"text\" data-bbox=\"0.3590,0.0930,0.6390,0.1090\" data-score=\"0.9135\"><p>심의:조명기기 분야 전문위원회</p></div>\n<div data-label=\"text\" data-bbox=\"0.1580,0.1320,0.4600,0.1480\" data-score=\"0.9253\"><p>구분 성명 근무처</p></div>\n<div data-label=\"text\" data-bbox=\"0.8050,0.1320,0.8760,0.1470\" data-score=\"0.8600\"><p>직위</p></div>\n<div data-label=\"text\" data-bbox=\"0.1590,0.1500,0.2580,0.1660\" data-score=\"0.7906\" data-corrected=\"true\"><p>위원장</p></div>\n<div data-label=\"text\" data-bbox=\"0.1590,0.1690,0.2580,0.1840\" data-score=\"0.9542\"><p>(위 원)</p></div>\n<div data-label=\"text\" data-bbox=\"0.1570,0.4050,0.2590,0.4210\" data-score=\"0.9832\"><p>(간 사)</p></div>\n<div data-label=\"text\" data-bbox=\"0.3130,0.4790,0.6850,0.4940\" data-score=\"0.9667\"><p>원안작성협력 : 시험 인증기관 담당자 연구포럼</p></div>\n<div data-label=\"text\" data-bbox=\"0.1520,0.5200,0.4600,0.5360\" data-score=\"0.9179\"><p>구분 성명 근무처</p></div>\n<div data-label=\"text\" data-bbox=\"0.8040,0.5200,0.8760,0.5350\" data-score=\"0.8586\"><p>직위</p></div>\n<div data-label=\"text\" data-bbox=\"0.1580,0.5420,0.2590,0.5570\" data-score=\"0.9999\"><p>(연구책임자)</p></div>\n<div data-label=\"text\" data-bbox=\"0.1580,0.5640,0.5080,0.5800\" data-score=\"0.9997\"><p>(참여연구원) 이대도 한국산업기술시험원</p></div>\n<div data-label=\"text\" data-bbox=\"0.8130,0.5650,0.8660,0.5790\" data-score=\"1.0000\"><p>연구원</p></div>\n<div data-label=\"text\" data-bbox=\"0.1260,0.6970,0.8550,0.7590\" data-score=\"0.9894\"><p>전기용품안전기준의 열람은 국가기술표준원 홈페이지(http://www.kats.go.kr), 및 제품안전정보센터(http://www.safety.korea.kr)를 이용하여 주시고, 이 전기용품안전기준에 대한 의견 또는 질문은 산업통상자원부 국가기술표준원 제품안전정책국 전기통신제품안전과(043-870-5441~9)으로 연락하여 주십시오.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1260,0.7740,0.8530,0.8090\" data-score=\"0.9992\"><p>이 안전기준은 전기용품안전관리법 제3조의 규정에 따라 매 5년마다 안전기준전문위원회에서 심의되어 제정, 개정 또는 폐지됩니다.</p></div>",
+            "page_visual_summary": "문서는 상단에 기준(KC 60598-2-2:2022) 및 심의 위원회 명단, 중간에 원안 작성 협력 연구 Forum 구성원 및 참여 연구자 정보(이대도), 하단에 전기용품안전기준 열람 안내와 안전관리법 개정 주기에 대한 설명이 포함된 구조로 되어 있습니다.",
+            "element_analysis": [],
+            "unbound_visual_notes": "문서는 상단에 기준(KC 60598-2-2:2022) 및 심의 위원회 명단, 중간에 원안 작성 협력 연구 Forum 구성원 및 참여 연구자 정보(이대도), 하단에 전기용품안전기준 열람 안내와 안전관리법 개정 주기에 대한 설명이 포함된 구조로 되어 있습니다.",
+            "table_markdown": "| 구 분 | 성명 | 근무처 | 직위 |\n| :--- | :--- | :--- | :--- |\n| (위원장) | | | |\n| (위원) | | | |\n\n---\n| 구분 | 성명 | 근무처 | 직무 |\n| :--- | :--- | :--- | :--- |\n| (연구책임자) | | | |\n| (참여연구원) | 이대도 | 한국산업기술시험원 | 연구원 |",
+            "arbitrated_blocks": 2,
+            "corrected_cells": 0,
+            "format_restored_cells": 0,
+            "name_consistency": null,
+            "applied_rotation": null,
+            "applied_skew": null
+          },
+          {
+            "page_number": 11,
+            "body_html": "<div data-label=\"title\" data-bbox=\"0.3100,0.3250,0.6880,0.3440\" data-score=\"0.9992\"><h1>KC 60598-2-2 : 2022-02-16</h1></div>\n<div data-label=\"title\" data-bbox=\"0.4220,0.3610,0.5780,0.3820\" data-score=\"1.0000\"><h1>Luminaires</h1></div>\n<div data-label=\"title\" data-bbox=\"0.2950,0.3990,0.7090,0.4370\" data-score=\"0.9571\"><h1>- Part 2-2: Particular requirements - Recessed luminaires</h1></div>\n<div data-label=\"text\" data-bbox=\"0.2670,0.4550,0.3750,0.4680\" data-score=\"1.0000\"><p>ICS 29.140.40</p></div>\n<div data-label=\"text\" data-bbox=\"0.2140,0.5450,0.7850,0.5650\" data-score=\"1.0000\"><p>Korean Agency for Technology and Standards</p></div>\n<div data-label=\"text\" data-bbox=\"0.4130,0.5660,0.5890,0.5810\" data-score=\"1.0000\"><p>http://www.kats.go.kr</p></div>",
+            "page_visual_summary": "문서 상단 중앙에 표준 문서의 제목 정보가 세로로 배치되어 있습니다. 가장 위에 'KC 60598-2-2 : 2022-02-16'이 굵은 글씨로 표시되고, 그 아래 'Luminaires', 하위 부분 'Part 2-2...', 그리고 분류 코드 'ICS 29.140.40'이 차례로 나열됩니다. 이 텍스트 그룹의 하단에는 회색 배경의 'Korean Agency for Technology and Standards' 로고가 위치하고 있어 문서를 발행한 기관을 명시합니다.",
+            "element_analysis": [],
+            "unbound_visual_notes": "문서 상단 중앙에 표준 문서의 제목 정보가 세로로 배치되어 있습니다. 가장 위에 'KC 60598-2-2 : 2022-02-16'이 굵은 글씨로 표시되고, 그 아래 'Luminaires', 하위 부분 'Part 2-2...', 그리고 분류 코드 'ICS 29.140.40'이 차례로 나열됩니다. 이 텍스트 그룹의 하단에는 회색 배경의 'Korean Agency for Technology and Standards' 로고가 위치하고 있어 문서를 발행한 기관을 명시합니다.",
+            "table_markdown": null,
+            "arbitrated_blocks": 0,
+            "corrected_cells": 0,
+            "format_restored_cells": 0,
+            "name_consistency": null,
+            "applied_rotation": null,
+            "applied_skew": null
+          },
+          {
+            "page_number": 12,
+            "body_html": "<div data-label=\"header\" data-bbox=\"0.1080,0.0970,0.2070,0.2000\" data-score=\"0.6673\" style=\"color:#888;font-size:0.9em;\">K</div>\n<div data-label=\"title\" data-bbox=\"0.1070,0.4110,0.2870,0.4440\" data-score=\"0.9931\"><h1>KATS</h1></div>\n<div data-label=\"title\" data-bbox=\"0.1060,0.4490,0.3510,0.4640\" data-score=\"0.9889\"><h1>산업통상자원부 국가기술표준원</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1050,0.4660,0.4830,0.4790\" data-score=\"1.0000\"><p>Korean Agency for Technology and Standards</p></div>\n<div data-label=\"text\" data-bbox=\"0.1060,0.4810,0.4010,0.4950\" data-score=\"1.0000\"><p>Ministry of Trade, Industry & Energy</p></div>\n<div data-label=\"text\" data-bbox=\"0.1060,0.4960,0.5170,0.5100\" data-score=\"0.9591\"><p>주소:(우)369-811충북 음성군 맹동면 이수로 93</p></div>\n<div data-label=\"text\" data-bbox=\"0.1060,0.5120,0.4820,0.5260\" data-score=\"0.9823\"><p>TEL : 043-870-5441~9 http://www.kats.go.kr</p></div>\n<div data-label=\"image\" data-bbox=\"0.1070,0.5400,0.8120,0.9000\"><figure style=\"text-align:center;\"><img src=\"/v2/api/figures/d4f88bf3e0174fe1ab15702703a9245f/12/fig_0.jpg?exp=1788163220&sig=c5ab76fef7b35aa0a288d4be0411a0af64b32cf21aa8b80a82e3592ee281e170&aid=1e7abe98e7320523\" alt=\"image\" style=\"width:70%;height:auto;\" /><div class=\"vision-caption\">페이지의</div></figure></div>",
+            "page_visual_summary": "페이지의 중앙 하단에는 밝은 회색 계열의 추상적인 배경 이미지가 있습니다. 이 이미지에는 얇고 곡선적인 선들이 겹치며 흐름과 움직임을 나타내는 듯한 패턴을 형성하고 있으며, 전체적으로 미래지향적이고 기술적인 느낌을 줍니다. 페이지 상단 왼쪽에 기관 로고가 배치되어 있습니다. 바로 아래에는 기관명 및 연락처 정보를 담은 텍스트 블록이 있습니다. 페이지 하단의 시각적 요소인 추상적인 그림은 페이지의 디자인을 완성하는 배경 역할을 합니다.",
+            "element_analysis": [],
+            "unbound_visual_notes": null,
+            "table_markdown": null,
+            "arbitrated_blocks": 1,
+            "corrected_cells": 0,
+            "format_restored_cells": 0,
+            "name_consistency": null,
+            "applied_rotation": null,
+            "applied_skew": null
+          }
+        ]
+      },
+      "page_classifier": null
+    },
+    "latency_seconds": 9.958779,
+    "parsing_cost": 0.571811
+  },
+  "error_message": null
+}
