@@ -1,0 +1,1447 @@
+{
+  "batch_id": "e6f3c7993d0e413f94c395ee54d21254",
+  "status": "completed",
+  "applied_fixes": null,
+  "filename": "9. 안전확인 부속서 67(실내용 바닥재).pdf",
+  "mode": "onprem_compose",
+  "tagger": "hierarchy",
+  "translation_ko": false,
+  "total_pages": 4,
+  "total_chunks": 4,
+  "total_latency_seconds": 7.304418,
+  "result": {
+    "filename": "9. 안전확인 부속서 67(실내용 바닥재).pdf",
+    "content": {
+      "ocr": {
+        "provider": "ocr_model_onprem",
+        "model": "ocr_model_onprem",
+        "text": "<div data-label=\"header\" data-bbox=\"0.3750,0.0690,0.6220,0.0880\" data-score=\"0.9459\" style=\"color:#888;font-size:0.9em;\">안전확인 안전기준</div>\n<div data-label=\"title\" data-bbox=\"0.4370,0.1050,0.5710,0.1230\" data-score=\"0.9999\"><h1>실내용 바닥재</h1></div>\n<div data-label=\"text\" data-bbox=\"0.7490,0.1050,0.8460,0.1230\" data-score=\"0.9999\"><p>부속서 67</p></div>\n<div data-label=\"title\" data-bbox=\"0.3880,0.1400,0.6100,0.1580\" data-score=\"0.9997\"><h1>(Indoor Floorcoverings)</h1></div>\n<div data-label=\"title\" data-bbox=\"0.4460,0.1900,0.5510,0.2060\" data-score=\"0.9998\"><h1>PVC 바닥재</h1></div>\n<div data-label=\"title\" data-bbox=\"0.3580,0.2120,0.6400,0.2280\" data-score=\"0.9989\"><h1>(Polyvinyl Chloride Floorcoverings)</h1></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.2750,0.9060,0.3130\" data-score=\"0.9772\"><p>1 적용범위 이 기준은 주택, 아파트, 보육시설 등 사람이 거주, 체류하는 건축물 내부 바닥에 사용하기 위하여 제조된 PVC 계통의 바닥재에 대하여 적용한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.3390,0.9060,0.3770\" data-score=\"0.9897\"><p>2 관련규격 다음에 나타내는 표준은 이 기준에 인용됨으로써 이 기준의 일부를 구성한다. 이러한 관련규격은 그 최신판을 적용한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1140,0.3830,0.3820,0.3980\" data-score=\"0.9982\"><p>KS D 0246 도금 두께 시험 방법</p></div>\n<div data-label=\"text\" data-bbox=\"0.1140,0.4040,0.6660,0.4200\" data-score=\"0.9737\"><p>KS D ISO 9220 금속 피막-피막 두께 측정-주사 전자현미경 방법</p></div>\n<div data-label=\"text\" data-bbox=\"0.1140,0.4250,0.3840,0.4400\" data-score=\"0.9952\"><p>KS M 3802 PVC(비닐)계 바닥재</p></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.4470,0.3240,0.4620\" data-score=\"0.9996\"><p>어린이제품 공통안전기준</p></div>\n<div data-label=\"title\" data-bbox=\"0.0890,0.4890,0.2140,0.5050\" data-score=\"0.9998\"><h1>3 제품의 종류</h1></div>\n<div data-label=\"title\" data-bbox=\"0.0890,0.5110,0.3450,0.5260\" data-score=\"0.9992\"><h1>3.1 재질 및 구조에 따른 구분</h1></div>\n<div data-label=\"text\" data-bbox=\"0.0970,0.5320,0.7850,0.5480\" data-score=\"0.9828\"><p>a) 비닐장판 PVC 재질을 주로하여 제조된 제품으로 반드시 발포층이 있어야 한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0970,0.5530,0.9060,0.5900\" data-score=\"0.9746\"><p>b) 비닐바닥시트 직포, 부직포, 유리섬유 등 PVC 이외의 재질이 적층된 제품으로 발포층이 없는 비닐바닥시트와 발표층이 있는 비닐바닥시트로 구분한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0970,0.5960,0.6280,0.6120\" data-score=\"0.9932\"><p>c) 비닐바닥타일 결합제 함유율에 따라 [표 1]과 같이 구분한다.</p></div>\n<div data-label=\"table_caption\" data-bbox=\"0.3750,0.6390,0.6220,0.6550\" data-score=\"0.9907\" style=\"font-weight:600;\">[표 1] 비닐바닥타일의 종류</div>\n<div data-label=\"table\" data-bbox=\"0.2120,0.6620,0.7890,0.8520\" data-score=\"0.9738\"><table><tr><td>종류</td><td>결합제 함유율 (%)</td></tr><tr><td>균일질 비닐 바닥 타일</td><td>30 이상</td></tr><tr><td>혼합질 비닐 바닥 타일</td><td>30 미만</td></tr><tr><td colspan=\"2\">a) 결합제는 비닐 수지, 가소제 및 안정제로 구성된다.b) 균일질 비닐 바닥 타일은 순수 비닐 바닥 타일(충전재를 포함하지 않은 것) 및 적층 비닐 바닥 타일을 포함한다.</td></tr></table></div>\n<div data-label=\"title\" data-bbox=\"0.0890,0.8770,0.3140,0.8940\" data-score=\"0.9565\"><h1>3.2 사용 용도에 따른 구분</h1></div>\n<div data-label=\"text\" data-bbox=\"0.0970,0.8990,0.9060,0.9570\" data-score=\"0.9960\"><p>a) 온돌용(PVC 바닥재) 주택, 아파트, 보육시설 등 바닥난방이 되거나, 바닥난방이 않되어도 신발을 신지 않고 생활하는 실내시설의 바닥표면에 시공하기 위하여 제조된 제품으로, 비온돌용으로도 사용 가능한 제품</p></div>\n\n<div data-label=\"text\" data-bbox=\"0.0970,0.0650,0.9060,0.1020\" data-score=\"0.9921\"><p>b) 비온돌용(PVC 바닥재) 상가, 사무실, 병원 등 바닥난방이 이루어지지 않는 다중시설의 바닥표면에 시공하기 위하여 제조된 제품으로 온돌용(신발을 신지 않고 생활하는 곳)으로의 사용에 부적합한 제품</p></div>\n<div data-label=\"title\" data-bbox=\"0.0900,0.1290,0.1850,0.1440\" data-score=\"0.9977\"><h1>4 공통사항</h1></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.1510,0.6030,0.1670\" data-score=\"0.9745\"><p>4.1 걸모양 걸모양은 육안으로 확인하며, 기준은 [표 2]와 같다.</p></div>\n<div data-label=\"table_caption\" data-bbox=\"0.3410,0.1930,0.6620,0.2090\" data-score=\"0.9879\" style=\"font-weight:600;\">[표 2] PVC 계통 바닥재 걸모양 요건</div>\n<div data-label=\"table\" data-bbox=\"0.1940,0.2160,0.8060,0.3440\" data-score=\"0.9794\"><table><tr><td>결점의 종류</td><td>확인 기준</td></tr><tr><td>갈라진 곳, 절단된 곳, 굽은 곳, 구멍</td><td>없어야 한다.</td></tr><tr><td>이상한 요철, 모양·광택 및 색조의 불균일, 오염, 흙, 이물의 혼입</td><td>눈에 뜨는 것이 없어야 한다.</td></tr></table></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.3720,0.9060,0.4310\" data-score=\"0.9857\"><p>4.2 프탈레이트 가소제 어린이제품 공통안전기준(프탈레이트계 가소제-부록C)에 따라 시험하였을 때 재질 중의 다이에틸렉실프탈레이트(DEHP), 다이부틸프탈레이트(DBP), 부틸벤질프탈레이트(BBP)의 총 함유량은 [표 3]과 같아야 한다.</p></div>\n<div data-label=\"table_caption\" data-bbox=\"0.2980,0.4570,0.6960,0.4730\" data-score=\"0.9985\" style=\"font-weight:600;\">[표 3] PVC 바닥재의 프탈레이트 가소제 요건</div>\n<div data-label=\"table\" data-bbox=\"0.1510,0.4800,0.8580,0.6640\" data-score=\"0.9891\"><table><tr><td rowspan=\"2\" colspan=\"2\">구 분</td><td rowspan=\"2\">비닐 장판</td><td rowspan=\"2\">비닐바닥시트 b)</td><td colspan=\"2\">비닐바닥타일</td></tr><tr><td>적층형</td><td>단일층형</td></tr><tr><td rowspan=\"2\">온돌용</td><td>상부층</td><td>1.5 % 이하</td><td>1.5 % 이하</td><td>1.5 % 이하</td><td rowspan=\"2\">1.5% 이하</td></tr><tr><td>하부층</td><td>5.0 % 이하</td><td>5.0 % 이하</td><td>5.0 % 이하</td></tr><tr><td rowspan=\"2\">비온돌용</td><td>상부층</td><td>3.0 % 이하</td><td>3.0 % 이하</td><td>3.0 % 이하</td><td rowspan=\"2\">1.5% 이하</td></tr><tr><td>하부층</td><td>10.0 % 이하</td><td>10.0 % 이하</td><td>10.0 % 이하</td></tr></table></div>\n<div data-label=\"table_footnote\" data-bbox=\"0.1390,0.6710,0.9060,0.7080\" data-score=\"0.9973\" style=\"font-weight:600;\">a) 상부층이란 표면코팅층, 투명필름층, 인쇄층 및 글라스파이버 함침층까지를, 하부층이란 비닐장판, 비닐바닥시트의 발표층, 비닐바닥타일의 중간층(베이스층) 부터의 아래 부분을 의미한다.</div>\n<div data-label=\"table_footnote\" data-bbox=\"0.1390,0.7130,0.8420,0.7300\" data-score=\"0.9840\" style=\"font-weight:600;\">b) 단일층의 경우 제품전체의 프탈레이트 가소제 함유량기준은 1.5 % 이하이여야 한다.</div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.7570,0.9060,0.8150\" data-score=\"0.9934\"><p>4.3 표면코팅 두께 KS D 0246의 5 현미경 단면 시험방법 또는 KS D ISO 9220에 따라 시험하였을 때 표면코팅 두께는 최소 8 μm이고 평균 15 μm 이상이어야 한다. 다만, 비온돌용 바닥재 및 제품전체의 프탈레이트 가소제 함유량이 0.1 % 이하인 제품의 경우 표면코팅층을 생략할 수 있다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.0890,0.8430,0.2490,0.8580\" data-score=\"0.9953\"><h1>5 기계·물리적 특성</h1></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.8640,0.9060,0.9010\" data-score=\"0.9870\"><p>5.1 비닐장판의 기계·물리적 특성 KS M 3802:2019의 7 시험방법에 따라 시험하였을 때 [표 4]와 같아야 한다.</p></div>\n\n<div data-label=\"table_caption\" data-bbox=\"0.3780,0.0650,0.6190,0.0810\" data-score=\"0.9946\" style=\"font-weight:600;\">[표 4] 비닐장판의 안전요건</div>\n<div data-label=\"table\" data-bbox=\"0.2220,0.0880,0.7790,0.1850\" data-score=\"0.9961\"><table><tr><td colspan=\"2\">인장 강도 (N/cm2)</td><td colspan=\"2\">인열 강도 (N/cm)</td></tr><tr><td>나비 방향</td><td>길이 방향</td><td>나비 방향</td><td>길이 방향</td></tr><tr><td>196 이상</td><td>236 이상</td><td>89 이상</td><td>196 이상</td></tr></table></div>\n<div data-label=\"text\" data-bbox=\"0.0880,0.2080,0.9080,0.2430\" data-score=\"0.9899\"><p>5.2 비닐바닥시트의 기계·물리적 특성 KS M 3802:2019의 7 에 따라 시험하였을 때 [표 5]와 같아야 한다.</p></div>\n<div data-label=\"table_caption\" data-bbox=\"0.3600,0.2650,0.6350,0.2810\" data-score=\"0.9984\" style=\"font-weight:600;\">[표 5] 비닐바닥시트의 안전요건</div>\n<div data-label=\"table\" data-bbox=\"0.1850,0.2860,0.8140,0.4570\" data-score=\"0.9821\"><table><tr><td>항 목</td><td>종 류</td><td>발포층이 없는 비닐바닥시트</td><td>발포층이 있는 비닐바닥시트</td></tr><tr><td colspan=\"2\">잔류 압입률 (%)</td><td colspan=\"2\">25 이하</td></tr><tr><td colspan=\"2\">가열에 의한 길이 변화율 (%)</td><td colspan=\"2\">2.0 이하</td></tr><tr><td colspan=\"2\">가열 감량률 (%)</td><td colspan=\"2\">2.5 이하</td></tr><tr><td colspan=\"2\">오염성</td><td colspan=\"2\">현저한 색·광택 및 부품이 없어야 한다.</td></tr></table></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.4790,0.9080,0.5150\" data-score=\"0.9956\"><p>5.3 비닐바닥타일의 기계·물리적 특성 KS M 3802:2019의 7 시험에 따라 시험하였을 때 [표 6]과 같아야 한다.</p></div>\n<div data-label=\"table_caption\" data-bbox=\"0.3600,0.5370,0.6350,0.5530\" data-score=\"0.9973\" style=\"font-weight:600;\">[표 6] 비닐바닥타일의 안전요건</div>\n<div data-label=\"table\" data-bbox=\"0.1420,0.5570,0.8590,0.8200\" data-score=\"0.9804\"><table><tr><td>성능 항목</td><td>종 류</td><td>균일질비닐 바닥 타일</td><td>혼합질 비닐 바닥 타일</td></tr><tr><td colspan=\"2\">잔류 압입률 (%)</td><td colspan=\"2\">8.0 이하</td></tr><tr><td colspan=\"2\">가열에 의한 길이 변화율 (%)</td><td>0.25 이하</td><td>0.20 이하</td></tr><tr><td colspan=\"2\">흡수에 의한 길이 변화율 (%)</td><td>-</td><td>0.20 이하</td></tr><tr><td colspan=\"2\">가열 감량률 (%)</td><td colspan=\"2\">0.5 이하</td></tr><tr><td colspan=\"2\">굵기 시험</td><td colspan=\"2\">홈의 나비가 3.1 mm 이하이어야 한다.</td></tr><tr><td colspan=\"2\">오염성</td><td colspan=\"2\">현저한 색·광택의 변화 및 부품이 없어야 한다.</td></tr><tr><td colspan=\"4\">주 1 바닥 타일 중 비닐 적층 타일의 오염성 시험인 경우는 바닥시트의 성능으로 대신할 수 있다.</td></tr></table></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.8430,0.1920,0.8580\" data-score=\"0.9796\"><p>6 검사 방법</p></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.8620,0.4850,0.8770\" data-score=\"0.9997\"><p>6.1 모델의 구분 제품 및 종류에 따라 구분한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.8810,0.7380,0.8960\" data-score=\"0.9873\"><p>6.2 시료채취방법 및 검사방법 4,5 장에 수록된 개별항목의 시험방법에 따른다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.9000,0.9060,0.9340\" data-score=\"0.9950\"><p>6.3 시료크기 및 합부판정조건 시료크기 및 합부판정은 다음 표와 같다. (다만, 합부판정시 표시사항은 제외한다.)</p></div>\n\n<div data-label=\"table\" data-bbox=\"0.1280,0.0670,0.8030,0.1140\" data-score=\"0.9994\"><table><tr><td>검사구분</td><td>시료의 크기(n)</td><td>합격판정갯수(Ac)</td><td>불합격판정갯수(Re)</td></tr><tr><td>안전확인</td><td>1</td><td>0</td><td>1</td></tr></table></div>\n<div data-label=\"text\" data-bbox=\"0.1230,0.1190,0.8480,0.1350\" data-score=\"0.9781\"><p>주 시료의 크기(n) : 동 안전기준을 적용하여 시험하는데 필요한 시료의 최소수량 또는 질량</p></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.1580,0.9070,0.2300\" data-score=\"0.9931\"><p>7 표 시 제품의 최소단위 포장마다 다음 표와 같은 표시를 하여야 한다. 또한 제품 뒷면 보기 쉬운 곳에 쉽게 지워지지 않는 방법으로 KC마크, 용도, 모델명, 제조연월(또는 로트번호) 및 제조자명(또는 수입자명)은 제품의 뒷면 매 1 m 이내 마다(제품 길이가 1 m 이하인 경우 1회) 인쇄 등의 방법으로 지워지지 않게 표시하여야 한다. 다만, 비닐바닥타일은 제품의 뒷면 표시를 생략할 수 있다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.2340,0.3080,0.2490\" data-score=\"0.9981\"><p>7.1 용도 (온돌용/비온돌용)</p></div>\n<div data-label=\"text\" data-bbox=\"0.1140,0.2520,0.6680,0.2690\" data-score=\"0.9364\"><p>*온돌용 제품의 경우 '(비온돌용 겸용)'이라는 문구를 부기할 수 있다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.2720,0.4860,0.2870\" data-score=\"0.9755\"><p>7.2 모델명 (제품 뒷면에 표기 시 약호 사용 가능)</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.2910,0.3100,0.3060\" data-score=\"0.9992\"><p>7.3 치수 (두께, 나비, 길이)</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.3100,0.3130,0.3240\" data-score=\"0.9985\"><p>7.4 제조연월 또는 로트번호</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.3290,0.5030,0.3440\" data-score=\"0.9841\"><p>7.5 제조자명 (제품 뒷면에 표기 시 약호 사용 가능)</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.3480,0.6410,0.3630\" data-score=\"0.9799\"><p>7.6 수입자명 (수입품에 한하며, 제품 뒷면에 표기 시 약호 사용 가능)</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.3670,0.7170,0.3820\" data-score=\"0.9974\"><p>7.7 주소 또는 전화번호(국내 제조품은 국내 제조자, 수입품인 경우에는 수입자)</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.3860,0.4860,0.4010\" data-score=\"0.9856\"><p>7.8 제조국명 (수입품은 대외 무역법에 의거 표기)</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.4050,0.2540,0.4200\" data-score=\"0.9344\"><p>7.9 사용상 주의사항</p></div>\n<div data-label=\"text\" data-bbox=\"0.1380,0.7940,0.5910,0.8100\" data-score=\"0.9607\"><p>제정: 기술표준원고시 제2012-175호(2012. 4.25)</p></div>\n<div data-label=\"text\" data-bbox=\"0.1390,0.8140,0.5910,0.8290\" data-score=\"0.9775\"><p>개정: 기술표준원고시 제2012-800호(2012.12.21)</p></div>\n<div data-label=\"text\" data-bbox=\"0.1400,0.8330,0.5900,0.8480\" data-score=\"0.9760\"><p>개정: 국가기술표준원고시 제2015-693호(2015.12.31)</p></div>\n<div data-label=\"text\" data-bbox=\"0.1400,0.8520,0.5900,0.8670\" data-score=\"0.9507\"><p>개정: 국가기술표준원고시 제2017-020호(2017. 1.31)</p></div>\n<div data-label=\"text\" data-bbox=\"0.1400,0.8710,0.5820,0.8860\" data-score=\"0.9473\"><p>개정: 국가기술표준원고시 제2017-032호(2017. 2.8)</p></div>\n<div data-label=\"text\" data-bbox=\"0.1400,0.8900,0.5900,0.9050\" data-score=\"0.9590\"><p>개정: 국가기술표준원고시 제2020-146호(2020.7.24)</p></div>\n<div data-label=\"text\" data-bbox=\"0.1400,0.9090,0.5980,0.9240\" data-score=\"0.9672\"><p>개정: 국가기술표준원고시 제2022-457호(2022.10.18)</p></div>\n<div data-label=\"text\" data-bbox=\"0.1400,0.9280,0.5820,0.9430\" data-score=\"0.9754\"><p>개정: 국가기술표준원고시 제2023-330호(2023.9.1)</p></div>",
+        "text_ko": null,
+        "pages": [
+          {
+            "page_number": 1,
+            "part_number": null,
+            "text": "<div data-label=\"header\" data-bbox=\"0.3750,0.0690,0.6220,0.0880\" data-score=\"0.9459\" style=\"color:#888;font-size:0.9em;\">안전확인 안전기준</div>\n<div data-label=\"title\" data-bbox=\"0.4370,0.1050,0.5710,0.1230\" data-score=\"0.9999\"><h1>실내용 바닥재</h1></div>\n<div data-label=\"text\" data-bbox=\"0.7490,0.1050,0.8460,0.1230\" data-score=\"0.9999\"><p>부속서 67</p></div>\n<div data-label=\"title\" data-bbox=\"0.3880,0.1400,0.6100,0.1580\" data-score=\"0.9997\"><h1>(Indoor Floorcoverings)</h1></div>\n<div data-label=\"title\" data-bbox=\"0.4460,0.1900,0.5510,0.2060\" data-score=\"0.9998\"><h1>PVC 바닥재</h1></div>\n<div data-label=\"title\" data-bbox=\"0.3580,0.2120,0.6400,0.2280\" data-score=\"0.9989\"><h1>(Polyvinyl Chloride Floorcoverings)</h1></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.2750,0.9060,0.3130\" data-score=\"0.9772\"><p>1 적용범위 이 기준은 주택, 아파트, 보육시설 등 사람이 거주, 체류하는 건축물 내부 바닥에 사용하기 위하여 제조된 PVC 계통의 바닥재에 대하여 적용한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.3390,0.9060,0.3770\" data-score=\"0.9897\"><p>2 관련규격 다음에 나타내는 표준은 이 기준에 인용됨으로써 이 기준의 일부를 구성한다. 이러한 관련규격은 그 최신판을 적용한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1140,0.3830,0.3820,0.3980\" data-score=\"0.9982\"><p>KS D 0246 도금 두께 시험 방법</p></div>\n<div data-label=\"text\" data-bbox=\"0.1140,0.4040,0.6660,0.4200\" data-score=\"0.9737\"><p>KS D ISO 9220 금속 피막-피막 두께 측정-주사 전자현미경 방법</p></div>\n<div data-label=\"text\" data-bbox=\"0.1140,0.4250,0.3840,0.4400\" data-score=\"0.9952\"><p>KS M 3802 PVC(비닐)계 바닥재</p></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.4470,0.3240,0.4620\" data-score=\"0.9996\"><p>어린이제품 공통안전기준</p></div>\n<div data-label=\"title\" data-bbox=\"0.0890,0.4890,0.2140,0.5050\" data-score=\"0.9998\"><h1>3 제품의 종류</h1></div>\n<div data-label=\"title\" data-bbox=\"0.0890,0.5110,0.3450,0.5260\" data-score=\"0.9992\"><h1>3.1 재질 및 구조에 따른 구분</h1></div>\n<div data-label=\"text\" data-bbox=\"0.0970,0.5320,0.7850,0.5480\" data-score=\"0.9828\"><p>a) 비닐장판 PVC 재질을 주로하여 제조된 제품으로 반드시 발포층이 있어야 한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0970,0.5530,0.9060,0.5900\" data-score=\"0.9746\"><p>b) 비닐바닥시트 직포, 부직포, 유리섬유 등 PVC 이외의 재질이 적층된 제품으로 발포층이 없는 비닐바닥시트와 발표층이 있는 비닐바닥시트로 구분한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0970,0.5960,0.6280,0.6120\" data-score=\"0.9932\"><p>c) 비닐바닥타일 결합제 함유율에 따라 [표 1]과 같이 구분한다.</p></div>\n<div data-label=\"table_caption\" data-bbox=\"0.3750,0.6390,0.6220,0.6550\" data-score=\"0.9907\" style=\"font-weight:600;\">[표 1] 비닐바닥타일의 종류</div>\n<div data-label=\"table\" data-bbox=\"0.2120,0.6620,0.7890,0.8520\" data-score=\"0.9738\"><table><tr><td>종류</td><td>결합제 함유율 (%)</td></tr><tr><td>균일질 비닐 바닥 타일</td><td>30 이상</td></tr><tr><td>혼합질 비닐 바닥 타일</td><td>30 미만</td></tr><tr><td colspan=\"2\">a) 결합제는 비닐 수지, 가소제 및 안정제로 구성된다.b) 균일질 비닐 바닥 타일은 순수 비닐 바닥 타일(충전재를 포함하지 않은 것) 및 적층 비닐 바닥 타일을 포함한다.</td></tr></table></div>\n<div data-label=\"title\" data-bbox=\"0.0890,0.8770,0.3140,0.8940\" data-score=\"0.9565\"><h1>3.2 사용 용도에 따른 구분</h1></div>\n<div data-label=\"text\" data-bbox=\"0.0970,0.8990,0.9060,0.9570\" data-score=\"0.9960\"><p>a) 온돌용(PVC 바닥재) 주택, 아파트, 보육시설 등 바닥난방이 되거나, 바닥난방이 않되어도 신발을 신지 않고 생활하는 실내시설의 바닥표면에 시공하기 위하여 제조된 제품으로, 비온돌용으로도 사용 가능한 제품</p></div>",
+            "text_ko": null,
+            "links": null,
+            "confidence": 0.9878
+          },
+          {
+            "page_number": 2,
+            "part_number": null,
+            "text": "<div data-label=\"text\" data-bbox=\"0.0970,0.0650,0.9060,0.1020\" data-score=\"0.9921\"><p>b) 비온돌용(PVC 바닥재) 상가, 사무실, 병원 등 바닥난방이 이루어지지 않는 다중시설의 바닥표면에 시공하기 위하여 제조된 제품으로 온돌용(신발을 신지 않고 생활하는 곳)으로의 사용에 부적합한 제품</p></div>\n<div data-label=\"title\" data-bbox=\"0.0900,0.1290,0.1850,0.1440\" data-score=\"0.9977\"><h1>4 공통사항</h1></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.1510,0.6030,0.1670\" data-score=\"0.9745\"><p>4.1 걸모양 걸모양은 육안으로 확인하며, 기준은 [표 2]와 같다.</p></div>\n<div data-label=\"table_caption\" data-bbox=\"0.3410,0.1930,0.6620,0.2090\" data-score=\"0.9879\" style=\"font-weight:600;\">[표 2] PVC 계통 바닥재 걸모양 요건</div>\n<div data-label=\"table\" data-bbox=\"0.1940,0.2160,0.8060,0.3440\" data-score=\"0.9794\"><table><tr><td>결점의 종류</td><td>확인 기준</td></tr><tr><td>갈라진 곳, 절단된 곳, 굽은 곳, 구멍</td><td>없어야 한다.</td></tr><tr><td>이상한 요철, 모양·광택 및 색조의 불균일, 오염, 흙, 이물의 혼입</td><td>눈에 뜨는 것이 없어야 한다.</td></tr></table></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.3720,0.9060,0.4310\" data-score=\"0.9857\"><p>4.2 프탈레이트 가소제 어린이제품 공통안전기준(프탈레이트계 가소제-부록C)에 따라 시험하였을 때 재질 중의 다이에틸렉실프탈레이트(DEHP), 다이부틸프탈레이트(DBP), 부틸벤질프탈레이트(BBP)의 총 함유량은 [표 3]과 같아야 한다.</p></div>\n<div data-label=\"table_caption\" data-bbox=\"0.2980,0.4570,0.6960,0.4730\" data-score=\"0.9985\" style=\"font-weight:600;\">[표 3] PVC 바닥재의 프탈레이트 가소제 요건</div>\n<div data-label=\"table\" data-bbox=\"0.1510,0.4800,0.8580,0.6640\" data-score=\"0.9891\"><table><tr><td rowspan=\"2\" colspan=\"2\">구 분</td><td rowspan=\"2\">비닐 장판</td><td rowspan=\"2\">비닐바닥시트 b)</td><td colspan=\"2\">비닐바닥타일</td></tr><tr><td>적층형</td><td>단일층형</td></tr><tr><td rowspan=\"2\">온돌용</td><td>상부층</td><td>1.5 % 이하</td><td>1.5 % 이하</td><td>1.5 % 이하</td><td rowspan=\"2\">1.5% 이하</td></tr><tr><td>하부층</td><td>5.0 % 이하</td><td>5.0 % 이하</td><td>5.0 % 이하</td></tr><tr><td rowspan=\"2\">비온돌용</td><td>상부층</td><td>3.0 % 이하</td><td>3.0 % 이하</td><td>3.0 % 이하</td><td rowspan=\"2\">1.5% 이하</td></tr><tr><td>하부층</td><td>10.0 % 이하</td><td>10.0 % 이하</td><td>10.0 % 이하</td></tr></table></div>\n<div data-label=\"table_footnote\" data-bbox=\"0.1390,0.6710,0.9060,0.7080\" data-score=\"0.9973\" style=\"font-weight:600;\">a) 상부층이란 표면코팅층, 투명필름층, 인쇄층 및 글라스파이버 함침층까지를, 하부층이란 비닐장판, 비닐바닥시트의 발표층, 비닐바닥타일의 중간층(베이스층) 부터의 아래 부분을 의미한다.</div>\n<div data-label=\"table_footnote\" data-bbox=\"0.1390,0.7130,0.8420,0.7300\" data-score=\"0.9840\" style=\"font-weight:600;\">b) 단일층의 경우 제품전체의 프탈레이트 가소제 함유량기준은 1.5 % 이하이여야 한다.</div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.7570,0.9060,0.8150\" data-score=\"0.9934\"><p>4.3 표면코팅 두께 KS D 0246의 5 현미경 단면 시험방법 또는 KS D ISO 9220에 따라 시험하였을 때 표면코팅 두께는 최소 8 μm이고 평균 15 μm 이상이어야 한다. 다만, 비온돌용 바닥재 및 제품전체의 프탈레이트 가소제 함유량이 0.1 % 이하인 제품의 경우 표면코팅층을 생략할 수 있다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.0890,0.8430,0.2490,0.8580\" data-score=\"0.9953\"><h1>5 기계·물리적 특성</h1></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.8640,0.9060,0.9010\" data-score=\"0.9870\"><p>5.1 비닐장판의 기계·물리적 특성 KS M 3802:2019의 7 시험방법에 따라 시험하였을 때 [표 4]와 같아야 한다.</p></div>",
+            "text_ko": null,
+            "links": null,
+            "confidence": 0.9894
+          },
+          {
+            "page_number": 3,
+            "part_number": null,
+            "text": "<div data-label=\"table_caption\" data-bbox=\"0.3780,0.0650,0.6190,0.0810\" data-score=\"0.9946\" style=\"font-weight:600;\">[표 4] 비닐장판의 안전요건</div>\n<div data-label=\"table\" data-bbox=\"0.2220,0.0880,0.7790,0.1850\" data-score=\"0.9961\"><table><tr><td colspan=\"2\">인장 강도 (N/cm2)</td><td colspan=\"2\">인열 강도 (N/cm)</td></tr><tr><td>나비 방향</td><td>길이 방향</td><td>나비 방향</td><td>길이 방향</td></tr><tr><td>196 이상</td><td>236 이상</td><td>89 이상</td><td>196 이상</td></tr></table></div>\n<div data-label=\"text\" data-bbox=\"0.0880,0.2080,0.9080,0.2430\" data-score=\"0.9899\"><p>5.2 비닐바닥시트의 기계·물리적 특성 KS M 3802:2019의 7 에 따라 시험하였을 때 [표 5]와 같아야 한다.</p></div>\n<div data-label=\"table_caption\" data-bbox=\"0.3600,0.2650,0.6350,0.2810\" data-score=\"0.9984\" style=\"font-weight:600;\">[표 5] 비닐바닥시트의 안전요건</div>\n<div data-label=\"table\" data-bbox=\"0.1850,0.2860,0.8140,0.4570\" data-score=\"0.9821\"><table><tr><td>항 목</td><td>종 류</td><td>발포층이 없는 비닐바닥시트</td><td>발포층이 있는 비닐바닥시트</td></tr><tr><td colspan=\"2\">잔류 압입률 (%)</td><td colspan=\"2\">25 이하</td></tr><tr><td colspan=\"2\">가열에 의한 길이 변화율 (%)</td><td colspan=\"2\">2.0 이하</td></tr><tr><td colspan=\"2\">가열 감량률 (%)</td><td colspan=\"2\">2.5 이하</td></tr><tr><td colspan=\"2\">오염성</td><td colspan=\"2\">현저한 색·광택 및 부품이 없어야 한다.</td></tr></table></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.4790,0.9080,0.5150\" data-score=\"0.9956\"><p>5.3 비닐바닥타일의 기계·물리적 특성 KS M 3802:2019의 7 시험에 따라 시험하였을 때 [표 6]과 같아야 한다.</p></div>\n<div data-label=\"table_caption\" data-bbox=\"0.3600,0.5370,0.6350,0.5530\" data-score=\"0.9973\" style=\"font-weight:600;\">[표 6] 비닐바닥타일의 안전요건</div>\n<div data-label=\"table\" data-bbox=\"0.1420,0.5570,0.8590,0.8200\" data-score=\"0.9804\"><table><tr><td>성능 항목</td><td>종 류</td><td>균일질비닐 바닥 타일</td><td>혼합질 비닐 바닥 타일</td></tr><tr><td colspan=\"2\">잔류 압입률 (%)</td><td colspan=\"2\">8.0 이하</td></tr><tr><td colspan=\"2\">가열에 의한 길이 변화율 (%)</td><td>0.25 이하</td><td>0.20 이하</td></tr><tr><td colspan=\"2\">흡수에 의한 길이 변화율 (%)</td><td>-</td><td>0.20 이하</td></tr><tr><td colspan=\"2\">가열 감량률 (%)</td><td colspan=\"2\">0.5 이하</td></tr><tr><td colspan=\"2\">굵기 시험</td><td colspan=\"2\">홈의 나비가 3.1 mm 이하이어야 한다.</td></tr><tr><td colspan=\"2\">오염성</td><td colspan=\"2\">현저한 색·광택의 변화 및 부품이 없어야 한다.</td></tr><tr><td colspan=\"4\">주 1 바닥 타일 중 비닐 적층 타일의 오염성 시험인 경우는 바닥시트의 성능으로 대신할 수 있다.</td></tr></table></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.8430,0.1920,0.8580\" data-score=\"0.9796\"><p>6 검사 방법</p></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.8620,0.4850,0.8770\" data-score=\"0.9997\"><p>6.1 모델의 구분 제품 및 종류에 따라 구분한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.8810,0.7380,0.8960\" data-score=\"0.9873\"><p>6.2 시료채취방법 및 검사방법 4,5 장에 수록된 개별항목의 시험방법에 따른다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.9000,0.9060,0.9340\" data-score=\"0.9950\"><p>6.3 시료크기 및 합부판정조건 시료크기 및 합부판정은 다음 표와 같다. (다만, 합부판정시 표시사항은 제외한다.)</p></div>",
+            "text_ko": null,
+            "links": null,
+            "confidence": 0.9913
+          },
+          {
+            "page_number": 4,
+            "part_number": null,
+            "text": "<div data-label=\"table\" data-bbox=\"0.1280,0.0670,0.8030,0.1140\" data-score=\"0.9994\"><table><tr><td>검사구분</td><td>시료의 크기(n)</td><td>합격판정갯수(Ac)</td><td>불합격판정갯수(Re)</td></tr><tr><td>안전확인</td><td>1</td><td>0</td><td>1</td></tr></table></div>\n<div data-label=\"text\" data-bbox=\"0.1230,0.1190,0.8480,0.1350\" data-score=\"0.9781\"><p>주 시료의 크기(n) : 동 안전기준을 적용하여 시험하는데 필요한 시료의 최소수량 또는 질량</p></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.1580,0.9070,0.2300\" data-score=\"0.9931\"><p>7 표 시 제품의 최소단위 포장마다 다음 표와 같은 표시를 하여야 한다. 또한 제품 뒷면 보기 쉬운 곳에 쉽게 지워지지 않는 방법으로 KC마크, 용도, 모델명, 제조연월(또는 로트번호) 및 제조자명(또는 수입자명)은 제품의 뒷면 매 1 m 이내 마다(제품 길이가 1 m 이하인 경우 1회) 인쇄 등의 방법으로 지워지지 않게 표시하여야 한다. 다만, 비닐바닥타일은 제품의 뒷면 표시를 생략할 수 있다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.2340,0.3080,0.2490\" data-score=\"0.9981\"><p>7.1 용도 (온돌용/비온돌용)</p></div>\n<div data-label=\"text\" data-bbox=\"0.1140,0.2520,0.6680,0.2690\" data-score=\"0.9364\"><p>*온돌용 제품의 경우 '(비온돌용 겸용)'이라는 문구를 부기할 수 있다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.2720,0.4860,0.2870\" data-score=\"0.9755\"><p>7.2 모델명 (제품 뒷면에 표기 시 약호 사용 가능)</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.2910,0.3100,0.3060\" data-score=\"0.9992\"><p>7.3 치수 (두께, 나비, 길이)</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.3100,0.3130,0.3240\" data-score=\"0.9985\"><p>7.4 제조연월 또는 로트번호</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.3290,0.5030,0.3440\" data-score=\"0.9841\"><p>7.5 제조자명 (제품 뒷면에 표기 시 약호 사용 가능)</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.3480,0.6410,0.3630\" data-score=\"0.9799\"><p>7.6 수입자명 (수입품에 한하며, 제품 뒷면에 표기 시 약호 사용 가능)</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.3670,0.7170,0.3820\" data-score=\"0.9974\"><p>7.7 주소 또는 전화번호(국내 제조품은 국내 제조자, 수입품인 경우에는 수입자)</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.3860,0.4860,0.4010\" data-score=\"0.9856\"><p>7.8 제조국명 (수입품은 대외 무역법에 의거 표기)</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.4050,0.2540,0.4200\" data-score=\"0.9344\"><p>7.9 사용상 주의사항</p></div>\n<div data-label=\"text\" data-bbox=\"0.1380,0.7940,0.5910,0.8100\" data-score=\"0.9607\"><p>제정: 기술표준원고시 제2012-175호(2012. 4.25)</p></div>\n<div data-label=\"text\" data-bbox=\"0.1390,0.8140,0.5910,0.8290\" data-score=\"0.9775\"><p>개정: 기술표준원고시 제2012-800호(2012.12.21)</p></div>\n<div data-label=\"text\" data-bbox=\"0.1400,0.8330,0.5900,0.8480\" data-score=\"0.9760\"><p>개정: 국가기술표준원고시 제2015-693호(2015.12.31)</p></div>\n<div data-label=\"text\" data-bbox=\"0.1400,0.8520,0.5900,0.8670\" data-score=\"0.9507\"><p>개정: 국가기술표준원고시 제2017-020호(2017. 1.31)</p></div>\n<div data-label=\"text\" data-bbox=\"0.1400,0.8710,0.5820,0.8860\" data-score=\"0.9473\"><p>개정: 국가기술표준원고시 제2017-032호(2017. 2.8)</p></div>\n<div data-label=\"text\" data-bbox=\"0.1400,0.8900,0.5900,0.9050\" data-score=\"0.9590\"><p>개정: 국가기술표준원고시 제2020-146호(2020.7.24)</p></div>\n<div data-label=\"text\" data-bbox=\"0.1400,0.9090,0.5980,0.9240\" data-score=\"0.9672\"><p>개정: 국가기술표준원고시 제2022-457호(2022.10.18)</p></div>\n<div data-label=\"text\" data-bbox=\"0.1400,0.9280,0.5820,0.9430\" data-score=\"0.9754\"><p>개정: 국가기술표준원고시 제2023-330호(2023.9.1)</p></div>",
+            "text_ko": null,
+            "links": null,
+            "confidence": 0.9749
+          }
+        ],
+        "latency_seconds": 8.82078212200031,
+        "confidence": 0.9859,
+        "truncated": false,
+        "full_text_length": null
+      },
+      "caption": {
+        "provider": "inference_provider",
+        "model": "caption_model_onprem",
+        "pages": [
+          {
+            "page_number": 1,
+            "part_number": null,
+            "entities": {
+              "text": "안전확인 안전기준\n실내용 바닥재 부속서 67\n(Indoor Floorcoverings)\nPVC 바닥재\n(Polyvinyl Chloride Floorcoverings)\n\n1 적용범위 이 기준은 주택, 아파트, 보육시설 등 사람이 거주, 체류하는 건축물 내부 바닥에 사용하기 위하여 제조된 PVC 계통의 바닥재에 대하여 적용한다.\n2 관련규격 다음에 나타내는 표준은 이 기준에 인용됨으로써 이 기준의 일부를 구성한다. 이러한 관련규격은 그 최신판을 적용한다.\nKS D 0246 도금 두께 시험 방법\nKS D ISO 9220 금속 피막 – 피막 두께 측정 - 주사 전자현미경 방법\nKS M 3802 PVC(비닐)계 바닥재\n어린이제품 공통안전기준\n3 제품의 종류\n3.1 재질 및 구조에 따른 구분\na) 비닐장판 PVC 재질을 주로하여 제조된 제품으로 반드시 발포층이 있어야 한다.\nb) 비닐바닥시트 직포, 부직포, 유리섬유 등 PVC 이외의 재질이 적층된 제품으로 발포층이 없는 비닐바닥시트와 발포층이 있는 비닐바닥시트로 구분한다.\nc) 비닐바닥타일 결합제 함유율에 따라 [표 1]과 같이 구분한다.\n[표 1] 비닐바닥타일의 종류\n|종류|결합제 함유율 (%)a)|\n|균일질 비닐 바닥 타일 b)|30 이상|\n|혼합질 비닐 바닥 타일|30 미만|\na) 결합제는 비닐 수지, 가소제 및 안정제로 구성된다.\nb) 균일질 비닐 바닥 타일은 순수 비닐 바닥 타일(충전재를 포함하지 않은 것) 및 적층 비닐 바닥 타일을 포함한다.\n3.2 사용 용도에 따른 구분\na) 온돌용(PVC 바닥재) 주택, 아파트, 보육시설 등 바닥난방이 되거나, 바닥난방이 않되어도 신발을 신지 않고 생활하는 실내시설의 바닥표면에 시공하기 위하여 제조된 제품으로, 비온돌용으로도 사용할 수있는 제품",
+              "graph": "",
+              "diagram": "",
+              "image_overview": "",
+              "table_markdown": "[표 1] 비닐바닥타일의 종류\n| 종류 | 결합제 함유율 (%)a)\n|---|---|\n| 균일질 비닐 바닥 타일 b) | 30 이상 |\n| 혼합질 비닐 바닥 타일 | 30 미만 |\na) 결합제는 비닐 수지, 가소제 및 안정제로 구성된다.\nb) 균일질 비닐 바닥 타일은 순수 비닐 바닥 타일(충전재를 포함하지 않은 것) 및 적층 비닐 바닥 타일을 포함한다.",
+              "visual_elements": "\"표 1\"은 PVC 바닥재 중 비닐바닥타일의 종류를 정의하는 표로, 문서의 세 번째 주요 섹션 \"3. 제품의 종류\" 내에서 그 하위 항목인 \"3.1 재질 및 구조에 따른 구분\"의 일부입니다."
+            },
+            "entities_ko": null
+          },
+          {
+            "page_number": 2,
+            "part_number": null,
+            "entities": {
+              "text": "b) 비온돌용(PVC 바닥재) 상가, 사무실, 병원 등 바닥난방이 이루어지지 않는 다중시설의 바닥표면에 시공하기 위하여 제조된 제품으로 온돌용(신발을 신지 않고 생활하는 곳)으로서의 사용에 부적합한 제품\n\n4 공통사항\n4.1 겉모양 겉모양은 육안으로 확인하며, 기준은 [표 2]와 같다.\n\n[표 2] PVC 계통 바닥재 겉모양 요건\n\n4.2 프탈레이트 가소제 어린이제품 공동안전기준(프탈레이트계 가소제-부록C)에 따라 시험하였을 때 재질 중의 디에틸헥실프탈레이트(DEHP), 디부틸프탈레이트(DBP), 부틸벤질프탈레이트(BBP)의 총 함유량은 [표 3]과 같아야 한다.\n\n[표 3] PVC 바닥제의 프탈레이트 가소제 요건\n\n| 구분 | 비닐 장판 | 비닐바닥시트 | 비닐바닥타일 |\n| --- | --- | --- | --- |\n| | | | 적층형 | 단일충형 |\n| 온돌용 | 상위층 | 1.5 % 이하 | 1.5 % 이하 | 1.5 % 이하 | 1.5 % 이하 |\n| | 하부층 | 5.0 % 이하 | 5.0 % 이하 | 5.0 % 이하 | |\n| 비온돌용 | 상위층 | 3.0 % 이하 | 3.0 % 이하 | 3.0 % 이하 | 1.5 % 이하 |\n| | 하부층 | 10.0 % 이하 | 10.0 % 이하 | 10.0 % 이하 | |\n\na) 상위층이란 표면코팅층, 투명필름층, 인쇄층 및 글라스파이버 함침층까지를, 하부층이란 비닐장판, 비닐바닥시트의 발포층, 비닐바닥타일의 중간층(베이스층)부터의 아래 부분을 의미한다.\nb) 단일충의 경우 제품전체의 프탈레이트 가소제 함유량기준은 1.5 % 이하이어야 한다.\n\n4.3 표면코팅 두께 KS D 0246의 5 현미경 단면 시험방법 또는 KS D ISO 9220에 따라 시험하였을 때 표면코팅 두께는 최소 8 µm이고 평균 15 µm 이상이어야 한다. 다만, 비온돌용 바닥재 및 제품전체의 프탈레이트 가소제 함유량이 0.1 % 이하인 제품의 경우 표면코팅층을 생략할 수 있다.\n\n5 기계·물리적 특성\n5.1 비닐장판의 기계·물리적 특성 KS M 3802:2019의 7 시험방법에 따라 시험하였을 때 [표 4]와 같아야 한다.",
+              "graph": "",
+              "diagram": "",
+              "image_overview": "",
+              "table_markdown": "| 결점의 종류 | 확인 기준 |\n| :--- | :--- |\n| 갈라진 곳, 절단된 곳, 굽은 곳, 구멍 | 없어야 한다. |\n| 이상한 요철, 모양·광택 및 색조의 불균일, 오염, 홈, 이물의 혼입 | 눈에 띄는 것이 없어야 한다. |",
+              "visual_elements": ""
+            },
+            "entities_ko": null
+          },
+          {
+            "page_number": 3,
+            "part_number": null,
+            "entities": {
+              "text": "5.2 비닐바닥시트의 기계·물리적 특성 KS M 3802:2019의 7 에 따라 시험하였을 때 [표 5]와 같아야 한다.\n\n5.3 비닐바닥타일의 기계·물리적 특성 KS M 3802:2019의 7 시험에 따라 시험하였을 때 [표 6]과 같아야 한다.\n\n6 검사 방법\n6.1 모델의 구분 제품 및 종류에 따라 구분한다.\n6.2 시료채취방법 및 검사방법 4, 5 장에 수록된 개별항목의 시험방법에 따른다.\n6.3 시료크기 및 합부판정조건 시료크기 및 합부판정은 다음 표와 같다. (다만, 합부판정시 표시사항은 제외한다.)",
+              "graph": "",
+              "diagram": "",
+              "image_overview": "",
+              "table_markdown": "[표 4] 비닐장판의 안전요건\n| 인장 강도 (N/cm²) | | 인열 강도 (N/cm) | |\n|---|---|---|---|\n| 나비 방향 | 길이 방향 | 나비 방향 | 길이 방향 |\n| 196 이상 | 236 이상 | 89 이상 | 196 이상 |\n\n[표 5] 비닐바닥시트의 안전요건\n| 항목 | 종류 | 발포층이 없는 비닐바닥시트 | 발포층이 있는 비닐바닥시트 |\n|---|---|---|---|\n| 잔류 압입률 (%) | | 25 이하 | |\n| 가열에 의한 길이 변화율 (%) | | 2.0 이하 | |\n| 가열 감량률 (%) | | 2.5 이하 | |\n| 오염성 | | 현저한 색·광택 및 부품이 없어야 한다. | |\n\n[표 6] 비닐바닥타일의 안전요건\n| 성능 항목 | 종류 | 균일질 비닐 바닥 타일 | 혼합질 비닐 바닥 타일 |\n|---|---|---|---|\n| 잔류 압입률 (%) | | 8.0 이하 | |\n| 가열에 의한 길이 변화율 (%) | | 0.25 이하 | 0.20 이하 |\n| 흡수에 의한 길이 변화율 (%) | | - | 0.20 이하 |\n| 가열 감량률 (%) | | 0.5 이하 | |\n| 긁기 시험 | | 흠의 나비가 3.1 mm 이하이어야 한다. | |\n| 오염성 | | 현저한 색·광택의 변화 및 부품이 없어야 한다. | |\n\n주 1 바닥 타일 중 비닐 적층 타일의 오염성 시험인 경우는 바닥시트의 성능으로 대신할 수 있다.",
+              "visual_elements": "페이지 상단에는 [표 4] 비닐장판의 안전요건이 위치하고 있습니다. 그 아래로 5.2절 비닐바닥시트의 기계·물리적 특성과 관련된 설명 및 [표 5] 비닐바닥시트의 안전요건이 배치되어 있습니다. 이어지는 5.3절에서는 비닐바닥타일의 기계·물리적 특성이 기술되며, [표 6] 비닐바닥타일의 안전요건이 해당 내용을 상세히 설명하고 있습니다. 하단부에는 6절 검사 방법과 그 하위 항목들(모델의 구분, 시료채취방법 및 검사방법, 시료크기 및 합부판정조건)이 순차적으로 배치되어 있습니다."
+            },
+            "entities_ko": null
+          },
+          {
+            "page_number": 4,
+            "part_number": null,
+            "entities": {
+              "text": "7 표 시 제품의 최소단위 포장마다 다음 표와 같은 표시를 하여야 한다. 또한 제품 뒷면 보기 쉬운 곳에 쉽게 지워지지 않는 방법으로 KC마크, 용도, 모델명, 제조연월(또는 로트번호) 및 제조자명(또는 수입자명)은 제품의 뒷면 매 1m 이내 마다(제품 길이가 1 m 이하인 경우 1회) 인쇄 등의 방법으로 지워지지 않게 표시하여야 한다. 다만, 비닐바닥타일은 제품의 뒷면 표시를 생략할 수 있다.\n7.1 용도 (온돌용/비온돌용)\n* 온돌용 제품의 경우 '(비온돌용 겸용)'이라는 문구를 부기할 수 있다.\n7.2 모델명 (제품 뒷면에 표기 시 약호 사용 가능)\n7.3 치수 (두께, 나비, 길이)\n7.4 제조연월 또는 로트번호\n7.5 제조자명 (제품 뒷면에 표기 시 약호 사용 가능)\n7.6 수입자명 (수입품에 한하며, 제품 뒷면에 표기 시 약호 사용 가능)\n7.7 주소 또는 전화번호(국내 제조국은 국내 제조자, 수입품인 경우에는 수입자)\n7.8 제조국명 (수입품은 대외 무역법에 의거 표기)\n7.9 사용상 주의사항",
+              "graph": "",
+              "diagram": "",
+              "image_overview": "",
+              "table_markdown": "| 검사구분 | 시료의 크기(n) | 합격판정갯수(Ac) | 불합격판정갯수(Re) |\n|---|---|---|---|\n| 안전확인 | 1 | 0 | 1 |\n\n주 시료의 크기(n): 동 안전기준을 적용하여 시험하는데 필요한 시료의 최소수량 또는 질량\n\n| 제 정 : 기술표준원고시 제2012-175호(2012. 4.25) |\n| 개 정 : 기술표준원고시 제2012-800호(2012.12.21) |\n| 개 정 : 국가기술표준원고시 제2015-693호(2015.12.31) |\n| 개 정 : 국가기술표준원고시 제2017-020호(2017. 1.31) |\n| 개 정 : 국가기술표준원고시 제2017-032호(2017. 2.8) |\n| 개 정 : 국가기술표준원고시 제2020-146호(2020. 7.24) |\n| 개 정 : 국가기술표준원고시 제2022-457호(2022. 10.18) |\n| 개 정 : 국가기술표준원고시 제2023-330호(2023.9.1 ) |",
+              "visual_elements": "문서의 하단에 있는 수정 이력 표(제정 및개정 목록)는 상단의 표시 규정을 포함한 본문 내용(7호 시 등)을 보충하는 문서의 관리 정보를 제공합니다."
+            },
+            "entities_ko": null
+          }
+        ],
+        "latency_seconds": 15.062830809999923
+      },
+      "tagger": {
+        "provider": "hierarchy",
+        "model": "hierarchy-ko",
+        "pages": [
+          {
+            "page_number": 1,
+            "part_number": null,
+            "keywords": [],
+            "summary": null,
+            "hierarchy": [
+              {
+                "x0": 0.089,
+                "text": "이 기준은 주택, 아파트, 보육시설 등 사람이 거주, 체류하는 건축물 내부 바닥에 사용하기 위하여 제조된 PVC 계통의 바닥재에 대하여 적용한다.",
+                "type": "section",
+                "title": "적용범위",
+                "marker": "1",
+                "confidence": 0.9772,
+                "level_code": "L3",
+                "level_name": "절"
+              },
+              {
+                "x0": 0.089,
+                "text": "이 기준에 인용됨으로써 이 기준의 일부를 구성한다. 이러한 관련규격은 그 최신판을 적용한다.\nKS D 0246 도금 두께 시험 방법\nKS D ISO 9220 금속 피막-피막 두께 측정-주사 전자현미경 방법\nKS M 3802 PVC(비닐)계 바닥재\n어린이제품 공통안전기준",
+                "type": "section",
+                "title": "관련규격 다음에 나타내는 표준은",
+                "marker": "2",
+                "confidence": 0.9897,
+                "level_code": "L3",
+                "level_name": "절"
+              },
+              {
+                "x0": 0.089,
+                "type": "section",
+                "title": "제품의 종류",
+                "marker": "3",
+                "confidence": 0.9998,
+                "level_code": "L3",
+                "level_name": "절"
+              },
+              {
+                "x0": 0.089,
+                "text": "[표 1] 비닐바닥타일의 종류",
+                "type": "subsection",
+                "title": "재질 및 구조에 따른 구분",
+                "marker": "3.1",
+                "breadcrumb": [
+                  "3"
+                ],
+                "confidence": 0.9992,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "x0": 0.097,
+                "type": "item",
+                "title": "a) 비닐장판 PVC 재질을 주로하여 제조된 제품으로 반드시 발포층이 있어야 한다.",
+                "breadcrumb": [
+                  "3",
+                  "3.1"
+                ],
+                "confidence": 0.9828,
+                "level_code": "L7",
+                "level_name": "열거항목"
+              },
+              {
+                "x0": 0.097,
+                "type": "item",
+                "title": "b) 비닐바닥시트 직포, 부직포, 유리섬유 등 PVC 이외의 재질이 적층된 제품으로 발포층이 없는 비닐바닥시트와 발표층이 있는 비닐바닥시트로 구",
+                "breadcrumb": [
+                  "3",
+                  "3.1"
+                ],
+                "confidence": 0.9746,
+                "level_code": "L7",
+                "level_name": "열거항목"
+              },
+              {
+                "x0": 0.097,
+                "type": "item",
+                "title": "c) 비닐바닥타일 결합제 함유율에 따라 [표 1]과 같이 구분한다.",
+                "breadcrumb": [
+                  "3",
+                  "3.1"
+                ],
+                "confidence": 0.9932,
+                "level_code": "L7",
+                "level_name": "열거항목"
+              },
+              {
+                "x0": 0.212,
+                "bbox": "0.2120,0.6620,0.7890,0.8520",
+                "type": "table",
+                "title": "[표 1] 비닐바닥타일의 종류",
+                "caption": "<table><tr><td>종류</td><td>결합제 함유율 (%)</td></tr><tr><td>균일질 비닐 바닥 타일</td><td>30 이상</td></tr><tr><td>혼합질 비닐 바닥 타일</td><td>30 미만</td></tr><tr><td colspan=\"2\">a) 결합제는 비닐 수지, 가소제 및 안정제로 구성된다.b) 균일질 비닐 바닥 타일은 순수 비닐 바닥 타일(충전재를 포함하지 않은 것) 및 적층 비닐 바닥 타일을 포함한다.</td></tr></table>",
+                "breadcrumb": [
+                  "3",
+                  "3.1"
+                ],
+                "confidence": 0.9738,
+                "level_code": "LT",
+                "level_name": "표"
+              },
+              {
+                "x0": 0.089,
+                "type": "subsection",
+                "title": "사용 용도에 따른 구분",
+                "marker": "3.2",
+                "breadcrumb": [
+                  "3"
+                ],
+                "confidence": 0.9565,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "x0": 0.097,
+                "type": "item",
+                "title": "a) 온돌용(PVC 바닥재) 주택, 아파트, 보육시설 등 바닥난방이 되거나, 바닥난방이 않되어도 신발을 신지 않고 생활하는 실내시설의 바닥표면에",
+                "breadcrumb": [
+                  "3",
+                  "3.2"
+                ],
+                "confidence": 0.996,
+                "level_code": "L7",
+                "level_name": "열거항목"
+              }
+            ],
+            "n_nodes": 10,
+            "graph": {
+              "edges": [
+                {
+                  "to": "1:2",
+                  "from": "1:3",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "1:3",
+                  "from": "1:4",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "1:3",
+                  "from": "1:5",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "1:3",
+                  "from": "1:6",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "1:7",
+                  "from": "1:3",
+                  "type": "HAS_TABLE"
+                },
+                {
+                  "to": "1:2",
+                  "from": "1:8",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "1:8",
+                  "from": "1:9",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "1:8",
+                  "from": "2:10",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "2:11",
+                  "from": "2:12",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "2:13",
+                  "from": "2:12",
+                  "type": "HAS_TABLE"
+                },
+                {
+                  "to": "2:11",
+                  "from": "2:14",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "2:15",
+                  "from": "2:14",
+                  "type": "HAS_TABLE"
+                },
+                {
+                  "to": "2:11",
+                  "from": "2:16",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "2:17",
+                  "from": "2:18",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "3:19",
+                  "from": "2:18",
+                  "type": "HAS_TABLE"
+                },
+                {
+                  "to": "2:17",
+                  "from": "3:20",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "3:21",
+                  "from": "3:20",
+                  "type": "HAS_TABLE"
+                },
+                {
+                  "to": "2:17",
+                  "from": "3:22",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "3:23",
+                  "from": "3:22",
+                  "type": "HAS_TABLE"
+                },
+                {
+                  "to": "3:24",
+                  "from": "3:25",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "3:24",
+                  "from": "3:26",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "3:24",
+                  "from": "3:27",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "4:28",
+                  "from": "3:27",
+                  "type": "HAS_TABLE"
+                },
+                {
+                  "to": "4:29",
+                  "from": "3:27",
+                  "type": "HAS_NOTE"
+                },
+                {
+                  "to": "4:30",
+                  "from": "4:31",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "4:30",
+                  "from": "4:32",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "4:30",
+                  "from": "4:33",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "4:30",
+                  "from": "4:34",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "4:30",
+                  "from": "4:35",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "4:30",
+                  "from": "4:36",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "4:30",
+                  "from": "4:37",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "4:30",
+                  "from": "4:38",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "4:30",
+                  "from": "4:39",
+                  "type": "PART_OF"
+                }
+              ],
+              "nodes": [
+                {
+                  "id": "1:0",
+                  "page": 1,
+                  "part": null,
+                  "type": "section",
+                  "order": 0,
+                  "title": "적용범위",
+                  "confidence": 0.9772,
+                  "level_code": "L3",
+                  "level_name": "절",
+                  "number_path": [
+                    "1"
+                  ]
+                },
+                {
+                  "id": "1:1",
+                  "page": 1,
+                  "part": null,
+                  "type": "section",
+                  "order": 1,
+                  "title": "관련규격 다음에 나타내는 표준은",
+                  "confidence": 0.9897,
+                  "level_code": "L3",
+                  "level_name": "절",
+                  "number_path": [
+                    "2"
+                  ]
+                },
+                {
+                  "id": "1:2",
+                  "page": 1,
+                  "part": null,
+                  "type": "section",
+                  "order": 2,
+                  "title": "제품의 종류",
+                  "confidence": 0.9998,
+                  "level_code": "L3",
+                  "level_name": "절",
+                  "number_path": [
+                    "3"
+                  ]
+                },
+                {
+                  "id": "1:3",
+                  "page": 1,
+                  "part": null,
+                  "type": "subsection",
+                  "order": 3,
+                  "title": "재질 및 구조에 따른 구분",
+                  "confidence": 0.9992,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "3",
+                    "1"
+                  ]
+                },
+                {
+                  "id": "1:4",
+                  "page": 1,
+                  "part": null,
+                  "type": "item",
+                  "order": 4,
+                  "title": "a) 비닐장판 PVC 재질을 주로하여 제조된 제품으로 반드시 발포층이 있어야 한다.",
+                  "confidence": 0.9828,
+                  "level_code": "L7",
+                  "level_name": "열거항목",
+                  "number_path": []
+                },
+                {
+                  "id": "1:5",
+                  "page": 1,
+                  "part": null,
+                  "type": "item",
+                  "order": 5,
+                  "title": "b) 비닐바닥시트 직포, 부직포, 유리섬유 등 PVC 이외의 재질이 적층된 제품으로 발포층이 없는 비닐바닥시트와 발표층이 있는 비닐바닥시트로 구",
+                  "confidence": 0.9746,
+                  "level_code": "L7",
+                  "level_name": "열거항목",
+                  "number_path": []
+                },
+                {
+                  "id": "1:6",
+                  "page": 1,
+                  "part": null,
+                  "type": "item",
+                  "order": 6,
+                  "title": "c) 비닐바닥타일 결합제 함유율에 따라 [표 1]과 같이 구분한다.",
+                  "confidence": 0.9932,
+                  "level_code": "L7",
+                  "level_name": "열거항목",
+                  "number_path": []
+                },
+                {
+                  "id": "1:7",
+                  "page": 1,
+                  "part": null,
+                  "type": "table",
+                  "order": 7,
+                  "title": "[표 1] 비닐바닥타일의 종류",
+                  "confidence": 0.9738,
+                  "level_code": "LT",
+                  "level_name": "표",
+                  "number_path": []
+                },
+                {
+                  "id": "1:8",
+                  "page": 1,
+                  "part": null,
+                  "type": "subsection",
+                  "order": 8,
+                  "title": "사용 용도에 따른 구분",
+                  "confidence": 0.9565,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "3",
+                    "2"
+                  ]
+                },
+                {
+                  "id": "1:9",
+                  "page": 1,
+                  "part": null,
+                  "type": "item",
+                  "order": 9,
+                  "title": "a) 온돌용(PVC 바닥재) 주택, 아파트, 보육시설 등 바닥난방이 되거나, 바닥난방이 않되어도 신발을 신지 않고 생활하는 실내시설의 바닥표면에",
+                  "confidence": 0.996,
+                  "level_code": "L7",
+                  "level_name": "열거항목",
+                  "number_path": []
+                },
+                {
+                  "id": "2:10",
+                  "page": 2,
+                  "part": null,
+                  "type": "item",
+                  "order": 10,
+                  "title": "b) 비온돌용(PVC 바닥재) 상가, 사무실, 병원 등 바닥난방이 이루어지지 않는 다중시설의 바닥표면에 시공하기 위하여 제조된 제품으로 온돌용(",
+                  "confidence": 0.9921,
+                  "level_code": "L7",
+                  "level_name": "열거항목",
+                  "number_path": []
+                },
+                {
+                  "id": "2:11",
+                  "page": 2,
+                  "part": null,
+                  "type": "section",
+                  "order": 11,
+                  "title": "공통사항",
+                  "confidence": 0.9977,
+                  "level_code": "L3",
+                  "level_name": "절",
+                  "number_path": [
+                    "4"
+                  ]
+                },
+                {
+                  "id": "2:12",
+                  "page": 2,
+                  "part": null,
+                  "type": "subsection",
+                  "order": 12,
+                  "title": "걸모양 걸모양은 육안으로 확인하며, 기준은 [표 2]와 같다.",
+                  "confidence": 0.9745,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "4",
+                    "1"
+                  ]
+                },
+                {
+                  "id": "2:13",
+                  "page": 2,
+                  "part": null,
+                  "type": "table",
+                  "order": 13,
+                  "title": "[표 2] PVC 계통 바닥재 걸모양 요건",
+                  "confidence": 0.9794,
+                  "level_code": "LT",
+                  "level_name": "표",
+                  "number_path": []
+                },
+                {
+                  "id": "2:14",
+                  "page": 2,
+                  "part": null,
+                  "type": "subsection",
+                  "order": 14,
+                  "title": "프탈레이트 가소제 어린이제품 공통안전기준(프탈레이트계 가소제-부록C)에",
+                  "confidence": 0.9857,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "4",
+                    "2"
+                  ]
+                },
+                {
+                  "id": "2:15",
+                  "page": 2,
+                  "part": null,
+                  "type": "table",
+                  "order": 15,
+                  "title": "[표 3] PVC 바닥재의 프탈레이트 가소제 요건",
+                  "confidence": 0.9891,
+                  "level_code": "LT",
+                  "level_name": "표",
+                  "number_path": []
+                },
+                {
+                  "id": "2:16",
+                  "page": 2,
+                  "part": null,
+                  "type": "subsection",
+                  "order": 16,
+                  "title": "표면코팅 두께 KS D 0246의 5 현미경 단면 시험방법",
+                  "confidence": 0.9934,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "4",
+                    "3"
+                  ]
+                },
+                {
+                  "id": "2:17",
+                  "page": 2,
+                  "part": null,
+                  "type": "section",
+                  "order": 17,
+                  "title": "기계·물리적 특성",
+                  "confidence": 0.9953,
+                  "level_code": "L3",
+                  "level_name": "절",
+                  "number_path": [
+                    "5"
+                  ]
+                },
+                {
+                  "id": "2:18",
+                  "page": 2,
+                  "part": null,
+                  "type": "subsection",
+                  "order": 18,
+                  "title": "비닐장판의 기계·물리적 특성 KS M 3802:2019의 7 시험방법에",
+                  "confidence": 0.987,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "5",
+                    "1"
+                  ]
+                },
+                {
+                  "id": "3:19",
+                  "page": 3,
+                  "part": null,
+                  "type": "table",
+                  "order": 19,
+                  "title": "[표 4] 비닐장판의 안전요건",
+                  "confidence": 0.9961,
+                  "level_code": "LT",
+                  "level_name": "표",
+                  "number_path": []
+                },
+                {
+                  "id": "3:20",
+                  "page": 3,
+                  "part": null,
+                  "type": "subsection",
+                  "order": 20,
+                  "title": "비닐바닥시트의 기계·물리적 특성 KS M 3802:2019의 7 에 따라",
+                  "confidence": 0.9899,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "5",
+                    "2"
+                  ]
+                },
+                {
+                  "id": "3:21",
+                  "page": 3,
+                  "part": null,
+                  "type": "table",
+                  "order": 21,
+                  "title": "[표 5] 비닐바닥시트의 안전요건",
+                  "confidence": 0.9821,
+                  "level_code": "LT",
+                  "level_name": "표",
+                  "number_path": []
+                },
+                {
+                  "id": "3:22",
+                  "page": 3,
+                  "part": null,
+                  "type": "subsection",
+                  "order": 22,
+                  "title": "비닐바닥타일의 기계·물리적 특성 KS M 3802:2019의 7 시험에",
+                  "confidence": 0.9956,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "5",
+                    "3"
+                  ]
+                },
+                {
+                  "id": "3:23",
+                  "page": 3,
+                  "part": null,
+                  "type": "table",
+                  "order": 23,
+                  "title": "[표 6] 비닐바닥타일의 안전요건",
+                  "confidence": 0.9804,
+                  "level_code": "LT",
+                  "level_name": "표",
+                  "number_path": []
+                },
+                {
+                  "id": "3:24",
+                  "page": 3,
+                  "part": null,
+                  "type": "section",
+                  "order": 24,
+                  "title": "검사 방법",
+                  "confidence": 0.9796,
+                  "level_code": "L3",
+                  "level_name": "절",
+                  "number_path": [
+                    "6"
+                  ]
+                },
+                {
+                  "id": "3:25",
+                  "page": 3,
+                  "part": null,
+                  "type": "subsection",
+                  "order": 25,
+                  "title": "모델의 구분 제품 및 종류에 따라 구분한다.",
+                  "confidence": 0.9997,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "6",
+                    "1"
+                  ]
+                },
+                {
+                  "id": "3:26",
+                  "page": 3,
+                  "part": null,
+                  "type": "subsection",
+                  "order": 26,
+                  "title": "시료채취방법 및 검사방법 4,5 장에 수록된 개별항목의 시험방법에 따른다",
+                  "confidence": 0.9873,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "6",
+                    "2"
+                  ]
+                },
+                {
+                  "id": "3:27",
+                  "page": 3,
+                  "part": null,
+                  "type": "subsection",
+                  "order": 27,
+                  "title": "시료크기 및 합부판정조건 시료크기 및 합부판정은",
+                  "confidence": 0.995,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "6",
+                    "3"
+                  ]
+                },
+                {
+                  "id": "4:28",
+                  "page": 4,
+                  "part": null,
+                  "type": "table",
+                  "order": 28,
+                  "title": "표",
+                  "confidence": 0.9994,
+                  "level_code": "LT",
+                  "level_name": "표",
+                  "number_path": []
+                },
+                {
+                  "id": "4:29",
+                  "page": 4,
+                  "part": null,
+                  "type": "note",
+                  "order": 29,
+                  "title": "주 시료의 크기(n) : 동 안전기준을 적용하여 시험하는데 필요한 시료의 최소수량 또는 질량",
+                  "confidence": 0.9781,
+                  "level_code": "LN",
+                  "level_name": "주석",
+                  "number_path": []
+                },
+                {
+                  "id": "4:30",
+                  "page": 4,
+                  "part": null,
+                  "type": "section",
+                  "order": 30,
+                  "title": "표 시 제품의 최소단위 포장마다",
+                  "confidence": 0.9931,
+                  "level_code": "L3",
+                  "level_name": "절",
+                  "number_path": [
+                    "7"
+                  ]
+                },
+                {
+                  "id": "4:31",
+                  "page": 4,
+                  "part": null,
+                  "type": "subsection",
+                  "order": 31,
+                  "title": "용도 (온돌용/비온돌용)",
+                  "confidence": 0.9981,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "7",
+                    "1"
+                  ]
+                },
+                {
+                  "id": "4:32",
+                  "page": 4,
+                  "part": null,
+                  "type": "subsection",
+                  "order": 32,
+                  "title": "모델명 (제품 뒷면에 표기 시 약호 사용 가능)",
+                  "confidence": 0.9755,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "7",
+                    "2"
+                  ]
+                },
+                {
+                  "id": "4:33",
+                  "page": 4,
+                  "part": null,
+                  "type": "subsection",
+                  "order": 33,
+                  "title": "치수 (두께, 나비, 길이)",
+                  "confidence": 0.9992,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "7",
+                    "3"
+                  ]
+                },
+                {
+                  "id": "4:34",
+                  "page": 4,
+                  "part": null,
+                  "type": "subsection",
+                  "order": 34,
+                  "title": "제조연월 또는 로트번호",
+                  "confidence": 0.9985,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "7",
+                    "4"
+                  ]
+                },
+                {
+                  "id": "4:35",
+                  "page": 4,
+                  "part": null,
+                  "type": "subsection",
+                  "order": 35,
+                  "title": "제조자명 (제품 뒷면에 표기 시 약호 사용 가능)",
+                  "confidence": 0.9841,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "7",
+                    "5"
+                  ]
+                },
+                {
+                  "id": "4:36",
+                  "page": 4,
+                  "part": null,
+                  "type": "subsection",
+                  "order": 36,
+                  "title": "수입자명 (수입품에 한하며, 제품 뒷면에 표기 시 약호 사용 가능)",
+                  "confidence": 0.9799,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "7",
+                    "6"
+                  ]
+                },
+                {
+                  "id": "4:37",
+                  "page": 4,
+                  "part": null,
+                  "type": "subsection",
+                  "order": 37,
+                  "title": "주소 또는 전화번호(국내 제조품은 국내 제조자, 수입품인 경우에는 수입자",
+                  "confidence": 0.9974,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "7",
+                    "7"
+                  ]
+                },
+                {
+                  "id": "4:38",
+                  "page": 4,
+                  "part": null,
+                  "type": "subsection",
+                  "order": 38,
+                  "title": "제조국명 (수입품은 대외 무역법에 의거 표기)",
+                  "confidence": 0.9856,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "7",
+                    "8"
+                  ]
+                },
+                {
+                  "id": "4:39",
+                  "page": 4,
+                  "part": null,
+                  "type": "subsection",
+                  "order": 39,
+                  "title": "사용상 주의사항",
+                  "confidence": 0.9344,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "7",
+                    "9"
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "page_number": 2,
+            "part_number": null,
+            "keywords": [],
+            "summary": null,
+            "hierarchy": [
+              {
+                "x0": 0.097,
+                "type": "item",
+                "title": "b) 비온돌용(PVC 바닥재) 상가, 사무실, 병원 등 바닥난방이 이루어지지 않는 다중시설의 바닥표면에 시공하기 위하여 제조된 제품으로 온돌용(",
+                "breadcrumb": [
+                  "3",
+                  "3.2"
+                ],
+                "confidence": 0.9921,
+                "level_code": "L7",
+                "level_name": "열거항목"
+              },
+              {
+                "x0": 0.09,
+                "type": "section",
+                "title": "공통사항",
+                "marker": "4",
+                "confidence": 0.9977,
+                "level_code": "L3",
+                "level_name": "절"
+              },
+              {
+                "x0": 0.089,
+                "text": "걸모양 걸모양은 육안으로 확인하며, 기준은 [표 2]와 같다.\n[표 2] PVC 계통 바닥재 걸모양 요건",
+                "type": "subsection",
+                "title": "걸모양 걸모양은 육안으로 확인하며, 기준은 [표 2]와 같다.",
+                "marker": "4.1",
+                "breadcrumb": [
+                  "4"
+                ],
+                "confidence": 0.9745,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "x0": 0.194,
+                "bbox": "0.1940,0.2160,0.8060,0.3440",
+                "type": "table",
+                "title": "[표 2] PVC 계통 바닥재 걸모양 요건",
+                "caption": "<table><tr><td>결점의 종류</td><td>확인 기준</td></tr><tr><td>갈라진 곳, 절단된 곳, 굽은 곳, 구멍</td><td>없어야 한다.</td></tr><tr><td>이상한 요철, 모양·광택 및 색조의 불균일, 오염, 흙, 이물의 혼입</td><td>눈에 뜨는 것이 없어야 한다.</td></tr></table>",
+                "breadcrumb": [
+                  "4",
+                  "4.1"
+                ],
+                "confidence": 0.9794,
+                "level_code": "LT",
+                "level_name": "표"
+              },
+              {
+                "x0": 0.089,
+                "text": "프탈레이트 가소제 어린이제품 공통안전기준(프탈레이트계 가소제-부록C)에 따라 시험하였을 때 재질 중의 다이에틸렉실프탈레이트(DEHP), 다이부틸프탈레이트(DBP), 부틸벤질프탈레이트(BBP)의 총 함유량은 [표 3]과 같아야 한다.",
+                "type": "subsection",
+                "title": "프탈레이트 가소제 어린이제품 공통안전기준(프탈레이트계 가소제-부록C)에",
+                "marker": "4.2",
+                "breadcrumb": [
+                  "4"
+                ],
+                "confidence": 0.9857,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "x0": 0.151,
+                "bbox": "0.1510,0.4800,0.8580,0.6640",
+                "type": "table",
+                "title": "[표 3] PVC 바닥재의 프탈레이트 가소제 요건",
+                "caption": "<table><tr><td rowspan=\"2\" colspan=\"2\">구 분</td><td rowspan=\"2\">비닐 장판</td><td rowspan=\"2\">비닐바닥시트 b)</td><td colspan=\"2\">비닐바닥타일</td></tr><tr><td>적층형</td><td>단일층형</td></tr><tr><td rowspan=\"2\">온돌용</td><td>상부층</td><td>1.5 % 이하</td><td>1.5 % 이하</td><td>1.5 % 이하</td><td rowspan=\"2\">1.5% 이하</td></tr><tr><td>하부층</td><td>5.0 % 이하</td><td>5.0 % 이하</td><td>5.0 % 이하</td></tr><tr><td rowspan=\"2\">비온돌용</td><td>상부층</td><td>3.0 % 이하</td><td>3.0 % 이하</td><td>3.0 % 이하</td><td rowspan=\"2\">1.5% 이하</td></tr><tr><td>하부층</td><td>10.0 % 이하</td><td>10.0 % 이하</td><td>10.0 % 이하</td></tr></table>",
+                "breadcrumb": [
+                  "4",
+                  "4.2"
+                ],
+                "confidence": 0.9891,
+                "level_code": "LT",
+                "level_name": "표"
+              },
+              {
+                "x0": 0.089,
+                "text": "또는 KS D ISO 9220에 따라 시험하였을 때 표면코팅 두께는 최소 8 μm이고 평균 15 μm 이상이어야 한다. 다만, 비온돌용 바닥재 및 제품전체의 프탈레이트 가소제 함유량이 0.1 % 이하인 제품의 경우 표면코팅층을 생략할 수 있다.",
+                "type": "subsection",
+                "title": "표면코팅 두께 KS D 0246의 5 현미경 단면 시험방법",
+                "marker": "4.3",
+                "breadcrumb": [
+                  "4"
+                ],
+                "confidence": 0.9934,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "x0": 0.089,
+                "type": "section",
+                "title": "기계·물리적 특성",
+                "marker": "5",
+                "confidence": 0.9953,
+                "level_code": "L3",
+                "level_name": "절"
+              },
+              {
+                "x0": 0.089,
+                "text": "비닐장판의 기계·물리적 특성 KS M 3802:2019의 7 시험방법에 따라 시험하였을 때 [표 4]와 같아야 한다.",
+                "type": "subsection",
+                "title": "비닐장판의 기계·물리적 특성 KS M 3802:2019의 7 시험방법에",
+                "marker": "5.1",
+                "breadcrumb": [
+                  "5"
+                ],
+                "confidence": 0.987,
+                "level_code": "L4",
+                "level_name": "소절"
+              }
+            ],
+            "n_nodes": 9,
+            "graph": null
+          },
+          {
+            "page_number": 3,
+            "part_number": null,
+            "keywords": [],
+            "summary": null,
+            "hierarchy": [
+              {
+                "x0": 0.222,
+                "bbox": "0.2220,0.0880,0.7790,0.1850",
+                "type": "table",
+                "title": "[표 4] 비닐장판의 안전요건",
+                "caption": "<table><tr><td colspan=\"2\">인장 강도 (N/cm2)</td><td colspan=\"2\">인열 강도 (N/cm)</td></tr><tr><td>나비 방향</td><td>길이 방향</td><td>나비 방향</td><td>길이 방향</td></tr><tr><td>196 이상</td><td>236 이상</td><td>89 이상</td><td>196 이상</td></tr></table>",
+                "breadcrumb": [
+                  "5",
+                  "5.1"
+                ],
+                "confidence": 0.9961,
+                "level_code": "LT",
+                "level_name": "표"
+              },
+              {
+                "x0": 0.088,
+                "text": "비닐바닥시트의 기계·물리적 특성 KS M 3802:2019의 7 에 따라 시험하였을 때 [표 5]와 같아야 한다.",
+                "type": "subsection",
+                "title": "비닐바닥시트의 기계·물리적 특성 KS M 3802:2019의 7 에 따라",
+                "marker": "5.2",
+                "breadcrumb": [
+                  "5"
+                ],
+                "confidence": 0.9899,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "x0": 0.185,
+                "bbox": "0.1850,0.2860,0.8140,0.4570",
+                "type": "table",
+                "title": "[표 5] 비닐바닥시트의 안전요건",
+                "caption": "<table><tr><td>항 목</td><td>종 류</td><td>발포층이 없는 비닐바닥시트</td><td>발포층이 있는 비닐바닥시트</td></tr><tr><td colspan=\"2\">잔류 압입률 (%)</td><td colspan=\"2\">25 이하</td></tr><tr><td colspan=\"2\">가열에 의한 길이 변화율 (%)</td><td colspan=\"2\">2.0 이하</td></tr><tr><td colspan=\"2\">가열 감량률 (%)</td><td colspan=\"2\">2.5 이하</td></tr><tr><td colspan=\"2\">오염성</td><td colspan=\"2\">현저한 색·광택 및 부품이 없어야 한다.</td></tr></table>",
+                "breadcrumb": [
+                  "5",
+                  "5.2"
+                ],
+                "confidence": 0.9821,
+                "level_code": "LT",
+                "level_name": "표"
+              },
+              {
+                "x0": 0.089,
+                "text": "비닐바닥타일의 기계·물리적 특성 KS M 3802:2019의 7 시험에 따라 시험하였을 때 [표 6]과 같아야 한다.",
+                "type": "subsection",
+                "title": "비닐바닥타일의 기계·물리적 특성 KS M 3802:2019의 7 시험에",
+                "marker": "5.3",
+                "breadcrumb": [
+                  "5"
+                ],
+                "confidence": 0.9956,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "x0": 0.142,
+                "bbox": "0.1420,0.5570,0.8590,0.8200",
+                "type": "table",
+                "title": "[표 6] 비닐바닥타일의 안전요건",
+                "caption": "<table><tr><td>성능 항목</td><td>종 류</td><td>균일질비닐 바닥 타일</td><td>혼합질 비닐 바닥 타일</td></tr><tr><td colspan=\"2\">잔류 압입률 (%)</td><td colspan=\"2\">8.0 이하</td></tr><tr><td colspan=\"2\">가열에 의한 길이 변화율 (%)</td><td>0.25 이하</td><td>0.20 이하</td></tr><tr><td colspan=\"2\">흡수에 의한 길이 변화율 (%)</td><td>-</td><td>0.20 이하</td></tr><tr><td colspan=\"2\">가열 감량률 (%)</td><td colspan=\"2\">0.5 이하</td></tr><tr><td colspan=\"2\">굵기 시험</td><td colspan=\"2\">홈의 나비가 3.1 mm 이하이어야 한다.</td></tr><tr><td colspan=\"2\">오염성</td><td colspan=\"2\">현저한 색·광택의 변화 및 부품이 없어야 한다.</td></tr><tr><td colspan=\"4\">주 1 바닥 타일 중 비닐 적층 타일의 오염성 시험인 경우는 바닥시트의 성능으로 대신할 수 있다.</td></tr></table>",
+                "breadcrumb": [
+                  "5",
+                  "5.3"
+                ],
+                "confidence": 0.9804,
+                "level_code": "LT",
+                "level_name": "표"
+              },
+              {
+                "x0": 0.09,
+                "type": "section",
+                "title": "검사 방법",
+                "marker": "6",
+                "confidence": 0.9796,
+                "level_code": "L3",
+                "level_name": "절"
+              },
+              {
+                "x0": 0.089,
+                "type": "subsection",
+                "title": "모델의 구분 제품 및 종류에 따라 구분한다.",
+                "marker": "6.1",
+                "breadcrumb": [
+                  "6"
+                ],
+                "confidence": 0.9997,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "x0": 0.089,
+                "text": "시료채취방법 및 검사방법 4,5 장에 수록된 개별항목의 시험방법에 따른다.",
+                "type": "subsection",
+                "title": "시료채취방법 및 검사방법 4,5 장에 수록된 개별항목의 시험방법에 따른다",
+                "marker": "6.2",
+                "breadcrumb": [
+                  "6"
+                ],
+                "confidence": 0.9873,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "x0": 0.089,
+                "text": "다음 표와 같다. (다만, 합부판정시 표시사항은 제외한다.)",
+                "type": "subsection",
+                "title": "시료크기 및 합부판정조건 시료크기 및 합부판정은",
+                "marker": "6.3",
+                "breadcrumb": [
+                  "6"
+                ],
+                "confidence": 0.995,
+                "level_code": "L4",
+                "level_name": "소절"
+              }
+            ],
+            "n_nodes": 9,
+            "graph": null
+          },
+          {
+            "page_number": 4,
+            "part_number": null,
+            "keywords": [],
+            "summary": null,
+            "hierarchy": [
+              {
+                "x0": 0.128,
+                "bbox": "0.1280,0.0670,0.8030,0.1140",
+                "type": "table",
+                "title": "표",
+                "caption": "<table><tr><td>검사구분</td><td>시료의 크기(n)</td><td>합격판정갯수(Ac)</td><td>불합격판정갯수(Re)</td></tr><tr><td>안전확인</td><td>1</td><td>0</td><td>1</td></tr></table>",
+                "breadcrumb": [
+                  "6",
+                  "6.3"
+                ],
+                "confidence": 0.9994,
+                "level_code": "LT",
+                "level_name": "표"
+              },
+              {
+                "x0": 0.123,
+                "type": "note",
+                "title": "주 시료의 크기(n) : 동 안전기준을 적용하여 시험하는데 필요한 시료의 최소수량 또는 질량",
+                "breadcrumb": [
+                  "6",
+                  "6.3"
+                ],
+                "confidence": 0.9781,
+                "level_code": "LN",
+                "level_name": "주석"
+              },
+              {
+                "x0": 0.089,
+                "text": "다음 표와 같은 표시를 하여야 한다. 또한 제품 뒷면 보기 쉬운 곳에 쉽게 지워지지 않는 방법으로 KC마크, 용도, 모델명, 제조연월(또는 로트번호) 및 제조자명(또는 수입자명)은 제품의 뒷면 매 1 m 이내 마다(제품 길이가 1 m 이하인 경우 1회) 인쇄 등의 방법으로 지워지지 않게 표시하여야 한다. 다만, 비닐바닥타일은 제품의 뒷면 표시를 생략할 수 있다.",
+                "type": "section",
+                "title": "표 시 제품의 최소단위 포장마다",
+                "marker": "7",
+                "confidence": 0.9931,
+                "level_code": "L3",
+                "level_name": "절"
+              },
+              {
+                "x0": 0.09,
+                "text": "*온돌용 제품의 경우 '(비온돌용 겸용)'이라는 문구를 부기할 수 있다.",
+                "type": "subsection",
+                "title": "용도 (온돌용/비온돌용)",
+                "marker": "7.1",
+                "breadcrumb": [
+                  "7"
+                ],
+                "confidence": 0.9981,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "x0": 0.09,
+                "type": "subsection",
+                "title": "모델명 (제품 뒷면에 표기 시 약호 사용 가능)",
+                "marker": "7.2",
+                "breadcrumb": [
+                  "7"
+                ],
+                "confidence": 0.9755,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "x0": 0.09,
+                "type": "subsection",
+                "title": "치수 (두께, 나비, 길이)",
+                "marker": "7.3",
+                "breadcrumb": [
+                  "7"
+                ],
+                "confidence": 0.9992,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "x0": 0.09,
+                "type": "subsection",
+                "title": "제조연월 또는 로트번호",
+                "marker": "7.4",
+                "breadcrumb": [
+                  "7"
+                ],
+                "confidence": 0.9985,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "x0": 0.09,
+                "type": "subsection",
+                "title": "제조자명 (제품 뒷면에 표기 시 약호 사용 가능)",
+                "marker": "7.5",
+                "breadcrumb": [
+                  "7"
+                ],
+                "confidence": 0.9841,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "x0": 0.09,
+                "type": "subsection",
+                "title": "수입자명 (수입품에 한하며, 제품 뒷면에 표기 시 약호 사용 가능)",
+                "marker": "7.6",
+                "breadcrumb": [
+                  "7"
+                ],
+                "confidence": 0.9799,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "x0": 0.09,
+                "text": "주소 또는 전화번호(국내 제조품은 국내 제조자, 수입품인 경우에는 수입자)",
+                "type": "subsection",
+                "title": "주소 또는 전화번호(국내 제조품은 국내 제조자, 수입품인 경우에는 수입자",
+                "marker": "7.7",
+                "breadcrumb": [
+                  "7"
+                ],
+                "confidence": 0.9974,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "x0": 0.09,
+                "type": "subsection",
+                "title": "제조국명 (수입품은 대외 무역법에 의거 표기)",
+                "marker": "7.8",
+                "breadcrumb": [
+                  "7"
+                ],
+                "confidence": 0.9856,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "x0": 0.09,
+                "text": "제정: 기술표준원고시 제2012-175호(2012. 4.25)\n개정: 기술표준원고시 제2012-800호(2012.12.21)\n개정: 국가기술표준원고시 제2015-693호(2015.12.31)\n개정: 국가기술표준원고시 제2017-020호(2017. 1.31)\n개정: 국가기술표준원고시 제2017-032호(2017. 2.8)\n개정: 국가기술표준원고시 제2020-146호(2020.7.24)\n개정: 국가기술표준원고시 제2022-457호(2022.10.18)\n개정: 국가기술표준원고시 제2023-330호(2023.9.1)",
+                "type": "subsection",
+                "title": "사용상 주의사항",
+                "marker": "7.9",
+                "breadcrumb": [
+                  "7"
+                ],
+                "confidence": 0.9344,
+                "level_code": "L4",
+                "level_name": "소절"
+              }
+            ],
+            "n_nodes": 12,
+            "graph": null
+          }
+        ],
+        "latency_seconds": 0.006457528999362694
+      },
+      "dimension_ocr": {
+        "enabled": true,
+        "model": "dimension_ocr_model",
+        "method": "text-segment",
+        "applied_fixes": null,
+        "pages": [
+          {
+            "page_number": 1,
+            "body_html": "<div data-label=\"header\" data-bbox=\"0.3750,0.0690,0.6220,0.0880\" data-score=\"0.9459\" style=\"color:#888;font-size:0.9em;\">안전확인 안전기준</div>\n<div data-label=\"title\" data-bbox=\"0.4370,0.1050,0.5710,0.1230\" data-score=\"0.9999\"><h1>실내용 바닥재</h1></div>\n<div data-label=\"text\" data-bbox=\"0.7490,0.1050,0.8460,0.1230\" data-score=\"0.9999\"><p>부속서 67</p></div>\n<div data-label=\"title\" data-bbox=\"0.3880,0.1400,0.6100,0.1580\" data-score=\"0.9997\"><h1>(Indoor Floorcoverings)</h1></div>\n<div data-label=\"title\" data-bbox=\"0.4460,0.1900,0.5510,0.2060\" data-score=\"0.9998\"><h1>PVC 바닥재</h1></div>\n<div data-label=\"title\" data-bbox=\"0.3580,0.2120,0.6400,0.2280\" data-score=\"0.9989\"><h1>(Polyvinyl Chloride Floorcoverings)</h1></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.2750,0.9060,0.3130\" data-score=\"0.9772\"><p>1 적용범위 이 기준은 주택, 아파트, 보육시설 등 사람이 거주, 체류하는 건축물 내부 바닥에 사용하기 위하여 제조된 PVC 계통의 바닥재에 대하여 적용한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.3390,0.9060,0.3770\" data-score=\"0.9897\"><p>2 관련규격 다음에 나타내는 표준은 이 기준에 인용됨으로써 이 기준의 일부를 구성한다. 이러한 관련규격은 그 최신판을 적용한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1140,0.3830,0.3820,0.3980\" data-score=\"0.9982\"><p>KS D 0246 도금 두께 시험 방법</p></div>\n<div data-label=\"text\" data-bbox=\"0.1140,0.4040,0.6660,0.4200\" data-score=\"0.9737\"><p>KS D ISO 9220 금속 피막-피막 두께 측정-주사 전자현미경 방법</p></div>\n<div data-label=\"text\" data-bbox=\"0.1140,0.4250,0.3840,0.4400\" data-score=\"0.9952\"><p>KS M 3802 PVC(비닐)계 바닥재</p></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.4470,0.3240,0.4620\" data-score=\"0.9996\"><p>어린이제품 공통안전기준</p></div>\n<div data-label=\"title\" data-bbox=\"0.0890,0.4890,0.2140,0.5050\" data-score=\"0.9998\"><h1>3 제품의 종류</h1></div>\n<div data-label=\"title\" data-bbox=\"0.0890,0.5110,0.3450,0.5260\" data-score=\"0.9992\"><h1>3.1 재질 및 구조에 따른 구분</h1></div>\n<div data-label=\"text\" data-bbox=\"0.0970,0.5320,0.7850,0.5480\" data-score=\"0.9828\"><p>a) 비닐장판 PVC 재질을 주로하여 제조된 제품으로 반드시 발포층이 있어야 한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0970,0.5530,0.9060,0.5900\" data-score=\"0.9746\"><p>b) 비닐바닥시트 직포, 부직포, 유리섬유 등 PVC 이외의 재질이 적층된 제품으로 발포층이 없는 비닐바닥시트와 발표층이 있는 비닐바닥시트로 구분한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0970,0.5960,0.6280,0.6120\" data-score=\"0.9932\"><p>c) 비닐바닥타일 결합제 함유율에 따라 [표 1]과 같이 구분한다.</p></div>\n<div data-label=\"table_caption\" data-bbox=\"0.3750,0.6390,0.6220,0.6550\" data-score=\"0.9907\" style=\"font-weight:600;\">[표 1] 비닐바닥타일의 종류</div>\n<div data-label=\"table\" data-bbox=\"0.2120,0.6620,0.7890,0.8520\" data-score=\"0.9738\"><table><tr><td>종류</td><td>결합제 함유율 (%)</td></tr><tr><td>균일질 비닐 바닥 타일</td><td>30 이상</td></tr><tr><td>혼합질 비닐 바닥 타일</td><td>30 미만</td></tr><tr><td colspan=\"2\">a) 결합제는 비닐 수지, 가소제 및 안정제로 구성된다.b) 균일질 비닐 바닥 타일은 순수 비닐 바닥 타일(충전재를 포함하지 않은 것) 및 적층 비닐 바닥 타일을 포함한다.</td></tr></table></div>\n<div data-label=\"title\" data-bbox=\"0.0890,0.8770,0.3140,0.8940\" data-score=\"0.9565\"><h1>3.2 사용 용도에 따른 구분</h1></div>\n<div data-label=\"text\" data-bbox=\"0.0970,0.8990,0.9060,0.9570\" data-score=\"0.9960\"><p>a) 온돌용(PVC 바닥재) 주택, 아파트, 보육시설 등 바닥난방이 되거나, 바닥난방이 않되어도 신발을 신지 않고 생활하는 실내시설의 바닥표면에 시공하기 위하여 제조된 제품으로, 비온돌용으로도 사용 가능한 제품</p></div>",
+            "page_visual_summary": "\"표 1\"은 PVC 바닥재 중 비닐바닥타일의 종류를 정의하는 표로, 문서의 세 번째 주요 섹션 \"3. 제품의 종류\" 내에서 그 하위 항목인 \"3.1 재질 및 구조에 따른 구분\"의 일부입니다.",
+            "element_analysis": [],
+            "unbound_visual_notes": "\"표 1\"은 PVC 바닥재 중 비닐바닥타일의 종류를 정의하는 표로, 문서의 세 번째 주요 섹션 \"3. 제품의 종류\" 내에서 그 하위 항목인 \"3.1 재질 및 구조에 따른 구분\"의 일부입니다.",
+            "table_markdown": "[표 1] 비닐바닥타일의 종류\n| 종류 | 결합제 함유율 (%)a)\n|---|---|\n| 균일질 비닐 바닥 타일 b) | 30 이상 |\n| 혼합질 비닐 바닥 타일 | 30 미만 |\na) 결합제는 비닐 수지, 가소제 및 안정제로 구성된다.\nb) 균일질 비닐 바닥 타일은 순수 비닐 바닥 타일(충전재를 포함하지 않은 것) 및 적층 비닐 바닥 타일을 포함한다.",
+            "arbitrated_blocks": 0,
+            "corrected_cells": 0,
+            "format_restored_cells": 0,
+            "name_consistency": null,
+            "applied_rotation": null,
+            "applied_skew": null
+          },
+          {
+            "page_number": 2,
+            "body_html": "<div data-label=\"text\" data-bbox=\"0.0970,0.0650,0.9060,0.1020\" data-score=\"0.9921\"><p>b) 비온돌용(PVC 바닥재) 상가, 사무실, 병원 등 바닥난방이 이루어지지 않는 다중시설의 바닥표면에 시공하기 위하여 제조된 제품으로 온돌용(신발을 신지 않고 생활하는 곳)으로의 사용에 부적합한 제품</p></div>\n<div data-label=\"title\" data-bbox=\"0.0900,0.1290,0.1850,0.1440\" data-score=\"0.9977\"><h1>4 공통사항</h1></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.1510,0.6030,0.1670\" data-score=\"0.9745\"><p>4.1 걸모양 걸모양은 육안으로 확인하며, 기준은 [표 2]와 같다.</p></div>\n<div data-label=\"table_caption\" data-bbox=\"0.3410,0.1930,0.6620,0.2090\" data-score=\"0.9879\" style=\"font-weight:600;\">[표 2] PVC 계통 바닥재 걸모양 요건</div>\n<div data-label=\"table\" data-bbox=\"0.1940,0.2160,0.8060,0.3440\" data-score=\"0.9794\"><table><tr><td>결점의 종류</td><td>확인 기준</td></tr><tr><td>갈라진 곳, 절단된 곳, 굽은 곳, 구멍</td><td>없어야 한다.</td></tr><tr><td>이상한 요철, 모양·광택 및 색조의 불균일, 오염, 흙, 이물의 혼입</td><td>눈에 뜨는 것이 없어야 한다.</td></tr></table></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.3720,0.9060,0.4310\" data-score=\"0.9857\"><p>4.2 프탈레이트 가소제 어린이제품 공통안전기준(프탈레이트계 가소제-부록C)에 따라 시험하였을 때 재질 중의 다이에틸렉실프탈레이트(DEHP), 다이부틸프탈레이트(DBP), 부틸벤질프탈레이트(BBP)의 총 함유량은 [표 3]과 같아야 한다.</p></div>\n<div data-label=\"table_caption\" data-bbox=\"0.2980,0.4570,0.6960,0.4730\" data-score=\"0.9985\" style=\"font-weight:600;\">[표 3] PVC 바닥재의 프탈레이트 가소제 요건</div>\n<div data-label=\"table\" data-bbox=\"0.1510,0.4800,0.8580,0.6640\" data-score=\"0.9891\"><table><tr><td rowspan=\"2\" colspan=\"2\">구 분</td><td rowspan=\"2\">비닐 장판</td><td rowspan=\"2\">비닐바닥시트 b)</td><td colspan=\"2\">비닐바닥타일</td></tr><tr><td>적층형</td><td>단일층형</td></tr><tr><td rowspan=\"2\">온돌용</td><td>상부층</td><td>1.5 % 이하</td><td>1.5 % 이하</td><td>1.5 % 이하</td><td rowspan=\"2\">1.5% 이하</td></tr><tr><td>하부층</td><td>5.0 % 이하</td><td>5.0 % 이하</td><td>5.0 % 이하</td></tr><tr><td rowspan=\"2\">비온돌용</td><td>상부층</td><td>3.0 % 이하</td><td>3.0 % 이하</td><td>3.0 % 이하</td><td rowspan=\"2\">1.5% 이하</td></tr><tr><td>하부층</td><td>10.0 % 이하</td><td>10.0 % 이하</td><td>10.0 % 이하</td></tr></table></div>\n<div data-label=\"table_footnote\" data-bbox=\"0.1390,0.6710,0.9060,0.7080\" data-score=\"0.9973\" style=\"font-weight:600;\">a) 상부층이란 표면코팅층, 투명필름층, 인쇄층 및 글라스파이버 함침층까지를, 하부층이란 비닐장판, 비닐바닥시트의 발표층, 비닐바닥타일의 중간층(베이스층) 부터의 아래 부분을 의미한다.</div>\n<div data-label=\"table_footnote\" data-bbox=\"0.1390,0.7130,0.8420,0.7300\" data-score=\"0.9840\" style=\"font-weight:600;\">b) 단일층의 경우 제품전체의 프탈레이트 가소제 함유량기준은 1.5 % 이하이여야 한다.</div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.7570,0.9060,0.8150\" data-score=\"0.9934\"><p>4.3 표면코팅 두께 KS D 0246의 5 현미경 단면 시험방법 또는 KS D ISO 9220에 따라 시험하였을 때 표면코팅 두께는 최소 8 μm이고 평균 15 μm 이상이어야 한다. 다만, 비온돌용 바닥재 및 제품전체의 프탈레이트 가소제 함유량이 0.1 % 이하인 제품의 경우 표면코팅층을 생략할 수 있다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.0890,0.8430,0.2490,0.8580\" data-score=\"0.9953\"><h1>5 기계·물리적 특성</h1></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.8640,0.9060,0.9010\" data-score=\"0.9870\"><p>5.1 비닐장판의 기계·물리적 특성 KS M 3802:2019의 7 시험방법에 따라 시험하였을 때 [표 4]와 같아야 한다.</p></div>",
+            "page_visual_summary": "",
+            "element_analysis": [],
+            "unbound_visual_notes": null,
+            "table_markdown": "| 결점의 종류 | 확인 기준 |\n| :--- | :--- |\n| 갈라진 곳, 절단된 곳, 굽은 곳, 구멍 | 없어야 한다. |\n| 이상한 요철, 모양·광택 및 색조의 불균일, 오염, 홈, 이물의 혼입 | 눈에 띄는 것이 없어야 한다. |",
+            "arbitrated_blocks": 0,
+            "corrected_cells": 0,
+            "format_restored_cells": 0,
+            "name_consistency": null,
+            "applied_rotation": null,
+            "applied_skew": null
+          },
+          {
+            "page_number": 3,
+            "body_html": "<div data-label=\"table_caption\" data-bbox=\"0.3780,0.0650,0.6190,0.0810\" data-score=\"0.9946\" style=\"font-weight:600;\">[표 4] 비닐장판의 안전요건</div>\n<div data-label=\"table\" data-bbox=\"0.2220,0.0880,0.7790,0.1850\" data-score=\"0.9961\"><table><tr><td colspan=\"2\">인장 강도 (N/cm2)</td><td colspan=\"2\">인열 강도 (N/cm)</td></tr><tr><td>나비 방향</td><td>길이 방향</td><td>나비 방향</td><td>길이 방향</td></tr><tr><td>196 이상</td><td>236 이상</td><td>89 이상</td><td>196 이상</td></tr></table></div>\n<div data-label=\"text\" data-bbox=\"0.0880,0.2080,0.9080,0.2430\" data-score=\"0.9899\"><p>5.2 비닐바닥시트의 기계·물리적 특성 KS M 3802:2019의 7 에 따라 시험하였을 때 [표 5]와 같아야 한다.</p></div>\n<div data-label=\"table_caption\" data-bbox=\"0.3600,0.2650,0.6350,0.2810\" data-score=\"0.9984\" style=\"font-weight:600;\">[표 5] 비닐바닥시트의 안전요건</div>\n<div data-label=\"table\" data-bbox=\"0.1850,0.2860,0.8140,0.4570\" data-score=\"0.9821\"><table><tr><td>항 목</td><td>종 류</td><td>발포층이 없는 비닐바닥시트</td><td>발포층이 있는 비닐바닥시트</td></tr><tr><td colspan=\"2\">잔류 압입률 (%)</td><td colspan=\"2\">25 이하</td></tr><tr><td colspan=\"2\">가열에 의한 길이 변화율 (%)</td><td colspan=\"2\">2.0 이하</td></tr><tr><td colspan=\"2\">가열 감량률 (%)</td><td colspan=\"2\">2.5 이하</td></tr><tr><td colspan=\"2\">오염성</td><td colspan=\"2\">현저한 색·광택 및 부품이 없어야 한다.</td></tr></table></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.4790,0.9080,0.5150\" data-score=\"0.9956\"><p>5.3 비닐바닥타일의 기계·물리적 특성 KS M 3802:2019의 7 시험에 따라 시험하였을 때 [표 6]과 같아야 한다.</p></div>\n<div data-label=\"table_caption\" data-bbox=\"0.3600,0.5370,0.6350,0.5530\" data-score=\"0.9973\" style=\"font-weight:600;\">[표 6] 비닐바닥타일의 안전요건</div>\n<div data-label=\"table\" data-bbox=\"0.1420,0.5570,0.8590,0.8200\" data-score=\"0.9804\"><table><tr><td>성능 항목</td><td>종 류</td><td>균일질비닐 바닥 타일</td><td>혼합질 비닐 바닥 타일</td></tr><tr><td colspan=\"2\">잔류 압입률 (%)</td><td colspan=\"2\">8.0 이하</td></tr><tr><td colspan=\"2\">가열에 의한 길이 변화율 (%)</td><td>0.25 이하</td><td>0.20 이하</td></tr><tr><td colspan=\"2\">흡수에 의한 길이 변화율 (%)</td><td>-</td><td>0.20 이하</td></tr><tr><td colspan=\"2\">가열 감량률 (%)</td><td colspan=\"2\">0.5 이하</td></tr><tr><td colspan=\"2\">굵기 시험</td><td colspan=\"2\">홈의 나비가 3.1 mm 이하이어야 한다.</td></tr><tr><td colspan=\"2\">오염성</td><td colspan=\"2\">현저한 색·광택의 변화 및 부품이 없어야 한다.</td></tr><tr><td colspan=\"4\">주 1 바닥 타일 중 비닐 적층 타일의 오염성 시험인 경우는 바닥시트의 성능으로 대신할 수 있다.</td></tr></table></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.8430,0.1920,0.8580\" data-score=\"0.9796\"><p>6 검사 방법</p></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.8620,0.4850,0.8770\" data-score=\"0.9997\"><p>6.1 모델의 구분 제품 및 종류에 따라 구분한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.8810,0.7380,0.8960\" data-score=\"0.9873\"><p>6.2 시료채취방법 및 검사방법 4,5 장에 수록된 개별항목의 시험방법에 따른다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.9000,0.9060,0.9340\" data-score=\"0.9950\"><p>6.3 시료크기 및 합부판정조건 시료크기 및 합부판정은 다음 표와 같다. (다만, 합부판정시 표시사항은 제외한다.)</p></div>",
+            "page_visual_summary": "페이지 상단에는 [표 4] 비닐장판의 안전요건이 위치하고 있습니다. 그 아래로 5.2절 비닐바닥시트의 기계·물리적 특성과 관련된 설명 및 [표 5] 비닐바닥시트의 안전요건이 배치되어 있습니다. 이어지는 5.3절에서는 비닐바닥타일의 기계·물리적 특성이 기술되며, [표 6] 비닐바닥타일의 안전요건이 해당 내용을 상세히 설명하고 있습니다. 하단부에는 6절 검사 방법과 그 하위 항목들(모델의 구분, 시료채취방법 및 검사방법, 시료크기 및 합부판정조건)이 순차적으로 배치되어 있습니다.",
+            "element_analysis": [],
+            "unbound_visual_notes": "페이지 상단에는 [표 4] 비닐장판의 안전요건이 위치하고 있습니다. 그 아래로 5.2절 비닐바닥시트의 기계·물리적 특성과 관련된 설명 및 [표 5] 비닐바닥시트의 안전요건이 배치되어 있습니다. 이어지는 5.3절에서는 비닐바닥타일의 기계·물리적 특성이 기술되며, [표 6] 비닐바닥타일의 안전요건이 해당 내용을 상세히 설명하고 있습니다. 하단부에는 6절 검사 방법과 그 하위 항목들(모델의 구분, 시료채취방법 및 검사방법, 시료크기 및 합부판정조건)이 순차적으로 배치되어 있습니다.",
+            "table_markdown": "[표 4] 비닐장판의 안전요건\n| 인장 강도 (N/cm²) | | 인열 강도 (N/cm) | |\n|---|---|---|---|\n| 나비 방향 | 길이 방향 | 나비 방향 | 길이 방향 |\n| 196 이상 | 236 이상 | 89 이상 | 196 이상 |\n\n[표 5] 비닐바닥시트의 안전요건\n| 항목 | 종류 | 발포층이 없는 비닐바닥시트 | 발포층이 있는 비닐바닥시트 |\n|---|---|---|---|\n| 잔류 압입률 (%) | | 25 이하 | |\n| 가열에 의한 길이 변화율 (%) | | 2.0 이하 | |\n| 가열 감량률 (%) | | 2.5 이하 | |\n| 오염성 | | 현저한 색·광택 및 부품이 없어야 한다. | |\n\n[표 6] 비닐바닥타일의 안전요건\n| 성능 항목 | 종류 | 균일질 비닐 바닥 타일 | 혼합질 비닐 바닥 타일 |\n|---|---|---|---|\n| 잔류 압입률 (%) | | 8.0 이하 | |\n| 가열에 의한 길이 변화율 (%) | | 0.25 이하 | 0.20 이하 |\n| 흡수에 의한 길이 변화율 (%) | | - | 0.20 이하 |\n| 가열 감량률 (%) | | 0.5 이하 | |\n| 긁기 시험 | | 흠의 나비가 3.1 mm 이하이어야 한다. | |\n| 오염성 | | 현저한 색·광택의 변화 및 부품이 없어야 한다. | |\n\n주 1 바닥 타일 중 비닐 적층 타일의 오염성 시험인 경우는 바닥시트의 성능으로 대신할 수 있다.",
+            "arbitrated_blocks": 0,
+            "corrected_cells": 0,
+            "format_restored_cells": 0,
+            "name_consistency": null,
+            "applied_rotation": null,
+            "applied_skew": null
+          },
+          {
+            "page_number": 4,
+            "body_html": "<div data-label=\"table\" data-bbox=\"0.1280,0.0670,0.8030,0.1140\" data-score=\"0.9994\"><table><tr><td>검사구분</td><td>시료의 크기(n)</td><td>합격판정갯수(Ac)</td><td>불합격판정갯수(Re)</td></tr><tr><td>안전확인</td><td>1</td><td>0</td><td>1</td></tr></table></div>\n<div data-label=\"text\" data-bbox=\"0.1230,0.1190,0.8480,0.1350\" data-score=\"0.9781\"><p>주 시료의 크기(n) : 동 안전기준을 적용하여 시험하는데 필요한 시료의 최소수량 또는 질량</p></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.1580,0.9070,0.2300\" data-score=\"0.9931\"><p>7 표 시 제품의 최소단위 포장마다 다음 표와 같은 표시를 하여야 한다. 또한 제품 뒷면 보기 쉬운 곳에 쉽게 지워지지 않는 방법으로 KC마크, 용도, 모델명, 제조연월(또는 로트번호) 및 제조자명(또는 수입자명)은 제품의 뒷면 매 1 m 이내 마다(제품 길이가 1 m 이하인 경우 1회) 인쇄 등의 방법으로 지워지지 않게 표시하여야 한다. 다만, 비닐바닥타일은 제품의 뒷면 표시를 생략할 수 있다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.2340,0.3080,0.2490\" data-score=\"0.9981\"><p>7.1 용도 (온돌용/비온돌용)</p></div>\n<div data-label=\"text\" data-bbox=\"0.1140,0.2520,0.6680,0.2690\" data-score=\"0.9364\"><p>*온돌용 제품의 경우 '(비온돌용 겸용)'이라는 문구를 부기할 수 있다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.2720,0.4860,0.2870\" data-score=\"0.9755\"><p>7.2 모델명 (제품 뒷면에 표기 시 약호 사용 가능)</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.2910,0.3100,0.3060\" data-score=\"0.9992\"><p>7.3 치수 (두께, 나비, 길이)</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.3100,0.3130,0.3240\" data-score=\"0.9985\"><p>7.4 제조연월 또는 로트번호</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.3290,0.5030,0.3440\" data-score=\"0.9841\"><p>7.5 제조자명 (제품 뒷면에 표기 시 약호 사용 가능)</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.3480,0.6410,0.3630\" data-score=\"0.9799\"><p>7.6 수입자명 (수입품에 한하며, 제품 뒷면에 표기 시 약호 사용 가능)</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.3670,0.7170,0.3820\" data-score=\"0.9974\"><p>7.7 주소 또는 전화번호(국내 제조품은 국내 제조자, 수입품인 경우에는 수입자)</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.3860,0.4860,0.4010\" data-score=\"0.9856\"><p>7.8 제조국명 (수입품은 대외 무역법에 의거 표기)</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.4050,0.2540,0.4200\" data-score=\"0.9344\"><p>7.9 사용상 주의사항</p></div>\n<div data-label=\"text\" data-bbox=\"0.1380,0.7940,0.5910,0.8100\" data-score=\"0.9607\"><p>제정: 기술표준원고시 제2012-175호(2012. 4.25)</p></div>\n<div data-label=\"text\" data-bbox=\"0.1390,0.8140,0.5910,0.8290\" data-score=\"0.9775\"><p>개정: 기술표준원고시 제2012-800호(2012.12.21)</p></div>\n<div data-label=\"text\" data-bbox=\"0.1400,0.8330,0.5900,0.8480\" data-score=\"0.9760\"><p>개정: 국가기술표준원고시 제2015-693호(2015.12.31)</p></div>\n<div data-label=\"text\" data-bbox=\"0.1400,0.8520,0.5900,0.8670\" data-score=\"0.9507\"><p>개정: 국가기술표준원고시 제2017-020호(2017. 1.31)</p></div>\n<div data-label=\"text\" data-bbox=\"0.1400,0.8710,0.5820,0.8860\" data-score=\"0.9473\"><p>개정: 국가기술표준원고시 제2017-032호(2017. 2.8)</p></div>\n<div data-label=\"text\" data-bbox=\"0.1400,0.8900,0.5900,0.9050\" data-score=\"0.9590\"><p>개정: 국가기술표준원고시 제2020-146호(2020.7.24)</p></div>\n<div data-label=\"text\" data-bbox=\"0.1400,0.9090,0.5980,0.9240\" data-score=\"0.9672\"><p>개정: 국가기술표준원고시 제2022-457호(2022.10.18)</p></div>\n<div data-label=\"text\" data-bbox=\"0.1400,0.9280,0.5820,0.9430\" data-score=\"0.9754\"><p>개정: 국가기술표준원고시 제2023-330호(2023.9.1)</p></div>",
+            "page_visual_summary": "문서의 하단에 있는 수정 이력 표(제정 및개정 목록)는 상단의 표시 규정을 포함한 본문 내용(7호 시 등)을 보충하는 문서의 관리 정보를 제공합니다.",
+            "element_analysis": [],
+            "unbound_visual_notes": "문서의 하단에 있는 수정 이력 표(제정 및개정 목록)는 상단의 표시 규정을 포함한 본문 내용(7호 시 등)을 보충하는 문서의 관리 정보를 제공합니다.",
+            "table_markdown": "| 검사구분 | 시료의 크기(n) | 합격판정갯수(Ac) | 불합격판정갯수(Re) |\n|---|---|---|---|\n| 안전확인 | 1 | 0 | 1 |\n\n주 시료의 크기(n): 동 안전기준을 적용하여 시험하는데 필요한 시료의 최소수량 또는 질량\n\n| 제 정 : 기술표준원고시 제2012-175호(2012. 4.25) |\n| 개 정 : 기술표준원고시 제2012-800호(2012.12.21) |\n| 개 정 : 국가기술표준원고시 제2015-693호(2015.12.31) |\n| 개 정 : 국가기술표준원고시 제2017-020호(2017. 1.31) |\n| 개 정 : 국가기술표준원고시 제2017-032호(2017. 2.8) |\n| 개 정 : 국가기술표준원고시 제2020-146호(2020. 7.24) |\n| 개 정 : 국가기술표준원고시 제2022-457호(2022. 10.18) |\n| 개 정 : 국가기술표준원고시 제2023-330호(2023.9.1 ) |",
+            "arbitrated_blocks": 0,
+            "corrected_cells": 0,
+            "format_restored_cells": 0,
+            "name_consistency": null,
+            "applied_rotation": null,
+            "applied_skew": null
+          }
+        ]
+      },
+      "page_classifier": null
+    },
+    "latency_seconds": 7.304418,
+    "parsing_cost": 0.191121
+  },
+  "error_message": null
+}
