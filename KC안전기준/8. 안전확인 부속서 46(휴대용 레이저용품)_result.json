@@ -1,0 +1,1494 @@
+{
+  "batch_id": "ec4c73f8aa5a47abb9e5b321a81c4471",
+  "status": "completed",
+  "applied_fixes": null,
+  "filename": "8. 안전확인 부속서 46(휴대용 레이저용품).pdf",
+  "mode": "onprem_compose",
+  "tagger": "hierarchy",
+  "translation_ko": false,
+  "total_pages": 3,
+  "total_chunks": 3,
+  "total_latency_seconds": 5.078477,
+  "result": {
+    "filename": "8. 안전확인 부속서 46(휴대용 레이저용품).pdf",
+    "content": {
+      "ocr": {
+        "provider": "ocr_model_onprem",
+        "model": "ocr_model_onprem",
+        "text": "<div data-label=\"title\" data-bbox=\"0.3850,0.1030,0.6140,0.1200\" data-score=\"0.9441\"><h1>안전확인 안전기준</h1></div>\n<div data-label=\"title\" data-bbox=\"0.3970,0.1490,0.6010,0.1690\" data-score=\"0.9984\"><h1>휴대용 레이저용품</h1></div>\n<div data-label=\"title\" data-bbox=\"0.7410,0.1490,0.8560,0.1690\" data-score=\"0.9999\"><h1>부속서 46</h1></div>\n<div data-label=\"text\" data-bbox=\"0.3990,0.1940,0.5990,0.2080\" data-score=\"0.9768\"><p>(Portable Laser Devices)</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.2560,0.9070,0.3490\" data-score=\"0.9867\"><p>1. 적용범위 이 기준은 휴대용 레이저용품의 안전요건 및 시험방법, 표시사항 등에 대하여 규정한다. 휴대용 레이저용품이란 레이저를 외부로 방사하도록 고안된 휴대용 장치를 말하며, 배터리와 같은 운반이 가능한 전원을 사용하여 쉽게 들고 이동이 가능한 제품을 휴대용으로 간주한다. 본 기준은 가시광선 레이저(파장범위 400-700 nm)를 출력하는 기기에 대해서 적용하며, 아래와 같은 제품들은 대상범위에서 제외한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.0910,0.3510,0.1970,0.3660\" data-score=\"0.9989\"><h1>1.1 제외품목</h1></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.3700,0.9070,0.4060\" data-score=\"0.9943\"><p>1.1.1 전기용품 및 생활용품 안전관리법상의 다른 안전기준 부속서 및 의료기기법 등 다른 법에서 안전관리대상으로 지정된 제품은 제외한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.4080,0.9060,0.4440\" data-score=\"0.9960\"><p>1.1.2. 제품의 용도가 산업용, 사업자용, 공연용, 군용인 것은 제외한다. 단, 일반 소비자의 사용이 예상되는 범용성이 있는 제품이나 일반 소비자가 사용하는 것을 전제로 판매·홍보 된 제품은 대상으로 한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.4650,0.9060,0.5000\" data-score=\"0.9826\"><p>2. 관련표준 다음의 표준은 이 기준에 인용됨으로서 이 기준의 규정 일부를 구성한다. 이러한 인용표준은 그 최신판을 적용한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1060,0.5040,0.3460,0.5180\" data-score=\"0.9970\"><p>KS Q 1003 랜덤 샘플링 방법</p></div>\n<div data-label=\"text\" data-bbox=\"0.1060,0.5220,0.8070,0.5380\" data-score=\"0.9986\"><p>KS C IEC 60825-1 레이저 제품의 안전성-제1부: 장비등급분류, 요구사항 및 사용자 지침</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.5600,0.5020,0.5760\" data-score=\"0.9990\"><p>3. 종류 종류는 용도에 따라 다음과 같이 구분한다.</p></div>\n<div data-label=\"table\" data-bbox=\"0.1390,0.5810,0.8600,0.7450\" data-score=\"0.9921\"><table><tr><td>종류</td><td>용도</td></tr><tr><td>A종</td><td>레이저 포인터 (물체나 위치를 가리키기 위한 레이저용품)</td></tr><tr><td>B종</td><td>A종이 아닌 휴대용 레이저용품예) 측정기기(거리측정기, 각도기 등), 레저용 제품(자전거 레이저 후미등, 골프용 레이저, 당구용 레이저 등), 사무용품(프로젝션 키보드, 가위용 라인레이저 등), 장난감·오락용 제품 (애완동물용 자동 레이저 등), 교육용 제품(레이저 실험기기 등)</td></tr></table></div>\n<div data-label=\"title\" data-bbox=\"0.0900,0.7690,0.2230,0.7840\" data-score=\"0.9556\"><h1>4. 안전요구사항</h1></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.7880,0.6960,0.8030\" data-score=\"0.9196\"><p>4.1 겉모양 흡,오염,비틀림,변형,날카로움 등 사용상 결함이 없어야 한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.0910,0.8070,0.1610,0.8210\" data-score=\"0.9998\"><h1>4.2 구조</h1></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.8260,0.5120,0.8410\" data-score=\"0.9995\"><p>4.2.1 레이저의 출력안정화회로를 갖추고 있어야 한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.8450,0.9050,0.8790\" data-score=\"0.9929\"><p>4.2.2 A종의 휴대용 레이저용품에는 스위치의 통전상태를 유지하는 기능이 없어야 한다. (수동으로 통전상태를 유지하는 기능은 허용된다.)</p></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.8830,0.9050,0.8980\" data-score=\"0.9864\"><p>4.2.3 B종의 휴대용 레이저용품에는 스위치의 통전상태를 유지하는 기능이 허용된다. 이 기능이 있는 경</p></div>\n\n<div data-label=\"text\" data-bbox=\"0.0900,0.0990,0.9060,0.1340\" data-score=\"0.9748\"><p>우, 통전 중에 레이저 등급은 4.3을 만족해야 한다. 또, 레이저가 사용자의 조작 없이 스스로 끼지는 기능이 있는 경우, 사용자의 추가 조작 없이 레이저가 다시 자동으로 쳐지는 것은 허용되지 않는다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.0900,0.1560,0.2400,0.1710\" data-score=\"0.9996\"><h1>4.3 레이저의 등급</h1></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.1750,0.8280,0.1910\" data-score=\"0.9978\"><p>4.3.1 A종, B종 레이저제품의 등급분류 중 1급 레이저 제품 또는 2급 레이저 제품이어야 한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.0900,0.2130,0.1870,0.2280\" data-score=\"0.9712\"><h1>5. 시험방법</h1></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.2320,0.4100,0.2460\" data-score=\"0.9391\"><p>5.1 결모양 육안 및 촉감으로 확인한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.2510,0.3250,0.2660\" data-score=\"0.9995\"><p>5.2 구조 육안으로 확인한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.2700,0.7780,0.2850\" data-score=\"0.9989\"><p>5.3 레이저의 등급 KS C IEC 60825-1의 레이저제품의 등급 분류방법에 따라 시험한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.0900,0.3080,0.1870,0.3230\" data-score=\"0.9482\"><h1>6. 검사방법</h1></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.3270,0.8310,0.3420\" data-score=\"0.9907\"><p>6.1 모델의 구분 휴대용레이저용품의 모델은 종류별, 형식별, 재질별, 모양별 등으로 구분한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.3460,0.6280,0.3610\" data-score=\"0.9977\"><p>6.2 시료채취방법 필요한 경우 시료는 KS Q 1003에 따라 채취한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.3650,0.9050,0.3990\" data-score=\"0.9943\"><p>6.3 시료크기 및 합부판정 조건 시료의 크기 및 합부 판정은 다음 표와 같다. 다만, 합부판정시 표시 사항은 제외한다.</p></div>\n<div data-label=\"table\" data-bbox=\"0.1410,0.4050,0.8590,0.4640\" data-score=\"0.9965\"><table><tr><td>검사구분</td><td>시료의 크기(n)</td><td>합격판정갯수(Ac)</td><td>불합격판정갯수(Re)</td></tr><tr><td>안전확인</td><td>1</td><td>0</td><td>1</td></tr></table></div>\n<div data-label=\"text\" data-bbox=\"0.0990,0.4690,0.8250,0.4850\" data-score=\"0.9684\"><p>주) 시료의 크기(n): 동 안전기준을 적용하여 시험하는데 필요한 시료의 최소수량 또는 질량</p></div>\n<div data-label=\"title\" data-bbox=\"0.0910,0.5070,0.1890,0.5220\" data-score=\"0.9976\"><h1>7. 표시사항</h1></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.5260,0.9050,0.5600\" data-score=\"0.9894\"><p>7.1 표 시 제품 또는 최소단위 포장마다 소비자가 보기 쉬운 곳에 쉽게 지워지지 않는 방법으로 다음의 사항을 표시한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.5640,0.6550,0.5790\" data-score=\"0.9996\"><p>7.1.1 품명(시행규칙의 표시사항과 동일 위치에 표시하는 경우 생략가능)</p></div>\n<div data-label=\"text\" data-bbox=\"0.0910,0.5830,0.1720,0.5980\" data-score=\"0.9999\"><p>7.1.2 종류</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.6020,0.6710,0.6170\" data-score=\"0.9990\"><p>7.1.3 모델명(시행규칙의 표시사항과 동일 위치에 표시하는 경우 생략가능)</p></div>\n<div data-label=\"text\" data-bbox=\"0.0910,0.6210,0.2050,0.6360\" data-score=\"0.9994\"><p>7.1.4 제조연월</p></div>\n<div data-label=\"text\" data-bbox=\"0.0910,0.6400,0.2050,0.6550\" data-score=\"0.9997\"><p>7.1.5 제조자명</p></div>\n<div data-label=\"text\" data-bbox=\"0.0910,0.6590,0.3310,0.6740\" data-score=\"0.9988\"><p>7.1.6. 수입자명(수입품에 한함)</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.6780,0.7260,0.6930\" data-score=\"0.9976\"><p>7.1.7 주소 및 전화번호(국내 제조제품은 국내 제조자, 수입품인 경우에는 수입자)</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.6970,0.7010,0.7120\" data-score=\"0.9991\"><p>7.1.8 제조국명(국내 제조제품은 생략 가능, 수입품은 대외무역법에 의거 표시)</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.7160,0.7830,0.7310\" data-score=\"0.9829\"><p>7.1.9사용상 주의사항 주의사항의 위치, 내용 및 형태를 확실히 눈에 뜨게 하여야 한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0910,0.7350,0.3910,0.7500\" data-score=\"0.9977\"><p>7.1.9.1 레이저광을 들여다보지 마시오.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.7540,0.4330,0.7690\" data-score=\"0.9994\"><p>7.1.9.2 레이저광을 사람에게 향하지 마시오.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.7730,0.5880,0.7880\" data-score=\"0.9701\"><p>7.1.9.3만 19세 미만의 청소년,어린이가 사용하지 않게 하시오.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.7920,0.8700,0.8070\" data-score=\"0.9983\"><p>7.2 경고라벨 등급별 경고라벨 도안과 이에 대한 부착위치는 KS C IEC 60825-1의 요구사항을 따른다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.8110,0.9070,0.8450\" data-score=\"0.9902\"><p>7.3 기타 주의사항 7.1.9 사용상 주의사항 이외의 기타 주의사항에 관련된 정보를 제품(또는 최소단위 포장) 또는 설명서에 제공해야 한다. 그 내용은 KS C IEC 60825-1의 관련 요구사항을 따른다.</p></div>\n\n<div data-label=\"text\" data-bbox=\"0.1140,0.1060,0.5310,0.1220\" data-score=\"0.9455\"><p>제정: 기술표준원고시 제2007-34호(2007.1.24)</p></div>\n<div data-label=\"text\" data-bbox=\"0.1140,0.1260,0.5560,0.1410\" data-score=\"0.9601\"><p>개정: 기술표준원고시 제2008-1019호(2008. 12. 31)</p></div>\n<div data-label=\"text\" data-bbox=\"0.1140,0.1450,0.5490,0.1600\" data-score=\"0.9487\"><p>개정: 기술표준원고시 제2009-978호(2009. 12. 30)</p></div>\n<div data-label=\"text\" data-bbox=\"0.1140,0.1640,0.5730,0.1790\" data-score=\"0.9514\"><p>개정: 국가기술표준원고시 제2017-032호 (2017. 2. 8)</p></div>\n<div data-label=\"text\" data-bbox=\"0.1140,0.1830,0.5900,0.1980\" data-score=\"0.9584\"><p>개정: 국가기술표준원고시 제2022-0035호 (2022. 3. 11)</p></div>",
+        "text_ko": null,
+        "pages": [
+          {
+            "page_number": 1,
+            "part_number": null,
+            "text": "<div data-label=\"title\" data-bbox=\"0.3850,0.1030,0.6140,0.1200\" data-score=\"0.9441\"><h1>안전확인 안전기준</h1></div>\n<div data-label=\"title\" data-bbox=\"0.3970,0.1490,0.6010,0.1690\" data-score=\"0.9984\"><h1>휴대용 레이저용품</h1></div>\n<div data-label=\"title\" data-bbox=\"0.7410,0.1490,0.8560,0.1690\" data-score=\"0.9999\"><h1>부속서 46</h1></div>\n<div data-label=\"text\" data-bbox=\"0.3990,0.1940,0.5990,0.2080\" data-score=\"0.9768\"><p>(Portable Laser Devices)</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.2560,0.9070,0.3490\" data-score=\"0.9867\"><p>1. 적용범위 이 기준은 휴대용 레이저용품의 안전요건 및 시험방법, 표시사항 등에 대하여 규정한다. 휴대용 레이저용품이란 레이저를 외부로 방사하도록 고안된 휴대용 장치를 말하며, 배터리와 같은 운반이 가능한 전원을 사용하여 쉽게 들고 이동이 가능한 제품을 휴대용으로 간주한다. 본 기준은 가시광선 레이저(파장범위 400-700 nm)를 출력하는 기기에 대해서 적용하며, 아래와 같은 제품들은 대상범위에서 제외한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.0910,0.3510,0.1970,0.3660\" data-score=\"0.9989\"><h1>1.1 제외품목</h1></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.3700,0.9070,0.4060\" data-score=\"0.9943\"><p>1.1.1 전기용품 및 생활용품 안전관리법상의 다른 안전기준 부속서 및 의료기기법 등 다른 법에서 안전관리대상으로 지정된 제품은 제외한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.4080,0.9060,0.4440\" data-score=\"0.9960\"><p>1.1.2. 제품의 용도가 산업용, 사업자용, 공연용, 군용인 것은 제외한다. 단, 일반 소비자의 사용이 예상되는 범용성이 있는 제품이나 일반 소비자가 사용하는 것을 전제로 판매·홍보 된 제품은 대상으로 한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.4650,0.9060,0.5000\" data-score=\"0.9826\"><p>2. 관련표준 다음의 표준은 이 기준에 인용됨으로서 이 기준의 규정 일부를 구성한다. 이러한 인용표준은 그 최신판을 적용한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1060,0.5040,0.3460,0.5180\" data-score=\"0.9970\"><p>KS Q 1003 랜덤 샘플링 방법</p></div>\n<div data-label=\"text\" data-bbox=\"0.1060,0.5220,0.8070,0.5380\" data-score=\"0.9986\"><p>KS C IEC 60825-1 레이저 제품의 안전성-제1부: 장비등급분류, 요구사항 및 사용자 지침</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.5600,0.5020,0.5760\" data-score=\"0.9990\"><p>3. 종류 종류는 용도에 따라 다음과 같이 구분한다.</p></div>\n<div data-label=\"table\" data-bbox=\"0.1390,0.5810,0.8600,0.7450\" data-score=\"0.9921\"><table><tr><td>종류</td><td>용도</td></tr><tr><td>A종</td><td>레이저 포인터 (물체나 위치를 가리키기 위한 레이저용품)</td></tr><tr><td>B종</td><td>A종이 아닌 휴대용 레이저용품예) 측정기기(거리측정기, 각도기 등), 레저용 제품(자전거 레이저 후미등, 골프용 레이저, 당구용 레이저 등), 사무용품(프로젝션 키보드, 가위용 라인레이저 등), 장난감·오락용 제품 (애완동물용 자동 레이저 등), 교육용 제품(레이저 실험기기 등)</td></tr></table></div>\n<div data-label=\"title\" data-bbox=\"0.0900,0.7690,0.2230,0.7840\" data-score=\"0.9556\"><h1>4. 안전요구사항</h1></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.7880,0.6960,0.8030\" data-score=\"0.9196\"><p>4.1 겉모양 흡,오염,비틀림,변형,날카로움 등 사용상 결함이 없어야 한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.0910,0.8070,0.1610,0.8210\" data-score=\"0.9998\"><h1>4.2 구조</h1></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.8260,0.5120,0.8410\" data-score=\"0.9995\"><p>4.2.1 레이저의 출력안정화회로를 갖추고 있어야 한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.8450,0.9050,0.8790\" data-score=\"0.9929\"><p>4.2.2 A종의 휴대용 레이저용품에는 스위치의 통전상태를 유지하는 기능이 없어야 한다. (수동으로 통전상태를 유지하는 기능은 허용된다.)</p></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.8830,0.9050,0.8980\" data-score=\"0.9864\"><p>4.2.3 B종의 휴대용 레이저용품에는 스위치의 통전상태를 유지하는 기능이 허용된다. 이 기능이 있는 경</p></div>",
+            "text_ko": null,
+            "links": null,
+            "confidence": 0.9852
+          },
+          {
+            "page_number": 2,
+            "part_number": null,
+            "text": "<div data-label=\"text\" data-bbox=\"0.0900,0.0990,0.9060,0.1340\" data-score=\"0.9748\"><p>우, 통전 중에 레이저 등급은 4.3을 만족해야 한다. 또, 레이저가 사용자의 조작 없이 스스로 끼지는 기능이 있는 경우, 사용자의 추가 조작 없이 레이저가 다시 자동으로 쳐지는 것은 허용되지 않는다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.0900,0.1560,0.2400,0.1710\" data-score=\"0.9996\"><h1>4.3 레이저의 등급</h1></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.1750,0.8280,0.1910\" data-score=\"0.9978\"><p>4.3.1 A종, B종 레이저제품의 등급분류 중 1급 레이저 제품 또는 2급 레이저 제품이어야 한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.0900,0.2130,0.1870,0.2280\" data-score=\"0.9712\"><h1>5. 시험방법</h1></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.2320,0.4100,0.2460\" data-score=\"0.9391\"><p>5.1 결모양 육안 및 촉감으로 확인한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.2510,0.3250,0.2660\" data-score=\"0.9995\"><p>5.2 구조 육안으로 확인한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.2700,0.7780,0.2850\" data-score=\"0.9989\"><p>5.3 레이저의 등급 KS C IEC 60825-1의 레이저제품의 등급 분류방법에 따라 시험한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.0900,0.3080,0.1870,0.3230\" data-score=\"0.9482\"><h1>6. 검사방법</h1></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.3270,0.8310,0.3420\" data-score=\"0.9907\"><p>6.1 모델의 구분 휴대용레이저용품의 모델은 종류별, 형식별, 재질별, 모양별 등으로 구분한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.3460,0.6280,0.3610\" data-score=\"0.9977\"><p>6.2 시료채취방법 필요한 경우 시료는 KS Q 1003에 따라 채취한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.3650,0.9050,0.3990\" data-score=\"0.9943\"><p>6.3 시료크기 및 합부판정 조건 시료의 크기 및 합부 판정은 다음 표와 같다. 다만, 합부판정시 표시 사항은 제외한다.</p></div>\n<div data-label=\"table\" data-bbox=\"0.1410,0.4050,0.8590,0.4640\" data-score=\"0.9965\"><table><tr><td>검사구분</td><td>시료의 크기(n)</td><td>합격판정갯수(Ac)</td><td>불합격판정갯수(Re)</td></tr><tr><td>안전확인</td><td>1</td><td>0</td><td>1</td></tr></table></div>\n<div data-label=\"text\" data-bbox=\"0.0990,0.4690,0.8250,0.4850\" data-score=\"0.9684\"><p>주) 시료의 크기(n): 동 안전기준을 적용하여 시험하는데 필요한 시료의 최소수량 또는 질량</p></div>\n<div data-label=\"title\" data-bbox=\"0.0910,0.5070,0.1890,0.5220\" data-score=\"0.9976\"><h1>7. 표시사항</h1></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.5260,0.9050,0.5600\" data-score=\"0.9894\"><p>7.1 표 시 제품 또는 최소단위 포장마다 소비자가 보기 쉬운 곳에 쉽게 지워지지 않는 방법으로 다음의 사항을 표시한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.5640,0.6550,0.5790\" data-score=\"0.9996\"><p>7.1.1 품명(시행규칙의 표시사항과 동일 위치에 표시하는 경우 생략가능)</p></div>\n<div data-label=\"text\" data-bbox=\"0.0910,0.5830,0.1720,0.5980\" data-score=\"0.9999\"><p>7.1.2 종류</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.6020,0.6710,0.6170\" data-score=\"0.9990\"><p>7.1.3 모델명(시행규칙의 표시사항과 동일 위치에 표시하는 경우 생략가능)</p></div>\n<div data-label=\"text\" data-bbox=\"0.0910,0.6210,0.2050,0.6360\" data-score=\"0.9994\"><p>7.1.4 제조연월</p></div>\n<div data-label=\"text\" data-bbox=\"0.0910,0.6400,0.2050,0.6550\" data-score=\"0.9997\"><p>7.1.5 제조자명</p></div>\n<div data-label=\"text\" data-bbox=\"0.0910,0.6590,0.3310,0.6740\" data-score=\"0.9988\"><p>7.1.6. 수입자명(수입품에 한함)</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.6780,0.7260,0.6930\" data-score=\"0.9976\"><p>7.1.7 주소 및 전화번호(국내 제조제품은 국내 제조자, 수입품인 경우에는 수입자)</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.6970,0.7010,0.7120\" data-score=\"0.9991\"><p>7.1.8 제조국명(국내 제조제품은 생략 가능, 수입품은 대외무역법에 의거 표시)</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.7160,0.7830,0.7310\" data-score=\"0.9829\"><p>7.1.9사용상 주의사항 주의사항의 위치, 내용 및 형태를 확실히 눈에 뜨게 하여야 한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0910,0.7350,0.3910,0.7500\" data-score=\"0.9977\"><p>7.1.9.1 레이저광을 들여다보지 마시오.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.7540,0.4330,0.7690\" data-score=\"0.9994\"><p>7.1.9.2 레이저광을 사람에게 향하지 마시오.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.7730,0.5880,0.7880\" data-score=\"0.9701\"><p>7.1.9.3만 19세 미만의 청소년,어린이가 사용하지 않게 하시오.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.7920,0.8700,0.8070\" data-score=\"0.9983\"><p>7.2 경고라벨 등급별 경고라벨 도안과 이에 대한 부착위치는 KS C IEC 60825-1의 요구사항을 따른다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.8110,0.9070,0.8450\" data-score=\"0.9902\"><p>7.3 기타 주의사항 7.1.9 사용상 주의사항 이외의 기타 주의사항에 관련된 정보를 제품(또는 최소단위 포장) 또는 설명서에 제공해야 한다. 그 내용은 KS C IEC 60825-1의 관련 요구사항을 따른다.</p></div>",
+            "text_ko": null,
+            "links": null,
+            "confidence": 0.9895
+          },
+          {
+            "page_number": 3,
+            "part_number": null,
+            "text": "<div data-label=\"text\" data-bbox=\"0.1140,0.1060,0.5310,0.1220\" data-score=\"0.9455\"><p>제정: 기술표준원고시 제2007-34호(2007.1.24)</p></div>\n<div data-label=\"text\" data-bbox=\"0.1140,0.1260,0.5560,0.1410\" data-score=\"0.9601\"><p>개정: 기술표준원고시 제2008-1019호(2008. 12. 31)</p></div>\n<div data-label=\"text\" data-bbox=\"0.1140,0.1450,0.5490,0.1600\" data-score=\"0.9487\"><p>개정: 기술표준원고시 제2009-978호(2009. 12. 30)</p></div>\n<div data-label=\"text\" data-bbox=\"0.1140,0.1640,0.5730,0.1790\" data-score=\"0.9514\"><p>개정: 국가기술표준원고시 제2017-032호 (2017. 2. 8)</p></div>\n<div data-label=\"text\" data-bbox=\"0.1140,0.1830,0.5900,0.1980\" data-score=\"0.9584\"><p>개정: 국가기술표준원고시 제2022-0035호 (2022. 3. 11)</p></div>",
+            "text_ko": null,
+            "links": null,
+            "confidence": 0.9528
+          }
+        ],
+        "latency_seconds": 4.356691577001129,
+        "confidence": 0.9758,
+        "truncated": false,
+        "full_text_length": null
+      },
+      "caption": {
+        "provider": "inference_provider",
+        "model": "caption_model_onprem",
+        "pages": [
+          {
+            "page_number": 1,
+            "part_number": null,
+            "entities": {
+              "text": "안전확인 안전기준\n휴대용 레이저용품 부속서 46\n(Portable Laser Devices)\n1. 적용범위 이 기준은 휴대용 레이저용품의 안전요건 및 시험방법, 표시사항 등에 대하여 규정한다.\n휴대용 레이저용품이란 레이저를 외부로 방사하도록 고안된 휴대용 장치를 말하며, 배터리와 같은 운반이 가능한 전원을 사용하여 쉽게 들고 이동이 가능한 제품을 휴대용으로 간주한다. 본 기준은 가시광선 레이저(파장범위 400~700 nm)를 출력하는 기기에 대해서 적용하며, 아래와 같은 제품들은 대상범위에서 제외한다.\n1.1 제외품목\n1.1.1 전기용품 및 생활용품 안전관리법상의 다른 안전기준 부속서 및 의료기기법 등 다른 법에서 안전 관리대상으로 지정된 제품은 제외한다.\n1.1.2. 제품의 용도가 산업용, 사업자용, 공연용, 군용인 것은 제외한다. 단, 일반 소비자의 사용이 예상되는 범용성이 있는 제품이나 일반 소비자가 사용하는 것을 전제로 판매·홍보 된 제품은 대상으로 한다.\n2. 관련표준 다음의 표준은 이 기준에 인용됨으로서 이 기준의 규정 일부를 구성한다. 이러한 인용표준은 그 최신판을 적용한다.\nKS Q 1003 랜덤 샘플링 방법\nKS C IEC 60825-1 레이저 제품의 안전성-제1부: 장비등급분류, 요구사항 및 사용자 지침\n3. 종류 종류는 용도에 따라 다음과 같이 구분한다.\n4. 안전요구사항\n4.1 결모양 홈, 오염, 비틀림, 변형, 날카로움 등 사용상 결함이 없어야 한다.\n4.2 구조\n4.2.1 레이저의 출력안정화회로를 갖추고 있어야 한다.\n4.2.2 A종의 휴대용 레이저용품에는 스위치의 통전상태를 유지하는 기능이 없어야 한다. (수동으로 통전 상태를 유지하는 기능은 허용된다.)\n4.2.3 B종의 휴대용 레이저용품에는 스위치의 통전상태를 유지하는 기능이 허용된다. 이 기능이 있는 경",
+              "graph": "",
+              "diagram": "",
+              "image_overview": "",
+              "table_markdown": "| 종류 | 용도 |\n|---|---|\n| A종 | 레이저 포인터 (물체나 위치를 가리키기 위한 레이저용품) |\n| B종 | A종이 아닌 휴대용 레이저용품\n예) 측정기기(거리측정기, 각도기 등), 레저용 제품(자전거 레이저 후미등, 골프용 레이저, 당구용 레이저 등), 사무용품(프로젝션 키보드, 가위용 라인레이저 등), 장난감·오락용 제품 (애완동물용 자동 레이저 등), 교육용 제품(레이저 실험기기 등)",
+              "visual_elements": "페이지 상단에는 제목과 괄호 안의 영어 텍스트가 배치되어 있고, 그 아래로 번호가 매겨진 본문 항목들이 순차적으로 나열되어 있습니다. 본문 중간에는 '3. 종류' 섹션에 표가 포함되어 있으며, 이는 용도별 분류를 시각화한 것입니다."
+            },
+            "entities_ko": null
+          },
+          {
+            "page_number": 2,
+            "part_number": null,
+            "entities": {
+              "text": "우, 통전 중에 레이저 등급은 4.3을 만족해야 한다. 또, 레이저가 사용자의 조작 없이 스스로 꺼지는 기능이 있는 경우, 사용자의 추가 조작 없이 레이저가 다시 자동으로 커지는 것은 허용되지 않는다.\n\n4.3 레이저의 등급\n4.3.1 A종, B종 레이저제품의 등급분류 중 1급 레이저 제품 또는 2급 레이저 제품이여야 한다.\n\n5. 시험방법\n5.1 겉모양 육안 및 촉감으로 확인한다.\n5.2 구조 육안으로 확인한다.\n5.3 레이저의 등급 KS C IEC 60825-1의 레이저제품의 등급 분류방법에 따라 시험한다.\n\n6. 검사방법\n6.1 모델의 구분 휴대용레이저용품의 모델은 종류별, 형식별, 재질별, 모양별 등으로 구분한다.\n6.2 시료채취방법 필요한 경우 시료는 KS Q 1003에 따라 채취한다.\n6.3 시료크기 및 합부판정 조건 시료의 크기 및 합부 판정은 다음 표와 같다. 다만, 합부판정시 표시사항은 제외한다.\n\n주) 시료의 크기(n) : 동 안전기준을 적용하여 시험하는데 필요한 시료의 최소수량 또는 질량\n\n7. 표시사항\n7.1 표 시 제품 또는 최소단위 포장마다 소비자가 보기 쉬운 곳에 쉽게 지워지지 않는 방법으로 다음의 사항을 표시한다.\n7.1.1 품명(시행규칙의 표시사항과 동일 위치에 표시하는 경우 생략가능)\n7.1.2 종류\n7.1.3 모델명(시행규칙의 표시사항과 동일 위치에 표시하는 경우 생략가능)\n7.1.4 제조연월\n7.1.5制造자명\n7.1.6 수입자명(수입품에 한함)\n7.1.7 주소 및 전화번호(국내 제조제품은 국내 제조자, 수입품인 경우에는 수입자)\n7.1.8 제조국명(국내 제조제품은 생략 가능, 수입품은 대외무역법에 의거 표시)\n7.1.9 사용상 주의사항 주의사항의 위치, 내용 및 형태를 확실히 눈에 띄게 하여야 한다.\n7.1.9.1 레이저광을 들여다보지 마시오.\n7.1.9.2 레이저광을 사람에게 향하지 마시오.\n7.1.9.3 만 19세 미만의 청소년, 어린이가 사용하지 않게 하시오.\n7.2 경고라벨 등급별 경고라벨 도안과 이에 대한 부착위치KS C IEC 60825-1의 요구사항을 따른다.\n7.3 기타 주의사항 7.1.9 사용상 주의사항 이외의 기타 주의사항에 관련된 정보를 제품(또는 최소단위 포장) 또는 설명서에 제공해야 한다. 그 내용은 KS C IEC 60825-1의 관련 요구사항을 따른다.",
+              "graph": "",
+              "diagram": "",
+              "image_overview": "",
+              "table_markdown": "| 검사구분 | 시료의 크기(n) | 합격판정갯수(Ac) | 불합격판정갯수(Re) |\n|---|---|---|---|\n| 안전확인 | 1 | 0 | 1 |",
+              "visual_elements": ""
+            },
+            "entities_ko": null
+          },
+          {
+            "page_number": 3,
+            "part_number": null,
+            "entities": {
+              "text": "",
+              "graph": "",
+              "diagram": "",
+              "image_overview": "",
+              "table_markdown": "| 제\n정 : | 기술표준원고시 | 제2007-34호(2007. 1. 24) |\n|---|---|---|\n| 개\n정 : | 기술표준원고시 | 제2008-1019호(2008. 12. 31) |\n| 개\n정 : | 기술표준원고시 | 제2009-978호(2009. 12. 30) |\n| 개\n정 : | 국가기술표준원고시 | 제2017-032호 (2017. 2. 8) |\n| 개\n정 : | 국가기술표준원고시 | 제2022-0035호 (2022. 3. 11) |",
+              "visual_elements": ""
+            },
+            "entities_ko": null
+          }
+        ],
+        "latency_seconds": 8.112384315000327
+      },
+      "tagger": {
+        "provider": "hierarchy",
+        "model": "hierarchy-ko",
+        "pages": [
+          {
+            "page_number": 1,
+            "part_number": null,
+            "keywords": [],
+            "summary": null,
+            "hierarchy": [
+              {
+                "x0": 0.09,
+                "text": "이 기준은 휴대용 레이저용품의 안전요건 및 시험방법, 표시사항 등에 대하여 규정한다. 휴대용 레이저용품이란 레이저를 외부로 방사하도록 고안된 휴대용 장치를 말하며, 배터리와 같은 운반이 가능한 전원을 사용하여 쉽게 들고 이동이 가능한 제품을 휴대용으로 간주한다. 본 기준은 가시광선 레이저(파장범위 400-700 nm)를 출력하는 기기에 대해서 적용하며, 아래와 같은 제품들은 대상범위에서 제외한다.",
+                "type": "section",
+                "title": "적용범위",
+                "marker": "1",
+                "confidence": 0.9867,
+                "level_code": "L3",
+                "level_name": "절"
+              },
+              {
+                "x0": 0.091,
+                "type": "subsection",
+                "title": "제외품목",
+                "marker": "1.1",
+                "breadcrumb": [
+                  "1"
+                ],
+                "confidence": 0.9989,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "x0": 0.09,
+                "text": "전기용품 및 생활용품 안전관리법상의 다른 안전기준 부속서 및 의료기기법 등 다른 법에서 안전관리대상으로 지정된 제품은 제외한다.",
+                "type": "subsubsection",
+                "title": "전기용품 및 생활용품 안전관리법상의 다른 안전기준 부속서 및 의료기기법",
+                "marker": "1.1.1",
+                "breadcrumb": [
+                  "1",
+                  "1.1"
+                ],
+                "confidence": 0.9943,
+                "level_code": "L5",
+                "level_name": "세부항목"
+              },
+              {
+                "x0": 0.09,
+                "text": "제품의 용도가 산업용, 사업자용, 공연용, 군용인 것은 제외한다. 단, 일반 소비자의 사용이 예상되는 범용성이 있는 제품이나 일반 소비자가 사용하는 것을 전제로 판매·홍보 된 제품은 대상으로 한다.",
+                "type": "subsubsection",
+                "title": "제품의 용도가 산업용, 사업자용, 공연용, 군용인 것은 제외한다. 단,",
+                "marker": "1.1.2",
+                "breadcrumb": [
+                  "1",
+                  "1.1"
+                ],
+                "confidence": 0.996,
+                "level_code": "L5",
+                "level_name": "세부항목"
+              },
+              {
+                "x0": 0.089,
+                "text": "이 기준에 인용됨으로서 이 기준의 규정 일부를 구성한다. 이러한 인용표준은 그 최신판을 적용한다.\nKS Q 1003 랜덤 샘플링 방법\nKS C IEC 60825-1 레이저 제품의 안전성-제1부: 장비등급분류, 요구사항 및 사용자 지침",
+                "type": "section",
+                "title": "관련표준 다음의 표준은",
+                "marker": "2",
+                "confidence": 0.9826,
+                "level_code": "L3",
+                "level_name": "절"
+              },
+              {
+                "x0": 0.09,
+                "type": "section",
+                "title": "종류 종류는 용도에 따라 다음과 같이 구분한다.",
+                "marker": "3",
+                "confidence": 0.999,
+                "level_code": "L3",
+                "level_name": "절"
+              },
+              {
+                "x0": 0.139,
+                "bbox": "0.1390,0.5810,0.8600,0.7450",
+                "type": "table",
+                "title": "표",
+                "caption": "<table><tr><td>종류</td><td>용도</td></tr><tr><td>A종</td><td>레이저 포인터 (물체나 위치를 가리키기 위한 레이저용품)</td></tr><tr><td>B종</td><td>A종이 아닌 휴대용 레이저용품예) 측정기기(거리측정기, 각도기 등), 레저용 제품(자전거 레이저 후미등, 골프용 레이저, 당구용 레이저 등), 사무용품(프로젝션 키보드, 가위용 라인레이저 등), 장난감·오락용 제품 (애완동물용 자동 레이저 등), 교육용 제품(레이저 실험기기 등)</td></tr></table>",
+                "breadcrumb": [
+                  "3"
+                ],
+                "confidence": 0.9921,
+                "level_code": "LT",
+                "level_name": "표"
+              },
+              {
+                "x0": 0.09,
+                "type": "section",
+                "title": "안전요구사항",
+                "marker": "4",
+                "confidence": 0.9556,
+                "level_code": "L3",
+                "level_name": "절"
+              },
+              {
+                "x0": 0.09,
+                "type": "subsection",
+                "title": "겉모양 흡,오염,비틀림,변형,날카로움 등 사용상 결함이 없어야 한다.",
+                "marker": "4.1",
+                "breadcrumb": [
+                  "4"
+                ],
+                "confidence": 0.9196,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "x0": 0.091,
+                "type": "subsection",
+                "title": "구조",
+                "marker": "4.2",
+                "breadcrumb": [
+                  "4"
+                ],
+                "confidence": 0.9998,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "x0": 0.09,
+                "type": "subsubsection",
+                "title": "레이저의 출력안정화회로를 갖추고 있어야 한다.",
+                "marker": "4.2.1",
+                "breadcrumb": [
+                  "4",
+                  "4.2"
+                ],
+                "confidence": 0.9995,
+                "level_code": "L5",
+                "level_name": "세부항목"
+              },
+              {
+                "x0": 0.089,
+                "text": "A종의 휴대용 레이저용품에는 스위치의 통전상태를 유지하는 기능이 없어야 한다. (수동으로 통전상태를 유지하는 기능은 허용된다.)",
+                "type": "subsubsection",
+                "title": "A종의 휴대용 레이저용품에는 스위치의 통전상태를 유지하는 기능이 없어야",
+                "marker": "4.2.2",
+                "breadcrumb": [
+                  "4",
+                  "4.2"
+                ],
+                "confidence": 0.9929,
+                "level_code": "L5",
+                "level_name": "세부항목"
+              },
+              {
+                "x0": 0.089,
+                "text": "B종의 휴대용 레이저용품에는 스위치의 통전상태를 유지하는 기능이 허용된다. 이 기능이 있는 경",
+                "type": "subsubsection",
+                "title": "B종의 휴대용 레이저용품에는 스위치의 통전상태를 유지하는 기능이 허용된다",
+                "marker": "4.2.3",
+                "breadcrumb": [
+                  "4",
+                  "4.2"
+                ],
+                "confidence": 0.9864,
+                "level_code": "L5",
+                "level_name": "세부항목"
+              }
+            ],
+            "n_nodes": 13,
+            "graph": {
+              "edges": [
+                {
+                  "to": "1:0",
+                  "from": "1:1",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "1:1",
+                  "from": "1:2",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "1:1",
+                  "from": "1:3",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "1:6",
+                  "from": "1:5",
+                  "type": "HAS_TABLE"
+                },
+                {
+                  "to": "1:7",
+                  "from": "1:8",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "1:7",
+                  "from": "1:9",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "1:9",
+                  "from": "1:10",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "1:9",
+                  "from": "1:11",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "1:9",
+                  "from": "1:12",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "1:7",
+                  "from": "2:13",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "2:13",
+                  "from": "2:14",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "2:15",
+                  "from": "2:16",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "2:15",
+                  "from": "2:17",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "2:15",
+                  "from": "2:18",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "2:19",
+                  "from": "2:20",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "2:19",
+                  "from": "2:21",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "2:19",
+                  "from": "2:22",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "2:23",
+                  "from": "2:22",
+                  "type": "HAS_TABLE"
+                },
+                {
+                  "to": "2:24",
+                  "from": "2:22",
+                  "type": "HAS_NOTE"
+                },
+                {
+                  "to": "2:25",
+                  "from": "2:26",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "2:26",
+                  "from": "2:27",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "2:26",
+                  "from": "2:28",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "2:26",
+                  "from": "2:29",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "2:26",
+                  "from": "2:30",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "2:26",
+                  "from": "2:31",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "2:26",
+                  "from": "2:32",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "2:26",
+                  "from": "2:33",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "2:26",
+                  "from": "2:34",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "2:26",
+                  "from": "2:35",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "2:35",
+                  "from": "2:36",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "2:35",
+                  "from": "2:37",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "2:35",
+                  "from": "2:38",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "2:25",
+                  "from": "2:39",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "2:25",
+                  "from": "2:40",
+                  "type": "PART_OF"
+                }
+              ],
+              "nodes": [
+                {
+                  "id": "1:0",
+                  "page": 1,
+                  "part": null,
+                  "type": "section",
+                  "order": 0,
+                  "title": "적용범위",
+                  "confidence": 0.9867,
+                  "level_code": "L3",
+                  "level_name": "절",
+                  "number_path": [
+                    "1"
+                  ]
+                },
+                {
+                  "id": "1:1",
+                  "page": 1,
+                  "part": null,
+                  "type": "subsection",
+                  "order": 1,
+                  "title": "제외품목",
+                  "confidence": 0.9989,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "1",
+                    "1"
+                  ]
+                },
+                {
+                  "id": "1:2",
+                  "page": 1,
+                  "part": null,
+                  "type": "subsubsection",
+                  "order": 2,
+                  "title": "전기용품 및 생활용품 안전관리법상의 다른 안전기준 부속서 및 의료기기법",
+                  "confidence": 0.9943,
+                  "level_code": "L5",
+                  "level_name": "세부항목",
+                  "number_path": [
+                    "1",
+                    "1",
+                    "1"
+                  ]
+                },
+                {
+                  "id": "1:3",
+                  "page": 1,
+                  "part": null,
+                  "type": "subsubsection",
+                  "order": 3,
+                  "title": "제품의 용도가 산업용, 사업자용, 공연용, 군용인 것은 제외한다. 단,",
+                  "confidence": 0.996,
+                  "level_code": "L5",
+                  "level_name": "세부항목",
+                  "number_path": [
+                    "1",
+                    "1",
+                    "2"
+                  ]
+                },
+                {
+                  "id": "1:4",
+                  "page": 1,
+                  "part": null,
+                  "type": "section",
+                  "order": 4,
+                  "title": "관련표준 다음의 표준은",
+                  "confidence": 0.9826,
+                  "level_code": "L3",
+                  "level_name": "절",
+                  "number_path": [
+                    "2"
+                  ]
+                },
+                {
+                  "id": "1:5",
+                  "page": 1,
+                  "part": null,
+                  "type": "section",
+                  "order": 5,
+                  "title": "종류 종류는 용도에 따라 다음과 같이 구분한다.",
+                  "confidence": 0.999,
+                  "level_code": "L3",
+                  "level_name": "절",
+                  "number_path": [
+                    "3"
+                  ]
+                },
+                {
+                  "id": "1:6",
+                  "page": 1,
+                  "part": null,
+                  "type": "table",
+                  "order": 6,
+                  "title": "표",
+                  "confidence": 0.9921,
+                  "level_code": "LT",
+                  "level_name": "표",
+                  "number_path": []
+                },
+                {
+                  "id": "1:7",
+                  "page": 1,
+                  "part": null,
+                  "type": "section",
+                  "order": 7,
+                  "title": "안전요구사항",
+                  "confidence": 0.9556,
+                  "level_code": "L3",
+                  "level_name": "절",
+                  "number_path": [
+                    "4"
+                  ]
+                },
+                {
+                  "id": "1:8",
+                  "page": 1,
+                  "part": null,
+                  "type": "subsection",
+                  "order": 8,
+                  "title": "겉모양 흡,오염,비틀림,변형,날카로움 등 사용상 결함이 없어야 한다.",
+                  "confidence": 0.9196,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "4",
+                    "1"
+                  ]
+                },
+                {
+                  "id": "1:9",
+                  "page": 1,
+                  "part": null,
+                  "type": "subsection",
+                  "order": 9,
+                  "title": "구조",
+                  "confidence": 0.9998,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "4",
+                    "2"
+                  ]
+                },
+                {
+                  "id": "1:10",
+                  "page": 1,
+                  "part": null,
+                  "type": "subsubsection",
+                  "order": 10,
+                  "title": "레이저의 출력안정화회로를 갖추고 있어야 한다.",
+                  "confidence": 0.9995,
+                  "level_code": "L5",
+                  "level_name": "세부항목",
+                  "number_path": [
+                    "4",
+                    "2",
+                    "1"
+                  ]
+                },
+                {
+                  "id": "1:11",
+                  "page": 1,
+                  "part": null,
+                  "type": "subsubsection",
+                  "order": 11,
+                  "title": "A종의 휴대용 레이저용품에는 스위치의 통전상태를 유지하는 기능이 없어야",
+                  "confidence": 0.9929,
+                  "level_code": "L5",
+                  "level_name": "세부항목",
+                  "number_path": [
+                    "4",
+                    "2",
+                    "2"
+                  ]
+                },
+                {
+                  "id": "1:12",
+                  "page": 1,
+                  "part": null,
+                  "type": "subsubsection",
+                  "order": 12,
+                  "title": "B종의 휴대용 레이저용품에는 스위치의 통전상태를 유지하는 기능이 허용된다",
+                  "confidence": 0.9864,
+                  "level_code": "L5",
+                  "level_name": "세부항목",
+                  "number_path": [
+                    "4",
+                    "2",
+                    "3"
+                  ]
+                },
+                {
+                  "id": "2:13",
+                  "page": 2,
+                  "part": null,
+                  "type": "subsection",
+                  "order": 13,
+                  "title": "레이저의 등급",
+                  "confidence": 0.9996,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "4",
+                    "3"
+                  ]
+                },
+                {
+                  "id": "2:14",
+                  "page": 2,
+                  "part": null,
+                  "type": "subsubsection",
+                  "order": 14,
+                  "title": "A종, B종 레이저제품의 등급분류 중 1급 레이저",
+                  "confidence": 0.9978,
+                  "level_code": "L5",
+                  "level_name": "세부항목",
+                  "number_path": [
+                    "4",
+                    "3",
+                    "1"
+                  ]
+                },
+                {
+                  "id": "2:15",
+                  "page": 2,
+                  "part": null,
+                  "type": "section",
+                  "order": 15,
+                  "title": "시험방법",
+                  "confidence": 0.9712,
+                  "level_code": "L3",
+                  "level_name": "절",
+                  "number_path": [
+                    "5"
+                  ]
+                },
+                {
+                  "id": "2:16",
+                  "page": 2,
+                  "part": null,
+                  "type": "subsection",
+                  "order": 16,
+                  "title": "결모양 육안 및 촉감으로 확인한다.",
+                  "confidence": 0.9391,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "5",
+                    "1"
+                  ]
+                },
+                {
+                  "id": "2:17",
+                  "page": 2,
+                  "part": null,
+                  "type": "subsection",
+                  "order": 17,
+                  "title": "구조 육안으로 확인한다.",
+                  "confidence": 0.9995,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "5",
+                    "2"
+                  ]
+                },
+                {
+                  "id": "2:18",
+                  "page": 2,
+                  "part": null,
+                  "type": "subsection",
+                  "order": 18,
+                  "title": "레이저의 등급 KS C IEC 60825-1의 레이저제품의 등급 분류방법",
+                  "confidence": 0.9989,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "5",
+                    "3"
+                  ]
+                },
+                {
+                  "id": "2:19",
+                  "page": 2,
+                  "part": null,
+                  "type": "section",
+                  "order": 19,
+                  "title": "검사방법",
+                  "confidence": 0.9482,
+                  "level_code": "L3",
+                  "level_name": "절",
+                  "number_path": [
+                    "6"
+                  ]
+                },
+                {
+                  "id": "2:20",
+                  "page": 2,
+                  "part": null,
+                  "type": "subsection",
+                  "order": 20,
+                  "title": "모델의 구분 휴대용레이저용품의 모델은 종류별, 형식별, 재질별, 모양별",
+                  "confidence": 0.9907,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "6",
+                    "1"
+                  ]
+                },
+                {
+                  "id": "2:21",
+                  "page": 2,
+                  "part": null,
+                  "type": "subsection",
+                  "order": 21,
+                  "title": "시료채취방법 필요한 경우 시료는 KS Q 1003에 따라 채취한다.",
+                  "confidence": 0.9977,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "6",
+                    "2"
+                  ]
+                },
+                {
+                  "id": "2:22",
+                  "page": 2,
+                  "part": null,
+                  "type": "subsection",
+                  "order": 22,
+                  "title": "시료크기 및 합부판정 조건 시료의 크기 및 합부 판정은",
+                  "confidence": 0.9943,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "6",
+                    "3"
+                  ]
+                },
+                {
+                  "id": "2:23",
+                  "page": 2,
+                  "part": null,
+                  "type": "table",
+                  "order": 23,
+                  "title": "표",
+                  "confidence": 0.9965,
+                  "level_code": "LT",
+                  "level_name": "표",
+                  "number_path": []
+                },
+                {
+                  "id": "2:24",
+                  "page": 2,
+                  "part": null,
+                  "type": "note",
+                  "order": 24,
+                  "title": "주) 시료의 크기(n): 동 안전기준을 적용하여 시험하는데 필요한 시료의 최소수량 또는 질량",
+                  "confidence": 0.9684,
+                  "level_code": "LN",
+                  "level_name": "주석",
+                  "number_path": []
+                },
+                {
+                  "id": "2:25",
+                  "page": 2,
+                  "part": null,
+                  "type": "section",
+                  "order": 25,
+                  "title": "표시사항",
+                  "confidence": 0.9976,
+                  "level_code": "L3",
+                  "level_name": "절",
+                  "number_path": [
+                    "7"
+                  ]
+                },
+                {
+                  "id": "2:26",
+                  "page": 2,
+                  "part": null,
+                  "type": "subsection",
+                  "order": 26,
+                  "title": "표 시",
+                  "confidence": 0.9894,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "7",
+                    "1"
+                  ]
+                },
+                {
+                  "id": "2:27",
+                  "page": 2,
+                  "part": null,
+                  "type": "subsubsection",
+                  "order": 27,
+                  "title": "품명(시행규칙의 표시사항과 동일 위치에 표시하는 경우 생략가능)",
+                  "confidence": 0.9996,
+                  "level_code": "L5",
+                  "level_name": "세부항목",
+                  "number_path": [
+                    "7",
+                    "1",
+                    "1"
+                  ]
+                },
+                {
+                  "id": "2:28",
+                  "page": 2,
+                  "part": null,
+                  "type": "subsubsection",
+                  "order": 28,
+                  "title": "종류",
+                  "confidence": 0.9999,
+                  "level_code": "L5",
+                  "level_name": "세부항목",
+                  "number_path": [
+                    "7",
+                    "1",
+                    "2"
+                  ]
+                },
+                {
+                  "id": "2:29",
+                  "page": 2,
+                  "part": null,
+                  "type": "subsubsection",
+                  "order": 29,
+                  "title": "모델명(시행규칙의 표시사항과 동일 위치에 표시하는 경우 생략가능)",
+                  "confidence": 0.999,
+                  "level_code": "L5",
+                  "level_name": "세부항목",
+                  "number_path": [
+                    "7",
+                    "1",
+                    "3"
+                  ]
+                },
+                {
+                  "id": "2:30",
+                  "page": 2,
+                  "part": null,
+                  "type": "subsubsection",
+                  "order": 30,
+                  "title": "제조연월",
+                  "confidence": 0.9994,
+                  "level_code": "L5",
+                  "level_name": "세부항목",
+                  "number_path": [
+                    "7",
+                    "1",
+                    "4"
+                  ]
+                },
+                {
+                  "id": "2:31",
+                  "page": 2,
+                  "part": null,
+                  "type": "subsubsection",
+                  "order": 31,
+                  "title": "제조자명",
+                  "confidence": 0.9997,
+                  "level_code": "L5",
+                  "level_name": "세부항목",
+                  "number_path": [
+                    "7",
+                    "1",
+                    "5"
+                  ]
+                },
+                {
+                  "id": "2:32",
+                  "page": 2,
+                  "part": null,
+                  "type": "subsubsection",
+                  "order": 32,
+                  "title": "수입자명(수입품에 한함)",
+                  "confidence": 0.9988,
+                  "level_code": "L5",
+                  "level_name": "세부항목",
+                  "number_path": [
+                    "7",
+                    "1",
+                    "6"
+                  ]
+                },
+                {
+                  "id": "2:33",
+                  "page": 2,
+                  "part": null,
+                  "type": "subsubsection",
+                  "order": 33,
+                  "title": "주소 및 전화번호(국내 제조제품은 국내 제조자, 수입품인 경우에는 수입자",
+                  "confidence": 0.9976,
+                  "level_code": "L5",
+                  "level_name": "세부항목",
+                  "number_path": [
+                    "7",
+                    "1",
+                    "7"
+                  ]
+                },
+                {
+                  "id": "2:34",
+                  "page": 2,
+                  "part": null,
+                  "type": "subsubsection",
+                  "order": 34,
+                  "title": "제조국명(국내 제조제품은 생략 가능, 수입품은 대외무역법에 의거 표시)",
+                  "confidence": 0.9991,
+                  "level_code": "L5",
+                  "level_name": "세부항목",
+                  "number_path": [
+                    "7",
+                    "1",
+                    "8"
+                  ]
+                },
+                {
+                  "id": "2:35",
+                  "page": 2,
+                  "part": null,
+                  "type": "subsubsection",
+                  "order": 35,
+                  "title": "사용상 주의사항 주의사항의 위치, 내용 및 형태를 확실히 눈에 뜨게 하여",
+                  "confidence": 0.9829,
+                  "level_code": "L5",
+                  "level_name": "세부항목",
+                  "number_path": [
+                    "7",
+                    "1",
+                    "9"
+                  ]
+                },
+                {
+                  "id": "2:36",
+                  "page": 2,
+                  "part": null,
+                  "type": "clause",
+                  "order": 36,
+                  "title": "레이저광을 들여다보지 마시오.",
+                  "confidence": 0.9977,
+                  "level_code": "L6",
+                  "level_name": "하위항목",
+                  "number_path": [
+                    "7",
+                    "1",
+                    "9",
+                    "1"
+                  ]
+                },
+                {
+                  "id": "2:37",
+                  "page": 2,
+                  "part": null,
+                  "type": "clause",
+                  "order": 37,
+                  "title": "레이저광을 사람에게 향하지 마시오.",
+                  "confidence": 0.9994,
+                  "level_code": "L6",
+                  "level_name": "하위항목",
+                  "number_path": [
+                    "7",
+                    "1",
+                    "9",
+                    "2"
+                  ]
+                },
+                {
+                  "id": "2:38",
+                  "page": 2,
+                  "part": null,
+                  "type": "clause",
+                  "order": 38,
+                  "title": "만 19세 미만의 청소년,어린이가 사용하지 않게 하시오.",
+                  "confidence": 0.9701,
+                  "level_code": "L6",
+                  "level_name": "하위항목",
+                  "number_path": [
+                    "7",
+                    "1",
+                    "9",
+                    "3"
+                  ]
+                },
+                {
+                  "id": "2:39",
+                  "page": 2,
+                  "part": null,
+                  "type": "subsection",
+                  "order": 39,
+                  "title": "경고라벨 등급별 경고라벨 도안과 이에 대한 부착위치는 KS C IEC 6",
+                  "confidence": 0.9983,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "7",
+                    "2"
+                  ]
+                },
+                {
+                  "id": "2:40",
+                  "page": 2,
+                  "part": null,
+                  "type": "subsection",
+                  "order": 40,
+                  "title": "기타 주의사항 7.1.9 사용상 주의사항 이외의 기타 주의사항에 관련된",
+                  "confidence": 0.9902,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "7",
+                    "3"
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "page_number": 2,
+            "part_number": null,
+            "keywords": [],
+            "summary": null,
+            "hierarchy": [
+              {
+                "x0": 0.09,
+                "type": "subsection",
+                "title": "레이저의 등급",
+                "marker": "4.3",
+                "breadcrumb": [
+                  "4"
+                ],
+                "confidence": 0.9996,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "x0": 0.09,
+                "text": "제품 또는 2급 레이저 제품이어야 한다.",
+                "type": "subsubsection",
+                "title": "A종, B종 레이저제품의 등급분류 중 1급 레이저",
+                "marker": "4.3.1",
+                "breadcrumb": [
+                  "4",
+                  "4.3"
+                ],
+                "confidence": 0.9978,
+                "level_code": "L5",
+                "level_name": "세부항목"
+              },
+              {
+                "x0": 0.09,
+                "type": "section",
+                "title": "시험방법",
+                "marker": "5",
+                "confidence": 0.9712,
+                "level_code": "L3",
+                "level_name": "절"
+              },
+              {
+                "x0": 0.09,
+                "type": "subsection",
+                "title": "결모양 육안 및 촉감으로 확인한다.",
+                "marker": "5.1",
+                "breadcrumb": [
+                  "5"
+                ],
+                "confidence": 0.9391,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "x0": 0.09,
+                "type": "subsection",
+                "title": "구조 육안으로 확인한다.",
+                "marker": "5.2",
+                "breadcrumb": [
+                  "5"
+                ],
+                "confidence": 0.9995,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "x0": 0.089,
+                "text": "레이저의 등급 KS C IEC 60825-1의 레이저제품의 등급 분류방법에 따라 시험한다.",
+                "type": "subsection",
+                "title": "레이저의 등급 KS C IEC 60825-1의 레이저제품의 등급 분류방법",
+                "marker": "5.3",
+                "breadcrumb": [
+                  "5"
+                ],
+                "confidence": 0.9989,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "x0": 0.09,
+                "type": "section",
+                "title": "검사방법",
+                "marker": "6",
+                "confidence": 0.9482,
+                "level_code": "L3",
+                "level_name": "절"
+              },
+              {
+                "x0": 0.089,
+                "text": "모델의 구분 휴대용레이저용품의 모델은 종류별, 형식별, 재질별, 모양별 등으로 구분한다.",
+                "type": "subsection",
+                "title": "모델의 구분 휴대용레이저용품의 모델은 종류별, 형식별, 재질별, 모양별",
+                "marker": "6.1",
+                "breadcrumb": [
+                  "6"
+                ],
+                "confidence": 0.9907,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "x0": 0.09,
+                "type": "subsection",
+                "title": "시료채취방법 필요한 경우 시료는 KS Q 1003에 따라 채취한다.",
+                "marker": "6.2",
+                "breadcrumb": [
+                  "6"
+                ],
+                "confidence": 0.9977,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "x0": 0.089,
+                "text": "다음 표와 같다. 다만, 합부판정시 표시 사항은 제외한다.",
+                "type": "subsection",
+                "title": "시료크기 및 합부판정 조건 시료의 크기 및 합부 판정은",
+                "marker": "6.3",
+                "breadcrumb": [
+                  "6"
+                ],
+                "confidence": 0.9943,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "x0": 0.141,
+                "bbox": "0.1410,0.4050,0.8590,0.4640",
+                "type": "table",
+                "title": "표",
+                "caption": "<table><tr><td>검사구분</td><td>시료의 크기(n)</td><td>합격판정갯수(Ac)</td><td>불합격판정갯수(Re)</td></tr><tr><td>안전확인</td><td>1</td><td>0</td><td>1</td></tr></table>",
+                "breadcrumb": [
+                  "6",
+                  "6.3"
+                ],
+                "confidence": 0.9965,
+                "level_code": "LT",
+                "level_name": "표"
+              },
+              {
+                "x0": 0.099,
+                "type": "note",
+                "title": "주) 시료의 크기(n): 동 안전기준을 적용하여 시험하는데 필요한 시료의 최소수량 또는 질량",
+                "breadcrumb": [
+                  "6",
+                  "6.3"
+                ],
+                "confidence": 0.9684,
+                "level_code": "LN",
+                "level_name": "주석"
+              },
+              {
+                "x0": 0.091,
+                "type": "section",
+                "title": "표시사항",
+                "marker": "7",
+                "confidence": 0.9976,
+                "level_code": "L3",
+                "level_name": "절"
+              },
+              {
+                "x0": 0.09,
+                "text": "제품 또는 최소단위 포장마다 소비자가 보기 쉬운 곳에 쉽게 지워지지 않는 방법으로 다음의 사항을 표시한다.",
+                "type": "subsection",
+                "title": "표 시",
+                "marker": "7.1",
+                "breadcrumb": [
+                  "7"
+                ],
+                "confidence": 0.9894,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "x0": 0.09,
+                "type": "subsubsection",
+                "title": "품명(시행규칙의 표시사항과 동일 위치에 표시하는 경우 생략가능)",
+                "marker": "7.1.1",
+                "breadcrumb": [
+                  "7",
+                  "7.1"
+                ],
+                "confidence": 0.9996,
+                "level_code": "L5",
+                "level_name": "세부항목"
+              },
+              {
+                "x0": 0.091,
+                "type": "subsubsection",
+                "title": "종류",
+                "marker": "7.1.2",
+                "breadcrumb": [
+                  "7",
+                  "7.1"
+                ],
+                "confidence": 0.9999,
+                "level_code": "L5",
+                "level_name": "세부항목"
+              },
+              {
+                "x0": 0.09,
+                "type": "subsubsection",
+                "title": "모델명(시행규칙의 표시사항과 동일 위치에 표시하는 경우 생략가능)",
+                "marker": "7.1.3",
+                "breadcrumb": [
+                  "7",
+                  "7.1"
+                ],
+                "confidence": 0.999,
+                "level_code": "L5",
+                "level_name": "세부항목"
+              },
+              {
+                "x0": 0.091,
+                "type": "subsubsection",
+                "title": "제조연월",
+                "marker": "7.1.4",
+                "breadcrumb": [
+                  "7",
+                  "7.1"
+                ],
+                "confidence": 0.9994,
+                "level_code": "L5",
+                "level_name": "세부항목"
+              },
+              {
+                "x0": 0.091,
+                "type": "subsubsection",
+                "title": "제조자명",
+                "marker": "7.1.5",
+                "breadcrumb": [
+                  "7",
+                  "7.1"
+                ],
+                "confidence": 0.9997,
+                "level_code": "L5",
+                "level_name": "세부항목"
+              },
+              {
+                "x0": 0.091,
+                "type": "subsubsection",
+                "title": "수입자명(수입품에 한함)",
+                "marker": "7.1.6",
+                "breadcrumb": [
+                  "7",
+                  "7.1"
+                ],
+                "confidence": 0.9988,
+                "level_code": "L5",
+                "level_name": "세부항목"
+              },
+              {
+                "x0": 0.09,
+                "text": "주소 및 전화번호(국내 제조제품은 국내 제조자, 수입품인 경우에는 수입자)",
+                "type": "subsubsection",
+                "title": "주소 및 전화번호(국내 제조제품은 국내 제조자, 수입품인 경우에는 수입자",
+                "marker": "7.1.7",
+                "breadcrumb": [
+                  "7",
+                  "7.1"
+                ],
+                "confidence": 0.9976,
+                "level_code": "L5",
+                "level_name": "세부항목"
+              },
+              {
+                "x0": 0.09,
+                "type": "subsubsection",
+                "title": "제조국명(국내 제조제품은 생략 가능, 수입품은 대외무역법에 의거 표시)",
+                "marker": "7.1.8",
+                "breadcrumb": [
+                  "7",
+                  "7.1"
+                ],
+                "confidence": 0.9991,
+                "level_code": "L5",
+                "level_name": "세부항목"
+              },
+              {
+                "x0": 0.09,
+                "text": "사용상 주의사항 주의사항의 위치, 내용 및 형태를 확실히 눈에 뜨게 하여야 한다.",
+                "type": "subsubsection",
+                "title": "사용상 주의사항 주의사항의 위치, 내용 및 형태를 확실히 눈에 뜨게 하여",
+                "marker": "7.1.9",
+                "breadcrumb": [
+                  "7",
+                  "7.1"
+                ],
+                "confidence": 0.9829,
+                "level_code": "L5",
+                "level_name": "세부항목"
+              },
+              {
+                "x0": 0.091,
+                "type": "clause",
+                "title": "레이저광을 들여다보지 마시오.",
+                "marker": "7.1.9.1",
+                "breadcrumb": [
+                  "7",
+                  "7.1",
+                  "7.1.9"
+                ],
+                "confidence": 0.9977,
+                "level_code": "L6",
+                "level_name": "하위항목"
+              },
+              {
+                "x0": 0.09,
+                "type": "clause",
+                "title": "레이저광을 사람에게 향하지 마시오.",
+                "marker": "7.1.9.2",
+                "breadcrumb": [
+                  "7",
+                  "7.1",
+                  "7.1.9"
+                ],
+                "confidence": 0.9994,
+                "level_code": "L6",
+                "level_name": "하위항목"
+              },
+              {
+                "x0": 0.09,
+                "type": "clause",
+                "title": "만 19세 미만의 청소년,어린이가 사용하지 않게 하시오.",
+                "marker": "7.1.9.3",
+                "breadcrumb": [
+                  "7",
+                  "7.1",
+                  "7.1.9"
+                ],
+                "confidence": 0.9701,
+                "level_code": "L6",
+                "level_name": "하위항목"
+              },
+              {
+                "x0": 0.089,
+                "text": "경고라벨 등급별 경고라벨 도안과 이에 대한 부착위치는 KS C IEC 60825-1의 요구사항을 따른다.",
+                "type": "subsection",
+                "title": "경고라벨 등급별 경고라벨 도안과 이에 대한 부착위치는 KS C IEC 6",
+                "marker": "7.2",
+                "breadcrumb": [
+                  "7"
+                ],
+                "confidence": 0.9983,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "x0": 0.089,
+                "text": "기타 주의사항 7.1.9 사용상 주의사항 이외의 기타 주의사항에 관련된 정보를 제품(또는 최소단위 포장) 또는 설명서에 제공해야 한다. 그 내용은 KS C IEC 60825-1의 관련 요구사항을 따른다.",
+                "type": "subsection",
+                "title": "기타 주의사항 7.1.9 사용상 주의사항 이외의 기타 주의사항에 관련된",
+                "marker": "7.3",
+                "breadcrumb": [
+                  "7"
+                ],
+                "confidence": 0.9902,
+                "level_code": "L4",
+                "level_name": "소절"
+              }
+            ],
+            "n_nodes": 28,
+            "graph": null
+          },
+          {
+            "page_number": 3,
+            "part_number": null,
+            "keywords": [],
+            "summary": null,
+            "hierarchy": [],
+            "n_nodes": 0,
+            "graph": null
+          }
+        ],
+        "latency_seconds": 0.003645958002380212
+      },
+      "dimension_ocr": {
+        "enabled": true,
+        "model": "dimension_ocr_model",
+        "method": "text-segment",
+        "applied_fixes": null,
+        "pages": [
+          {
+            "page_number": 1,
+            "body_html": "<div data-label=\"title\" data-bbox=\"0.3850,0.1030,0.6140,0.1200\" data-score=\"0.9441\"><h1>안전확인 안전기준</h1></div>\n<div data-label=\"title\" data-bbox=\"0.3970,0.1490,0.6010,0.1690\" data-score=\"0.9984\"><h1>휴대용 레이저용품</h1></div>\n<div data-label=\"title\" data-bbox=\"0.7410,0.1490,0.8560,0.1690\" data-score=\"0.9999\"><h1>부속서 46</h1></div>\n<div data-label=\"text\" data-bbox=\"0.3990,0.1940,0.5990,0.2080\" data-score=\"0.9768\"><p>(Portable Laser Devices)</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.2560,0.9070,0.3490\" data-score=\"0.9867\"><p>1. 적용범위 이 기준은 휴대용 레이저용품의 안전요건 및 시험방법, 표시사항 등에 대하여 규정한다. 휴대용 레이저용품이란 레이저를 외부로 방사하도록 고안된 휴대용 장치를 말하며, 배터리와 같은 운반이 가능한 전원을 사용하여 쉽게 들고 이동이 가능한 제품을 휴대용으로 간주한다. 본 기준은 가시광선 레이저(파장범위 400-700 nm)를 출력하는 기기에 대해서 적용하며, 아래와 같은 제품들은 대상범위에서 제외한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.0910,0.3510,0.1970,0.3660\" data-score=\"0.9989\"><h1>1.1 제외품목</h1></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.3700,0.9070,0.4060\" data-score=\"0.9943\"><p>1.1.1 전기용품 및 생활용품 안전관리법상의 다른 안전기준 부속서 및 의료기기법 등 다른 법에서 안전관리대상으로 지정된 제품은 제외한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.4080,0.9060,0.4440\" data-score=\"0.9960\"><p>1.1.2. 제품의 용도가 산업용, 사업자용, 공연용, 군용인 것은 제외한다. 단, 일반 소비자의 사용이 예상되는 범용성이 있는 제품이나 일반 소비자가 사용하는 것을 전제로 판매·홍보 된 제품은 대상으로 한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.4650,0.9060,0.5000\" data-score=\"0.9826\"><p>2. 관련표준 다음의 표준은 이 기준에 인용됨으로서 이 기준의 규정 일부를 구성한다. 이러한 인용표준은 그 최신판을 적용한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1060,0.5040,0.3460,0.5180\" data-score=\"0.9970\"><p>KS Q 1003 랜덤 샘플링 방법</p></div>\n<div data-label=\"text\" data-bbox=\"0.1060,0.5220,0.8070,0.5380\" data-score=\"0.9986\"><p>KS C IEC 60825-1 레이저 제품의 안전성-제1부: 장비등급분류, 요구사항 및 사용자 지침</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.5600,0.5020,0.5760\" data-score=\"0.9990\"><p>3. 종류 종류는 용도에 따라 다음과 같이 구분한다.</p></div>\n<div data-label=\"table\" data-bbox=\"0.1390,0.5810,0.8600,0.7450\" data-score=\"0.9921\"><table><tr><td>종류</td><td>용도</td></tr><tr><td>A종</td><td>레이저 포인터 (물체나 위치를 가리키기 위한 레이저용품)</td></tr><tr><td>B종</td><td>A종이 아닌 휴대용 레이저용품예) 측정기기(거리측정기, 각도기 등), 레저용 제품(자전거 레이저 후미등, 골프용 레이저, 당구용 레이저 등), 사무용품(프로젝션 키보드, 가위용 라인레이저 등), 장난감·오락용 제품 (애완동물용 자동 레이저 등), 교육용 제품(레이저 실험기기 등)</td></tr></table></div>\n<div data-label=\"title\" data-bbox=\"0.0900,0.7690,0.2230,0.7840\" data-score=\"0.9556\"><h1>4. 안전요구사항</h1></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.7880,0.6960,0.8030\" data-score=\"0.9196\"><p>4.1 겉모양 흡,오염,비틀림,변형,날카로움 등 사용상 결함이 없어야 한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.0910,0.8070,0.1610,0.8210\" data-score=\"0.9998\"><h1>4.2 구조</h1></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.8260,0.5120,0.8410\" data-score=\"0.9995\"><p>4.2.1 레이저의 출력안정화회로를 갖추고 있어야 한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.8450,0.9050,0.8790\" data-score=\"0.9929\"><p>4.2.2 A종의 휴대용 레이저용품에는 스위치의 통전상태를 유지하는 기능이 없어야 한다. (수동으로 통전상태를 유지하는 기능은 허용된다.)</p></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.8830,0.9050,0.8980\" data-score=\"0.9864\"><p>4.2.3 B종의 휴대용 레이저용품에는 스위치의 통전상태를 유지하는 기능이 허용된다. 이 기능이 있는 경</p></div>",
+            "page_visual_summary": "페이지 상단에는 제목과 괄호 안의 영어 텍스트가 배치되어 있고, 그 아래로 번호가 매겨진 본문 항목들이 순차적으로 나열되어 있습니다. 본문 중간에는 '3. 종류' 섹션에 표가 포함되어 있으며, 이는 용도별 분류를 시각화한 것입니다.",
+            "element_analysis": [],
+            "unbound_visual_notes": "페이지 상단에는 제목과 괄호 안의 영어 텍스트가 배치되어 있고, 그 아래로 번호가 매겨진 본문 항목들이 순차적으로 나열되어 있습니다. 본문 중간에는 '3. 종류' 섹션에 표가 포함되어 있으며, 이는 용도별 분류를 시각화한 것입니다.",
+            "table_markdown": "| 종류 | 용도 |\n|---|---|\n| A종 | 레이저 포인터 (물체나 위치를 가리키기 위한 레이저용품) |\n| B종 | A종이 아닌 휴대용 레이저용품\n예) 측정기기(거리측정기, 각도기 등), 레저용 제품(자전거 레이저 후미등, 골프용 레이저, 당구용 레이저 등), 사무용품(프로젝션 키보드, 가위용 라인레이저 등), 장난감·오락용 제품 (애완동물용 자동 레이저 등), 교육용 제품(레이저 실험기기 등)",
+            "arbitrated_blocks": 0,
+            "corrected_cells": 0,
+            "format_restored_cells": 0,
+            "name_consistency": null,
+            "applied_rotation": null,
+            "applied_skew": null
+          },
+          {
+            "page_number": 2,
+            "body_html": "<div data-label=\"text\" data-bbox=\"0.0900,0.0990,0.9060,0.1340\" data-score=\"0.9748\"><p>우, 통전 중에 레이저 등급은 4.3을 만족해야 한다. 또, 레이저가 사용자의 조작 없이 스스로 끼지는 기능이 있는 경우, 사용자의 추가 조작 없이 레이저가 다시 자동으로 쳐지는 것은 허용되지 않는다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.0900,0.1560,0.2400,0.1710\" data-score=\"0.9996\"><h1>4.3 레이저의 등급</h1></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.1750,0.8280,0.1910\" data-score=\"0.9978\"><p>4.3.1 A종, B종 레이저제품의 등급분류 중 1급 레이저 제품 또는 2급 레이저 제품이어야 한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.0900,0.2130,0.1870,0.2280\" data-score=\"0.9712\"><h1>5. 시험방법</h1></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.2320,0.4100,0.2460\" data-score=\"0.9391\"><p>5.1 결모양 육안 및 촉감으로 확인한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.2510,0.3250,0.2660\" data-score=\"0.9995\"><p>5.2 구조 육안으로 확인한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.2700,0.7780,0.2850\" data-score=\"0.9989\"><p>5.3 레이저의 등급 KS C IEC 60825-1의 레이저제품의 등급 분류방법에 따라 시험한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.0900,0.3080,0.1870,0.3230\" data-score=\"0.9482\"><h1>6. 검사방법</h1></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.3270,0.8310,0.3420\" data-score=\"0.9907\"><p>6.1 모델의 구분 휴대용레이저용품의 모델은 종류별, 형식별, 재질별, 모양별 등으로 구분한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.3460,0.6280,0.3610\" data-score=\"0.9977\"><p>6.2 시료채취방법 필요한 경우 시료는 KS Q 1003에 따라 채취한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.3650,0.9050,0.3990\" data-score=\"0.9943\"><p>6.3 시료크기 및 합부판정 조건 시료의 크기 및 합부 판정은 다음 표와 같다. 다만, 합부판정시 표시 사항은 제외한다.</p></div>\n<div data-label=\"table\" data-bbox=\"0.1410,0.4050,0.8590,0.4640\" data-score=\"0.9965\"><table><tr><td>검사구분</td><td>시료의 크기(n)</td><td>합격판정갯수(Ac)</td><td>불합격판정갯수(Re)</td></tr><tr><td>안전확인</td><td>1</td><td>0</td><td>1</td></tr></table></div>\n<div data-label=\"text\" data-bbox=\"0.0990,0.4690,0.8250,0.4850\" data-score=\"0.9684\"><p>주) 시료의 크기(n): 동 안전기준을 적용하여 시험하는데 필요한 시료의 최소수량 또는 질량</p></div>\n<div data-label=\"title\" data-bbox=\"0.0910,0.5070,0.1890,0.5220\" data-score=\"0.9976\"><h1>7. 표시사항</h1></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.5260,0.9050,0.5600\" data-score=\"0.9894\"><p>7.1 표 시 제품 또는 최소단위 포장마다 소비자가 보기 쉬운 곳에 쉽게 지워지지 않는 방법으로 다음의 사항을 표시한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.5640,0.6550,0.5790\" data-score=\"0.9996\"><p>7.1.1 품명(시행규칙의 표시사항과 동일 위치에 표시하는 경우 생략가능)</p></div>\n<div data-label=\"text\" data-bbox=\"0.0910,0.5830,0.1720,0.5980\" data-score=\"0.9999\"><p>7.1.2 종류</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.6020,0.6710,0.6170\" data-score=\"0.9990\"><p>7.1.3 모델명(시행규칙의 표시사항과 동일 위치에 표시하는 경우 생략가능)</p></div>\n<div data-label=\"text\" data-bbox=\"0.0910,0.6210,0.2050,0.6360\" data-score=\"0.9994\"><p>7.1.4 제조연월</p></div>\n<div data-label=\"text\" data-bbox=\"0.0910,0.6400,0.2050,0.6550\" data-score=\"0.9997\"><p>7.1.5 제조자명</p></div>\n<div data-label=\"text\" data-bbox=\"0.0910,0.6590,0.3310,0.6740\" data-score=\"0.9988\"><p>7.1.6. 수입자명(수입품에 한함)</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.6780,0.7260,0.6930\" data-score=\"0.9976\"><p>7.1.7 주소 및 전화번호(국내 제조제품은 국내 제조자, 수입품인 경우에는 수입자)</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.6970,0.7010,0.7120\" data-score=\"0.9991\"><p>7.1.8 제조국명(국내 제조제품은 생략 가능, 수입품은 대외무역법에 의거 표시)</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.7160,0.7830,0.7310\" data-score=\"0.9829\"><p>7.1.9사용상 주의사항 주의사항의 위치, 내용 및 형태를 확실히 눈에 뜨게 하여야 한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0910,0.7350,0.3910,0.7500\" data-score=\"0.9977\"><p>7.1.9.1 레이저광을 들여다보지 마시오.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.7540,0.4330,0.7690\" data-score=\"0.9994\"><p>7.1.9.2 레이저광을 사람에게 향하지 마시오.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.7730,0.5880,0.7880\" data-score=\"0.9701\"><p>7.1.9.3만 19세 미만의 청소년,어린이가 사용하지 않게 하시오.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.7920,0.8700,0.8070\" data-score=\"0.9983\"><p>7.2 경고라벨 등급별 경고라벨 도안과 이에 대한 부착위치는 KS C IEC 60825-1의 요구사항을 따른다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.8110,0.9070,0.8450\" data-score=\"0.9902\"><p>7.3 기타 주의사항 7.1.9 사용상 주의사항 이외의 기타 주의사항에 관련된 정보를 제품(또는 최소단위 포장) 또는 설명서에 제공해야 한다. 그 내용은 KS C IEC 60825-1의 관련 요구사항을 따른다.</p></div>",
+            "page_visual_summary": "",
+            "element_analysis": [],
+            "unbound_visual_notes": null,
+            "table_markdown": "| 검사구분 | 시료의 크기(n) | 합격판정갯수(Ac) | 불합격판정갯수(Re) |\n|---|---|---|---|\n| 안전확인 | 1 | 0 | 1 |",
+            "arbitrated_blocks": 0,
+            "corrected_cells": 0,
+            "format_restored_cells": 0,
+            "name_consistency": null,
+            "applied_rotation": null,
+            "applied_skew": null
+          },
+          {
+            "page_number": 3,
+            "body_html": "<div data-label=\"text\" data-bbox=\"0.1140,0.1060,0.5310,0.1220\" data-score=\"0.9455\"><p>제정: 기술표준원고시 제2007-34호(2007.1.24)</p></div>\n<div data-label=\"text\" data-bbox=\"0.1140,0.1260,0.5560,0.1410\" data-score=\"0.9601\"><p>개정: 기술표준원고시 제2008-1019호(2008. 12. 31)</p></div>\n<div data-label=\"text\" data-bbox=\"0.1140,0.1450,0.5490,0.1600\" data-score=\"0.9487\"><p>개정: 기술표준원고시 제2009-978호(2009. 12. 30)</p></div>\n<div data-label=\"text\" data-bbox=\"0.1140,0.1640,0.5730,0.1790\" data-score=\"0.9514\"><p>개정: 국가기술표준원고시 제2017-032호 (2017. 2. 8)</p></div>\n<div data-label=\"text\" data-bbox=\"0.1140,0.1830,0.5900,0.1980\" data-score=\"0.9584\"><p>개정: 국가기술표준원고시 제2022-0035호 (2022. 3. 11)</p></div>",
+            "page_visual_summary": "",
+            "element_analysis": [],
+            "unbound_visual_notes": null,
+            "table_markdown": "| 제\n정 : | 기술표준원고시 | 제2007-34호(2007. 1. 24) |\n|---|---|---|\n| 개\n정 : | 기술표준원고시 | 제2008-1019호(2008. 12. 31) |\n| 개\n정 : | 기술표준원고시 | 제2009-978호(2009. 12. 30) |\n| 개\n정 : | 국가기술표준원고시 | 제2017-032호 (2017. 2. 8) |\n| 개\n정 : | 국가기술표준원고시 | 제2022-0035호 (2022. 3. 11) |",
+            "arbitrated_blocks": 0,
+            "corrected_cells": 0,
+            "format_restored_cells": 0,
+            "name_consistency": null,
+            "applied_rotation": null,
+            "applied_skew": null
+          }
+        ]
+      },
+      "page_classifier": null
+    },
+    "latency_seconds": 5.078477,
+    "parsing_cost": 0.099782
+  },
+  "error_message": null
+}

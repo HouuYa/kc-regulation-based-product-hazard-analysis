@@ -1,0 +1,2752 @@
+{
+  "batch_id": "6703d68401a349629fc349c8df4c01c5",
+  "status": "completed",
+  "applied_fixes": null,
+  "filename": "15. 공급자적합성 부속서 15(아동용 섬유제품).pdf",
+  "mode": "onprem_compose",
+  "tagger": "hierarchy",
+  "translation_ko": false,
+  "total_pages": 7,
+  "total_chunks": 7,
+  "total_latency_seconds": 12.393323,
+  "result": {
+    "filename": "15. 공급자적합성 부속서 15(아동용 섬유제품).pdf",
+    "content": {
+      "ocr": {
+        "provider": "ocr_model_onprem",
+        "model": "ocr_model_onprem",
+        "text": "<div data-label=\"title\" data-bbox=\"0.3490,0.0860,0.6020,0.1070\" data-score=\"0.9951\"><h1>공급자적합성 안전기준</h1></div>\n<div data-label=\"title\" data-bbox=\"0.3220,0.1310,0.8300,0.1570\" data-score=\"0.9519\"><h1>아 동 용 섬 유 제 품 부속서 15</h1></div>\n<div data-label=\"title\" data-bbox=\"0.3090,0.1700,0.6420,0.1920\" data-score=\"1.0000\"><h1>(Textile products for children)</h1></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.2220,0.9070,0.2860\" data-score=\"0.9981\"><p>1. 적용범위 이 기준은 36개월 이상 만 13세 이하의 아동용 섬유제품의 안전요건, 시험방법 및 표시사항 등에 대해 규정한다. 다만, 맞춤복은 공급자적합성확인대상에서 제외하며, 놀이에 사용할 용도로 제작된 가장복은 안전확인 안전기준 부속서 6(완구)의 안전기준에 따라 관리하여야 한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.3350,0.9070,0.3780\" data-score=\"0.9975\"><p>2. 인용표준 다음에 나타내는 표준 또는 기준은 이 기준에 인용됨으로써 이 기준의 규정 일부를 구성한다. 이러한 관련표준 또는 기준은 그 최신판을 적용한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.4030,0.5650,0.4220\" data-score=\"0.9578\"><p>· KS K ISO 3071 텍스타일 — 수성 추출액의 pH 측정</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.4260,0.9060,0.4660\" data-score=\"0.9731\"><p>· KS K ISO 14184-1 텍스타일 — 품알데하이드 측정 — 제1부 : 유리 및 가수분해 품알데하이드 (증류수 추출법)</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.4700,0.5850,0.4880\" data-score=\"0.9437\"><p>· KS K 0736 섬유제품의 알러지성 염료 함유량 시험방법</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.4920,0.6060,0.5100\" data-score=\"0.9729\"><p>· KS K 0737 섬유 제품의 유기 주석 화합물 함유량 시험 방법</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.5140,0.9060,0.5560\" data-score=\"0.9759\"><p>• KS K 0739 섬유제품 — 아조 염료로부터 생성되는 특정 방향족 아민의 분석 방법 — 제3부 : 특정 아조 염료를 사용할 때 생성되는 4-아미노아조벤젠 분석</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.5590,0.9060,0.6000\" data-score=\"0.9721\"><p>- KS K ISO 3175-1 텍스타일 — 드라이클리닝 및 마무리 — 제1부 : 원단 및 의류의 클리닝성 (cleanability) 평가방법</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.6040,0.6980,0.6220\" data-score=\"0.9671\"><p>· KS K ISO 6330 텍스타일 — 섬유 시험에 대한 가정세탁과 건조과정</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.6260,0.8890,0.6440\" data-score=\"0.9498\"><p>· KS K 0941 유아동복의 안전성 — 유아동복에 사용하는 코드 및 조임곤 — 안전 요구 성능</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.6480,0.9070,0.6880\" data-score=\"0.9583\"><p>• KS K ISO 18254-1 텍스타일 — 알키페놀에톡실레이트(APEO)의 검출 및 분석방법 — 제1부: HPLC-MS 방법</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.6920,0.9060,0.7330\" data-score=\"0.9687\"><p>• KS C IEC 62321-6 전기전자 제품 내 특정 물질의 정량 — 제6부 : GC-MS에 의한 고분자 내존재하는 폴리브로민화바이페닐과 폴리브로민화다이페닐에테르의 분석</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.7370,0.5040,0.7550\" data-score=\"0.9719\"><p>· 안전확인 안전기준 부속서 1 유아용 섬유제품</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.7590,0.5880,0.7760\" data-score=\"0.9830\"><p>· 공급자적합성확인 안전기준 부속서 1 어린이용 가죽제품</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.7810,0.5850,0.7980\" data-score=\"0.9855\"><p>· 공급자적합성확인 안전기준 부속서 11 어린이용 장신구</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.8030,0.7010,0.8210\" data-score=\"0.9855\"><p>· 공급자적합성확인 안전기준 부속서 17 방한용·패션용·스포츠용 마스크</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.8260,0.5370,0.8430\" data-score=\"0.9710\"><p>· 안전기준준수 안전기준 부속서 1 가정용 섬유제품</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.8480,0.3280,0.8650\" data-score=\"0.9266\"><p>·어린이제품 공통안전기준</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.8700,0.6030,0.8880\" data-score=\"0.9421\"><p>·소방청고시 방염제품의 성능인증 및 제품검사의 기술기준</p></div>\n<div data-label=\"page_number\" data-bbox=\"0.4740,0.9380,0.5260,0.9500\" data-score=\"0.9374\" style=\"color:#888;font-size:0.9em;\">- 1 -</div>\n<div data-label=\"footer\" data-bbox=\"0.2830,0.9790,0.7160,0.9940\" data-score=\"0.9583\" style=\"color:#888;font-size:0.9em;\">김용석/생활어린이제품안전과/2024-03-12 17:40:30</div>\n\n<div data-label=\"title\" data-bbox=\"0.0910,0.0810,0.2320,0.0990\" data-score=\"0.9854\"><h1>3. 용어의 정의</h1></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.1250,0.9040,0.1620\" data-score=\"0.9869\"><p>3.1 “섬유제품”이라 함은 일상생활에서 사용하는 피부에 직접 또는 간접 접촉하는 섬유로 만들어진제품을 말한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.1670,0.7140,0.1840\" data-score=\"0.9848\"><p>3.2 \"조성섬유\"라 함은 섬유제품을 구성하고 있는 섬유의 명칭을 말한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.1880,0.9050,0.2250\" data-score=\"0.9843\"><p>3.3 “혼용률”이라 함은 조성섬유가 2종 이상의 섬유로 혼용 (혼방, 교직)되었을 때, 각 조성섬유의 무게를 전 조성섬유 무게에 대한 백분율 (%)로 나타낸 것을 말한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.2300,0.9040,0.2460\" data-score=\"0.9843\"><p>3.4 \"취급상 주의사항\"이라 함은 세탁 등의 취급 방법을 알리기 위하여 섬유 제품에 표시하는 것을 말한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.2510,0.9050,0.2880\" data-score=\"0.9950\"><p>3.5 \"방염제품\"이라 함은 방염처리하거나 난연성소재로 제조한 제품을 말하며 방염제품이라 표시하였을 경우는 소방청 고시 방염제품의 성능인증 및 제품검사의 기술기준에 적합하여야 한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.2920,0.9010,0.3090\" data-score=\"0.9925\"><p>3.6 \"맞춤복\"이라 함은 개인을 위해 형태, 재료, 색상 등을 임의로 선정하여 주문·제작하는 의복을 말한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.0900,0.3480,0.2010,0.3650\" data-score=\"0.9980\"><h1>4. 세부분류</h1></div>\n<div data-label=\"table_caption\" data-bbox=\"0.3420,0.3720,0.6450,0.3890\" data-score=\"0.9969\" style=\"font-weight:600;\">[표 1] 아동용 섬유제품의 세부분류</div>\n<div data-label=\"table\" data-bbox=\"0.0940,0.3960,0.8980,0.7720\" data-score=\"0.9801\"><table><tr><td>구분</td><td>종류</td></tr><tr><td>외의류</td><td>스웨터, 재킷, 코트, 커버울, 점퍼, 조끼, 토퍼, 우주복, 카디건, 솔, 망토, 한복, 우의, 앞치마, 미술 가운, 넥타이, 벨트류, 멜빵, 모자(모자, 목도리, 헤어밴드 넥워머, 스카프, 스카프밥 등), 신발(운동화, 장화류, 슬리퍼, 구두, 샌들, 부츠, 발레화, 기타 신발 등을 말하며, 섬유의 원료인 합성수지를 사용한 제품은 포함되나 천연가죽, 인조가죽 또는 모피로 된 신발은 제외)</td></tr><tr><td>중의류</td><td>상하복, 원피스, 티셔츠, 남방, 바지, 치마, 블라우스, 수영복, 발레복, 타올류, 체조복, 체육복, 수면안대, 스포츠용 보호대, 가발, 손수건, 목욕장갑, 삼푸캡, 방한용·패션용·스포츠용 마스크1), 장갑, 귀마개, 토시</td></tr><tr><td>내의류</td><td>팬티 및 팬티류, 잠옷류, 풀바지, 팬티스타킹, 바디슈트, 내의, 목욕가운, 수면조끼, 속치마, 복대, 양말류(양말, 타이츠, 스타킹, 레깅스, 덧신, 무릎보호대)</td></tr><tr><td>침구류</td><td>이불, 베탘, 베탘싸개, 커버류, 매트류(합성수지 재질인 바닥매트2)는 제외), 요, 시트류, 침낭, 패드, 카펫(면적 1 m2 미만), 해먹, 범퍼침대, 덮개류</td></tr><tr><td>가방류</td><td>가방, 배낭, 핸드백, 지갑, 보온주머니</td></tr><tr><td>기타 제품류</td><td>쿠션류, 방석류, 모기장, 커튼 등</td></tr></table></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.7840,0.9050,0.8220\" data-score=\"0.9689\"><p>주 1. 「전기용품 및 생활용품 안전관리법」공급자적합성확인 안전기준부속서 17(방한용·패션용·스포츠용마스크) 안전기준을 추가적으로 만족하여야 한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1260,0.8260,0.8340,0.8430\" data-score=\"0.9919\"><p>2. 안전확인 안전기준 부속서2(합성수지제 어린이용품) 제 4부. 바닥매트를 따른다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1270,0.8480,0.8780,0.9060\" data-score=\"0.9981\"><p>3. 상기의 종류에 없는 섬유제품 또는 신유형 섬유제품이 보통의 아동이 사용하는 섬유제품으로 판매되는 경우에는 사용환경, 용도 등을 고려하여 [표 1] 제품의 구분과 종류를 적용한다.</p></div>\n<div data-label=\"page_number\" data-bbox=\"0.4740,0.9380,0.5260,0.9500\" data-score=\"0.9541\" style=\"color:#888;font-size:0.9em;\">- 2 -</div>\n<div data-label=\"footer\" data-bbox=\"0.2830,0.9790,0.7150,0.9940\" data-score=\"0.9667\" style=\"color:#888;font-size:0.9em;\">김용석/생활어린이제품안전과/2024-03-12 17:40:30</div>\n\n<div data-label=\"title\" data-bbox=\"0.0900,0.1070,0.2020,0.1240\" data-score=\"0.9944\"><h1>5. 안전요건</h1></div>\n<div data-label=\"title\" data-bbox=\"0.0900,0.1580,0.2700,0.1750\" data-score=\"0.9999\"><h1>5.1 물리적 안전요건</h1></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.1810,0.9060,0.2460\" data-score=\"0.9972\"><p>5.1.1 코드 및 조임곤 (6.1.1 참조) KS K 0941에서 규정하고 있는 코드 및 조임곤이 사용된 경우에는 KS K 0941에 적합하여야 한다. 제품의 연령 구분 및 정의는 KS K 0941에 따르되 대상 연령은 만 13세 이하로 한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.2750,0.9070,0.3880\" data-score=\"0.9941\"><p>5.2 유해물질 안전요건 유해물질의 기준 함유량은 6. 시험방법에 따라 시험하였을 때 [표 2]의 기준치에 적합하여야 한다. 가죽이나 모피 소재가 사용된 부분에 대해서는 공급자적합성확인 안전기준 부속서 1(어린이용 가죽제품)의 유해물질 안전요건에 적합하여야 한다. 단, 가죽이나 모피 소재가 제품 면적 대비 5 % 이하인 부분과 전체 중량의 1 % 미만인 부분도 유해물질 안전요건 적용대상으로 본다. 신발류의 유해물질 안전요건 적용 범위에서 밀창은 제외한다.</p></div>\n<div data-label=\"table_caption\" data-bbox=\"0.3490,0.4160,0.6460,0.4350\" data-score=\"0.9690\" style=\"font-weight:600;\">[표 2] 유해물질 안전요건 \\( ^{9)} \\) , 10), 11)</div>\n<div data-label=\"table\" data-bbox=\"0.0940,0.4410,0.9070,0.7580\" data-score=\"0.9820\"><table><tr><td>유해물질명</td><td>허용치</td></tr><tr><td>폼알데하이드 (mg/kg) 1)</td><td>75 이하</td></tr><tr><td>아릴아민 (mg/kg) 2)</td><td>각각 30 이하</td></tr><tr><td>프탈레이트계 가소제 총 함유량 (%) 3)</td><td>0.1 이하</td></tr><tr><td>유기주석화합물(tributyltin, TBT) (mg/kg) 4)</td><td>1.0 이하</td></tr><tr><td>방염제 5)</td><td>사용하지 말 것</td></tr><tr><td>총 납 함유량 (mg/kg) 6)</td><td>100 이하</td></tr><tr><td>총 카드뮴 함유량(mg/kg) 6)</td><td>75 이하</td></tr><tr><td>알러지성 염료 (mg/kg) 7)</td><td>각각 50 이하</td></tr><tr><td>pH 1)</td><td>4.0 ~ 7.5</td></tr><tr><td>니켈(Ni)의 용출량 (\\( \\mu g/cm^{2}/week \\)) 8)</td><td>0.5 이하</td></tr><tr><td>노닐페놀(NP, NPEO) 총 함량 (mg/kg) 1)</td><td>100 이하</td></tr></table></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.7680,0.3910,0.7850\" data-score=\"0.9985\"><p>주 1. 섬유부분에 한하여 적용한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1190,0.7930,0.9070,0.8340\" data-score=\"0.9775\"><p>2. 염색한 섬유부분에만 적용하며, 대상물질은 안전기준준수 안전기준 부속서1(가정용 섬유 제품) 부록 B., KS K 0739에 따른다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1200,0.8400,0.9070,0.9050\" data-score=\"0.9982\"><p>3. 섬유 원단에 합성수지(합성고무 포함) 소재로 코팅 또는 프린팅 등의 가공 처리를 한 경우 및 합성수지(합성고무 포함) 소재의 부자재에만 적용하며, 대상물질은 어린이제품안전 공통 기준에 따른다. 단, 금속 및 고분자 기질 위에 페인트 코팅된 경우는 적용대상에서 제외한다.</p></div>\n<div data-label=\"page_number\" data-bbox=\"0.4740,0.9370,0.5250,0.9500\" data-score=\"0.9428\" style=\"color:#888;font-size:0.9em;\">- 3 -</div>\n<div data-label=\"footer\" data-bbox=\"0.2830,0.9790,0.7150,0.9940\" data-score=\"0.9667\" style=\"color:#888;font-size:0.9em;\">김용석/생활어린이제품안전과/2024-03-12 17:40:30</div>\n\n<div data-label=\"ref_text\" data-bbox=\"0.1200,0.0810,0.6570,0.0980\" data-score=\"0.9981\"><small style=\"color:#666;\">4. 섬유 원단에 코팅, 프린팅 등이 되어 있는 경우만 적용한다.</small></div>\n<div data-label=\"ref_text\" data-bbox=\"0.1210,0.1050,0.9030,0.1470\" data-score=\"0.9927\"><small style=\"color:#666;\">5. 대상물질은 TDBPP [tri(2,3-dibromopropyl) phosphate], PentaBDE[Pentabromodiphenyl ethers], OctaBDE[Octabromodiphenyl ethers]이고 방염가공처리된 제품에 한하여 적용한다.</small></div>\n<div data-label=\"ref_text\" data-bbox=\"0.1210,0.1520,0.9070,0.2160\" data-score=\"0.9923\"><small style=\"color:#666;\">6. 금속 기질, 고분자 기질, 페인팅 및 유사코팅, 기타 재료(목재 등)부분에 적용하며, 섬유 원단에는 적용하지 않는다. 단, 페인팅 및 표면코팅의 경우, 총 납 함유량 허용치는 어린이 제품 공통안전기준에 따른다.</small></div>\n<div data-label=\"ref_text\" data-bbox=\"0.1210,0.2220,0.9060,0.2640\" data-score=\"0.9840\"><small style=\"color:#666;\">7. 대상물질은 KS K 0736에 따르고, 적용되는 조성섬유는 폴리에스터, 나일론, 아크릴, 아세\n테이트, 트리아세테이트, 염화비닐 섬유이며, 염색한 섬유부분에 한하여 적용한다.</small></div>\n<div data-label=\"ref_text\" data-bbox=\"0.1210,0.2690,0.9060,0.3110\" data-score=\"0.9945\"><small style=\"color:#666;\">8. 원래 용도대로 제품을 착용한 상태에서 피부에 지속적으로 접촉하는 금속에 한하여 적용한다. 표면이 도금형태가 아닌 페인트 코팅된 경우는 제외한다.</small></div>\n<div data-label=\"ref_text\" data-bbox=\"0.1210,0.3160,0.9070,0.4050\" data-score=\"0.9865\"><small style=\"color:#666;\">9. 제품을 구성하는 섬유 부위 중 충전재 및 제품 면적 대비 5 % 이하인 부분은 제외하며, 면적계산이 불가한 끈이나 코드 등 섬유제 부속의 경우 전체 중량의 1 % 미만인 경우는 제외한다. 단, 상기 조건에도 불구하고 내의류, 중의류(장갑, 토시, 귀마개), 외의류(샌들, 슬리퍼, 모자)의 섬유부위 중 착용시 신체와 지속적으로 직접 접촉하는 부위는 적용대상으로 인정한다.</small></div>\n<div data-label=\"ref_text\" data-bbox=\"0.1230,0.4100,0.9060,0.4520\" data-score=\"0.9895\"><small style=\"color:#666;\">10. 제품에 투입된 원부자재가 추가적인 가공 없이 최종제품에 사용되었다면 그 원부자재의 안전요건을 최종 제품의 안전요건으로 인정할 수 있다.</small></div>\n<div data-label=\"ref_text\" data-bbox=\"0.1230,0.4570,0.9070,0.5220\" data-score=\"0.9930\"><small style=\"color:#666;\">11. 방한용.패션용.스포츠용 마스크는 추가적으로「전기용품 및 생활용품 안전관리법」에 따른 공급자적합성확인 안전기준 부속서 17(방한용.패션용.스포츠용 마스크)의 유해물질 안전요건에 적합하여야 한다.</small></div>\n<div data-label=\"title\" data-bbox=\"0.0900,0.5520,0.2700,0.5690\" data-score=\"0.9998\"><h1>5.3 전기적 안전요건</h1></div>\n<div data-label=\"ref_text\" data-bbox=\"0.0890,0.5750,0.9020,0.6400\" data-score=\"0.9993\"><small style=\"color:#666;\">5.3.1 섬유제품에 포함되는 2차전지는 폭발 등의 가능성을 고려하여 리튬폴리머 전지로 사용을 제한한다. 또한 제조업자 및 수입업자는 사용되는 리튬폴리머 전지 및 셀의 안전성(플라스틱 보강 및 케이스가 있는 상태)을 KC 62133 또는 그에 준하는 성적서를 통해 확인해야 한다.</small></div>\n<div data-label=\"ref_text\" data-bbox=\"0.0890,0.6450,0.9020,0.7340\" data-score=\"0.9838\"><small style=\"color:#666;\">5.3.2 전지가 위치한 공간은 외부의 충격, 하중, 휈 변형, 관통 등에 의한 제품 파손 및 폭발 등의 사고를 고려하여 설계되어야 하고, 제조업자 및 수입업자는 제품 구성에 대한 상세 정보를 기술한 제품설명서(긴급대응가이드 포함)를 작성하여 5.3.5항의 주의경고표시와 함께 소비자에게 제공해야 한다.</small></div>\n<div data-label=\"ref_text\" data-bbox=\"0.0890,0.7390,0.9010,0.7820\" data-score=\"0.9983\"><small style=\"color:#666;\">5.3.3 제조업자 및 수입업자는 침수 등에 의한 전지 폭발 및 사고에 대비하여 해당 제품이 IP(International Protection) 보호 등급 IPX7등급 이상인지 확인해야 한다.</small></div>\n<div data-label=\"ref_text\" data-bbox=\"0.0890,0.7860,0.9010,0.8280\" data-score=\"0.9996\"><small style=\"color:#666;\">5.3.4 전지를 제외한 모든 전기제품은 전기용품안전관리법에 따라 인증 또는 시험성적서가 있는 제품을 사용해야 한다.</small></div>\n<div data-label=\"ref_text\" data-bbox=\"0.0890,0.8330,0.9010,0.8760\" data-score=\"0.9989\"><small style=\"color:#666;\">5.3.5 전기 제품 및 리튬폴리머 전지가 내장되거나 사용되는 모든 제품은 사용상 발생 가능한 모든 경우를 고려하여 반드시 주의경고 표시 8종류 이상을 기호 및 한글로 표기하여야 한다.</small></div>\n<div data-label=\"ref_text\" data-bbox=\"0.0890,0.8810,0.5780,0.8980\" data-score=\"0.9998\"><small style=\"color:#666;\">5.3.6 세부적인 표시방법은 부록 A.2.1을 참고할 수 있다.</small></div>\n<div data-label=\"page_number\" data-bbox=\"0.4740,0.9380,0.5260,0.9490\" data-score=\"0.9739\" style=\"color:#888;font-size:0.9em;\">- 4 -</div>\n<div data-label=\"footer\" data-bbox=\"0.2830,0.9790,0.7160,0.9940\" data-score=\"0.9602\" style=\"color:#888;font-size:0.9em;\">김용석/생활어린이제품안전과/2024-03-12 17:40:30</div>\n\n<div data-label=\"title\" data-bbox=\"0.0900,0.1050,0.3980,0.1210\" data-score=\"0.9997\"><h1>5.4 안전요건에 대한 적합여부 확인</h1></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.1280,0.9080,0.2170\" data-score=\"0.9941\"><p>공급자적합성확인을 하려는 제조업자 및 수입업자는 안전한 공산품이 유통될 수 있도록 해당 제품을 출고하기 전이나 통관하기 전에 유해물질이 제품에 존재할 수 있는 다양한 가능성을 고려하여 자체시험, 제3자 시험·검사기관의 시험, 외국기관의 시험성적서, 원자재 공급업체가 제시하는 시험성적서 등을 통하여 공급자적합성확인기준에 적합한지를 확인하여야 한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.0900,0.2740,0.2020,0.2910\" data-score=\"0.9788\"><h1>6. 시험방법</h1></div>\n<div data-label=\"title\" data-bbox=\"0.0930,0.3250,0.2690,0.3420\" data-score=\"0.9998\"><h1>6.1 물리적 안전요건</h1></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.3490,0.4640,0.3650\" data-score=\"0.9813\"><p>6.1.1 코드 및 조임곤 KS K 0941에 따른다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.3720,0.6050,0.3890\" data-score=\"0.9775\"><p>6.1.2 자석과 자석부품 “어린이제품 공통안전기준”에 따른다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.0930,0.4190,0.2860,0.4360\" data-score=\"0.9918\"><h1>6.2 유해물질 안전요건</h1></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.4430,0.4030,0.4600\" data-score=\"0.9988\"><p>6.2.1 pH KS K ISO 3071에 따른다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.4660,0.5170,0.4830\" data-score=\"0.9930\"><p>6.2.2 품알데하이드 KS K ISO 14184-1에 따른다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.4890,0.9050,0.5300\" data-score=\"0.9933\"><p>6.2.3 아릴아민 「전기용품 및 생활용품 안전관리법」에 따른 안전기준준수 안전기준 부속서 1(가정용 섬유제품) 부록 B. 염료 및 염색물의 아릴아민 시험방법, KS K 0739에 따른다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.5360,0.7060,0.5540\" data-score=\"0.9822\"><p>6.2.4 프탈레이트가소제 총 함유량 \"어린이제품 공통안전기준\"에 따른다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.5600,0.4700,0.5770\" data-score=\"0.9987\"><p>6.2.5 유기주석화합물 KS K 0737에 따른다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.5840,0.1980,0.6010\" data-score=\"0.9595\"><p>6.2.6 방염제</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.6070,0.6460,0.6240\" data-score=\"0.9817\"><p>6.2.6.1 PentaBDE, OctaBDE의 시험은 KS C IEC 62321-6에 따른다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.6300,0.9050,0.6710\" data-score=\"0.9930\"><p>6.2.6.2 TDBPP「전기용품 및 생활용품 안전관리법」에 따른 안전기준준수 안전기준 부속서 2(양탄자) 부속서A TDBPP 정량방법에 따른다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.6780,0.5740,0.6950\" data-score=\"0.9767\"><p>6.2.7 총 납 함유량 “어린이제품 공통안전기준”에 따른다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.7010,0.6140,0.7180\" data-score=\"0.9511\"><p>6.2.8 총 카드뮴 함유량 \"어린이제품 공통안전기준\"에 따른다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.7250,0.4600,0.7420\" data-score=\"0.9667\"><p>6.2.9 알려지성 염료 KS K 0736에 따른다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.7480,0.8260,0.7650\" data-score=\"0.9985\"><p>6.2.10 니켈 용출량 공급자적합성확인 안전기준 부속서 11(어린이용 장신구)에 따른다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.7720,0.3990,0.7890\" data-score=\"0.9903\"><p>6.2.11 노닐페놀(NP, NPEO) 총 함량</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.7950,0.8760,0.8130\" data-score=\"0.9959\"><p>6.2.11.1 NP(Nonylphenol)의 시험은 안전확인 안전기준 1(유아용 섬유제품) 부록 A에 따른다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.8190,0.7470,0.8370\" data-score=\"0.9981\"><p>6.2.11.2 NPEO(Nonylphenolethylates)의 시험은 KS K ISO 18254-1에 따른다.</p></div>\n<div data-label=\"page_number\" data-bbox=\"0.4740,0.9370,0.5240,0.9490\" data-score=\"0.9238\" style=\"color:#888;font-size:0.9em;\">- 5 -</div>\n<div data-label=\"footer\" data-bbox=\"0.2830,0.9790,0.7140,0.9940\" data-score=\"0.9641\" style=\"color:#888;font-size:0.9em;\">김용석/생활어린이제품안전과/2024-03-12 17:40:30</div>\n\n<div data-label=\"title\" data-bbox=\"0.0900,0.0820,0.3310,0.0990\" data-score=\"0.9995\"><h1>7. 표시사항 및 표시 방법</h1></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.1300,0.9080,0.2430\" data-score=\"0.9909\"><p>7.1 「전기용품 및 생활용품 안전관리법」에 따른 안전기준준수 안전기준 부속서 1 가정용 섬유제품의 표시사항에 따른다. 다만, 방한용.패션용.스포츠용 마스크는「전기용품 및 생활용품 안전관리법」에 따른 공급자적합성확인 안전기준 부속서 17(방한용.패션용.스포츠용 마스크)의 표시사항을 따른다. 표시사항은 한글로 표시하여야 한다(단, 제품의 사용연령을 반드시 표시하여야 한다).</p></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.2720,0.9080,0.3360\" data-score=\"0.9991\"><p>7.2 아동이 입을 수 있는 섬유제품이 안전확인 안전기준 부속서 6(완구) 제2부 5.2(작은 부품시험)에서 통과되는 작은 부품이 부착된 경우에는 [표 3](1)에 따라 주의 사항을 표시하여야 한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.3660,0.9060,0.4060\" data-score=\"0.9976\"><p>7.3. 아동이 사용하는 연질 또는 발표된 합성수지 재질의 신발은 [표 3](2)에 따라 주의 사항을 표시하여야 한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.3980,0.4360,0.5990,0.4540\" data-score=\"0.9975\"><h1>[표 3] 취급상 주의표시</h1></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.4830,0.6460,0.5020\" data-score=\"0.9988\"><p>(1) 아동이 입을 수 있는 섬유제품의 작은 부품에 대한 주의사항</p></div>\n<div data-label=\"table\" data-bbox=\"0.0970,0.5110,0.9020,0.5860\" data-score=\"0.9867\"><table><tr><td>취급상 주의사항</td></tr><tr><td>\"주의! 작은 부품이 탈락되면 삼킬 수 있음\"</td></tr></table></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.6310,0.7500,0.6490\" data-score=\"0.9943\"><p>(2) 아동이 사용하는 연질 또는 발표된 합성수지 재질의 신발에 대한 주의사항</p></div>\n<div data-label=\"table\" data-bbox=\"0.0970,0.6590,0.9020,0.7310\" data-score=\"0.9449\"><table><tr><td>취급상 주의사항</td></tr><tr><td>주의! 신발이 에스컬레이터 등에 끌 수 있음</td></tr></table></div>\n<div data-label=\"table\" data-bbox=\"0.0950,0.7830,0.9060,0.9010\" data-score=\"0.9958\"><table><tr><td>개정</td><td>정 : 산업통상자원부 고시</td><td>제2015 - 0109호(2015. 6. 4.)</td></tr><tr><td>개정</td><td>정 : 산업통상자원부 고시</td><td>제2017 - 0017호(2017. 1. 31.)</td></tr><tr><td>개정</td><td>정 : 산업통상자원부 고시</td><td>제2018 - 0031호(2018. 3. 5.)</td></tr><tr><td>개정</td><td>정 : 산업통상자원부 고시</td><td>제2021 - 0171호(2021. 10. 27.)</td></tr><tr><td>개정</td><td>정 : 산업통상자원부 고시</td><td>제2024 - 042호(2024. 3. 7.)</td></tr></table></div>\n<div data-label=\"page_number\" data-bbox=\"0.4750,0.9380,0.5260,0.9500\" data-score=\"0.9638\" style=\"color:#888;font-size:0.9em;\">- 6 -</div>\n<div data-label=\"footer\" data-bbox=\"0.2830,0.9790,0.7150,0.9940\" data-score=\"0.9667\" style=\"color:#888;font-size:0.9em;\">김용석/생활어린이제품안전과/2024-03-12 17:40:30</div>\n\n<div data-label=\"title\" data-bbox=\"0.3440,0.0860,0.6560,0.1080\" data-score=\"0.9998\"><h1>부록 A. 세부 표시방법(예시)</h1></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.1630,0.9080,0.2060\" data-score=\"0.9941\"><p>A.1. 서론 이 세부 표시방법(예시)은 참고하기 위한 것으로 실제 적용되는 품목과 꼭 일치하는 것은 아니다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.0900,0.2350,0.3030,0.2520\" data-score=\"0.9999\"><h1>A.2 세부 표시방법(예시)</h1></div>\n<div data-label=\"title\" data-bbox=\"0.0900,0.2580,0.5020,0.2750\" data-score=\"0.9996\"><h1>A.2.1 리튬이차전지 사용 제품의 주의경고(예시)</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1110,0.2890,0.8930,0.3080\" data-score=\"0.9745\"><p>1.인증을 받지 않은 전지 또는 충전기를 사용하여 충전하는 경우 폭발 위험성이 있습니다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1110,0.3100,0.8170,0.3280\" data-score=\"0.9997\"><p>2. 전지 단자에 금속성 물질(휴대폰 액세서리, 동전 등)이 접촉하지 않도록 하세요.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1110,0.3310,0.6540,0.3490\" data-score=\"0.9671\"><p>3. 전지를 어린 아이가 빨거나 동물이 물어 Rd지 않도록 하세요.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1110,0.3520,0.9010,0.3900\" data-score=\"0.9716\"><p>4. 전지를 파손시키거나 강한 충격, 가열, 침수, 날카로운 물질로 뜻을 경우 폭발 위험이 있으므로 절대 금하여 주세요.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1130,0.3940,0.9010,0.4330\" data-score=\"0.9991\"><p>5. 전지가 포함되어 있는 제품을 직사광선이 드는 자동차 내부 등 밀폐된 고온의 장소에 두지 마세요. 변형, 고장, 폭발의 위험이 있습니다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1130,0.4360,0.9010,0.4740\" data-score=\"0.9987\"><p>6. 임의로 분해하거나 충격을 주지말고, 충전 중인 상태로 이용하지 마세요. 감전, 누전화재의 원인이 될 수 있습니다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1130,0.4780,0.9010,0.5160\" data-score=\"0.9911\"><p>7. 전지의 발열, 누액, 파열, 오염 등은 기기고장의 원인이 되거나 상해의 위험이 있으니 전지를 임의로 분해 및 개조하지 마세요.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1130,0.5200,0.9010,0.5580\" data-score=\"0.9929\"><p>8. 전지가 내장되어 있는 제품의(예:신발, 의류 등) 해당 부위를 구부리거나, 세탁, 외부적으로 강한 충격을 가할 경우 전지의 파손, 폭발의 위험이 있으므로 주의하십시오.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1110,0.5610,0.8990,0.5790\" data-score=\"0.9984\"><p>9. 전지가 내장되어 있는 제품을 유아동이 사용하는 경우 보호자의 지속적인 보호가 필요합니다.</p></div>\n<div data-label=\"page_number\" data-bbox=\"0.4750,0.9370,0.5260,0.9490\" data-score=\"0.9984\" style=\"color:#888;font-size:0.9em;\">- 7 -</div>\n<div data-label=\"footer\" data-bbox=\"0.2830,0.9790,0.7160,0.9940\" data-score=\"0.9583\" style=\"color:#888;font-size:0.9em;\">김용석/생활어린이제품안전과/2024-03-12 17:40:30</div>",
+        "text_ko": null,
+        "pages": [
+          {
+            "page_number": 1,
+            "part_number": null,
+            "text": "<div data-label=\"title\" data-bbox=\"0.3490,0.0860,0.6020,0.1070\" data-score=\"0.9951\"><h1>공급자적합성 안전기준</h1></div>\n<div data-label=\"title\" data-bbox=\"0.3220,0.1310,0.8300,0.1570\" data-score=\"0.9519\"><h1>아 동 용 섬 유 제 품 부속서 15</h1></div>\n<div data-label=\"title\" data-bbox=\"0.3090,0.1700,0.6420,0.1920\" data-score=\"1.0000\"><h1>(Textile products for children)</h1></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.2220,0.9070,0.2860\" data-score=\"0.9981\"><p>1. 적용범위 이 기준은 36개월 이상 만 13세 이하의 아동용 섬유제품의 안전요건, 시험방법 및 표시사항 등에 대해 규정한다. 다만, 맞춤복은 공급자적합성확인대상에서 제외하며, 놀이에 사용할 용도로 제작된 가장복은 안전확인 안전기준 부속서 6(완구)의 안전기준에 따라 관리하여야 한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.3350,0.9070,0.3780\" data-score=\"0.9975\"><p>2. 인용표준 다음에 나타내는 표준 또는 기준은 이 기준에 인용됨으로써 이 기준의 규정 일부를 구성한다. 이러한 관련표준 또는 기준은 그 최신판을 적용한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.4030,0.5650,0.4220\" data-score=\"0.9578\"><p>· KS K ISO 3071 텍스타일 — 수성 추출액의 pH 측정</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.4260,0.9060,0.4660\" data-score=\"0.9731\"><p>· KS K ISO 14184-1 텍스타일 — 품알데하이드 측정 — 제1부 : 유리 및 가수분해 품알데하이드 (증류수 추출법)</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.4700,0.5850,0.4880\" data-score=\"0.9437\"><p>· KS K 0736 섬유제품의 알러지성 염료 함유량 시험방법</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.4920,0.6060,0.5100\" data-score=\"0.9729\"><p>· KS K 0737 섬유 제품의 유기 주석 화합물 함유량 시험 방법</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.5140,0.9060,0.5560\" data-score=\"0.9759\"><p>• KS K 0739 섬유제품 — 아조 염료로부터 생성되는 특정 방향족 아민의 분석 방법 — 제3부 : 특정 아조 염료를 사용할 때 생성되는 4-아미노아조벤젠 분석</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.5590,0.9060,0.6000\" data-score=\"0.9721\"><p>- KS K ISO 3175-1 텍스타일 — 드라이클리닝 및 마무리 — 제1부 : 원단 및 의류의 클리닝성 (cleanability) 평가방법</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.6040,0.6980,0.6220\" data-score=\"0.9671\"><p>· KS K ISO 6330 텍스타일 — 섬유 시험에 대한 가정세탁과 건조과정</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.6260,0.8890,0.6440\" data-score=\"0.9498\"><p>· KS K 0941 유아동복의 안전성 — 유아동복에 사용하는 코드 및 조임곤 — 안전 요구 성능</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.6480,0.9070,0.6880\" data-score=\"0.9583\"><p>• KS K ISO 18254-1 텍스타일 — 알키페놀에톡실레이트(APEO)의 검출 및 분석방법 — 제1부: HPLC-MS 방법</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.6920,0.9060,0.7330\" data-score=\"0.9687\"><p>• KS C IEC 62321-6 전기전자 제품 내 특정 물질의 정량 — 제6부 : GC-MS에 의한 고분자 내존재하는 폴리브로민화바이페닐과 폴리브로민화다이페닐에테르의 분석</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.7370,0.5040,0.7550\" data-score=\"0.9719\"><p>· 안전확인 안전기준 부속서 1 유아용 섬유제품</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.7590,0.5880,0.7760\" data-score=\"0.9830\"><p>· 공급자적합성확인 안전기준 부속서 1 어린이용 가죽제품</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.7810,0.5850,0.7980\" data-score=\"0.9855\"><p>· 공급자적합성확인 안전기준 부속서 11 어린이용 장신구</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.8030,0.7010,0.8210\" data-score=\"0.9855\"><p>· 공급자적합성확인 안전기준 부속서 17 방한용·패션용·스포츠용 마스크</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.8260,0.5370,0.8430\" data-score=\"0.9710\"><p>· 안전기준준수 안전기준 부속서 1 가정용 섬유제품</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.8480,0.3280,0.8650\" data-score=\"0.9266\"><p>·어린이제품 공통안전기준</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.8700,0.6030,0.8880\" data-score=\"0.9421\"><p>·소방청고시 방염제품의 성능인증 및 제품검사의 기술기준</p></div>\n<div data-label=\"page_number\" data-bbox=\"0.4740,0.9380,0.5260,0.9500\" data-score=\"0.9374\" style=\"color:#888;font-size:0.9em;\">- 1 -</div>\n<div data-label=\"footer\" data-bbox=\"0.2830,0.9790,0.7160,0.9940\" data-score=\"0.9583\" style=\"color:#888;font-size:0.9em;\">김용석/생활어린이제품안전과/2024-03-12 17:40:30</div>",
+            "text_ko": null,
+            "links": null,
+            "confidence": 0.9685
+          },
+          {
+            "page_number": 2,
+            "part_number": null,
+            "text": "<div data-label=\"title\" data-bbox=\"0.0910,0.0810,0.2320,0.0990\" data-score=\"0.9854\"><h1>3. 용어의 정의</h1></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.1250,0.9040,0.1620\" data-score=\"0.9869\"><p>3.1 “섬유제품”이라 함은 일상생활에서 사용하는 피부에 직접 또는 간접 접촉하는 섬유로 만들어진제품을 말한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.1670,0.7140,0.1840\" data-score=\"0.9848\"><p>3.2 \"조성섬유\"라 함은 섬유제품을 구성하고 있는 섬유의 명칭을 말한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.1880,0.9050,0.2250\" data-score=\"0.9843\"><p>3.3 “혼용률”이라 함은 조성섬유가 2종 이상의 섬유로 혼용 (혼방, 교직)되었을 때, 각 조성섬유의 무게를 전 조성섬유 무게에 대한 백분율 (%)로 나타낸 것을 말한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.2300,0.9040,0.2460\" data-score=\"0.9843\"><p>3.4 \"취급상 주의사항\"이라 함은 세탁 등의 취급 방법을 알리기 위하여 섬유 제품에 표시하는 것을 말한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.2510,0.9050,0.2880\" data-score=\"0.9950\"><p>3.5 \"방염제품\"이라 함은 방염처리하거나 난연성소재로 제조한 제품을 말하며 방염제품이라 표시하였을 경우는 소방청 고시 방염제품의 성능인증 및 제품검사의 기술기준에 적합하여야 한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.2920,0.9010,0.3090\" data-score=\"0.9925\"><p>3.6 \"맞춤복\"이라 함은 개인을 위해 형태, 재료, 색상 등을 임의로 선정하여 주문·제작하는 의복을 말한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.0900,0.3480,0.2010,0.3650\" data-score=\"0.9980\"><h1>4. 세부분류</h1></div>\n<div data-label=\"table_caption\" data-bbox=\"0.3420,0.3720,0.6450,0.3890\" data-score=\"0.9969\" style=\"font-weight:600;\">[표 1] 아동용 섬유제품의 세부분류</div>\n<div data-label=\"table\" data-bbox=\"0.0940,0.3960,0.8980,0.7720\" data-score=\"0.9801\"><table><tr><td>구분</td><td>종류</td></tr><tr><td>외의류</td><td>스웨터, 재킷, 코트, 커버울, 점퍼, 조끼, 토퍼, 우주복, 카디건, 솔, 망토, 한복, 우의, 앞치마, 미술 가운, 넥타이, 벨트류, 멜빵, 모자(모자, 목도리, 헤어밴드 넥워머, 스카프, 스카프밥 등), 신발(운동화, 장화류, 슬리퍼, 구두, 샌들, 부츠, 발레화, 기타 신발 등을 말하며, 섬유의 원료인 합성수지를 사용한 제품은 포함되나 천연가죽, 인조가죽 또는 모피로 된 신발은 제외)</td></tr><tr><td>중의류</td><td>상하복, 원피스, 티셔츠, 남방, 바지, 치마, 블라우스, 수영복, 발레복, 타올류, 체조복, 체육복, 수면안대, 스포츠용 보호대, 가발, 손수건, 목욕장갑, 삼푸캡, 방한용·패션용·스포츠용 마스크1), 장갑, 귀마개, 토시</td></tr><tr><td>내의류</td><td>팬티 및 팬티류, 잠옷류, 풀바지, 팬티스타킹, 바디슈트, 내의, 목욕가운, 수면조끼, 속치마, 복대, 양말류(양말, 타이츠, 스타킹, 레깅스, 덧신, 무릎보호대)</td></tr><tr><td>침구류</td><td>이불, 베탘, 베탘싸개, 커버류, 매트류(합성수지 재질인 바닥매트2)는 제외), 요, 시트류, 침낭, 패드, 카펫(면적 1 m2 미만), 해먹, 범퍼침대, 덮개류</td></tr><tr><td>가방류</td><td>가방, 배낭, 핸드백, 지갑, 보온주머니</td></tr><tr><td>기타 제품류</td><td>쿠션류, 방석류, 모기장, 커튼 등</td></tr></table></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.7840,0.9050,0.8220\" data-score=\"0.9689\"><p>주 1. 「전기용품 및 생활용품 안전관리법」공급자적합성확인 안전기준부속서 17(방한용·패션용·스포츠용마스크) 안전기준을 추가적으로 만족하여야 한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1260,0.8260,0.8340,0.8430\" data-score=\"0.9919\"><p>2. 안전확인 안전기준 부속서2(합성수지제 어린이용품) 제 4부. 바닥매트를 따른다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1270,0.8480,0.8780,0.9060\" data-score=\"0.9981\"><p>3. 상기의 종류에 없는 섬유제품 또는 신유형 섬유제품이 보통의 아동이 사용하는 섬유제품으로 판매되는 경우에는 사용환경, 용도 등을 고려하여 [표 1] 제품의 구분과 종류를 적용한다.</p></div>\n<div data-label=\"page_number\" data-bbox=\"0.4740,0.9380,0.5260,0.9500\" data-score=\"0.9541\" style=\"color:#888;font-size:0.9em;\">- 2 -</div>\n<div data-label=\"footer\" data-bbox=\"0.2830,0.9790,0.7150,0.9940\" data-score=\"0.9667\" style=\"color:#888;font-size:0.9em;\">김용석/생활어린이제품안전과/2024-03-12 17:40:30</div>",
+            "text_ko": null,
+            "links": null,
+            "confidence": 0.9845
+          },
+          {
+            "page_number": 3,
+            "part_number": null,
+            "text": "<div data-label=\"title\" data-bbox=\"0.0900,0.1070,0.2020,0.1240\" data-score=\"0.9944\"><h1>5. 안전요건</h1></div>\n<div data-label=\"title\" data-bbox=\"0.0900,0.1580,0.2700,0.1750\" data-score=\"0.9999\"><h1>5.1 물리적 안전요건</h1></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.1810,0.9060,0.2460\" data-score=\"0.9972\"><p>5.1.1 코드 및 조임곤 (6.1.1 참조) KS K 0941에서 규정하고 있는 코드 및 조임곤이 사용된 경우에는 KS K 0941에 적합하여야 한다. 제품의 연령 구분 및 정의는 KS K 0941에 따르되 대상 연령은 만 13세 이하로 한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.2750,0.9070,0.3880\" data-score=\"0.9941\"><p>5.2 유해물질 안전요건 유해물질의 기준 함유량은 6. 시험방법에 따라 시험하였을 때 [표 2]의 기준치에 적합하여야 한다. 가죽이나 모피 소재가 사용된 부분에 대해서는 공급자적합성확인 안전기준 부속서 1(어린이용 가죽제품)의 유해물질 안전요건에 적합하여야 한다. 단, 가죽이나 모피 소재가 제품 면적 대비 5 % 이하인 부분과 전체 중량의 1 % 미만인 부분도 유해물질 안전요건 적용대상으로 본다. 신발류의 유해물질 안전요건 적용 범위에서 밀창은 제외한다.</p></div>\n<div data-label=\"table_caption\" data-bbox=\"0.3490,0.4160,0.6460,0.4350\" data-score=\"0.9690\" style=\"font-weight:600;\">[표 2] 유해물질 안전요건 \\( ^{9)} \\) , 10), 11)</div>\n<div data-label=\"table\" data-bbox=\"0.0940,0.4410,0.9070,0.7580\" data-score=\"0.9820\"><table><tr><td>유해물질명</td><td>허용치</td></tr><tr><td>폼알데하이드 (mg/kg) 1)</td><td>75 이하</td></tr><tr><td>아릴아민 (mg/kg) 2)</td><td>각각 30 이하</td></tr><tr><td>프탈레이트계 가소제 총 함유량 (%) 3)</td><td>0.1 이하</td></tr><tr><td>유기주석화합물(tributyltin, TBT) (mg/kg) 4)</td><td>1.0 이하</td></tr><tr><td>방염제 5)</td><td>사용하지 말 것</td></tr><tr><td>총 납 함유량 (mg/kg) 6)</td><td>100 이하</td></tr><tr><td>총 카드뮴 함유량(mg/kg) 6)</td><td>75 이하</td></tr><tr><td>알러지성 염료 (mg/kg) 7)</td><td>각각 50 이하</td></tr><tr><td>pH 1)</td><td>4.0 ~ 7.5</td></tr><tr><td>니켈(Ni)의 용출량 (\\( \\mu g/cm^{2}/week \\)) 8)</td><td>0.5 이하</td></tr><tr><td>노닐페놀(NP, NPEO) 총 함량 (mg/kg) 1)</td><td>100 이하</td></tr></table></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.7680,0.3910,0.7850\" data-score=\"0.9985\"><p>주 1. 섬유부분에 한하여 적용한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1190,0.7930,0.9070,0.8340\" data-score=\"0.9775\"><p>2. 염색한 섬유부분에만 적용하며, 대상물질은 안전기준준수 안전기준 부속서1(가정용 섬유 제품) 부록 B., KS K 0739에 따른다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1200,0.8400,0.9070,0.9050\" data-score=\"0.9982\"><p>3. 섬유 원단에 합성수지(합성고무 포함) 소재로 코팅 또는 프린팅 등의 가공 처리를 한 경우 및 합성수지(합성고무 포함) 소재의 부자재에만 적용하며, 대상물질은 어린이제품안전 공통 기준에 따른다. 단, 금속 및 고분자 기질 위에 페인트 코팅된 경우는 적용대상에서 제외한다.</p></div>\n<div data-label=\"page_number\" data-bbox=\"0.4740,0.9370,0.5250,0.9500\" data-score=\"0.9428\" style=\"color:#888;font-size:0.9em;\">- 3 -</div>\n<div data-label=\"footer\" data-bbox=\"0.2830,0.9790,0.7150,0.9940\" data-score=\"0.9667\" style=\"color:#888;font-size:0.9em;\">김용석/생활어린이제품안전과/2024-03-12 17:40:30</div>",
+            "text_ko": null,
+            "links": null,
+            "confidence": 0.9837
+          },
+          {
+            "page_number": 4,
+            "part_number": null,
+            "text": "<div data-label=\"ref_text\" data-bbox=\"0.1200,0.0810,0.6570,0.0980\" data-score=\"0.9981\"><small style=\"color:#666;\">4. 섬유 원단에 코팅, 프린팅 등이 되어 있는 경우만 적용한다.</small></div>\n<div data-label=\"ref_text\" data-bbox=\"0.1210,0.1050,0.9030,0.1470\" data-score=\"0.9927\"><small style=\"color:#666;\">5. 대상물질은 TDBPP [tri(2,3-dibromopropyl) phosphate], PentaBDE[Pentabromodiphenyl ethers], OctaBDE[Octabromodiphenyl ethers]이고 방염가공처리된 제품에 한하여 적용한다.</small></div>\n<div data-label=\"ref_text\" data-bbox=\"0.1210,0.1520,0.9070,0.2160\" data-score=\"0.9923\"><small style=\"color:#666;\">6. 금속 기질, 고분자 기질, 페인팅 및 유사코팅, 기타 재료(목재 등)부분에 적용하며, 섬유 원단에는 적용하지 않는다. 단, 페인팅 및 표면코팅의 경우, 총 납 함유량 허용치는 어린이 제품 공통안전기준에 따른다.</small></div>\n<div data-label=\"ref_text\" data-bbox=\"0.1210,0.2220,0.9060,0.2640\" data-score=\"0.9840\"><small style=\"color:#666;\">7. 대상물질은 KS K 0736에 따르고, 적용되는 조성섬유는 폴리에스터, 나일론, 아크릴, 아세\n테이트, 트리아세테이트, 염화비닐 섬유이며, 염색한 섬유부분에 한하여 적용한다.</small></div>\n<div data-label=\"ref_text\" data-bbox=\"0.1210,0.2690,0.9060,0.3110\" data-score=\"0.9945\"><small style=\"color:#666;\">8. 원래 용도대로 제품을 착용한 상태에서 피부에 지속적으로 접촉하는 금속에 한하여 적용한다. 표면이 도금형태가 아닌 페인트 코팅된 경우는 제외한다.</small></div>\n<div data-label=\"ref_text\" data-bbox=\"0.1210,0.3160,0.9070,0.4050\" data-score=\"0.9865\"><small style=\"color:#666;\">9. 제품을 구성하는 섬유 부위 중 충전재 및 제품 면적 대비 5 % 이하인 부분은 제외하며, 면적계산이 불가한 끈이나 코드 등 섬유제 부속의 경우 전체 중량의 1 % 미만인 경우는 제외한다. 단, 상기 조건에도 불구하고 내의류, 중의류(장갑, 토시, 귀마개), 외의류(샌들, 슬리퍼, 모자)의 섬유부위 중 착용시 신체와 지속적으로 직접 접촉하는 부위는 적용대상으로 인정한다.</small></div>\n<div data-label=\"ref_text\" data-bbox=\"0.1230,0.4100,0.9060,0.4520\" data-score=\"0.9895\"><small style=\"color:#666;\">10. 제품에 투입된 원부자재가 추가적인 가공 없이 최종제품에 사용되었다면 그 원부자재의 안전요건을 최종 제품의 안전요건으로 인정할 수 있다.</small></div>\n<div data-label=\"ref_text\" data-bbox=\"0.1230,0.4570,0.9070,0.5220\" data-score=\"0.9930\"><small style=\"color:#666;\">11. 방한용.패션용.스포츠용 마스크는 추가적으로「전기용품 및 생활용품 안전관리법」에 따른 공급자적합성확인 안전기준 부속서 17(방한용.패션용.스포츠용 마스크)의 유해물질 안전요건에 적합하여야 한다.</small></div>\n<div data-label=\"title\" data-bbox=\"0.0900,0.5520,0.2700,0.5690\" data-score=\"0.9998\"><h1>5.3 전기적 안전요건</h1></div>\n<div data-label=\"ref_text\" data-bbox=\"0.0890,0.5750,0.9020,0.6400\" data-score=\"0.9993\"><small style=\"color:#666;\">5.3.1 섬유제품에 포함되는 2차전지는 폭발 등의 가능성을 고려하여 리튬폴리머 전지로 사용을 제한한다. 또한 제조업자 및 수입업자는 사용되는 리튬폴리머 전지 및 셀의 안전성(플라스틱 보강 및 케이스가 있는 상태)을 KC 62133 또는 그에 준하는 성적서를 통해 확인해야 한다.</small></div>\n<div data-label=\"ref_text\" data-bbox=\"0.0890,0.6450,0.9020,0.7340\" data-score=\"0.9838\"><small style=\"color:#666;\">5.3.2 전지가 위치한 공간은 외부의 충격, 하중, 휈 변형, 관통 등에 의한 제품 파손 및 폭발 등의 사고를 고려하여 설계되어야 하고, 제조업자 및 수입업자는 제품 구성에 대한 상세 정보를 기술한 제품설명서(긴급대응가이드 포함)를 작성하여 5.3.5항의 주의경고표시와 함께 소비자에게 제공해야 한다.</small></div>\n<div data-label=\"ref_text\" data-bbox=\"0.0890,0.7390,0.9010,0.7820\" data-score=\"0.9983\"><small style=\"color:#666;\">5.3.3 제조업자 및 수입업자는 침수 등에 의한 전지 폭발 및 사고에 대비하여 해당 제품이 IP(International Protection) 보호 등급 IPX7등급 이상인지 확인해야 한다.</small></div>\n<div data-label=\"ref_text\" data-bbox=\"0.0890,0.7860,0.9010,0.8280\" data-score=\"0.9996\"><small style=\"color:#666;\">5.3.4 전지를 제외한 모든 전기제품은 전기용품안전관리법에 따라 인증 또는 시험성적서가 있는 제품을 사용해야 한다.</small></div>\n<div data-label=\"ref_text\" data-bbox=\"0.0890,0.8330,0.9010,0.8760\" data-score=\"0.9989\"><small style=\"color:#666;\">5.3.5 전기 제품 및 리튬폴리머 전지가 내장되거나 사용되는 모든 제품은 사용상 발생 가능한 모든 경우를 고려하여 반드시 주의경고 표시 8종류 이상을 기호 및 한글로 표기하여야 한다.</small></div>\n<div data-label=\"ref_text\" data-bbox=\"0.0890,0.8810,0.5780,0.8980\" data-score=\"0.9998\"><small style=\"color:#666;\">5.3.6 세부적인 표시방법은 부록 A.2.1을 참고할 수 있다.</small></div>\n<div data-label=\"page_number\" data-bbox=\"0.4740,0.9380,0.5260,0.9490\" data-score=\"0.9739\" style=\"color:#888;font-size:0.9em;\">- 4 -</div>\n<div data-label=\"footer\" data-bbox=\"0.2830,0.9790,0.7160,0.9940\" data-score=\"0.9602\" style=\"color:#888;font-size:0.9em;\">김용석/생활어린이제품안전과/2024-03-12 17:40:30</div>",
+            "text_ko": null,
+            "links": null,
+            "confidence": 0.9908
+          },
+          {
+            "page_number": 5,
+            "part_number": null,
+            "text": "<div data-label=\"title\" data-bbox=\"0.0900,0.1050,0.3980,0.1210\" data-score=\"0.9997\"><h1>5.4 안전요건에 대한 적합여부 확인</h1></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.1280,0.9080,0.2170\" data-score=\"0.9941\"><p>공급자적합성확인을 하려는 제조업자 및 수입업자는 안전한 공산품이 유통될 수 있도록 해당 제품을 출고하기 전이나 통관하기 전에 유해물질이 제품에 존재할 수 있는 다양한 가능성을 고려하여 자체시험, 제3자 시험·검사기관의 시험, 외국기관의 시험성적서, 원자재 공급업체가 제시하는 시험성적서 등을 통하여 공급자적합성확인기준에 적합한지를 확인하여야 한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.0900,0.2740,0.2020,0.2910\" data-score=\"0.9788\"><h1>6. 시험방법</h1></div>\n<div data-label=\"title\" data-bbox=\"0.0930,0.3250,0.2690,0.3420\" data-score=\"0.9998\"><h1>6.1 물리적 안전요건</h1></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.3490,0.4640,0.3650\" data-score=\"0.9813\"><p>6.1.1 코드 및 조임곤 KS K 0941에 따른다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.3720,0.6050,0.3890\" data-score=\"0.9775\"><p>6.1.2 자석과 자석부품 “어린이제품 공통안전기준”에 따른다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.0930,0.4190,0.2860,0.4360\" data-score=\"0.9918\"><h1>6.2 유해물질 안전요건</h1></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.4430,0.4030,0.4600\" data-score=\"0.9988\"><p>6.2.1 pH KS K ISO 3071에 따른다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.4660,0.5170,0.4830\" data-score=\"0.9930\"><p>6.2.2 품알데하이드 KS K ISO 14184-1에 따른다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.4890,0.9050,0.5300\" data-score=\"0.9933\"><p>6.2.3 아릴아민 「전기용품 및 생활용품 안전관리법」에 따른 안전기준준수 안전기준 부속서 1(가정용 섬유제품) 부록 B. 염료 및 염색물의 아릴아민 시험방법, KS K 0739에 따른다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.5360,0.7060,0.5540\" data-score=\"0.9822\"><p>6.2.4 프탈레이트가소제 총 함유량 \"어린이제품 공통안전기준\"에 따른다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.5600,0.4700,0.5770\" data-score=\"0.9987\"><p>6.2.5 유기주석화합물 KS K 0737에 따른다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.5840,0.1980,0.6010\" data-score=\"0.9595\"><p>6.2.6 방염제</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.6070,0.6460,0.6240\" data-score=\"0.9817\"><p>6.2.6.1 PentaBDE, OctaBDE의 시험은 KS C IEC 62321-6에 따른다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.6300,0.9050,0.6710\" data-score=\"0.9930\"><p>6.2.6.2 TDBPP「전기용품 및 생활용품 안전관리법」에 따른 안전기준준수 안전기준 부속서 2(양탄자) 부속서A TDBPP 정량방법에 따른다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.6780,0.5740,0.6950\" data-score=\"0.9767\"><p>6.2.7 총 납 함유량 “어린이제품 공통안전기준”에 따른다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.7010,0.6140,0.7180\" data-score=\"0.9511\"><p>6.2.8 총 카드뮴 함유량 \"어린이제품 공통안전기준\"에 따른다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.7250,0.4600,0.7420\" data-score=\"0.9667\"><p>6.2.9 알려지성 염료 KS K 0736에 따른다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.7480,0.8260,0.7650\" data-score=\"0.9985\"><p>6.2.10 니켈 용출량 공급자적합성확인 안전기준 부속서 11(어린이용 장신구)에 따른다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.7720,0.3990,0.7890\" data-score=\"0.9903\"><p>6.2.11 노닐페놀(NP, NPEO) 총 함량</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.7950,0.8760,0.8130\" data-score=\"0.9959\"><p>6.2.11.1 NP(Nonylphenol)의 시험은 안전확인 안전기준 1(유아용 섬유제품) 부록 A에 따른다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.8190,0.7470,0.8370\" data-score=\"0.9981\"><p>6.2.11.2 NPEO(Nonylphenolethylates)의 시험은 KS K ISO 18254-1에 따른다.</p></div>\n<div data-label=\"page_number\" data-bbox=\"0.4740,0.9370,0.5240,0.9490\" data-score=\"0.9238\" style=\"color:#888;font-size:0.9em;\">- 5 -</div>\n<div data-label=\"footer\" data-bbox=\"0.2830,0.9790,0.7140,0.9940\" data-score=\"0.9641\" style=\"color:#888;font-size:0.9em;\">김용석/생활어린이제품안전과/2024-03-12 17:40:30</div>",
+            "text_ko": null,
+            "links": null,
+            "confidence": 0.9829
+          },
+          {
+            "page_number": 6,
+            "part_number": null,
+            "text": "<div data-label=\"title\" data-bbox=\"0.0900,0.0820,0.3310,0.0990\" data-score=\"0.9995\"><h1>7. 표시사항 및 표시 방법</h1></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.1300,0.9080,0.2430\" data-score=\"0.9909\"><p>7.1 「전기용품 및 생활용품 안전관리법」에 따른 안전기준준수 안전기준 부속서 1 가정용 섬유제품의 표시사항에 따른다. 다만, 방한용.패션용.스포츠용 마스크는「전기용품 및 생활용품 안전관리법」에 따른 공급자적합성확인 안전기준 부속서 17(방한용.패션용.스포츠용 마스크)의 표시사항을 따른다. 표시사항은 한글로 표시하여야 한다(단, 제품의 사용연령을 반드시 표시하여야 한다).</p></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.2720,0.9080,0.3360\" data-score=\"0.9991\"><p>7.2 아동이 입을 수 있는 섬유제품이 안전확인 안전기준 부속서 6(완구) 제2부 5.2(작은 부품시험)에서 통과되는 작은 부품이 부착된 경우에는 [표 3](1)에 따라 주의 사항을 표시하여야 한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.3660,0.9060,0.4060\" data-score=\"0.9976\"><p>7.3. 아동이 사용하는 연질 또는 발표된 합성수지 재질의 신발은 [표 3](2)에 따라 주의 사항을 표시하여야 한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.3980,0.4360,0.5990,0.4540\" data-score=\"0.9975\"><h1>[표 3] 취급상 주의표시</h1></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.4830,0.6460,0.5020\" data-score=\"0.9988\"><p>(1) 아동이 입을 수 있는 섬유제품의 작은 부품에 대한 주의사항</p></div>\n<div data-label=\"table\" data-bbox=\"0.0970,0.5110,0.9020,0.5860\" data-score=\"0.9867\"><table><tr><td>취급상 주의사항</td></tr><tr><td>\"주의! 작은 부품이 탈락되면 삼킬 수 있음\"</td></tr></table></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.6310,0.7500,0.6490\" data-score=\"0.9943\"><p>(2) 아동이 사용하는 연질 또는 발표된 합성수지 재질의 신발에 대한 주의사항</p></div>\n<div data-label=\"table\" data-bbox=\"0.0970,0.6590,0.9020,0.7310\" data-score=\"0.9449\"><table><tr><td>취급상 주의사항</td></tr><tr><td>주의! 신발이 에스컬레이터 등에 끌 수 있음</td></tr></table></div>\n<div data-label=\"table\" data-bbox=\"0.0950,0.7830,0.9060,0.9010\" data-score=\"0.9958\"><table><tr><td>개정</td><td>정 : 산업통상자원부 고시</td><td>제2015 - 0109호(2015. 6. 4.)</td></tr><tr><td>개정</td><td>정 : 산업통상자원부 고시</td><td>제2017 - 0017호(2017. 1. 31.)</td></tr><tr><td>개정</td><td>정 : 산업통상자원부 고시</td><td>제2018 - 0031호(2018. 3. 5.)</td></tr><tr><td>개정</td><td>정 : 산업통상자원부 고시</td><td>제2021 - 0171호(2021. 10. 27.)</td></tr><tr><td>개정</td><td>정 : 산업통상자원부 고시</td><td>제2024 - 042호(2024. 3. 7.)</td></tr></table></div>\n<div data-label=\"page_number\" data-bbox=\"0.4750,0.9380,0.5260,0.9500\" data-score=\"0.9638\" style=\"color:#888;font-size:0.9em;\">- 6 -</div>\n<div data-label=\"footer\" data-bbox=\"0.2830,0.9790,0.7150,0.9940\" data-score=\"0.9667\" style=\"color:#888;font-size:0.9em;\">김용석/생활어린이제품안전과/2024-03-12 17:40:30</div>",
+            "text_ko": null,
+            "links": null,
+            "confidence": 0.9863
+          },
+          {
+            "page_number": 7,
+            "part_number": null,
+            "text": "<div data-label=\"title\" data-bbox=\"0.3440,0.0860,0.6560,0.1080\" data-score=\"0.9998\"><h1>부록 A. 세부 표시방법(예시)</h1></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.1630,0.9080,0.2060\" data-score=\"0.9941\"><p>A.1. 서론 이 세부 표시방법(예시)은 참고하기 위한 것으로 실제 적용되는 품목과 꼭 일치하는 것은 아니다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.0900,0.2350,0.3030,0.2520\" data-score=\"0.9999\"><h1>A.2 세부 표시방법(예시)</h1></div>\n<div data-label=\"title\" data-bbox=\"0.0900,0.2580,0.5020,0.2750\" data-score=\"0.9996\"><h1>A.2.1 리튬이차전지 사용 제품의 주의경고(예시)</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1110,0.2890,0.8930,0.3080\" data-score=\"0.9745\"><p>1.인증을 받지 않은 전지 또는 충전기를 사용하여 충전하는 경우 폭발 위험성이 있습니다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1110,0.3100,0.8170,0.3280\" data-score=\"0.9997\"><p>2. 전지 단자에 금속성 물질(휴대폰 액세서리, 동전 등)이 접촉하지 않도록 하세요.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1110,0.3310,0.6540,0.3490\" data-score=\"0.9671\"><p>3. 전지를 어린 아이가 빨거나 동물이 물어 Rd지 않도록 하세요.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1110,0.3520,0.9010,0.3900\" data-score=\"0.9716\"><p>4. 전지를 파손시키거나 강한 충격, 가열, 침수, 날카로운 물질로 뜻을 경우 폭발 위험이 있으므로 절대 금하여 주세요.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1130,0.3940,0.9010,0.4330\" data-score=\"0.9991\"><p>5. 전지가 포함되어 있는 제품을 직사광선이 드는 자동차 내부 등 밀폐된 고온의 장소에 두지 마세요. 변형, 고장, 폭발의 위험이 있습니다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1130,0.4360,0.9010,0.4740\" data-score=\"0.9987\"><p>6. 임의로 분해하거나 충격을 주지말고, 충전 중인 상태로 이용하지 마세요. 감전, 누전화재의 원인이 될 수 있습니다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1130,0.4780,0.9010,0.5160\" data-score=\"0.9911\"><p>7. 전지의 발열, 누액, 파열, 오염 등은 기기고장의 원인이 되거나 상해의 위험이 있으니 전지를 임의로 분해 및 개조하지 마세요.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1130,0.5200,0.9010,0.5580\" data-score=\"0.9929\"><p>8. 전지가 내장되어 있는 제품의(예:신발, 의류 등) 해당 부위를 구부리거나, 세탁, 외부적으로 강한 충격을 가할 경우 전지의 파손, 폭발의 위험이 있으므로 주의하십시오.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1110,0.5610,0.8990,0.5790\" data-score=\"0.9984\"><p>9. 전지가 내장되어 있는 제품을 유아동이 사용하는 경우 보호자의 지속적인 보호가 필요합니다.</p></div>\n<div data-label=\"page_number\" data-bbox=\"0.4750,0.9370,0.5260,0.9490\" data-score=\"0.9984\" style=\"color:#888;font-size:0.9em;\">- 7 -</div>\n<div data-label=\"footer\" data-bbox=\"0.2830,0.9790,0.7160,0.9940\" data-score=\"0.9583\" style=\"color:#888;font-size:0.9em;\">김용석/생활어린이제품안전과/2024-03-12 17:40:30</div>",
+            "text_ko": null,
+            "links": null,
+            "confidence": 0.9895
+          }
+        ],
+        "latency_seconds": 14.606932565997795,
+        "confidence": 0.9837,
+        "truncated": false,
+        "full_text_length": null
+      },
+      "caption": {
+        "provider": "inference_provider",
+        "model": "caption_model_onprem",
+        "pages": [
+          {
+            "page_number": 1,
+            "part_number": null,
+            "entities": {
+              "text": "공급자적합성 안전기준\n아동용 섬유제품\n부속서 15\n(Textile products for children)\n\n1. 적용범위 이 기준은 36개월 이상 만 13세 이하의 아동용 섬유제품의 안전요건, 시험방법\n및 표시사항 등에 대해 규정한다. 다만, 맞춤복은 공급자적합성확인대상에서 제외하며, 놀이에 사용할\n용으로 제작된 가정복은 안전확인 안전기준 부속서 6(완구)의 안전기준에 따라 관리하여야 한다.\n\n2. 인용표준 다음과 나타내는 표준 또는 기준은 이 기준에 인용됨으로써 이 기준의 규정 일부를\n구성한다. 이러한 관련표준 또는 기준은 그 최신판을 적용한다.\n\n· KS K ISO 3071 텍스타일 - 수성 추출액의 pH 측정\n· KS K ISO 14184-1 텍스타일 - 폼알데하이드 측정 - 제1부 : 유리 및 가수분해 폼알데하이드\n(증류수 추출법)\n· KS K 0736 섬유제품의 알러지성 염료 함유량 시험방법\n· KS K 0737 섬유 제품의 유기 주석 화합물 함유량 시험 방법\n· KS K 0739 섬유제품 - 아조 염료로부터 생성되는 특정 방향족 아민의 분석 방법 - 제3부\n: 특정 아조 염료를 사용할 때 생성되는 4-아미노아조벤젠 분석\n· KS K ISO 3175-1 텍스타일 - 드라이클리닝 및 마무리 - 제1부 : 원단 및 의류의 클리닝성\n(cleanability) 평가방법\n· KS K ISO 6330 텍스타일 - 섬유 시험에 대한 가정 세탁과 건조과정\n· KS K 0941 유아동복의 안전성 - 유아가복에 사용하는 코드 및 조임끈 - 안전 요구 성능\n· KS K ISO 18254-1 텍스타일 - 알킬페놀에톡실레이트(APEO)의 검출 및 분석방법 - 제1부:\nHPLC-MS 방법\n· KS C IEC 62321-6 전기전자 제품 내 특정 물질의 정량 - 제6부 : GC-MS에 의한 고분자 내\n존재하는 폴리브롬화바이페닐과 폴리브롬화다이페닐에테르의 분석\n· 안전확인 안전기준 부속서 1 유아용 섬유제품\n· 공급자적합성확 인 안전기준 부속서 1 어린이용 가죽제품\n· 공급자적합성확인 안전기준 부속서 11 어린이용 장신구\n· 공급자적합성확인 안전기준 부속서 17 방한용·패션용·스포츠용 마스크\n· 안전기준준수 안전기준 부속서 1 가정용 섬유제품\n· 어린이제품 공통안전기준\n· 소방청고시 방염제품의 성능인증 및 제품검사의 기술기준\n\n- 1 -\n김용석 / 생활어린이제품안전과 / 2024-03-12 17:40:30",
+              "graph": "",
+              "diagram": "",
+              "image_overview": "",
+              "table_markdown": "",
+              "visual_elements": ""
+            },
+            "entities_ko": null
+          },
+          {
+            "page_number": 2,
+            "part_number": null,
+            "entities": {
+              "text": "3. 용어의 정의\n3.1 “섬유제품”이라 함은 일상생활에서 사용하는 피부에 직접 또는 간접 접촉하는 섬유로 만들어진 제품을 말한다.\n3.2 “조성섬유”라 함은 섬유제품을 구성하고 있는 섬유의 명칭을 말한다.\n3.3 “혼용률”이라 함은 조성섬유가 2종 이상의 섬유로 혼용(혼방, 교직)되었을 때, 각 조성섬유의 무게를 전 조성섬유 무게에 대한 백분율 (%)로 나타낸 것을 말한다.\n3.4 “취급상 주의사항”이라 함은 세탁 등의 취급 방법을 알리기 위하여 섬유 제품에 표시하는 것을 말한다.\n3.5 “방염제품”이라 함은 방염처리하거나 난연성소재로 제조한 제품을 말하며 방염제품이라 표시하였을 경우에는 소방청 고시 방염제품의 성능인증 및 제품검사의 기술기준에 적합하여야 한다.\n3.6 “맞춤복”이라 함은 개인을 위해 형태, 재료, 색상 등을 임의로 선정하여 주문제작하는 의복을 말한다.\n\n4. 세부분류\n[표 1] 아동용 섬유제품의 세부분류\n(표 내용)\n\n주 1. 「전기용품 및 생활용품 안전관리법」 공급자격확성확인 안전기준부속서 17(방한용 패션용 스포츠용 마스크) 안전기준을 추가적으로 만족하여야 한다.\n2. 안전확인 안전기준 부속서2(합성수지제 어린이용품) 제 4부. 바닥매트를 따른다.\n3. 상기의 종류에 없는 섬유제품 또는 신유형 섬유제품이 ordinary 한 아동이 사용하는 섬유제품으로 판매되는 경우에는 사용환경, 용도 등을 고려하여 [표 1] 제품의 구분과 종류를 적용한다.\n- 2 -\n김용석 / 생활어린이제품안전과 / 2024-03-12 17:40:30",
+              "graph": "",
+              "diagram": "",
+              "image_overview": "",
+              "table_markdown": "| 구분 | 종류 |\n| :--- | :--- |\n| 외의류 | 스웨터, 재킷, 코트, 커버올, 점퍼, 조끼, 토퍼, 우주복, 카디건, 설, 망토, 한복, 우의, 앞치마, 미슬 가운, 넥타이, 벨트류, 멜빵, 모자(모자, 목도리, 헤어밴드 넥워머, 스카프, 스카프빕 등), 신발(운동화, 장화류, 슬리퍼, 구두, 샌들, 부츠, 발레화, 기타 신발 등을 말하며, 섬유의 원료인 합성수지를 사용한 제품은 포함되나 천연가죽, 인조가죽 또는 모피로 된 신발은 제외) |\n| 중의류 | 상하복, 원피스, 티셔츠, 남방, 바지, 치마, 블라우스, 수영복, 발레복, 타올류, 체조복, 체육복, 수면안대, 스포츠용 보호대, 가발, 손수건, 목욕장갑, 삼푸캡, 방한용·패션용·스포츠용 마스크¹⁾, 장갑, 귀마개, 토시 |\n| 내의류 | 팬티 및 팬티류, 잠옷류, 죌바지, 팬티스타킹, 바디슈트, 내의, 목욕가운, 수면조끼, 속치마, 복대, 양말류(양말, 타이츠, 스타킹, 레깅스, 덧신, 무릎보호대) |\n| 침구류 | 이불, 베개, 베개싸개, 커버류, 매트류(합성수지 재질인 바닥매트²⁾는 제외), 요, 시트류, 침낭, 패드, 카페트(면적 1 m² 미만), 해먹, 범퍼침대, 덮개류 |\n| 가방류 | 가방, 배낭, 핸드백, 지갑, 보온주머니 |\n| 기타 제품류 | 쿠션류, 방석류, 모기장, 커튼 등",
+              "visual_elements": "문서의 상단에는 '3. 용어의 정의' 섹션이 있으며, 여섯 가지 용어(섬유제품, 조성섬유, 혼용률, 취급상 주의사항, 방염제품, 맞춤복)에 대한 정의를 나열하고 있습니다. 그 아래에는 '4. 세부분류'라는 제목과 함께 '[표 1] 아동용 섬유제품의 세부분류'라는 표가 위치해 있으며, 다양한 섬유 제품들을 유형별로 분류한 내용을 담고 있습니다. 문서 하단에는 표에 대한 추가적인 설명을 제공하는 주(Note) 세 개와 문서 페이지 번호, 파일 정보 및 생성 시간이 표시되어 있습니다."
+            },
+            "entities_ko": null
+          },
+          {
+            "page_number": 3,
+            "part_number": null,
+            "entities": {
+              "text": "5. 안전요건\n\n5.1 물리적 안전요건\n5.1.1 코드 및 조임끈 (6.1.1 참조) KS K 0941에서 규정하고 있는 코드 및 조임끈이 사용된 경우에는 KS K 0941에 적합하여야 한다. 제품의 연령 구분 및 정의는 KS K 0941에 따르되 대상 연령은 만 13세 이하로 한다.\n\n5.2 유해물질 안전요건 유해물질의 기준 함유량은 6. 시험방법에 따라 시험하였을 때 [표 2]의 기준치에 적합하여야 한다. 가죽이나 모피 소재가 사용된 부분에 대해서는 공급자적합성확인 안전기준 부속서 1(어린이용 가죽제품)의 유해물질 안전요건에 적합하여야 한다. 단, 가죽이나 모피 소재가 제품 면적 대비 5% 이하인 부분과 전체 중량의 1% 미만인 부분도 유해물질 안전요건 적용대상으로 본다. 신발류의 유해물질 안전요건 적용 범위에서 밀창은 제외한다.\n\n[표 2] 유해물질 안전요건 9), 10), 11)\n\n주 1. 섬유부분에 한하여 적용한다.\n   2. 염색한 섬유부분에만 적용하며, 대상물질은 안전기준준수 안전기준 부속서1(가정용 섬유제품) 부록 B., KS K 0739에 따른다.\n   3. 섬유 원단에 합성수지(합성고무 포함) 소재로 코팅 또는 프린팅 등의 가공 처리를 한 경우 및 합성수지(합성고무 포함) 소재의 부자재에만 적용하며, 대상물질은 어린이제품안전 공통 기준에 따른다. 단, 금속 및 고분자 기질 위에 페인트 코팅된 경우는 적용대상에서 제외한다.\n\n- 3 -\n김용석 / 생활어린이제품안전과 / 2024-03-12 17:40:30",
+              "graph": "",
+              "diagram": "",
+              "image_overview": "",
+              "table_markdown": "| 유해물질명 | 허용치 |\n| :--- | :--- |\n| 폼알데하이드 (mg/kg) 1) | 75 이하 |\n| 아릴아민 (mg/kg) 2) | 각각 30 이하 |\n| 프탈레이트계 가소제 총 함유량 (%) 3) | 0.1 이하 |\n| 유기주석화합물(tributyltin, TBT) (mg/kg) 4) | 1.0 이하 |\n| 방염제 5) | 사용하지 말것 |\n| 총 납 함유량 (mg/kg) 6) | 100 이하 |\n| 총 카드뮴 함유량(mg/kg) 6) | 75 이하 |\n| 알러지성 염료 (mg/kg) 7) | 각각 50 이하 |\n| pH 1) | 4.0 ~ 7.5 |\n| 니켈(Ni)의 용출량 ($\\mu$g/cm²/week) 8) | 0.5 이하 |\n| 노닐페놀(NP, NPEO) 총 함량 (mg/kg) 1) | 100 이하 |",
+              "visual_elements": "문서의 본문 텍스트 섹션 아래에 [표 2] 유해물질 안전요건이 위치하며, 표 하단에는 주요 내용과 관련된 주(주석) 세 개가 나열되어 있다."
+            },
+            "entities_ko": null
+          },
+          {
+            "page_number": 4,
+            "part_number": null,
+            "entities": {
+              "text": "4. 섬유 원단에 코팅, 프린팅 등이 되어 있는 경우만 적용한다.\n5. 대상물질은 TDBPP [tri(2,3-dibromopropyl) phosphate], PentaBDE[Pentabromodiphenyl ethers], OctaBDE[Octabromodiphenyl ethers]이고 방염가공처리된 제품에 한하여 적용한다.\n6. 금속 기질, 고분자 기질, 페인팅 및 유사코팅, 기타 재료(목재 등)부분에 적용하며, 섬유 원단에는 적용하지 않는다. 단, 페인팅 및 표면코팅의 경우, 총 납 함유량 허용치는 어린이 제품 공통안전기준에 따른다.\n7. 대상물질은 KS K 0736에 따르고, 적용되는 조성섬유는 폴리에스터, 나일론, 아크릴, 아세테이트, 트리아세테이트, 염화비닐 섬유이며, 염색한 섬유부분에 한하여 적용한다.\n8. 원래 용도대로 제품을 착용한 상태에서 피부에 지속적으로 접촉하는 금속에 한하여 적용한다. 표면을 도금형태가 아닌 페인트 코팅된 경우는 제외한다.\n9. 제품을 구성하는 섬유 부위 중 충전제 및 제품 면적 대비 5% 이하인 부분은 제외하며, 면적계산이 불가능한 끈이나 코드 등 섬유제 부속의 경우 전체 중량의 1% 미만인 경우는 제외한다. 단, 상기 조건에도 불구하고 내의류, 중의류(장갑, 토시, 귀마개), 외의류(샌들, 슬리퍼, 모자)의 섬유부위 중 착용 시 신체와 지속적으로 직접 접촉하는 부위는 적용대상으로 인정한다.\n10. 제품에 투입된 원부자재가 추가적인 가공 없이 최종제품에 사용되었다면 그 원부자재의 안전요건을 최종 제품의 안전요건으로 인정할 수 있다.\n11. 방한용·패션용·스포츠용 마스크는 추가로 「전기용품 및 생활용품 안전관리법」에 따른 공급자적합성확인 안전기준 부속서 17(방한용·패션용·스포츠용 마스크)의 유해물질 안전요건에 적합하여야 한다.\n\n5.3 전기적 안전요건\n5.3.1 섬유제품에 포함되는 2차전지는 폭발 등의 가능성을 고려하여 리튬폴머 전지로 사용을 제한한다. 또한 제조업자 및 수입업자는 사용되는 리튬폴머 전지 및 셀의 안전성(플라스틱 보강 및 케이스가 있는 상태)을 KC 62133 또는 그에 준하는 성적서를 통해 확인해야 한다.\n5.3.2 전지가 위치한 공간은 외부의 충격, 하중, 휨 변형, 관통 등에 의한 제품 파손 및 폭발 등의 사고를 고려하여 설계되어야 하고, 제조업자 및 수입업자는 제품 구성에 대한 상세 정보를 기술한 제품설명서(긴급대응가이드 포함)를 작성하여 5.3.5항의 주의경고표시와 함께 소비자에게 제공해야 한다.\n5.3.3 제조업자 및 수입업자는 침수 등에 의한 전지 폭발 및 사고에 대비하여 해당 제품이 IP(International Protection) 보호 등급 IPX7등급 이상인지 확인해야 한다.\n5.3.4 전지를 제외한 모든 전기제품은 전기용품안전관리법에 따라 인증 또는 시험성적서가 있는 제품을 사용하여야 한다.\n5.3.5 전기 제품 및 리튬폴머 전지가 내장되거나 사용되는 모든 제품은 사용상 발생 가능한 모든 경우를 고려하여 반드시 주의경고 표시 8종류 이상을 기호 및 한글로 표기하여야 한다.\n5.3.6 세부적인 표시방법은 부록 A.2.1을 참고할 수 있다.\n\n- 4 -\n\n김용석 / 생활어린이제품안전과 / 2024-03-12 17:40:30",
+              "graph": "",
+              "diagram": "",
+              "image_overview": "",
+              "table_markdown": "",
+              "visual_elements": "문서의 하단 중앙에는 '- 4 -'이라는 페이지 번호가 있고, 그 아래에는 '김용석 / 생활어린이제품안전과 / 2024-03-12 17:40:30'이라는 메타데이터 텍스트가 포함되어 있습니다."
+            },
+            "entities_ko": null
+          },
+          {
+            "page_number": 5,
+            "part_number": null,
+            "entities": {
+              "text": "5.4 안전요건에 대한 적합여부 확인\n공급자적합성확인을 하려는 제조업자 및 수입업자는 안전한 공산품이 유통될 수 있도록 해당 제품을 출고하기 전이나 통관하기 전에 유해물질이 제품에 존재할 수 있는 다양한 가능성을 고려하여 자체시험, 제3자 시험·검사기관의 시험, 외국기관의 시험성적서, 원자재 공급업체가 제시하는 시험성적서 등을 통하여 공급자적합성확인기준에 적합한지를 확인하여야 한다.\n\n6. 시험방법\n\n6.1 물리적 안전요건\n6.1.1 코드 및 조임끈 KS K 0941에 따른다.\n6.1.2 자석과 자석부품 “어린이제품 공통안전기준”에 따른다.\n\n6.2 유해물질 안전요건\n6.2.1 pH KS K ISO 3071에 따른다.\n6.2.2 폼알데하이드 KS K ISO 14184-1에 따른다.\n6.2.3 아릴아민 「전기용품 및 생활용품 안전관리법」에 따른 안전기준준수 안전기준 부속서 1(가정용 섬유제품) 부록 B. 염료 및 염색물의 아릴아민 시험방법, KS K 0739에 따른다.\n6.2.4 프탈레이트가소제 총 함유량 “어린이제품 공통안전기준”에 따른다.\n6.2.5 유기주석화합물 KS K 0737에 따른다.\n6.2.6 방염제\n6.2.6.1 PentaBDE, OctaBDE의 실험은 KS C IEC 62321-6에 따른다.\n6.2.6.2 TDBPP「전기용품 및 생활용품 안전관리법」에 따른 안전기준준수 안전기준 부속서 2(양탄자) 부속서A TDBPP 정량방법에 따른다.\n6.2.7 총 납 함유량 “어린이제품 공통안전기준”에 따른다.\n6.2.8 총 카드뮴 함유량 “어린이제품 공통안전기준”에 따른다.\n6.2.9 알러지성 염료 KS K 0736에 따른다.\n6.2.10 니켈 용출량 공급자적합성확인 안전기준 부속서 11(어린이용 장신구)에 따른다.\n6.2.11 노닐페놀(NP, NPEO) 총 함량\n6.2.11.1 NP(Nonylphenol)의 실험은 안전확인 안전기준 1(유아용 섬유제품) 부록 A에 따른다.\n6.2.11.2 NPEO(Nonylphenoletlhylates)의 실험은 KS K ISO 18254-1에 따른다.\n\n- 5 -\n김용석 / 생활어린이제품안전과 / 2024-03-12 17:40:30",
+              "graph": "",
+              "diagram": "",
+              "image_overview": "",
+              "table_markdown": "",
+              "visual_elements": ""
+            },
+            "entities_ko": null
+          },
+          {
+            "page_number": 6,
+            "part_number": null,
+            "entities": {
+              "text": "7. 표시사항 및 표시 방법\n\n7.1 「전기용품 및 생활용품 안전관리법」에 따른 안전기준준수 안전기준 부속서 1 가정용 섬유제품의 표시사항에 따른다. 다만, 방한용.패션용.스포츠용 마스크는 「전기용품 및 생활용품 안전관리법」에 따른 공급자적합성확인 안전기준 부속서 17(방한용.패션용.스포츠용 마스크)의 표시사항을 따른다. 표시사항은 한글로 표시하여야 한다(단, 제품의 사용연령을 반드시 표시하여야 한다.).\n\n7.2 아동이 입을 수 있는 섬유제품이 안전확인 안전기준 부속서 6(완구) 제2부 5.2(작은 부품시험)에서 통과되는 작은 부품이 부착된 경우에는 [표 3](1)에 따라 주의 사항을 표시하여야 한다.\n\n7.3. 아동이 사용하는 연질 또는 발포된 합성수지 재질의 신발은 [표 3](2)에 따라 주의사항을 표시하여야 한다.\n\n[표 3] 취급상 주의표시\n\n(1) 아동이 입을 수 있는 섬유제품의 작은 부품에 대한 주의사항\n\n취급상 주의사항\n\"주의! 작은 부품이 탈락되면 삼킬 수 있음\"\n\n(2) 아동이 사용하는 연질 또는 발포된 합성수지 재질의 신발에 대한 주의사항\n\n취급상 주의사항\n주의! 신발이 에스컬레이터 등에 낄 수 있음\n\n제 정 : 산업통상자원부 고시 제2015 - 0109호(2015. 6. 4.)\n개 정 : 산업통상자원부 고시 제2017 - 0017호(2017. 1. 31.)\n개 정 : 산업통상자원부 고시 제2018 - 0031호(2018. 3. 5.)\n개 정 : 산업통상자원부 고시 제2021 - 0171호(2021. 10. 27.)\n개 정 : 산업통상자원부 고시 제2024 - 042호(2024. 3. 7.)\n\n- 6 -\n\n김용석 / 생활어린이제품안전과 / 2024-03-12 17:40:30",
+              "graph": "",
+              "diagram": "",
+              "image_overview": "",
+              "table_markdown": "| [표3] 취급상 주의표시 |\n|---|\n|(1) 아동이 입을 수 있는 섬유제품의 작은 부품에 대한 주의사항 |\n|취급상 주의사항 |\n|\n\n---\n\n| \"주의! 작은 부품이 탈락되면 삼킬 수 있음\" |\n|---|\n|(2) 아동이 사용하는 연질 또는 발포된 합성수지材質의 신발에 대한 주의사항 |\n|취급상 주의사항 |\n|\n\n---\n\n| 주의! 신발이 에스컬레이터 등에 낄 수 있음 |\n|---|제정: 산업통상자원부 고시 제2015 - 0109호(2015. 6. 4.)개정: 산업통상자원부 고시 제2017 - 0017호(2017. 1. 31.)개정: 산업통상자원부 고시 제2018 - 0031호(2018. 3. 5.)개정: 산업통상자원부 고시 제2021 - 0171호(2021. 10. 27.)개정: 산업통상자원부 고시 제2024 - 042호(2024. 3. 7.)",
+              "visual_elements": "문서의 하단에는 '[표3] 취급상 주의표시'에 해당하는 두 개의 표와 제정 및 개정 내역을 기록한 세 번째 표가 위치하고 있습니다. 각 표는 위쪽에 위치한 해당 규정에 대한 설명(7.1~7.3항)과 '(1)', '(2)' 등의 하위 항목을 시각적으로 연결하여 정보를 제공합니다."
+            },
+            "entities_ko": null
+          },
+          {
+            "page_number": 7,
+            "part_number": null,
+            "entities": {
+              "text": "부록 A. 세부 표시방법(예시)\n\nA.1. 서론 이 세부 표시방법(예시)은 참고하기 위한 것으로 실제 적용되는 품목과 꼭 일치하는 것은 아니다.\n\nA.2 세부 표시방법(예시)\n\nA.2.1 리튬이차전지 사용 제품의 주의경고(예시)\n[표]\n1. 인증을 받지 않은 전지 또는 충전기를 사용하여 충전하는 경우 폭발 위험성이 있습니다.\n2. 전지 단자에 금속성 물질(휴대폰 액세서리, 동전 등)이 접촉하지 않도록 하세요.\n3. 전지를 어린 아이가 빨거나 동물이 물어뜯지 않도록 하세요.\n4. 전지를 파손시키거나 강한 충격, 가열, 침수, 날카로운 물질로 뚫을 경우 폭발 위험이 있으므로 절대 금하여 주세요.\n5. 전지가 포함되어 있는 제품을 직사광선이 드는 자동차 내부 등 밀폐된 고온의 장소에 두지 마세요. 변형, 고장, 폭발의 위험이 있습니다.\n6. 임의로 분해하거나 충격을 주지말고, 충전 중인 상태로 사용하지 마세요. 감전, 누전화재의 원인이 될 수 있습니다.\n7. 전지의 발열, 누액, 파열, 오염 등은 기기고장의 원인이 되거나 상해의 위험이 있으니 전지를 임의로 분해 및 개조하지 마세요.\n8. 전지가 내장되어 있는 제품의(예:신발, 의류 등) 해당 부위를 구부리거나, 세탁, 외부적으로 강한 충격을 가할 경우 전지의 파손, 폭발의 위험이 있으므로 주의하십시오.\n9. 전지가 내장되어 있는 제품을 유아가 사용하는 경우 보호자의 지속적인 보호가 필요합니다.\n\n- 7 -\n김용석 / 생활어린이제품안전과 / 2024-03-12 17:40:30",
+              "graph": "",
+              "diagram": "",
+              "image_overview": "",
+              "table_markdown": "",
+              "visual_elements": ""
+            },
+            "entities_ko": null
+          }
+        ],
+        "latency_seconds": 50.98946448699962
+      },
+      "tagger": {
+        "provider": "hierarchy",
+        "model": "hierarchy-ko",
+        "pages": [
+          {
+            "page_number": 1,
+            "part_number": null,
+            "keywords": [],
+            "summary": null,
+            "hierarchy": [
+              {
+                "x0": 0.09,
+                "text": "이 기준은 36개월 이상 만 13세 이하의 아동용 섬유제품의 안전요건, 시험방법 및 표시사항 등에 대해 규정한다. 다만, 맞춤복은 공급자적합성확인대상에서 제외하며, 놀이에 사용할 용도로 제작된 가장복은 안전확인 안전기준 부속서 6(완구)의 안전기준에 따라 관리하여야 한다.",
+                "type": "section",
+                "title": "적용범위",
+                "marker": "1",
+                "confidence": 0.9981,
+                "level_code": "L3",
+                "level_name": "절"
+              },
+              {
+                "x0": 0.089,
+                "text": "또는 기준은 이 기준에 인용됨으로써 이 기준의 규정 일부를 구성한다. 이러한 관련표준 또는 기준은 그 최신판을 적용한다.\n김용석/생활어린이제품안전과/2024-03-12 17:40:30",
+                "type": "section",
+                "title": "인용표준 다음에 나타내는 표준",
+                "marker": "2",
+                "confidence": 0.9975,
+                "level_code": "L3",
+                "level_name": "절"
+              },
+              {
+                "x0": 0.093,
+                "type": "item",
+                "title": "· KS K ISO 3071 텍스타일 — 수성 추출액의 pH 측정",
+                "breadcrumb": [
+                  "2"
+                ],
+                "confidence": 0.9578,
+                "level_code": "L7",
+                "level_name": "열거항목"
+              },
+              {
+                "x0": 0.093,
+                "type": "item",
+                "title": "· KS K ISO 14184-1 텍스타일 — 품알데하이드 측정 — 제1부 : 유리 및 가수분해 품알데하이드 (증류수 추출법)",
+                "breadcrumb": [
+                  "2"
+                ],
+                "confidence": 0.9731,
+                "level_code": "L7",
+                "level_name": "열거항목"
+              },
+              {
+                "x0": 0.093,
+                "type": "item",
+                "title": "· KS K 0736 섬유제품의 알러지성 염료 함유량 시험방법",
+                "breadcrumb": [
+                  "2"
+                ],
+                "confidence": 0.9437,
+                "level_code": "L7",
+                "level_name": "열거항목"
+              },
+              {
+                "x0": 0.093,
+                "type": "item",
+                "title": "· KS K 0737 섬유 제품의 유기 주석 화합물 함유량 시험 방법",
+                "breadcrumb": [
+                  "2"
+                ],
+                "confidence": 0.9729,
+                "level_code": "L7",
+                "level_name": "열거항목"
+              },
+              {
+                "x0": 0.093,
+                "type": "item",
+                "title": "• KS K 0739 섬유제품 — 아조 염료로부터 생성되는 특정 방향족 아민의 분석 방법 — 제3부 : 특정 아조 염료를 사용할 때 생성되는 4",
+                "breadcrumb": [
+                  "2"
+                ],
+                "confidence": 0.9759,
+                "level_code": "L7",
+                "level_name": "열거항목"
+              },
+              {
+                "x0": 0.093,
+                "type": "item",
+                "title": "- KS K ISO 3175-1 텍스타일 — 드라이클리닝 및 마무리 — 제1부 : 원단 및 의류의 클리닝성 (cleanability) 평가방법",
+                "breadcrumb": [
+                  "2"
+                ],
+                "confidence": 0.9721,
+                "level_code": "L7",
+                "level_name": "열거항목"
+              },
+              {
+                "x0": 0.093,
+                "type": "item",
+                "title": "· KS K ISO 6330 텍스타일 — 섬유 시험에 대한 가정세탁과 건조과정",
+                "breadcrumb": [
+                  "2"
+                ],
+                "confidence": 0.9671,
+                "level_code": "L7",
+                "level_name": "열거항목"
+              },
+              {
+                "x0": 0.093,
+                "type": "item",
+                "title": "· KS K 0941 유아동복의 안전성 — 유아동복에 사용하는 코드 및 조임곤 — 안전 요구 성능",
+                "breadcrumb": [
+                  "2"
+                ],
+                "confidence": 0.9498,
+                "level_code": "L7",
+                "level_name": "열거항목"
+              },
+              {
+                "x0": 0.093,
+                "type": "item",
+                "title": "• KS K ISO 18254-1 텍스타일 — 알키페놀에톡실레이트(APEO)의 검출 및 분석방법 — 제1부: HPLC-MS 방법",
+                "breadcrumb": [
+                  "2"
+                ],
+                "confidence": 0.9583,
+                "level_code": "L7",
+                "level_name": "열거항목"
+              },
+              {
+                "x0": 0.093,
+                "type": "item",
+                "title": "• KS C IEC 62321-6 전기전자 제품 내 특정 물질의 정량 — 제6부 : GC-MS에 의한 고분자 내존재하는 폴리브로민화바이페닐과 폴",
+                "breadcrumb": [
+                  "2"
+                ],
+                "confidence": 0.9687,
+                "level_code": "L7",
+                "level_name": "열거항목"
+              },
+              {
+                "x0": 0.093,
+                "type": "item",
+                "title": "· 안전확인 안전기준 부속서 1 유아용 섬유제품",
+                "breadcrumb": [
+                  "2"
+                ],
+                "confidence": 0.9719,
+                "level_code": "L7",
+                "level_name": "열거항목"
+              },
+              {
+                "x0": 0.093,
+                "type": "item",
+                "title": "· 공급자적합성확인 안전기준 부속서 1 어린이용 가죽제품",
+                "breadcrumb": [
+                  "2"
+                ],
+                "confidence": 0.983,
+                "level_code": "L7",
+                "level_name": "열거항목"
+              },
+              {
+                "x0": 0.093,
+                "type": "item",
+                "title": "· 공급자적합성확인 안전기준 부속서 11 어린이용 장신구",
+                "breadcrumb": [
+                  "2"
+                ],
+                "confidence": 0.9855,
+                "level_code": "L7",
+                "level_name": "열거항목"
+              },
+              {
+                "x0": 0.093,
+                "type": "item",
+                "title": "· 공급자적합성확인 안전기준 부속서 17 방한용·패션용·스포츠용 마스크",
+                "breadcrumb": [
+                  "2"
+                ],
+                "confidence": 0.9855,
+                "level_code": "L7",
+                "level_name": "열거항목"
+              },
+              {
+                "x0": 0.093,
+                "type": "item",
+                "title": "· 안전기준준수 안전기준 부속서 1 가정용 섬유제품",
+                "breadcrumb": [
+                  "2"
+                ],
+                "confidence": 0.971,
+                "level_code": "L7",
+                "level_name": "열거항목"
+              },
+              {
+                "x0": 0.093,
+                "type": "item",
+                "title": "·어린이제품 공통안전기준",
+                "breadcrumb": [
+                  "2"
+                ],
+                "confidence": 0.9266,
+                "level_code": "L7",
+                "level_name": "열거항목"
+              },
+              {
+                "x0": 0.093,
+                "type": "item",
+                "title": "·소방청고시 방염제품의 성능인증 및 제품검사의 기술기준",
+                "breadcrumb": [
+                  "2"
+                ],
+                "confidence": 0.9421,
+                "level_code": "L7",
+                "level_name": "열거항목"
+              }
+            ],
+            "n_nodes": 19,
+            "graph": {
+              "edges": [
+                {
+                  "to": "1:1",
+                  "from": "1:2",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "1:1",
+                  "from": "1:3",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "1:1",
+                  "from": "1:4",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "1:1",
+                  "from": "1:5",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "1:1",
+                  "from": "1:6",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "1:1",
+                  "from": "1:7",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "1:1",
+                  "from": "1:8",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "1:1",
+                  "from": "1:9",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "1:1",
+                  "from": "1:10",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "1:1",
+                  "from": "1:11",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "1:1",
+                  "from": "1:12",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "1:1",
+                  "from": "1:13",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "1:1",
+                  "from": "1:14",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "1:1",
+                  "from": "1:15",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "1:1",
+                  "from": "1:16",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "1:1",
+                  "from": "1:17",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "1:1",
+                  "from": "1:18",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "2:19",
+                  "from": "2:20",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "2:19",
+                  "from": "2:21",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "2:19",
+                  "from": "2:22",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "2:19",
+                  "from": "2:23",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "2:19",
+                  "from": "2:24",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "2:19",
+                  "from": "2:25",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "2:27",
+                  "from": "2:26",
+                  "type": "HAS_TABLE"
+                },
+                {
+                  "to": "2:28",
+                  "from": "2:26",
+                  "type": "HAS_NOTE"
+                },
+                {
+                  "to": "3:30",
+                  "from": "3:31",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "3:31",
+                  "from": "3:32",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "3:30",
+                  "from": "3:33",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "3:34",
+                  "from": "3:33",
+                  "type": "HAS_TABLE"
+                },
+                {
+                  "to": "3:35",
+                  "from": "3:33",
+                  "type": "HAS_NOTE"
+                },
+                {
+                  "to": "3:30",
+                  "from": "4:38",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "4:38",
+                  "from": "4:39",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "4:38",
+                  "from": "4:40",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "4:38",
+                  "from": "4:41",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "4:38",
+                  "from": "4:42",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "4:38",
+                  "from": "4:43",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "4:38",
+                  "from": "4:44",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "3:30",
+                  "from": "5:45",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "5:46",
+                  "from": "5:47",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "5:47",
+                  "from": "5:48",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "5:47",
+                  "from": "5:49",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "5:46",
+                  "from": "5:50",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "5:50",
+                  "from": "5:51",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "5:50",
+                  "from": "5:52",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "5:50",
+                  "from": "5:53",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "5:50",
+                  "from": "5:54",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "5:50",
+                  "from": "5:55",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "5:50",
+                  "from": "5:56",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "5:56",
+                  "from": "5:57",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "5:56",
+                  "from": "5:58",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "5:50",
+                  "from": "5:59",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "5:50",
+                  "from": "5:60",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "5:50",
+                  "from": "5:61",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "5:50",
+                  "from": "5:62",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "5:50",
+                  "from": "5:63",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "5:63",
+                  "from": "5:64",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "5:63",
+                  "from": "5:65",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "6:66",
+                  "from": "6:67",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "6:66",
+                  "from": "6:68",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "6:66",
+                  "from": "6:69",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "6:70",
+                  "from": "6:69",
+                  "type": "HAS_TABLE"
+                },
+                {
+                  "to": "6:71",
+                  "from": "6:69",
+                  "type": "HAS_TABLE"
+                },
+                {
+                  "to": "6:72",
+                  "from": "6:69",
+                  "type": "HAS_TABLE"
+                },
+                {
+                  "to": "7:73",
+                  "from": "7:74",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "7:73",
+                  "from": "7:75",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "7:75",
+                  "from": "7:76",
+                  "type": "PART_OF"
+                }
+              ],
+              "nodes": [
+                {
+                  "id": "1:0",
+                  "page": 1,
+                  "part": null,
+                  "type": "section",
+                  "order": 0,
+                  "title": "적용범위",
+                  "confidence": 0.9981,
+                  "level_code": "L3",
+                  "level_name": "절",
+                  "number_path": [
+                    "1"
+                  ]
+                },
+                {
+                  "id": "1:1",
+                  "page": 1,
+                  "part": null,
+                  "type": "section",
+                  "order": 1,
+                  "title": "인용표준 다음에 나타내는 표준",
+                  "confidence": 0.9975,
+                  "level_code": "L3",
+                  "level_name": "절",
+                  "number_path": [
+                    "2"
+                  ]
+                },
+                {
+                  "id": "1:2",
+                  "page": 1,
+                  "part": null,
+                  "type": "item",
+                  "order": 2,
+                  "title": "· KS K ISO 3071 텍스타일 — 수성 추출액의 pH 측정",
+                  "confidence": 0.9578,
+                  "level_code": "L7",
+                  "level_name": "열거항목",
+                  "number_path": []
+                },
+                {
+                  "id": "1:3",
+                  "page": 1,
+                  "part": null,
+                  "type": "item",
+                  "order": 3,
+                  "title": "· KS K ISO 14184-1 텍스타일 — 품알데하이드 측정 — 제1부 : 유리 및 가수분해 품알데하이드 (증류수 추출법)",
+                  "confidence": 0.9731,
+                  "level_code": "L7",
+                  "level_name": "열거항목",
+                  "number_path": []
+                },
+                {
+                  "id": "1:4",
+                  "page": 1,
+                  "part": null,
+                  "type": "item",
+                  "order": 4,
+                  "title": "· KS K 0736 섬유제품의 알러지성 염료 함유량 시험방법",
+                  "confidence": 0.9437,
+                  "level_code": "L7",
+                  "level_name": "열거항목",
+                  "number_path": []
+                },
+                {
+                  "id": "1:5",
+                  "page": 1,
+                  "part": null,
+                  "type": "item",
+                  "order": 5,
+                  "title": "· KS K 0737 섬유 제품의 유기 주석 화합물 함유량 시험 방법",
+                  "confidence": 0.9729,
+                  "level_code": "L7",
+                  "level_name": "열거항목",
+                  "number_path": []
+                },
+                {
+                  "id": "1:6",
+                  "page": 1,
+                  "part": null,
+                  "type": "item",
+                  "order": 6,
+                  "title": "• KS K 0739 섬유제품 — 아조 염료로부터 생성되는 특정 방향족 아민의 분석 방법 — 제3부 : 특정 아조 염료를 사용할 때 생성되는 4",
+                  "confidence": 0.9759,
+                  "level_code": "L7",
+                  "level_name": "열거항목",
+                  "number_path": []
+                },
+                {
+                  "id": "1:7",
+                  "page": 1,
+                  "part": null,
+                  "type": "item",
+                  "order": 7,
+                  "title": "- KS K ISO 3175-1 텍스타일 — 드라이클리닝 및 마무리 — 제1부 : 원단 및 의류의 클리닝성 (cleanability) 평가방법",
+                  "confidence": 0.9721,
+                  "level_code": "L7",
+                  "level_name": "열거항목",
+                  "number_path": []
+                },
+                {
+                  "id": "1:8",
+                  "page": 1,
+                  "part": null,
+                  "type": "item",
+                  "order": 8,
+                  "title": "· KS K ISO 6330 텍스타일 — 섬유 시험에 대한 가정세탁과 건조과정",
+                  "confidence": 0.9671,
+                  "level_code": "L7",
+                  "level_name": "열거항목",
+                  "number_path": []
+                },
+                {
+                  "id": "1:9",
+                  "page": 1,
+                  "part": null,
+                  "type": "item",
+                  "order": 9,
+                  "title": "· KS K 0941 유아동복의 안전성 — 유아동복에 사용하는 코드 및 조임곤 — 안전 요구 성능",
+                  "confidence": 0.9498,
+                  "level_code": "L7",
+                  "level_name": "열거항목",
+                  "number_path": []
+                },
+                {
+                  "id": "1:10",
+                  "page": 1,
+                  "part": null,
+                  "type": "item",
+                  "order": 10,
+                  "title": "• KS K ISO 18254-1 텍스타일 — 알키페놀에톡실레이트(APEO)의 검출 및 분석방법 — 제1부: HPLC-MS 방법",
+                  "confidence": 0.9583,
+                  "level_code": "L7",
+                  "level_name": "열거항목",
+                  "number_path": []
+                },
+                {
+                  "id": "1:11",
+                  "page": 1,
+                  "part": null,
+                  "type": "item",
+                  "order": 11,
+                  "title": "• KS C IEC 62321-6 전기전자 제품 내 특정 물질의 정량 — 제6부 : GC-MS에 의한 고분자 내존재하는 폴리브로민화바이페닐과 폴",
+                  "confidence": 0.9687,
+                  "level_code": "L7",
+                  "level_name": "열거항목",
+                  "number_path": []
+                },
+                {
+                  "id": "1:12",
+                  "page": 1,
+                  "part": null,
+                  "type": "item",
+                  "order": 12,
+                  "title": "· 안전확인 안전기준 부속서 1 유아용 섬유제품",
+                  "confidence": 0.9719,
+                  "level_code": "L7",
+                  "level_name": "열거항목",
+                  "number_path": []
+                },
+                {
+                  "id": "1:13",
+                  "page": 1,
+                  "part": null,
+                  "type": "item",
+                  "order": 13,
+                  "title": "· 공급자적합성확인 안전기준 부속서 1 어린이용 가죽제품",
+                  "confidence": 0.983,
+                  "level_code": "L7",
+                  "level_name": "열거항목",
+                  "number_path": []
+                },
+                {
+                  "id": "1:14",
+                  "page": 1,
+                  "part": null,
+                  "type": "item",
+                  "order": 14,
+                  "title": "· 공급자적합성확인 안전기준 부속서 11 어린이용 장신구",
+                  "confidence": 0.9855,
+                  "level_code": "L7",
+                  "level_name": "열거항목",
+                  "number_path": []
+                },
+                {
+                  "id": "1:15",
+                  "page": 1,
+                  "part": null,
+                  "type": "item",
+                  "order": 15,
+                  "title": "· 공급자적합성확인 안전기준 부속서 17 방한용·패션용·스포츠용 마스크",
+                  "confidence": 0.9855,
+                  "level_code": "L7",
+                  "level_name": "열거항목",
+                  "number_path": []
+                },
+                {
+                  "id": "1:16",
+                  "page": 1,
+                  "part": null,
+                  "type": "item",
+                  "order": 16,
+                  "title": "· 안전기준준수 안전기준 부속서 1 가정용 섬유제품",
+                  "confidence": 0.971,
+                  "level_code": "L7",
+                  "level_name": "열거항목",
+                  "number_path": []
+                },
+                {
+                  "id": "1:17",
+                  "page": 1,
+                  "part": null,
+                  "type": "item",
+                  "order": 17,
+                  "title": "·어린이제품 공통안전기준",
+                  "confidence": 0.9266,
+                  "level_code": "L7",
+                  "level_name": "열거항목",
+                  "number_path": []
+                },
+                {
+                  "id": "1:18",
+                  "page": 1,
+                  "part": null,
+                  "type": "item",
+                  "order": 18,
+                  "title": "·소방청고시 방염제품의 성능인증 및 제품검사의 기술기준",
+                  "confidence": 0.9421,
+                  "level_code": "L7",
+                  "level_name": "열거항목",
+                  "number_path": []
+                },
+                {
+                  "id": "2:19",
+                  "page": 2,
+                  "part": null,
+                  "type": "section",
+                  "order": 19,
+                  "title": "용어의 정의",
+                  "confidence": 0.9854,
+                  "level_code": "L3",
+                  "level_name": "절",
+                  "number_path": [
+                    "3"
+                  ]
+                },
+                {
+                  "id": "2:20",
+                  "page": 2,
+                  "part": null,
+                  "type": "subsection",
+                  "order": 20,
+                  "title": "“섬유제품”이라 함은 일상생활에서 사용하는 피부에 직접",
+                  "confidence": 0.9869,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "3",
+                    "1"
+                  ]
+                },
+                {
+                  "id": "2:21",
+                  "page": 2,
+                  "part": null,
+                  "type": "subsection",
+                  "order": 21,
+                  "title": "\"조성섬유\"라 함은 섬유제품을 구성하고 있는 섬유의 명칭을 말한다.",
+                  "confidence": 0.9848,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "3",
+                    "2"
+                  ]
+                },
+                {
+                  "id": "2:22",
+                  "page": 2,
+                  "part": null,
+                  "type": "subsection",
+                  "order": 22,
+                  "title": "“혼용률”이라 함은 조성섬유가 2종 이상의 섬유로 혼용 (혼방, 교직)되",
+                  "confidence": 0.9843,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "3",
+                    "3"
+                  ]
+                },
+                {
+                  "id": "2:23",
+                  "page": 2,
+                  "part": null,
+                  "type": "subsection",
+                  "order": 23,
+                  "title": "\"취급상 주의사항\"이라 함은 세탁 등의 취급 방법을 알리기 위하여 섬유",
+                  "confidence": 0.9843,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "3",
+                    "4"
+                  ]
+                },
+                {
+                  "id": "2:24",
+                  "page": 2,
+                  "part": null,
+                  "type": "subsection",
+                  "order": 24,
+                  "title": "\"방염제품\"이라 함은 방염처리하거나 난연성소재로 제조한 제품을 말하며 방",
+                  "confidence": 0.995,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "3",
+                    "5"
+                  ]
+                },
+                {
+                  "id": "2:25",
+                  "page": 2,
+                  "part": null,
+                  "type": "subsection",
+                  "order": 25,
+                  "title": "\"맞춤복\"이라 함은 개인을 위해 형태, 재료, 색상 등을 임의로 선정하여",
+                  "confidence": 0.9925,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "3",
+                    "6"
+                  ]
+                },
+                {
+                  "id": "2:26",
+                  "page": 2,
+                  "part": null,
+                  "type": "section",
+                  "order": 26,
+                  "title": "세부분류",
+                  "confidence": 0.998,
+                  "level_code": "L3",
+                  "level_name": "절",
+                  "number_path": [
+                    "4"
+                  ]
+                },
+                {
+                  "id": "2:27",
+                  "page": 2,
+                  "part": null,
+                  "type": "table",
+                  "order": 27,
+                  "title": "[표 1] 아동용 섬유제품의 세부분류",
+                  "confidence": 0.9801,
+                  "level_code": "LT",
+                  "level_name": "표",
+                  "number_path": []
+                },
+                {
+                  "id": "2:28",
+                  "page": 2,
+                  "part": null,
+                  "type": "note",
+                  "order": 28,
+                  "title": "주 1. 「전기용품 및 생활용품 안전관리법」공급자적합성확인 안전기준부속서 17(방한용·패션용·스포츠용마스크) 안전기준을 추가적으로 만족하여야 한",
+                  "confidence": 0.9689,
+                  "level_code": "LN",
+                  "level_name": "주석",
+                  "number_path": []
+                },
+                {
+                  "id": "2:29",
+                  "page": 2,
+                  "part": null,
+                  "type": "section",
+                  "order": 29,
+                  "title": "안전확인 안전기준 부속서2(합성수지제 어린이용품) 제 4부. 바닥매트를",
+                  "confidence": 0.9919,
+                  "level_code": "L3",
+                  "level_name": "절",
+                  "number_path": [
+                    "2"
+                  ]
+                },
+                {
+                  "id": "3:30",
+                  "page": 3,
+                  "part": null,
+                  "type": "section",
+                  "order": 30,
+                  "title": "안전요건",
+                  "confidence": 0.9944,
+                  "level_code": "L3",
+                  "level_name": "절",
+                  "number_path": [
+                    "5"
+                  ]
+                },
+                {
+                  "id": "3:31",
+                  "page": 3,
+                  "part": null,
+                  "type": "subsection",
+                  "order": 31,
+                  "title": "물리적 안전요건",
+                  "confidence": 0.9999,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "5",
+                    "1"
+                  ]
+                },
+                {
+                  "id": "3:32",
+                  "page": 3,
+                  "part": null,
+                  "type": "subsubsection",
+                  "order": 32,
+                  "title": "코드 및 조임곤 (6.1.1 참조) KS K 0941에서 규정하고 있는",
+                  "confidence": 0.9972,
+                  "level_code": "L5",
+                  "level_name": "세부항목",
+                  "number_path": [
+                    "5",
+                    "1",
+                    "1"
+                  ]
+                },
+                {
+                  "id": "3:33",
+                  "page": 3,
+                  "part": null,
+                  "type": "subsection",
+                  "order": 33,
+                  "title": "유해물질 안전요건 유해물질의 기준 함유량은 6. 시험방법에 따라 시험하였",
+                  "confidence": 0.9941,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "5",
+                    "2"
+                  ]
+                },
+                {
+                  "id": "3:34",
+                  "page": 3,
+                  "part": null,
+                  "type": "table",
+                  "order": 34,
+                  "title": "[표 2] 유해물질 안전요건 \\( ^{9)} \\) , 10), 11)",
+                  "confidence": 0.982,
+                  "level_code": "LT",
+                  "level_name": "표",
+                  "number_path": []
+                },
+                {
+                  "id": "3:35",
+                  "page": 3,
+                  "part": null,
+                  "type": "note",
+                  "order": 35,
+                  "title": "주 1. 섬유부분에 한하여 적용한다.",
+                  "confidence": 0.9985,
+                  "level_code": "LN",
+                  "level_name": "주석",
+                  "number_path": []
+                },
+                {
+                  "id": "3:36",
+                  "page": 3,
+                  "part": null,
+                  "type": "section",
+                  "order": 36,
+                  "title": "염색한 섬유부분에만 적용하며, 대상물질은 안전기준준수 안전기준 부속서1(",
+                  "confidence": 0.9775,
+                  "level_code": "L3",
+                  "level_name": "절",
+                  "number_path": [
+                    "2"
+                  ]
+                },
+                {
+                  "id": "3:37",
+                  "page": 3,
+                  "part": null,
+                  "type": "section",
+                  "order": 37,
+                  "title": "섬유 원단에 합성수지(합성고무 포함) 소재로 코팅",
+                  "confidence": 0.9982,
+                  "level_code": "L3",
+                  "level_name": "절",
+                  "number_path": [
+                    "3"
+                  ]
+                },
+                {
+                  "id": "4:38",
+                  "page": 4,
+                  "part": null,
+                  "type": "subsection",
+                  "order": 38,
+                  "title": "전기적 안전요건",
+                  "confidence": 0.9998,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "5",
+                    "3"
+                  ]
+                },
+                {
+                  "id": "4:39",
+                  "page": 4,
+                  "part": null,
+                  "type": "subsubsection",
+                  "order": 39,
+                  "title": "섬유제품에 포함되는 2차전지는 폭발 등의 가능성을 고려하여 리튬폴리머 전",
+                  "confidence": 0.9993,
+                  "level_code": "L5",
+                  "level_name": "세부항목",
+                  "number_path": [
+                    "5",
+                    "3",
+                    "1"
+                  ]
+                },
+                {
+                  "id": "4:40",
+                  "page": 4,
+                  "part": null,
+                  "type": "subsubsection",
+                  "order": 40,
+                  "title": "전지가 위치한 공간은 외부의 충격, 하중, 휈 변형, 관통 등에 의한",
+                  "confidence": 0.9838,
+                  "level_code": "L5",
+                  "level_name": "세부항목",
+                  "number_path": [
+                    "5",
+                    "3",
+                    "2"
+                  ]
+                },
+                {
+                  "id": "4:41",
+                  "page": 4,
+                  "part": null,
+                  "type": "subsubsection",
+                  "order": 41,
+                  "title": "제조업자 및 수입업자는 침수 등에 의한 전지 폭발 및 사고에 대비하여",
+                  "confidence": 0.9983,
+                  "level_code": "L5",
+                  "level_name": "세부항목",
+                  "number_path": [
+                    "5",
+                    "3",
+                    "3"
+                  ]
+                },
+                {
+                  "id": "4:42",
+                  "page": 4,
+                  "part": null,
+                  "type": "subsubsection",
+                  "order": 42,
+                  "title": "전지를 제외한",
+                  "confidence": 0.9996,
+                  "level_code": "L5",
+                  "level_name": "세부항목",
+                  "number_path": [
+                    "5",
+                    "3",
+                    "4"
+                  ]
+                },
+                {
+                  "id": "4:43",
+                  "page": 4,
+                  "part": null,
+                  "type": "subsubsection",
+                  "order": 43,
+                  "title": "전기 제품 및 리튬폴리머 전지가 내장되거나 사용되는",
+                  "confidence": 0.9989,
+                  "level_code": "L5",
+                  "level_name": "세부항목",
+                  "number_path": [
+                    "5",
+                    "3",
+                    "5"
+                  ]
+                },
+                {
+                  "id": "4:44",
+                  "page": 4,
+                  "part": null,
+                  "type": "subsubsection",
+                  "order": 44,
+                  "title": "세부적인 표시방법은 부록 A.2.1을 참고할 수 있다.",
+                  "confidence": 0.9998,
+                  "level_code": "L5",
+                  "level_name": "세부항목",
+                  "number_path": [
+                    "5",
+                    "3",
+                    "6"
+                  ]
+                },
+                {
+                  "id": "5:45",
+                  "page": 5,
+                  "part": null,
+                  "type": "subsection",
+                  "order": 45,
+                  "title": "안전요건에 대한 적합여부 확인",
+                  "confidence": 0.9997,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "5",
+                    "4"
+                  ]
+                },
+                {
+                  "id": "5:46",
+                  "page": 5,
+                  "part": null,
+                  "type": "section",
+                  "order": 46,
+                  "title": "시험방법",
+                  "confidence": 0.9788,
+                  "level_code": "L3",
+                  "level_name": "절",
+                  "number_path": [
+                    "6"
+                  ]
+                },
+                {
+                  "id": "5:47",
+                  "page": 5,
+                  "part": null,
+                  "type": "subsection",
+                  "order": 47,
+                  "title": "물리적 안전요건",
+                  "confidence": 0.9998,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "6",
+                    "1"
+                  ]
+                },
+                {
+                  "id": "5:48",
+                  "page": 5,
+                  "part": null,
+                  "type": "subsubsection",
+                  "order": 48,
+                  "title": "코드 및 조임곤 KS K 0941에 따른다.",
+                  "confidence": 0.9813,
+                  "level_code": "L5",
+                  "level_name": "세부항목",
+                  "number_path": [
+                    "6",
+                    "1",
+                    "1"
+                  ]
+                },
+                {
+                  "id": "5:49",
+                  "page": 5,
+                  "part": null,
+                  "type": "subsubsection",
+                  "order": 49,
+                  "title": "자석과 자석부품 “어린이제품 공통안전기준”에 따른다.",
+                  "confidence": 0.9775,
+                  "level_code": "L5",
+                  "level_name": "세부항목",
+                  "number_path": [
+                    "6",
+                    "1",
+                    "2"
+                  ]
+                },
+                {
+                  "id": "5:50",
+                  "page": 5,
+                  "part": null,
+                  "type": "subsection",
+                  "order": 50,
+                  "title": "유해물질 안전요건",
+                  "confidence": 0.9918,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "6",
+                    "2"
+                  ]
+                },
+                {
+                  "id": "5:51",
+                  "page": 5,
+                  "part": null,
+                  "type": "subsubsection",
+                  "order": 51,
+                  "title": "pH KS K ISO 3071에 따른다.",
+                  "confidence": 0.9988,
+                  "level_code": "L5",
+                  "level_name": "세부항목",
+                  "number_path": [
+                    "6",
+                    "2",
+                    "1"
+                  ]
+                },
+                {
+                  "id": "5:52",
+                  "page": 5,
+                  "part": null,
+                  "type": "subsubsection",
+                  "order": 52,
+                  "title": "품알데하이드 KS K ISO 14184-1에 따른다.",
+                  "confidence": 0.993,
+                  "level_code": "L5",
+                  "level_name": "세부항목",
+                  "number_path": [
+                    "6",
+                    "2",
+                    "2"
+                  ]
+                },
+                {
+                  "id": "5:53",
+                  "page": 5,
+                  "part": null,
+                  "type": "subsubsection",
+                  "order": 53,
+                  "title": "아릴아민 「전기용품 및 생활용품 안전관리법」에 따른 안전기준준수 안전기준",
+                  "confidence": 0.9933,
+                  "level_code": "L5",
+                  "level_name": "세부항목",
+                  "number_path": [
+                    "6",
+                    "2",
+                    "3"
+                  ]
+                },
+                {
+                  "id": "5:54",
+                  "page": 5,
+                  "part": null,
+                  "type": "subsubsection",
+                  "order": 54,
+                  "title": "프탈레이트가소제 총 함유량 \"어린이제품 공통안전기준\"에 따른다.",
+                  "confidence": 0.9822,
+                  "level_code": "L5",
+                  "level_name": "세부항목",
+                  "number_path": [
+                    "6",
+                    "2",
+                    "4"
+                  ]
+                },
+                {
+                  "id": "5:55",
+                  "page": 5,
+                  "part": null,
+                  "type": "subsubsection",
+                  "order": 55,
+                  "title": "유기주석화합물 KS K 0737에 따른다.",
+                  "confidence": 0.9987,
+                  "level_code": "L5",
+                  "level_name": "세부항목",
+                  "number_path": [
+                    "6",
+                    "2",
+                    "5"
+                  ]
+                },
+                {
+                  "id": "5:56",
+                  "page": 5,
+                  "part": null,
+                  "type": "subsubsection",
+                  "order": 56,
+                  "title": "방염제",
+                  "confidence": 0.9595,
+                  "level_code": "L5",
+                  "level_name": "세부항목",
+                  "number_path": [
+                    "6",
+                    "2",
+                    "6"
+                  ]
+                },
+                {
+                  "id": "5:57",
+                  "page": 5,
+                  "part": null,
+                  "type": "clause",
+                  "order": 57,
+                  "title": "PentaBDE, OctaBDE의 시험은 KS C IEC 62321-6에",
+                  "confidence": 0.9817,
+                  "level_code": "L6",
+                  "level_name": "하위항목",
+                  "number_path": [
+                    "6",
+                    "2",
+                    "6",
+                    "1"
+                  ]
+                },
+                {
+                  "id": "5:58",
+                  "page": 5,
+                  "part": null,
+                  "type": "clause",
+                  "order": 58,
+                  "title": "TDBPP「전기용품 및 생활용품 안전관리법」에 따른 안전기준준수 안전기준",
+                  "confidence": 0.993,
+                  "level_code": "L6",
+                  "level_name": "하위항목",
+                  "number_path": [
+                    "6",
+                    "2",
+                    "6",
+                    "2"
+                  ]
+                },
+                {
+                  "id": "5:59",
+                  "page": 5,
+                  "part": null,
+                  "type": "subsubsection",
+                  "order": 59,
+                  "title": "총 납 함유량 “어린이제품 공통안전기준”에 따른다.",
+                  "confidence": 0.9767,
+                  "level_code": "L5",
+                  "level_name": "세부항목",
+                  "number_path": [
+                    "6",
+                    "2",
+                    "7"
+                  ]
+                },
+                {
+                  "id": "5:60",
+                  "page": 5,
+                  "part": null,
+                  "type": "subsubsection",
+                  "order": 60,
+                  "title": "총 카드뮴 함유량 \"어린이제품 공통안전기준\"에 따른다.",
+                  "confidence": 0.9511,
+                  "level_code": "L5",
+                  "level_name": "세부항목",
+                  "number_path": [
+                    "6",
+                    "2",
+                    "8"
+                  ]
+                },
+                {
+                  "id": "5:61",
+                  "page": 5,
+                  "part": null,
+                  "type": "subsubsection",
+                  "order": 61,
+                  "title": "알려지성 염료 KS K 0736에 따른다.",
+                  "confidence": 0.9667,
+                  "level_code": "L5",
+                  "level_name": "세부항목",
+                  "number_path": [
+                    "6",
+                    "2",
+                    "9"
+                  ]
+                },
+                {
+                  "id": "5:62",
+                  "page": 5,
+                  "part": null,
+                  "type": "subsubsection",
+                  "order": 62,
+                  "title": "니켈 용출량 공급자적합성확인 안전기준 부속서 11(어린이용 장신구)에 따",
+                  "confidence": 0.9985,
+                  "level_code": "L5",
+                  "level_name": "세부항목",
+                  "number_path": [
+                    "6",
+                    "2",
+                    "10"
+                  ]
+                },
+                {
+                  "id": "5:63",
+                  "page": 5,
+                  "part": null,
+                  "type": "subsubsection",
+                  "order": 63,
+                  "title": "노닐페놀(NP, NPEO) 총 함량",
+                  "confidence": 0.9903,
+                  "level_code": "L5",
+                  "level_name": "세부항목",
+                  "number_path": [
+                    "6",
+                    "2",
+                    "11"
+                  ]
+                },
+                {
+                  "id": "5:64",
+                  "page": 5,
+                  "part": null,
+                  "type": "clause",
+                  "order": 64,
+                  "title": "NP(Nonylphenol)의 시험은 안전확인 안전기준 1(유아용 섬유제",
+                  "confidence": 0.9959,
+                  "level_code": "L6",
+                  "level_name": "하위항목",
+                  "number_path": [
+                    "6",
+                    "2",
+                    "11",
+                    "1"
+                  ]
+                },
+                {
+                  "id": "5:65",
+                  "page": 5,
+                  "part": null,
+                  "type": "clause",
+                  "order": 65,
+                  "title": "NPEO(Nonylphenolethylates)의 시험은 KS K ISO",
+                  "confidence": 0.9981,
+                  "level_code": "L6",
+                  "level_name": "하위항목",
+                  "number_path": [
+                    "6",
+                    "2",
+                    "11",
+                    "2"
+                  ]
+                },
+                {
+                  "id": "6:66",
+                  "page": 6,
+                  "part": null,
+                  "type": "section",
+                  "order": 66,
+                  "title": "표시사항 및 표시 방법",
+                  "confidence": 0.9995,
+                  "level_code": "L3",
+                  "level_name": "절",
+                  "number_path": [
+                    "7"
+                  ]
+                },
+                {
+                  "id": "6:67",
+                  "page": 6,
+                  "part": null,
+                  "type": "subsection",
+                  "order": 67,
+                  "title": "「전기용품 및 생활용품 안전관리법」에 따른 안전기준준수 안전기준 부속서",
+                  "confidence": 0.9909,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "7",
+                    "1"
+                  ]
+                },
+                {
+                  "id": "6:68",
+                  "page": 6,
+                  "part": null,
+                  "type": "subsection",
+                  "order": 68,
+                  "title": "아동이 입을 수 있는 섬유제품이 안전확인 안전기준 부속서 6(완구) 제2",
+                  "confidence": 0.9991,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "7",
+                    "2"
+                  ]
+                },
+                {
+                  "id": "6:69",
+                  "page": 6,
+                  "part": null,
+                  "type": "subsection",
+                  "order": 69,
+                  "title": "아동이 사용하는 연질",
+                  "confidence": 0.9976,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "7",
+                    "3"
+                  ]
+                },
+                {
+                  "id": "6:70",
+                  "page": 6,
+                  "part": null,
+                  "type": "table",
+                  "order": 70,
+                  "title": "표",
+                  "confidence": 0.9867,
+                  "level_code": "LT",
+                  "level_name": "표",
+                  "number_path": []
+                },
+                {
+                  "id": "6:71",
+                  "page": 6,
+                  "part": null,
+                  "type": "table",
+                  "order": 71,
+                  "title": "표",
+                  "confidence": 0.9449,
+                  "level_code": "LT",
+                  "level_name": "표",
+                  "number_path": []
+                },
+                {
+                  "id": "6:72",
+                  "page": 6,
+                  "part": null,
+                  "type": "table",
+                  "order": 72,
+                  "title": "표",
+                  "confidence": 0.9958,
+                  "level_code": "LT",
+                  "level_name": "표",
+                  "number_path": []
+                },
+                {
+                  "id": "7:73",
+                  "page": 7,
+                  "part": "부록 A",
+                  "type": "appendix",
+                  "order": 73,
+                  "title": "부록 A. 세부 표시방법(예시)",
+                  "confidence": 0.9998,
+                  "level_code": "LA",
+                  "level_name": "부록",
+                  "number_path": [
+                    "A"
+                  ]
+                },
+                {
+                  "id": "7:74",
+                  "page": 7,
+                  "part": "부록 A",
+                  "type": "subsection",
+                  "order": 74,
+                  "title": "서론 이 세부 표시방법(예시)은 참고하기 위한 것으로 실제 적용되는 품목",
+                  "confidence": 0.9941,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "A",
+                    "1"
+                  ]
+                },
+                {
+                  "id": "7:75",
+                  "page": 7,
+                  "part": "부록 A",
+                  "type": "subsection",
+                  "order": 75,
+                  "title": "세부 표시방법(예시)",
+                  "confidence": 0.9999,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "A",
+                    "2"
+                  ]
+                },
+                {
+                  "id": "7:76",
+                  "page": 7,
+                  "part": "부록 A",
+                  "type": "subsubsection",
+                  "order": 76,
+                  "title": "리튬이차전지 사용 제품의 주의경고(예시)",
+                  "confidence": 0.9996,
+                  "level_code": "L5",
+                  "level_name": "세부항목",
+                  "number_path": [
+                    "A",
+                    "2",
+                    "1"
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "page_number": 2,
+            "part_number": null,
+            "keywords": [],
+            "summary": null,
+            "hierarchy": [
+              {
+                "x0": 0.091,
+                "type": "section",
+                "title": "용어의 정의",
+                "marker": "3",
+                "confidence": 0.9854,
+                "level_code": "L3",
+                "level_name": "절"
+              },
+              {
+                "x0": 0.089,
+                "text": "또는 간접 접촉하는 섬유로 만들어진제품을 말한다.",
+                "type": "subsection",
+                "title": "“섬유제품”이라 함은 일상생활에서 사용하는 피부에 직접",
+                "marker": "3.1",
+                "breadcrumb": [
+                  "3"
+                ],
+                "confidence": 0.9869,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "x0": 0.09,
+                "type": "subsection",
+                "title": "\"조성섬유\"라 함은 섬유제품을 구성하고 있는 섬유의 명칭을 말한다.",
+                "marker": "3.2",
+                "breadcrumb": [
+                  "3"
+                ],
+                "confidence": 0.9848,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "x0": 0.089,
+                "text": "“혼용률”이라 함은 조성섬유가 2종 이상의 섬유로 혼용 (혼방, 교직)되었을 때, 각 조성섬유의 무게를 전 조성섬유 무게에 대한 백분율 (%)로 나타낸 것을 말한다.",
+                "type": "subsection",
+                "title": "“혼용률”이라 함은 조성섬유가 2종 이상의 섬유로 혼용 (혼방, 교직)되",
+                "marker": "3.3",
+                "breadcrumb": [
+                  "3"
+                ],
+                "confidence": 0.9843,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "x0": 0.09,
+                "text": "\"취급상 주의사항\"이라 함은 세탁 등의 취급 방법을 알리기 위하여 섬유 제품에 표시하는 것을 말한다.",
+                "type": "subsection",
+                "title": "\"취급상 주의사항\"이라 함은 세탁 등의 취급 방법을 알리기 위하여 섬유",
+                "marker": "3.4",
+                "breadcrumb": [
+                  "3"
+                ],
+                "confidence": 0.9843,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "x0": 0.09,
+                "text": "\"방염제품\"이라 함은 방염처리하거나 난연성소재로 제조한 제품을 말하며 방염제품이라 표시하였을 경우는 소방청 고시 방염제품의 성능인증 및 제품검사의 기술기준에 적합하여야 한다.",
+                "type": "subsection",
+                "title": "\"방염제품\"이라 함은 방염처리하거나 난연성소재로 제조한 제품을 말하며 방",
+                "marker": "3.5",
+                "breadcrumb": [
+                  "3"
+                ],
+                "confidence": 0.995,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "x0": 0.09,
+                "text": "\"맞춤복\"이라 함은 개인을 위해 형태, 재료, 색상 등을 임의로 선정하여 주문·제작하는 의복을 말한다.",
+                "type": "subsection",
+                "title": "\"맞춤복\"이라 함은 개인을 위해 형태, 재료, 색상 등을 임의로 선정하여",
+                "marker": "3.6",
+                "breadcrumb": [
+                  "3"
+                ],
+                "confidence": 0.9925,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "x0": 0.09,
+                "text": "[표 1] 아동용 섬유제품의 세부분류",
+                "type": "section",
+                "title": "세부분류",
+                "marker": "4",
+                "confidence": 0.998,
+                "level_code": "L3",
+                "level_name": "절"
+              },
+              {
+                "x0": 0.094,
+                "bbox": "0.0940,0.3960,0.8980,0.7720",
+                "type": "table",
+                "title": "[표 1] 아동용 섬유제품의 세부분류",
+                "caption": "<table><tr><td>구분</td><td>종류</td></tr><tr><td>외의류</td><td>스웨터, 재킷, 코트, 커버울, 점퍼, 조끼, 토퍼, 우주복, 카디건, 솔, 망토, 한복, 우의, 앞치마, 미술 가운, 넥타이, 벨트류, 멜빵, 모자(모자, 목도리, 헤어밴드 넥워머, 스카프, 스카프밥 등), 신발(운동화, 장화류, 슬리퍼, 구두, 샌들, 부츠, 발레화, 기타 신발 등을 말하며, 섬유의 원료인 합성수지를 사용한 제품은 포함되나 천연가죽, 인조가죽 또는 모피로 된 신발은 제외)</td></tr><tr><td>중의류</td><td>상하복, 원피스, 티셔츠, 남방, 바지, 치마, 블라우스, 수영복, 발레복, 타올류, 체조복, 체육복, 수면안대, 스포츠용 보호대, 가발, 손수건, 목욕장갑, 삼푸캡, 방한용·패션용·스포츠용 마스크1), 장갑, 귀마개, 토시</td></tr><tr><td>내의류</td><td>팬티 및 팬티류, 잠옷류, 풀바지, 팬티스타킹, 바디슈트, 내의, 목욕가운, 수면조끼, 속치마, 복대, 양말류(양말, 타이츠, 스타킹, 레깅스, 덧신, 무릎보호대)</td></tr><tr><td>침구류</td><td>이불, 베탘, 베탘싸개, 커버류, 매트류(합성수지 재질인 바닥매트2)는 제외), 요, 시트류, 침낭, 패드, 카펫(면적 1 m2 미만), 해먹, 범퍼침대, 덮개류</td></tr><tr><td>가방류</td><td>가방, 배낭, 핸드백, 지갑, 보온주머니</td></tr><tr><td>기타 제품류</td><td>쿠션류, 방석류, 모기장, 커튼 등</td></tr></table>",
+                "breadcrumb": [
+                  "4"
+                ],
+                "confidence": 0.9801,
+                "level_code": "LT",
+                "level_name": "표"
+              },
+              {
+                "x0": 0.09,
+                "type": "note",
+                "title": "주 1. 「전기용품 및 생활용품 안전관리법」공급자적합성확인 안전기준부속서 17(방한용·패션용·스포츠용마스크) 안전기준을 추가적으로 만족하여야 한",
+                "breadcrumb": [
+                  "4"
+                ],
+                "confidence": 0.9689,
+                "level_code": "LN",
+                "level_name": "주석"
+              },
+              {
+                "x0": 0.126,
+                "text": "안전확인 안전기준 부속서2(합성수지제 어린이용품) 제 4부. 바닥매트를 따른다.\n3. 상기의 종류에 없는 섬유제품 또는 신유형 섬유제품이 보통의 아동이 사용하는 섬유제품으로 판매되는 경우에는 사용환경, 용도 등을 고려하여 [표 1] 제품의 구분과 종류를 적용한다.\n김용석/생활어린이제품안전과/2024-03-12 17:40:30",
+                "type": "section",
+                "title": "안전확인 안전기준 부속서2(합성수지제 어린이용품) 제 4부. 바닥매트를",
+                "marker": "2",
+                "confidence": 0.9919,
+                "level_code": "L3",
+                "level_name": "절"
+              }
+            ],
+            "n_nodes": 11,
+            "graph": null
+          },
+          {
+            "page_number": 3,
+            "part_number": null,
+            "keywords": [],
+            "summary": null,
+            "hierarchy": [
+              {
+                "x0": 0.09,
+                "type": "section",
+                "title": "안전요건",
+                "marker": "5",
+                "confidence": 0.9944,
+                "level_code": "L3",
+                "level_name": "절"
+              },
+              {
+                "x0": 0.09,
+                "type": "subsection",
+                "title": "물리적 안전요건",
+                "marker": "5.1",
+                "breadcrumb": [
+                  "5"
+                ],
+                "confidence": 0.9999,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "x0": 0.089,
+                "text": "코드 및 조임곤 (6.1.1 참조) KS K 0941에서 규정하고 있는 코드 및 조임곤이 사용된 경우에는 KS K 0941에 적합하여야 한다. 제품의 연령 구분 및 정의는 KS K 0941에 따르되 대상 연령은 만 13세 이하로 한다.",
+                "type": "subsubsection",
+                "title": "코드 및 조임곤 (6.1.1 참조) KS K 0941에서 규정하고 있는",
+                "marker": "5.1.1",
+                "breadcrumb": [
+                  "5",
+                  "5.1"
+                ],
+                "confidence": 0.9972,
+                "level_code": "L5",
+                "level_name": "세부항목"
+              },
+              {
+                "x0": 0.089,
+                "text": "유해물질 안전요건 유해물질의 기준 함유량은 6. 시험방법에 따라 시험하였을 때 [표 2]의 기준치에 적합하여야 한다. 가죽이나 모피 소재가 사용된 부분에 대해서는 공급자적합성확인 안전기준 부속서 1(어린이용 가죽제품)의 유해물질 안전요건에 적합하여야 한다. 단, 가죽이나 모피 소재가 제품 면적 대비 5 % 이하인 부분과 전체 중량의 1 % 미만인 부분도 유해물질 안전요건 적용대상으로 본다. 신발류의 유해물질 안전요건 적용 범위에서 밀창은 제외한다.\n[표 2] 유해물질 안전요건 \\( ^{9)} \\) , 10), 11)",
+                "type": "subsection",
+                "title": "유해물질 안전요건 유해물질의 기준 함유량은 6. 시험방법에 따라 시험하였",
+                "marker": "5.2",
+                "breadcrumb": [
+                  "5"
+                ],
+                "confidence": 0.9941,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "x0": 0.094,
+                "bbox": "0.0940,0.4410,0.9070,0.7580",
+                "type": "table",
+                "title": "[표 2] 유해물질 안전요건 \\( ^{9)} \\) , 10), 11)",
+                "caption": "<table><tr><td>유해물질명</td><td>허용치</td></tr><tr><td>폼알데하이드 (mg/kg) 1)</td><td>75 이하</td></tr><tr><td>아릴아민 (mg/kg) 2)</td><td>각각 30 이하</td></tr><tr><td>프탈레이트계 가소제 총 함유량 (%) 3)</td><td>0.1 이하</td></tr><tr><td>유기주석화합물(tributyltin, TBT) (mg/kg) 4)</td><td>1.0 이하</td></tr><tr><td>방염제 5)</td><td>사용하지 말 것</td></tr><tr><td>총 납 함유량 (mg/kg) 6)</td><td>100 이하</td></tr><tr><td>총 카드뮴 함유량(mg/kg) 6)</td><td>75 이하</td></tr><tr><td>알러지성 염료 (mg/kg) 7)</td><td>각각 50 이하</td></tr><tr><td>pH 1)</td><td>4.0 ~ 7.5</td></tr><tr><td>니켈(Ni)의 용출량 (\\( \\mu g/cm^{2}/week \\)) 8)</td><td>0.5 이하</td></tr><tr><td>노닐페놀(NP, NPEO) 총 함량 (mg/kg) 1)</td><td>100 이하</td></tr></table>",
+                "breadcrumb": [
+                  "5",
+                  "5.2"
+                ],
+                "confidence": 0.982,
+                "level_code": "LT",
+                "level_name": "표"
+              },
+              {
+                "x0": 0.09,
+                "type": "note",
+                "title": "주 1. 섬유부분에 한하여 적용한다.",
+                "breadcrumb": [
+                  "5",
+                  "5.2"
+                ],
+                "confidence": 0.9985,
+                "level_code": "LN",
+                "level_name": "주석"
+              },
+              {
+                "x0": 0.119,
+                "text": "염색한 섬유부분에만 적용하며, 대상물질은 안전기준준수 안전기준 부속서1(가정용 섬유 제품) 부록 B., KS K 0739에 따른다.",
+                "type": "section",
+                "title": "염색한 섬유부분에만 적용하며, 대상물질은 안전기준준수 안전기준 부속서1(",
+                "marker": "2",
+                "confidence": 0.9775,
+                "level_code": "L3",
+                "level_name": "절"
+              },
+              {
+                "x0": 0.12,
+                "text": "또는 프린팅 등의 가공 처리를 한 경우 및 합성수지(합성고무 포함) 소재의 부자재에만 적용하며, 대상물질은 어린이제품안전 공통 기준에 따른다. 단, 금속 및 고분자 기질 위에 페인트 코팅된 경우는 적용대상에서 제외한다.\n김용석/생활어린이제품안전과/2024-03-12 17:40:30",
+                "type": "section",
+                "title": "섬유 원단에 합성수지(합성고무 포함) 소재로 코팅",
+                "marker": "3",
+                "confidence": 0.9982,
+                "level_code": "L3",
+                "level_name": "절"
+              }
+            ],
+            "n_nodes": 8,
+            "graph": null
+          },
+          {
+            "page_number": 4,
+            "part_number": null,
+            "keywords": [],
+            "summary": null,
+            "hierarchy": [
+              {
+                "x0": 0.09,
+                "type": "subsection",
+                "title": "전기적 안전요건",
+                "marker": "5.3",
+                "breadcrumb": [
+                  "5"
+                ],
+                "confidence": 0.9998,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "x0": 0.089,
+                "text": "섬유제품에 포함되는 2차전지는 폭발 등의 가능성을 고려하여 리튬폴리머 전지로 사용을 제한한다. 또한 제조업자 및 수입업자는 사용되는 리튬폴리머 전지 및 셀의 안전성(플라스틱 보강 및 케이스가 있는 상태)을 KC 62133 또는 그에 준하는 성적서를 통해 확인해야 한다.",
+                "type": "subsubsection",
+                "title": "섬유제품에 포함되는 2차전지는 폭발 등의 가능성을 고려하여 리튬폴리머 전",
+                "marker": "5.3.1",
+                "breadcrumb": [
+                  "5",
+                  "5.3"
+                ],
+                "confidence": 0.9993,
+                "level_code": "L5",
+                "level_name": "세부항목"
+              },
+              {
+                "x0": 0.089,
+                "text": "제품 파손 및 폭발 등의 사고를 고려하여 설계되어야 하고, 제조업자 및 수입업자는 제품 구성에 대한 상세 정보를 기술한 제품설명서(긴급대응가이드 포함)를 작성하여 5.3.5항의 주의경고표시와 함께 소비자에게 제공해야 한다.",
+                "type": "subsubsection",
+                "title": "전지가 위치한 공간은 외부의 충격, 하중, 휈 변형, 관통 등에 의한",
+                "marker": "5.3.2",
+                "breadcrumb": [
+                  "5",
+                  "5.3"
+                ],
+                "confidence": 0.9838,
+                "level_code": "L5",
+                "level_name": "세부항목"
+              },
+              {
+                "x0": 0.089,
+                "text": "해당 제품이 IP(International Protection) 보호 등급 IPX7등급 이상인지 확인해야 한다.",
+                "type": "subsubsection",
+                "title": "제조업자 및 수입업자는 침수 등에 의한 전지 폭발 및 사고에 대비하여",
+                "marker": "5.3.3",
+                "breadcrumb": [
+                  "5",
+                  "5.3"
+                ],
+                "confidence": 0.9983,
+                "level_code": "L5",
+                "level_name": "세부항목"
+              },
+              {
+                "x0": 0.089,
+                "text": "모든 전기제품은 전기용품안전관리법에 따라 인증 또는 시험성적서가 있는 제품을 사용해야 한다.",
+                "type": "subsubsection",
+                "title": "전지를 제외한",
+                "marker": "5.3.4",
+                "breadcrumb": [
+                  "5",
+                  "5.3"
+                ],
+                "confidence": 0.9996,
+                "level_code": "L5",
+                "level_name": "세부항목"
+              },
+              {
+                "x0": 0.089,
+                "text": "모든 제품은 사용상 발생 가능한 모든 경우를 고려하여 반드시 주의경고 표시 8종류 이상을 기호 및 한글로 표기하여야 한다.",
+                "type": "subsubsection",
+                "title": "전기 제품 및 리튬폴리머 전지가 내장되거나 사용되는",
+                "marker": "5.3.5",
+                "breadcrumb": [
+                  "5",
+                  "5.3"
+                ],
+                "confidence": 0.9989,
+                "level_code": "L5",
+                "level_name": "세부항목"
+              },
+              {
+                "x0": 0.089,
+                "text": "김용석/생활어린이제품안전과/2024-03-12 17:40:30",
+                "type": "subsubsection",
+                "title": "세부적인 표시방법은 부록 A.2.1을 참고할 수 있다.",
+                "marker": "5.3.6",
+                "breadcrumb": [
+                  "5",
+                  "5.3"
+                ],
+                "confidence": 0.9998,
+                "level_code": "L5",
+                "level_name": "세부항목"
+              }
+            ],
+            "n_nodes": 7,
+            "graph": null
+          },
+          {
+            "page_number": 5,
+            "part_number": null,
+            "keywords": [],
+            "summary": null,
+            "hierarchy": [
+              {
+                "x0": 0.09,
+                "text": "공급자적합성확인을 하려는 제조업자 및 수입업자는 안전한 공산품이 유통될 수 있도록 해당 제품을 출고하기 전이나 통관하기 전에 유해물질이 제품에 존재할 수 있는 다양한 가능성을 고려하여 자체시험, 제3자 시험·검사기관의 시험, 외국기관의 시험성적서, 원자재 공급업체가 제시하는 시험성적서 등을 통하여 공급자적합성확인기준에 적합한지를 확인하여야 한다.",
+                "type": "subsection",
+                "title": "안전요건에 대한 적합여부 확인",
+                "marker": "5.4",
+                "breadcrumb": [
+                  "5"
+                ],
+                "confidence": 0.9997,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "x0": 0.09,
+                "type": "section",
+                "title": "시험방법",
+                "marker": "6",
+                "confidence": 0.9788,
+                "level_code": "L3",
+                "level_name": "절"
+              },
+              {
+                "x0": 0.093,
+                "type": "subsection",
+                "title": "물리적 안전요건",
+                "marker": "6.1",
+                "breadcrumb": [
+                  "6"
+                ],
+                "confidence": 0.9998,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "x0": 0.093,
+                "type": "subsubsection",
+                "title": "코드 및 조임곤 KS K 0941에 따른다.",
+                "marker": "6.1.1",
+                "breadcrumb": [
+                  "6",
+                  "6.1"
+                ],
+                "confidence": 0.9813,
+                "level_code": "L5",
+                "level_name": "세부항목"
+              },
+              {
+                "x0": 0.093,
+                "type": "subsubsection",
+                "title": "자석과 자석부품 “어린이제품 공통안전기준”에 따른다.",
+                "marker": "6.1.2",
+                "breadcrumb": [
+                  "6",
+                  "6.1"
+                ],
+                "confidence": 0.9775,
+                "level_code": "L5",
+                "level_name": "세부항목"
+              },
+              {
+                "x0": 0.093,
+                "type": "subsection",
+                "title": "유해물질 안전요건",
+                "marker": "6.2",
+                "breadcrumb": [
+                  "6"
+                ],
+                "confidence": 0.9918,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "x0": 0.093,
+                "type": "subsubsection",
+                "title": "pH KS K ISO 3071에 따른다.",
+                "marker": "6.2.1",
+                "breadcrumb": [
+                  "6",
+                  "6.2"
+                ],
+                "confidence": 0.9988,
+                "level_code": "L5",
+                "level_name": "세부항목"
+              },
+              {
+                "x0": 0.093,
+                "type": "subsubsection",
+                "title": "품알데하이드 KS K ISO 14184-1에 따른다.",
+                "marker": "6.2.2",
+                "breadcrumb": [
+                  "6",
+                  "6.2"
+                ],
+                "confidence": 0.993,
+                "level_code": "L5",
+                "level_name": "세부항목"
+              },
+              {
+                "x0": 0.093,
+                "text": "아릴아민 「전기용품 및 생활용품 안전관리법」에 따른 안전기준준수 안전기준 부속서 1(가정용 섬유제품) 부록 B. 염료 및 염색물의 아릴아민 시험방법, KS K 0739에 따른다.",
+                "type": "subsubsection",
+                "title": "아릴아민 「전기용품 및 생활용품 안전관리법」에 따른 안전기준준수 안전기준",
+                "marker": "6.2.3",
+                "breadcrumb": [
+                  "6",
+                  "6.2"
+                ],
+                "confidence": 0.9933,
+                "level_code": "L5",
+                "level_name": "세부항목"
+              },
+              {
+                "x0": 0.093,
+                "type": "subsubsection",
+                "title": "프탈레이트가소제 총 함유량 \"어린이제품 공통안전기준\"에 따른다.",
+                "marker": "6.2.4",
+                "breadcrumb": [
+                  "6",
+                  "6.2"
+                ],
+                "confidence": 0.9822,
+                "level_code": "L5",
+                "level_name": "세부항목"
+              },
+              {
+                "x0": 0.093,
+                "type": "subsubsection",
+                "title": "유기주석화합물 KS K 0737에 따른다.",
+                "marker": "6.2.5",
+                "breadcrumb": [
+                  "6",
+                  "6.2"
+                ],
+                "confidence": 0.9987,
+                "level_code": "L5",
+                "level_name": "세부항목"
+              },
+              {
+                "x0": 0.093,
+                "type": "subsubsection",
+                "title": "방염제",
+                "marker": "6.2.6",
+                "breadcrumb": [
+                  "6",
+                  "6.2"
+                ],
+                "confidence": 0.9595,
+                "level_code": "L5",
+                "level_name": "세부항목"
+              },
+              {
+                "x0": 0.093,
+                "text": "PentaBDE, OctaBDE의 시험은 KS C IEC 62321-6에 따른다.",
+                "type": "clause",
+                "title": "PentaBDE, OctaBDE의 시험은 KS C IEC 62321-6에",
+                "marker": "6.2.6.1",
+                "breadcrumb": [
+                  "6",
+                  "6.2",
+                  "6.2.6"
+                ],
+                "confidence": 0.9817,
+                "level_code": "L6",
+                "level_name": "하위항목"
+              },
+              {
+                "x0": 0.093,
+                "text": "TDBPP「전기용품 및 생활용품 안전관리법」에 따른 안전기준준수 안전기준 부속서 2(양탄자) 부속서A TDBPP 정량방법에 따른다.",
+                "type": "clause",
+                "title": "TDBPP「전기용품 및 생활용품 안전관리법」에 따른 안전기준준수 안전기준",
+                "marker": "6.2.6.2",
+                "breadcrumb": [
+                  "6",
+                  "6.2",
+                  "6.2.6"
+                ],
+                "confidence": 0.993,
+                "level_code": "L6",
+                "level_name": "하위항목"
+              },
+              {
+                "x0": 0.093,
+                "type": "subsubsection",
+                "title": "총 납 함유량 “어린이제품 공통안전기준”에 따른다.",
+                "marker": "6.2.7",
+                "breadcrumb": [
+                  "6",
+                  "6.2"
+                ],
+                "confidence": 0.9767,
+                "level_code": "L5",
+                "level_name": "세부항목"
+              },
+              {
+                "x0": 0.093,
+                "type": "subsubsection",
+                "title": "총 카드뮴 함유량 \"어린이제품 공통안전기준\"에 따른다.",
+                "marker": "6.2.8",
+                "breadcrumb": [
+                  "6",
+                  "6.2"
+                ],
+                "confidence": 0.9511,
+                "level_code": "L5",
+                "level_name": "세부항목"
+              },
+              {
+                "x0": 0.093,
+                "type": "subsubsection",
+                "title": "알려지성 염료 KS K 0736에 따른다.",
+                "marker": "6.2.9",
+                "breadcrumb": [
+                  "6",
+                  "6.2"
+                ],
+                "confidence": 0.9667,
+                "level_code": "L5",
+                "level_name": "세부항목"
+              },
+              {
+                "x0": 0.093,
+                "text": "니켈 용출량 공급자적합성확인 안전기준 부속서 11(어린이용 장신구)에 따른다.",
+                "type": "subsubsection",
+                "title": "니켈 용출량 공급자적합성확인 안전기준 부속서 11(어린이용 장신구)에 따",
+                "marker": "6.2.10",
+                "breadcrumb": [
+                  "6",
+                  "6.2"
+                ],
+                "confidence": 0.9985,
+                "level_code": "L5",
+                "level_name": "세부항목"
+              },
+              {
+                "x0": 0.093,
+                "type": "subsubsection",
+                "title": "노닐페놀(NP, NPEO) 총 함량",
+                "marker": "6.2.11",
+                "breadcrumb": [
+                  "6",
+                  "6.2"
+                ],
+                "confidence": 0.9903,
+                "level_code": "L5",
+                "level_name": "세부항목"
+              },
+              {
+                "x0": 0.093,
+                "text": "NP(Nonylphenol)의 시험은 안전확인 안전기준 1(유아용 섬유제품) 부록 A에 따른다.",
+                "type": "clause",
+                "title": "NP(Nonylphenol)의 시험은 안전확인 안전기준 1(유아용 섬유제",
+                "marker": "6.2.11.1",
+                "breadcrumb": [
+                  "6",
+                  "6.2",
+                  "6.2.11"
+                ],
+                "confidence": 0.9959,
+                "level_code": "L6",
+                "level_name": "하위항목"
+              },
+              {
+                "x0": 0.093,
+                "text": "NPEO(Nonylphenolethylates)의 시험은 KS K ISO 18254-1에 따른다.\n김용석/생활어린이제품안전과/2024-03-12 17:40:30",
+                "type": "clause",
+                "title": "NPEO(Nonylphenolethylates)의 시험은 KS K ISO",
+                "marker": "6.2.11.2",
+                "breadcrumb": [
+                  "6",
+                  "6.2",
+                  "6.2.11"
+                ],
+                "confidence": 0.9981,
+                "level_code": "L6",
+                "level_name": "하위항목"
+              }
+            ],
+            "n_nodes": 21,
+            "graph": null
+          },
+          {
+            "page_number": 6,
+            "part_number": null,
+            "keywords": [],
+            "summary": null,
+            "hierarchy": [
+              {
+                "x0": 0.09,
+                "type": "section",
+                "title": "표시사항 및 표시 방법",
+                "marker": "7",
+                "confidence": 0.9995,
+                "level_code": "L3",
+                "level_name": "절"
+              },
+              {
+                "x0": 0.089,
+                "text": "「전기용품 및 생활용품 안전관리법」에 따른 안전기준준수 안전기준 부속서 1 가정용 섬유제품의 표시사항에 따른다. 다만, 방한용.패션용.스포츠용 마스크는「전기용품 및 생활용품 안전관리법」에 따른 공급자적합성확인 안전기준 부속서 17(방한용.패션용.스포츠용 마스크)의 표시사항을 따른다. 표시사항은 한글로 표시하여야 한다(단, 제품의 사용연령을 반드시 표시하여야 한다).",
+                "type": "subsection",
+                "title": "「전기용품 및 생활용품 안전관리법」에 따른 안전기준준수 안전기준 부속서",
+                "marker": "7.1",
+                "breadcrumb": [
+                  "7"
+                ],
+                "confidence": 0.9909,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "x0": 0.089,
+                "text": "아동이 입을 수 있는 섬유제품이 안전확인 안전기준 부속서 6(완구) 제2부 5.2(작은 부품시험)에서 통과되는 작은 부품이 부착된 경우에는 [표 3](1)에 따라 주의 사항을 표시하여야 한다.",
+                "type": "subsection",
+                "title": "아동이 입을 수 있는 섬유제품이 안전확인 안전기준 부속서 6(완구) 제2",
+                "marker": "7.2",
+                "breadcrumb": [
+                  "7"
+                ],
+                "confidence": 0.9991,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "x0": 0.089,
+                "text": "또는 발표된 합성수지 재질의 신발은 [표 3](2)에 따라 주의 사항을 표시하여야 한다.\n[표 3] 취급상 주의표시\n(1) 아동이 입을 수 있는 섬유제품의 작은 부품에 대한 주의사항\n(2) 아동이 사용하는 연질 또는 발표된 합성수지 재질의 신발에 대한 주의사항\n김용석/생활어린이제품안전과/2024-03-12 17:40:30",
+                "type": "subsection",
+                "title": "아동이 사용하는 연질",
+                "marker": "7.3",
+                "breadcrumb": [
+                  "7"
+                ],
+                "confidence": 0.9976,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "x0": 0.097,
+                "bbox": "0.0970,0.5110,0.9020,0.5860",
+                "type": "table",
+                "title": "표",
+                "caption": "<table><tr><td>취급상 주의사항</td></tr><tr><td>\"주의! 작은 부품이 탈락되면 삼킬 수 있음\"</td></tr></table>",
+                "breadcrumb": [
+                  "7",
+                  "7.3"
+                ],
+                "confidence": 0.9867,
+                "level_code": "LT",
+                "level_name": "표"
+              },
+              {
+                "x0": 0.097,
+                "bbox": "0.0970,0.6590,0.9020,0.7310",
+                "type": "table",
+                "title": "표",
+                "caption": "<table><tr><td>취급상 주의사항</td></tr><tr><td>주의! 신발이 에스컬레이터 등에 끌 수 있음</td></tr></table>",
+                "breadcrumb": [
+                  "7",
+                  "7.3"
+                ],
+                "confidence": 0.9449,
+                "level_code": "LT",
+                "level_name": "표"
+              },
+              {
+                "x0": 0.095,
+                "bbox": "0.0950,0.7830,0.9060,0.9010",
+                "type": "table",
+                "title": "표",
+                "caption": "<table><tr><td>개정</td><td>정 : 산업통상자원부 고시</td><td>제2015 - 0109호(2015. 6. 4.)</td></tr><tr><td>개정</td><td>정 : 산업통상자원부 고시</td><td>제2017 - 0017호(2017. 1. 31.)</td></tr><tr><td>개정</td><td>정 : 산업통상자원부 고시</td><td>제2018 - 0031호(2018. 3. 5.)</td></tr><tr><td>개정</td><td>정 : 산업통상자원부 고시</td><td>제2021 - 0171호(2021. 10. 27.)</td></tr><tr><td>개정</td><td>정 : 산업통상자원부 고시</td><td>제2024 - 042호(2024. 3. 7.)</td></tr></table>",
+                "breadcrumb": [
+                  "7",
+                  "7.3"
+                ],
+                "confidence": 0.9958,
+                "level_code": "LT",
+                "level_name": "표"
+              }
+            ],
+            "n_nodes": 7,
+            "graph": null
+          },
+          {
+            "page_number": 7,
+            "part_number": null,
+            "keywords": [],
+            "summary": null,
+            "hierarchy": [
+              {
+                "x0": 0.344,
+                "part": "부록 A",
+                "type": "appendix",
+                "title": "부록 A. 세부 표시방법(예시)",
+                "marker": "A",
+                "confidence": 0.9998,
+                "level_code": "LA",
+                "level_name": "부록"
+              },
+              {
+                "x0": 0.089,
+                "part": "부록 A",
+                "text": "서론 이 세부 표시방법(예시)은 참고하기 위한 것으로 실제 적용되는 품목과 꼭 일치하는 것은 아니다.",
+                "type": "subsection",
+                "title": "서론 이 세부 표시방법(예시)은 참고하기 위한 것으로 실제 적용되는 품목",
+                "marker": "A.1",
+                "breadcrumb": [
+                  "A"
+                ],
+                "confidence": 0.9941,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "x0": 0.09,
+                "part": "부록 A",
+                "type": "subsection",
+                "title": "세부 표시방법(예시)",
+                "marker": "A.2",
+                "breadcrumb": [
+                  "A"
+                ],
+                "confidence": 0.9999,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "x0": 0.09,
+                "part": "부록 A",
+                "text": "1.인증을 받지 않은 전지 또는 충전기를 사용하여 충전하는 경우 폭발 위험성이 있습니다.\n2. 전지 단자에 금속성 물질(휴대폰 액세서리, 동전 등)이 접촉하지 않도록 하세요.\n3. 전지를 어린 아이가 빨거나 동물이 물어 Rd지 않도록 하세요.\n4. 전지를 파손시키거나 강한 충격, 가열, 침수, 날카로운 물질로 뜻을 경우 폭발 위험이 있으므로 절대 금하여 주세요.\n5. 전지가 포함되어 있는 제품을 직사광선이 드는 자동차 내부 등 밀폐된 고온의 장소에 두지 마세요. 변형, 고장, 폭발의 위험이 있습니다.\n6. 임의로 분해하거나 충격을 주지말고, 충전 중인 상태로 이용하지 마세요. 감전, 누전화재의 원인이 될 수 있습니다.\n7. 전지의 발열, 누액, 파열, 오염 등은 기기고장의 원인이 되거나 상해의 위험이 있으니 전지를 임의로 분해 및 개조하지 마세요.\n8. 전지가 내장되어 있는 제품의(예:신발, 의류 등) 해당 부위를 구부리거나, 세탁, 외부적으로 강한 충격을 가할 경우 전지의 파손, 폭발의 위험이 있으므로 주의하십시오.\n9. 전지가 내장되어 있는 제품을 유아동이 사용하는 경우 보호자의 지속적인 보호가 필요합니다.\n김용석/생활어린이제품안전과/2024-03-12 17:40:30",
+                "type": "subsubsection",
+                "title": "리튬이차전지 사용 제품의 주의경고(예시)",
+                "marker": "A.2.1",
+                "breadcrumb": [
+                  "A",
+                  "A.2"
+                ],
+                "confidence": 0.9996,
+                "level_code": "L5",
+                "level_name": "세부항목"
+              }
+            ],
+            "n_nodes": 4,
+            "graph": null
+          }
+        ],
+        "latency_seconds": 0.008610227000644954
+      },
+      "dimension_ocr": {
+        "enabled": true,
+        "model": "dimension_ocr_model",
+        "method": "text-segment",
+        "applied_fixes": null,
+        "pages": [
+          {
+            "page_number": 1,
+            "body_html": "<div data-label=\"title\" data-bbox=\"0.3490,0.0860,0.6020,0.1070\" data-score=\"0.9951\"><h1>공급자적합성 안전기준</h1></div>\n<div data-label=\"title\" data-bbox=\"0.3220,0.1310,0.8300,0.1570\" data-score=\"0.9519\"><h1>아 동 용 섬 유 제 품 부속서 15</h1></div>\n<div data-label=\"title\" data-bbox=\"0.3090,0.1700,0.6420,0.1920\" data-score=\"1.0000\"><h1>(Textile products for children)</h1></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.2220,0.9070,0.2860\" data-score=\"0.9981\"><p>1. 적용범위 이 기준은 36개월 이상 만 13세 이하의 아동용 섬유제품의 안전요건, 시험방법 및 표시사항 등에 대해 규정한다. 다만, 맞춤복은 공급자적합성확인대상에서 제외하며, 놀이에 사용할 용도로 제작된 가장복은 안전확인 안전기준 부속서 6(완구)의 안전기준에 따라 관리하여야 한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.3350,0.9070,0.3780\" data-score=\"0.9975\"><p>2. 인용표준 다음에 나타내는 표준 또는 기준은 이 기준에 인용됨으로써 이 기준의 규정 일부를 구성한다. 이러한 관련표준 또는 기준은 그 최신판을 적용한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.4030,0.5650,0.4220\" data-score=\"0.9578\"><p>· KS K ISO 3071 텍스타일 — 수성 추출액의 pH 측정</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.4260,0.9060,0.4660\" data-score=\"0.9731\"><p>· KS K ISO 14184-1 텍스타일 — 품알데하이드 측정 — 제1부 : 유리 및 가수분해 품알데하이드 (증류수 추출법)</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.4700,0.5850,0.4880\" data-score=\"0.9437\"><p>· KS K 0736 섬유제품의 알러지성 염료 함유량 시험방법</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.4920,0.6060,0.5100\" data-score=\"0.9729\"><p>· KS K 0737 섬유 제품의 유기 주석 화합물 함유량 시험 방법</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.5140,0.9060,0.5560\" data-score=\"0.9759\"><p>• KS K 0739 섬유제품 — 아조 염료로부터 생성되는 특정 방향족 아민의 분석 방법 — 제3부 : 특정 아조 염료를 사용할 때 생성되는 4-아미노아조벤젠 분석</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.5590,0.9060,0.6000\" data-score=\"0.9721\"><p>- KS K ISO 3175-1 텍스타일 — 드라이클리닝 및 마무리 — 제1부 : 원단 및 의류의 클리닝성 (cleanability) 평가방법</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.6040,0.6980,0.6220\" data-score=\"0.9671\"><p>· KS K ISO 6330 텍스타일 — 섬유 시험에 대한 가정세탁과 건조과정</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.6260,0.8890,0.6440\" data-score=\"0.9498\"><p>· KS K 0941 유아동복의 안전성 — 유아동복에 사용하는 코드 및 조임곤 — 안전 요구 성능</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.6480,0.9070,0.6880\" data-score=\"0.9583\"><p>• KS K ISO 18254-1 텍스타일 — 알키페놀에톡실레이트(APEO)의 검출 및 분석방법 — 제1부: HPLC-MS 방법</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.6920,0.9060,0.7330\" data-score=\"0.9687\"><p>• KS C IEC 62321-6 전기전자 제품 내 특정 물질의 정량 — 제6부 : GC-MS에 의한 고분자 내존재하는 폴리브로민화바이페닐과 폴리브로민화다이페닐에테르의 분석</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.7370,0.5040,0.7550\" data-score=\"0.9719\"><p>· 안전확인 안전기준 부속서 1 유아용 섬유제품</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.7590,0.5880,0.7760\" data-score=\"0.9830\"><p>· 공급자적합성확인 안전기준 부속서 1 어린이용 가죽제품</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.7810,0.5850,0.7980\" data-score=\"0.9855\"><p>· 공급자적합성확인 안전기준 부속서 11 어린이용 장신구</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.8030,0.7010,0.8210\" data-score=\"0.9855\"><p>· 공급자적합성확인 안전기준 부속서 17 방한용·패션용·스포츠용 마스크</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.8260,0.5370,0.8430\" data-score=\"0.9710\"><p>· 안전기준준수 안전기준 부속서 1 가정용 섬유제품</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.8480,0.3280,0.8650\" data-score=\"0.9266\"><p>·어린이제품 공통안전기준</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.8700,0.6030,0.8880\" data-score=\"0.9421\"><p>·소방청고시 방염제품의 성능인증 및 제품검사의 기술기준</p></div>\n<div data-label=\"page_number\" data-bbox=\"0.4740,0.9380,0.5260,0.9500\" data-score=\"0.9374\" style=\"color:#888;font-size:0.9em;\">- 1 -</div>\n<div data-label=\"footer\" data-bbox=\"0.2830,0.9790,0.7160,0.9940\" data-score=\"0.9583\" style=\"color:#888;font-size:0.9em;\">김용석/생활어린이제품안전과/2024-03-12 17:40:30</div>",
+            "page_visual_summary": "",
+            "element_analysis": [],
+            "unbound_visual_notes": null,
+            "table_markdown": null,
+            "arbitrated_blocks": 0,
+            "corrected_cells": 0,
+            "format_restored_cells": 0,
+            "name_consistency": null,
+            "applied_rotation": null,
+            "applied_skew": null
+          },
+          {
+            "page_number": 2,
+            "body_html": "<div data-label=\"title\" data-bbox=\"0.0910,0.0810,0.2320,0.0990\" data-score=\"0.9854\"><h1>3. 용어의 정의</h1></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.1250,0.9040,0.1620\" data-score=\"0.9869\"><p>3.1 “섬유제품”이라 함은 일상생활에서 사용하는 피부에 직접 또는 간접 접촉하는 섬유로 만들어진제품을 말한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.1670,0.7140,0.1840\" data-score=\"0.9848\"><p>3.2 \"조성섬유\"라 함은 섬유제품을 구성하고 있는 섬유의 명칭을 말한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.1880,0.9050,0.2250\" data-score=\"0.9843\"><p>3.3 “혼용률”이라 함은 조성섬유가 2종 이상의 섬유로 혼용 (혼방, 교직)되었을 때, 각 조성섬유의 무게를 전 조성섬유 무게에 대한 백분율 (%)로 나타낸 것을 말한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.2300,0.9040,0.2460\" data-score=\"0.9843\"><p>3.4 \"취급상 주의사항\"이라 함은 세탁 등의 취급 방법을 알리기 위하여 섬유 제품에 표시하는 것을 말한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.2510,0.9050,0.2880\" data-score=\"0.9950\"><p>3.5 \"방염제품\"이라 함은 방염처리하거나 난연성소재로 제조한 제품을 말하며 방염제품이라 표시하였을 경우는 소방청 고시 방염제품의 성능인증 및 제품검사의 기술기준에 적합하여야 한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.2920,0.9010,0.3090\" data-score=\"0.9925\"><p>3.6 \"맞춤복\"이라 함은 개인을 위해 형태, 재료, 색상 등을 임의로 선정하여 주문·제작하는 의복을 말한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.0900,0.3480,0.2010,0.3650\" data-score=\"0.9980\"><h1>4. 세부분류</h1></div>\n<div data-label=\"table_caption\" data-bbox=\"0.3420,0.3720,0.6450,0.3890\" data-score=\"0.9969\" style=\"font-weight:600;\">[표 1] 아동용 섬유제품의 세부분류</div>\n<div data-label=\"table\" data-bbox=\"0.0940,0.3960,0.8980,0.7720\" data-score=\"0.9801\"><table><tr><td>구분</td><td>종류</td></tr><tr><td>외의류</td><td>스웨터, 재킷, 코트, 커버울, 점퍼, 조끼, 토퍼, 우주복, 카디건, 솔, 망토, 한복, 우의, 앞치마, 미술 가운, 넥타이, 벨트류, 멜빵, 모자(모자, 목도리, 헤어밴드 넥워머, 스카프, 스카프밥 등), 신발(운동화, 장화류, 슬리퍼, 구두, 샌들, 부츠, 발레화, 기타 신발 등을 말하며, 섬유의 원료인 합성수지를 사용한 제품은 포함되나 천연가죽, 인조가죽 또는 모피로 된 신발은 제외)</td></tr><tr><td>중의류</td><td>상하복, 원피스, 티셔츠, 남방, 바지, 치마, 블라우스, 수영복, 발레복, 타올류, 체조복, 체육복, 수면안대, 스포츠용 보호대, 가발, 손수건, 목욕장갑, 삼푸캡, 방한용·패션용·스포츠용 마스크1), 장갑, 귀마개, 토시</td></tr><tr><td>내의류</td><td>팬티 및 팬티류, 잠옷류, 풀바지, 팬티스타킹, 바디슈트, 내의, 목욕가운, 수면조끼, 속치마, 복대, 양말류(양말, 타이츠, 스타킹, 레깅스, 덧신, 무릎보호대)</td></tr><tr><td>침구류</td><td>이불, 베탘, 베탘싸개, 커버류, 매트류(합성수지 재질인 바닥매트2)는 제외), 요, 시트류, 침낭, 패드, 카펫(면적 1 m2 미만), 해먹, 범퍼침대, 덮개류</td></tr><tr><td>가방류</td><td>가방, 배낭, 핸드백, 지갑, 보온주머니</td></tr><tr><td>기타 제품류</td><td>쿠션류, 방석류, 모기장, 커튼 등</td></tr></table></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.7840,0.9050,0.8220\" data-score=\"0.9689\"><p>주 1. 「전기용품 및 생활용품 안전관리법」공급자적합성확인 안전기준부속서 17(방한용·패션용·스포츠용마스크) 안전기준을 추가적으로 만족하여야 한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1260,0.8260,0.8340,0.8430\" data-score=\"0.9919\"><p>2. 안전확인 안전기준 부속서2(합성수지제 어린이용품) 제 4부. 바닥매트를 따른다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1270,0.8480,0.8780,0.9060\" data-score=\"0.9981\"><p>3. 상기의 종류에 없는 섬유제품 또는 신유형 섬유제품이 보통의 아동이 사용하는 섬유제품으로 판매되는 경우에는 사용환경, 용도 등을 고려하여 [표 1] 제품의 구분과 종류를 적용한다.</p></div>\n<div data-label=\"page_number\" data-bbox=\"0.4740,0.9380,0.5260,0.9500\" data-score=\"0.9541\" style=\"color:#888;font-size:0.9em;\">- 2 -</div>\n<div data-label=\"footer\" data-bbox=\"0.2830,0.9790,0.7150,0.9940\" data-score=\"0.9667\" style=\"color:#888;font-size:0.9em;\">김용석/생활어린이제품안전과/2024-03-12 17:40:30</div>",
+            "page_visual_summary": "문서의 상단에는 '3. 용어의 정의' 섹션이 있으며, 여섯 가지 용어(섬유제품, 조성섬유, 혼용률, 취급상 주의사항, 방염제품, 맞춤복)에 대한 정의를 나열하고 있습니다. 그 아래에는 '4. 세부분류'라는 제목과 함께 '[표 1] 아동용 섬유제품의 세부분류'라는 표가 위치해 있으며, 다양한 섬유 제품들을 유형별로 분류한 내용을 담고 있습니다. 문서 하단에는 표에 대한 추가적인 설명을 제공하는 주(Note) 세 개와 문서 페이지 번호, 파일 정보 및 생성 시간이 표시되어 있습니다.",
+            "element_analysis": [],
+            "unbound_visual_notes": "문서의 상단에는 '3. 용어의 정의' 섹션이 있으며, 여섯 가지 용어(섬유제품, 조성섬유, 혼용률, 취급상 주의사항, 방염제품, 맞춤복)에 대한 정의를 나열하고 있습니다. 그 아래에는 '4. 세부분류'라는 제목과 함께 '[표 1] 아동용 섬유제품의 세부분류'라는 표가 위치해 있으며, 다양한 섬유 제품들을 유형별로 분류한 내용을 담고 있습니다. 문서 하단에는 표에 대한 추가적인 설명을 제공하는 주(Note) 세 개와 문서 페이지 번호, 파일 정보 및 생성 시간이 표시되어 있습니다.",
+            "table_markdown": "| 구분 | 종류 |\n| :--- | :--- |\n| 외의류 | 스웨터, 재킷, 코트, 커버올, 점퍼, 조끼, 토퍼, 우주복, 카디건, 설, 망토, 한복, 우의, 앞치마, 미슬 가운, 넥타이, 벨트류, 멜빵, 모자(모자, 목도리, 헤어밴드 넥워머, 스카프, 스카프빕 등), 신발(운동화, 장화류, 슬리퍼, 구두, 샌들, 부츠, 발레화, 기타 신발 등을 말하며, 섬유의 원료인 합성수지를 사용한 제품은 포함되나 천연가죽, 인조가죽 또는 모피로 된 신발은 제외) |\n| 중의류 | 상하복, 원피스, 티셔츠, 남방, 바지, 치마, 블라우스, 수영복, 발레복, 타올류, 체조복, 체육복, 수면안대, 스포츠용 보호대, 가발, 손수건, 목욕장갑, 삼푸캡, 방한용·패션용·스포츠용 마스크¹⁾, 장갑, 귀마개, 토시 |\n| 내의류 | 팬티 및 팬티류, 잠옷류, 죌바지, 팬티스타킹, 바디슈트, 내의, 목욕가운, 수면조끼, 속치마, 복대, 양말류(양말, 타이츠, 스타킹, 레깅스, 덧신, 무릎보호대) |\n| 침구류 | 이불, 베개, 베개싸개, 커버류, 매트류(합성수지 재질인 바닥매트²⁾는 제외), 요, 시트류, 침낭, 패드, 카페트(면적 1 m² 미만), 해먹, 범퍼침대, 덮개류 |\n| 가방류 | 가방, 배낭, 핸드백, 지갑, 보온주머니 |\n| 기타 제품류 | 쿠션류, 방석류, 모기장, 커튼 등",
+            "arbitrated_blocks": 0,
+            "corrected_cells": 0,
+            "format_restored_cells": 0,
+            "name_consistency": null,
+            "applied_rotation": null,
+            "applied_skew": null
+          },
+          {
+            "page_number": 3,
+            "body_html": "<div data-label=\"title\" data-bbox=\"0.0900,0.1070,0.2020,0.1240\" data-score=\"0.9944\"><h1>5. 안전요건</h1></div>\n<div data-label=\"title\" data-bbox=\"0.0900,0.1580,0.2700,0.1750\" data-score=\"0.9999\"><h1>5.1 물리적 안전요건</h1></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.1810,0.9060,0.2460\" data-score=\"0.9972\"><p>5.1.1 코드 및 조임곤 (6.1.1 참조) KS K 0941에서 규정하고 있는 코드 및 조임곤이 사용된 경우에는 KS K 0941에 적합하여야 한다. 제품의 연령 구분 및 정의는 KS K 0941에 따르되 대상 연령은 만 13세 이하로 한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.2750,0.9070,0.3880\" data-score=\"0.9941\"><p>5.2 유해물질 안전요건 유해물질의 기준 함유량은 6. 시험방법에 따라 시험하였을 때 [표 2]의 기준치에 적합하여야 한다. 가죽이나 모피 소재가 사용된 부분에 대해서는 공급자적합성확인 안전기준 부속서 1(어린이용 가죽제품)의 유해물질 안전요건에 적합하여야 한다. 단, 가죽이나 모피 소재가 제품 면적 대비 5 % 이하인 부분과 전체 중량의 1 % 미만인 부분도 유해물질 안전요건 적용대상으로 본다. 신발류의 유해물질 안전요건 적용 범위에서 밀창은 제외한다.</p></div>\n<div data-label=\"table_caption\" data-bbox=\"0.3490,0.4160,0.6460,0.4350\" data-score=\"0.9690\" style=\"font-weight:600;\">[표 2] 유해물질 안전요건 \\( ^{9)} \\) , 10), 11)</div>\n<div data-label=\"table\" data-bbox=\"0.0940,0.4410,0.9070,0.7580\" data-score=\"0.9820\"><table><tr><td>유해물질명</td><td>허용치</td></tr><tr><td>폼알데하이드 (mg/kg) 1)</td><td>75 이하</td></tr><tr><td>아릴아민 (mg/kg) 2)</td><td>각각 30 이하</td></tr><tr><td>프탈레이트계 가소제 총 함유량 (%) 3)</td><td>0.1 이하</td></tr><tr><td>유기주석화합물(tributyltin, TBT) (mg/kg) 4)</td><td>1.0 이하</td></tr><tr><td>방염제 5)</td><td>사용하지 말 것</td></tr><tr><td>총 납 함유량 (mg/kg) 6)</td><td>100 이하</td></tr><tr><td>총 카드뮴 함유량(mg/kg) 6)</td><td>75 이하</td></tr><tr><td>알러지성 염료 (mg/kg) 7)</td><td>각각 50 이하</td></tr><tr><td>pH 1)</td><td>4.0 ~ 7.5</td></tr><tr><td>니켈(Ni)의 용출량 (\\( \\mu g/cm^{2}/week \\)) 8)</td><td>0.5 이하</td></tr><tr><td>노닐페놀(NP, NPEO) 총 함량 (mg/kg) 1)</td><td>100 이하</td></tr></table></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.7680,0.3910,0.7850\" data-score=\"0.9985\"><p>주 1. 섬유부분에 한하여 적용한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1190,0.7930,0.9070,0.8340\" data-score=\"0.9775\"><p>2. 염색한 섬유부분에만 적용하며, 대상물질은 안전기준준수 안전기준 부속서1(가정용 섬유 제품) 부록 B., KS K 0739에 따른다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1200,0.8400,0.9070,0.9050\" data-score=\"0.9982\"><p>3. 섬유 원단에 합성수지(합성고무 포함) 소재로 코팅 또는 프린팅 등의 가공 처리를 한 경우 및 합성수지(합성고무 포함) 소재의 부자재에만 적용하며, 대상물질은 어린이제품안전 공통 기준에 따른다. 단, 금속 및 고분자 기질 위에 페인트 코팅된 경우는 적용대상에서 제외한다.</p></div>\n<div data-label=\"page_number\" data-bbox=\"0.4740,0.9370,0.5250,0.9500\" data-score=\"0.9428\" style=\"color:#888;font-size:0.9em;\">- 3 -</div>\n<div data-label=\"footer\" data-bbox=\"0.2830,0.9790,0.7150,0.9940\" data-score=\"0.9667\" style=\"color:#888;font-size:0.9em;\">김용석/생활어린이제품안전과/2024-03-12 17:40:30</div>",
+            "page_visual_summary": "문서의 본문 텍스트 섹션 아래에 [표 2] 유해물질 안전요건이 위치하며, 표 하단에는 주요 내용과 관련된 주(주석) 세 개가 나열되어 있다.",
+            "element_analysis": [],
+            "unbound_visual_notes": "문서의 본문 텍스트 섹션 아래에 [표 2] 유해물질 안전요건이 위치하며, 표 하단에는 주요 내용과 관련된 주(주석) 세 개가 나열되어 있다.",
+            "table_markdown": "| 유해물질명 | 허용치 |\n| :--- | :--- |\n| 폼알데하이드 (mg/kg) 1) | 75 이하 |\n| 아릴아민 (mg/kg) 2) | 각각 30 이하 |\n| 프탈레이트계 가소제 총 함유량 (%) 3) | 0.1 이하 |\n| 유기주석화합물(tributyltin, TBT) (mg/kg) 4) | 1.0 이하 |\n| 방염제 5) | 사용하지 말것 |\n| 총 납 함유량 (mg/kg) 6) | 100 이하 |\n| 총 카드뮴 함유량(mg/kg) 6) | 75 이하 |\n| 알러지성 염료 (mg/kg) 7) | 각각 50 이하 |\n| pH 1) | 4.0 ~ 7.5 |\n| 니켈(Ni)의 용출량 ($\\mu$g/cm²/week) 8) | 0.5 이하 |\n| 노닐페놀(NP, NPEO) 총 함량 (mg/kg) 1) | 100 이하 |",
+            "arbitrated_blocks": 0,
+            "corrected_cells": 0,
+            "format_restored_cells": 0,
+            "name_consistency": null,
+            "applied_rotation": null,
+            "applied_skew": null
+          },
+          {
+            "page_number": 4,
+            "body_html": "<div data-label=\"ref_text\" data-bbox=\"0.1200,0.0810,0.6570,0.0980\" data-score=\"0.9981\"><small style=\"color:#666;\">4. 섬유 원단에 코팅, 프린팅 등이 되어 있는 경우만 적용한다.</small></div>\n<div data-label=\"ref_text\" data-bbox=\"0.1210,0.1050,0.9030,0.1470\" data-score=\"0.9927\"><small style=\"color:#666;\">5. 대상물질은 TDBPP [tri(2,3-dibromopropyl) phosphate], PentaBDE[Pentabromodiphenyl ethers], OctaBDE[Octabromodiphenyl ethers]이고 방염가공처리된 제품에 한하여 적용한다.</small></div>\n<div data-label=\"ref_text\" data-bbox=\"0.1210,0.1520,0.9070,0.2160\" data-score=\"0.9923\"><small style=\"color:#666;\">6. 금속 기질, 고분자 기질, 페인팅 및 유사코팅, 기타 재료(목재 등)부분에 적용하며, 섬유 원단에는 적용하지 않는다. 단, 페인팅 및 표면코팅의 경우, 총 납 함유량 허용치는 어린이 제품 공통안전기준에 따른다.</small></div>\n<div data-label=\"ref_text\" data-bbox=\"0.1210,0.2220,0.9060,0.2640\" data-score=\"0.9840\"><small style=\"color:#666;\">7. 대상물질은 KS K 0736에 따르고, 적용되는 조성섬유는 폴리에스터, 나일론, 아크릴, 아세\n테이트, 트리아세테이트, 염화비닐 섬유이며, 염색한 섬유부분에 한하여 적용한다.</small></div>\n<div data-label=\"ref_text\" data-bbox=\"0.1210,0.2690,0.9060,0.3110\" data-score=\"0.9945\"><small style=\"color:#666;\">8. 원래 용도대로 제품을 착용한 상태에서 피부에 지속적으로 접촉하는 금속에 한하여 적용한다. 표면이 도금형태가 아닌 페인트 코팅된 경우는 제외한다.</small></div>\n<div data-label=\"ref_text\" data-bbox=\"0.1210,0.3160,0.9070,0.4050\" data-score=\"0.9865\"><small style=\"color:#666;\">9. 제품을 구성하는 섬유 부위 중 충전재 및 제품 면적 대비 5 % 이하인 부분은 제외하며, 면적계산이 불가한 끈이나 코드 등 섬유제 부속의 경우 전체 중량의 1 % 미만인 경우는 제외한다. 단, 상기 조건에도 불구하고 내의류, 중의류(장갑, 토시, 귀마개), 외의류(샌들, 슬리퍼, 모자)의 섬유부위 중 착용시 신체와 지속적으로 직접 접촉하는 부위는 적용대상으로 인정한다.</small></div>\n<div data-label=\"ref_text\" data-bbox=\"0.1230,0.4100,0.9060,0.4520\" data-score=\"0.9895\"><small style=\"color:#666;\">10. 제품에 투입된 원부자재가 추가적인 가공 없이 최종제품에 사용되었다면 그 원부자재의 안전요건을 최종 제품의 안전요건으로 인정할 수 있다.</small></div>\n<div data-label=\"ref_text\" data-bbox=\"0.1230,0.4570,0.9070,0.5220\" data-score=\"0.9930\"><small style=\"color:#666;\">11. 방한용.패션용.스포츠용 마스크는 추가적으로「전기용품 및 생활용품 안전관리법」에 따른 공급자적합성확인 안전기준 부속서 17(방한용.패션용.스포츠용 마스크)의 유해물질 안전요건에 적합하여야 한다.</small></div>\n<div data-label=\"title\" data-bbox=\"0.0900,0.5520,0.2700,0.5690\" data-score=\"0.9998\"><h1>5.3 전기적 안전요건</h1></div>\n<div data-label=\"ref_text\" data-bbox=\"0.0890,0.5750,0.9020,0.6400\" data-score=\"0.9993\"><small style=\"color:#666;\">5.3.1 섬유제품에 포함되는 2차전지는 폭발 등의 가능성을 고려하여 리튬폴리머 전지로 사용을 제한한다. 또한 제조업자 및 수입업자는 사용되는 리튬폴리머 전지 및 셀의 안전성(플라스틱 보강 및 케이스가 있는 상태)을 KC 62133 또는 그에 준하는 성적서를 통해 확인해야 한다.</small></div>\n<div data-label=\"ref_text\" data-bbox=\"0.0890,0.6450,0.9020,0.7340\" data-score=\"0.9838\"><small style=\"color:#666;\">5.3.2 전지가 위치한 공간은 외부의 충격, 하중, 휈 변형, 관통 등에 의한 제품 파손 및 폭발 등의 사고를 고려하여 설계되어야 하고, 제조업자 및 수입업자는 제품 구성에 대한 상세 정보를 기술한 제품설명서(긴급대응가이드 포함)를 작성하여 5.3.5항의 주의경고표시와 함께 소비자에게 제공해야 한다.</small></div>\n<div data-label=\"ref_text\" data-bbox=\"0.0890,0.7390,0.9010,0.7820\" data-score=\"0.9983\"><small style=\"color:#666;\">5.3.3 제조업자 및 수입업자는 침수 등에 의한 전지 폭발 및 사고에 대비하여 해당 제품이 IP(International Protection) 보호 등급 IPX7등급 이상인지 확인해야 한다.</small></div>\n<div data-label=\"ref_text\" data-bbox=\"0.0890,0.7860,0.9010,0.8280\" data-score=\"0.9996\"><small style=\"color:#666;\">5.3.4 전지를 제외한 모든 전기제품은 전기용품안전관리법에 따라 인증 또는 시험성적서가 있는 제품을 사용해야 한다.</small></div>\n<div data-label=\"ref_text\" data-bbox=\"0.0890,0.8330,0.9010,0.8760\" data-score=\"0.9989\"><small style=\"color:#666;\">5.3.5 전기 제품 및 리튬폴리머 전지가 내장되거나 사용되는 모든 제품은 사용상 발생 가능한 모든 경우를 고려하여 반드시 주의경고 표시 8종류 이상을 기호 및 한글로 표기하여야 한다.</small></div>\n<div data-label=\"ref_text\" data-bbox=\"0.0890,0.8810,0.5780,0.8980\" data-score=\"0.9998\"><small style=\"color:#666;\">5.3.6 세부적인 표시방법은 부록 A.2.1을 참고할 수 있다.</small></div>\n<div data-label=\"page_number\" data-bbox=\"0.4740,0.9380,0.5260,0.9490\" data-score=\"0.9739\" style=\"color:#888;font-size:0.9em;\">- 4 -</div>\n<div data-label=\"footer\" data-bbox=\"0.2830,0.9790,0.7160,0.9940\" data-score=\"0.9602\" style=\"color:#888;font-size:0.9em;\">김용석/생활어린이제품안전과/2024-03-12 17:40:30</div>",
+            "page_visual_summary": "문서의 하단 중앙에는 '- 4 -'이라는 페이지 번호가 있고, 그 아래에는 '김용석 / 생활어린이제품안전과 / 2024-03-12 17:40:30'이라는 메타데이터 텍스트가 포함되어 있습니다.",
+            "element_analysis": [],
+            "unbound_visual_notes": "문서의 하단 중앙에는 '- 4 -'이라는 페이지 번호가 있고, 그 아래에는 '김용석 / 생활어린이제품안전과 / 2024-03-12 17:40:30'이라는 메타데이터 텍스트가 포함되어 있습니다.",
+            "table_markdown": null,
+            "arbitrated_blocks": 0,
+            "corrected_cells": 0,
+            "format_restored_cells": 0,
+            "name_consistency": null,
+            "applied_rotation": null,
+            "applied_skew": null
+          },
+          {
+            "page_number": 5,
+            "body_html": "<div data-label=\"title\" data-bbox=\"0.0900,0.1050,0.3980,0.1210\" data-score=\"0.9997\"><h1>5.4 안전요건에 대한 적합여부 확인</h1></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.1280,0.9080,0.2170\" data-score=\"0.9941\"><p>공급자적합성확인을 하려는 제조업자 및 수입업자는 안전한 공산품이 유통될 수 있도록 해당 제품을 출고하기 전이나 통관하기 전에 유해물질이 제품에 존재할 수 있는 다양한 가능성을 고려하여 자체시험, 제3자 시험·검사기관의 시험, 외국기관의 시험성적서, 원자재 공급업체가 제시하는 시험성적서 등을 통하여 공급자적합성확인기준에 적합한지를 확인하여야 한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.0900,0.2740,0.2020,0.2910\" data-score=\"0.9788\"><h1>6. 시험방법</h1></div>\n<div data-label=\"title\" data-bbox=\"0.0930,0.3250,0.2690,0.3420\" data-score=\"0.9998\"><h1>6.1 물리적 안전요건</h1></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.3490,0.4640,0.3650\" data-score=\"0.9813\"><p>6.1.1 코드 및 조임곤 KS K 0941에 따른다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.3720,0.6050,0.3890\" data-score=\"0.9775\"><p>6.1.2 자석과 자석부품 “어린이제품 공통안전기준”에 따른다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.0930,0.4190,0.2860,0.4360\" data-score=\"0.9918\"><h1>6.2 유해물질 안전요건</h1></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.4430,0.4030,0.4600\" data-score=\"0.9988\"><p>6.2.1 pH KS K ISO 3071에 따른다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.4660,0.5170,0.4830\" data-score=\"0.9930\"><p>6.2.2 품알데하이드 KS K ISO 14184-1에 따른다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.4890,0.9050,0.5300\" data-score=\"0.9933\"><p>6.2.3 아릴아민 「전기용품 및 생활용품 안전관리법」에 따른 안전기준준수 안전기준 부속서 1(가정용 섬유제품) 부록 B. 염료 및 염색물의 아릴아민 시험방법, KS K 0739에 따른다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.5360,0.7060,0.5540\" data-score=\"0.9822\"><p>6.2.4 프탈레이트가소제 총 함유량 \"어린이제품 공통안전기준\"에 따른다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.5600,0.4700,0.5770\" data-score=\"0.9987\"><p>6.2.5 유기주석화합물 KS K 0737에 따른다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.5840,0.1980,0.6010\" data-score=\"0.9595\"><p>6.2.6 방염제</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.6070,0.6460,0.6240\" data-score=\"0.9817\"><p>6.2.6.1 PentaBDE, OctaBDE의 시험은 KS C IEC 62321-6에 따른다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.6300,0.9050,0.6710\" data-score=\"0.9930\"><p>6.2.6.2 TDBPP「전기용품 및 생활용품 안전관리법」에 따른 안전기준준수 안전기준 부속서 2(양탄자) 부속서A TDBPP 정량방법에 따른다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.6780,0.5740,0.6950\" data-score=\"0.9767\"><p>6.2.7 총 납 함유량 “어린이제품 공통안전기준”에 따른다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.7010,0.6140,0.7180\" data-score=\"0.9511\"><p>6.2.8 총 카드뮴 함유량 \"어린이제품 공통안전기준\"에 따른다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.7250,0.4600,0.7420\" data-score=\"0.9667\"><p>6.2.9 알려지성 염료 KS K 0736에 따른다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.7480,0.8260,0.7650\" data-score=\"0.9985\"><p>6.2.10 니켈 용출량 공급자적합성확인 안전기준 부속서 11(어린이용 장신구)에 따른다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.7720,0.3990,0.7890\" data-score=\"0.9903\"><p>6.2.11 노닐페놀(NP, NPEO) 총 함량</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.7950,0.8760,0.8130\" data-score=\"0.9959\"><p>6.2.11.1 NP(Nonylphenol)의 시험은 안전확인 안전기준 1(유아용 섬유제품) 부록 A에 따른다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0930,0.8190,0.7470,0.8370\" data-score=\"0.9981\"><p>6.2.11.2 NPEO(Nonylphenolethylates)의 시험은 KS K ISO 18254-1에 따른다.</p></div>\n<div data-label=\"page_number\" data-bbox=\"0.4740,0.9370,0.5240,0.9490\" data-score=\"0.9238\" style=\"color:#888;font-size:0.9em;\">- 5 -</div>\n<div data-label=\"footer\" data-bbox=\"0.2830,0.9790,0.7140,0.9940\" data-score=\"0.9641\" style=\"color:#888;font-size:0.9em;\">김용석/생활어린이제품안전과/2024-03-12 17:40:30</div>",
+            "page_visual_summary": "",
+            "element_analysis": [],
+            "unbound_visual_notes": null,
+            "table_markdown": null,
+            "arbitrated_blocks": 0,
+            "corrected_cells": 0,
+            "format_restored_cells": 0,
+            "name_consistency": null,
+            "applied_rotation": null,
+            "applied_skew": null
+          },
+          {
+            "page_number": 6,
+            "body_html": "<div data-label=\"title\" data-bbox=\"0.0900,0.0820,0.3310,0.0990\" data-score=\"0.9995\"><h1>7. 표시사항 및 표시 방법</h1></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.1300,0.9080,0.2430\" data-score=\"0.9909\"><p>7.1 「전기용품 및 생활용품 안전관리법」에 따른 안전기준준수 안전기준 부속서 1 가정용 섬유제품의 표시사항에 따른다. 다만, 방한용.패션용.스포츠용 마스크는「전기용품 및 생활용품 안전관리법」에 따른 공급자적합성확인 안전기준 부속서 17(방한용.패션용.스포츠용 마스크)의 표시사항을 따른다. 표시사항은 한글로 표시하여야 한다(단, 제품의 사용연령을 반드시 표시하여야 한다).</p></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.2720,0.9080,0.3360\" data-score=\"0.9991\"><p>7.2 아동이 입을 수 있는 섬유제품이 안전확인 안전기준 부속서 6(완구) 제2부 5.2(작은 부품시험)에서 통과되는 작은 부품이 부착된 경우에는 [표 3](1)에 따라 주의 사항을 표시하여야 한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.3660,0.9060,0.4060\" data-score=\"0.9976\"><p>7.3. 아동이 사용하는 연질 또는 발표된 합성수지 재질의 신발은 [표 3](2)에 따라 주의 사항을 표시하여야 한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.3980,0.4360,0.5990,0.4540\" data-score=\"0.9975\"><h1>[표 3] 취급상 주의표시</h1></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.4830,0.6460,0.5020\" data-score=\"0.9988\"><p>(1) 아동이 입을 수 있는 섬유제품의 작은 부품에 대한 주의사항</p></div>\n<div data-label=\"table\" data-bbox=\"0.0970,0.5110,0.9020,0.5860\" data-score=\"0.9867\"><table><tr><td>취급상 주의사항</td></tr><tr><td>\"주의! 작은 부품이 탈락되면 삼킬 수 있음\"</td></tr></table></div>\n<div data-label=\"text\" data-bbox=\"0.0900,0.6310,0.7500,0.6490\" data-score=\"0.9943\"><p>(2) 아동이 사용하는 연질 또는 발표된 합성수지 재질의 신발에 대한 주의사항</p></div>\n<div data-label=\"table\" data-bbox=\"0.0970,0.6590,0.9020,0.7310\" data-score=\"0.9449\"><table><tr><td>취급상 주의사항</td></tr><tr><td>주의! 신발이 에스컬레이터 등에 끌 수 있음</td></tr></table></div>\n<div data-label=\"table\" data-bbox=\"0.0950,0.7830,0.9060,0.9010\" data-score=\"0.9958\"><table><tr><td>개정</td><td>정 : 산업통상자원부 고시</td><td>제2015 - 0109호(2015. 6. 4.)</td></tr><tr><td>개정</td><td>정 : 산업통상자원부 고시</td><td>제2017 - 0017호(2017. 1. 31.)</td></tr><tr><td>개정</td><td>정 : 산업통상자원부 고시</td><td>제2018 - 0031호(2018. 3. 5.)</td></tr><tr><td>개정</td><td>정 : 산업통상자원부 고시</td><td>제2021 - 0171호(2021. 10. 27.)</td></tr><tr><td>개정</td><td>정 : 산업통상자원부 고시</td><td>제2024 - 042호(2024. 3. 7.)</td></tr></table></div>\n<div data-label=\"page_number\" data-bbox=\"0.4750,0.9380,0.5260,0.9500\" data-score=\"0.9638\" style=\"color:#888;font-size:0.9em;\">- 6 -</div>\n<div data-label=\"footer\" data-bbox=\"0.2830,0.9790,0.7150,0.9940\" data-score=\"0.9667\" style=\"color:#888;font-size:0.9em;\">김용석/생활어린이제품안전과/2024-03-12 17:40:30</div>",
+            "page_visual_summary": "문서의 하단에는 '[표3] 취급상 주의표시'에 해당하는 두 개의 표와 제정 및 개정 내역을 기록한 세 번째 표가 위치하고 있습니다. 각 표는 위쪽에 위치한 해당 규정에 대한 설명(7.1~7.3항)과 '(1)', '(2)' 등의 하위 항목을 시각적으로 연결하여 정보를 제공합니다.",
+            "element_analysis": [],
+            "unbound_visual_notes": "문서의 하단에는 '[표3] 취급상 주의표시'에 해당하는 두 개의 표와 제정 및 개정 내역을 기록한 세 번째 표가 위치하고 있습니다. 각 표는 위쪽에 위치한 해당 규정에 대한 설명(7.1~7.3항)과 '(1)', '(2)' 등의 하위 항목을 시각적으로 연결하여 정보를 제공합니다.",
+            "table_markdown": "| [표3] 취급상 주의표시 |\n|---|\n|(1) 아동이 입을 수 있는 섬유제품의 작은 부품에 대한 주의사항 |\n|취급상 주의사항 |\n|\n\n---\n\n| \"주의! 작은 부품이 탈락되면 삼킬 수 있음\" |\n|---|\n|(2) 아동이 사용하는 연질 또는 발포된 합성수지材質의 신발에 대한 주의사항 |\n|취급상 주의사항 |\n|\n\n---\n\n| 주의! 신발이 에스컬레이터 등에 낄 수 있음 |\n|---|제정: 산업통상자원부 고시 제2015 - 0109호(2015. 6. 4.)개정: 산업통상자원부 고시 제2017 - 0017호(2017. 1. 31.)개정: 산업통상자원부 고시 제2018 - 0031호(2018. 3. 5.)개정: 산업통상자원부 고시 제2021 - 0171호(2021. 10. 27.)개정: 산업통상자원부 고시 제2024 - 042호(2024. 3. 7.)",
+            "arbitrated_blocks": 0,
+            "corrected_cells": 0,
+            "format_restored_cells": 0,
+            "name_consistency": null,
+            "applied_rotation": null,
+            "applied_skew": null
+          },
+          {
+            "page_number": 7,
+            "body_html": "<div data-label=\"title\" data-bbox=\"0.3440,0.0860,0.6560,0.1080\" data-score=\"0.9998\"><h1>부록 A. 세부 표시방법(예시)</h1></div>\n<div data-label=\"text\" data-bbox=\"0.0890,0.1630,0.9080,0.2060\" data-score=\"0.9941\"><p>A.1. 서론 이 세부 표시방법(예시)은 참고하기 위한 것으로 실제 적용되는 품목과 꼭 일치하는 것은 아니다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.0900,0.2350,0.3030,0.2520\" data-score=\"0.9999\"><h1>A.2 세부 표시방법(예시)</h1></div>\n<div data-label=\"title\" data-bbox=\"0.0900,0.2580,0.5020,0.2750\" data-score=\"0.9996\"><h1>A.2.1 리튬이차전지 사용 제품의 주의경고(예시)</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1110,0.2890,0.8930,0.3080\" data-score=\"0.9745\"><p>1.인증을 받지 않은 전지 또는 충전기를 사용하여 충전하는 경우 폭발 위험성이 있습니다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1110,0.3100,0.8170,0.3280\" data-score=\"0.9997\"><p>2. 전지 단자에 금속성 물질(휴대폰 액세서리, 동전 등)이 접촉하지 않도록 하세요.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1110,0.3310,0.6540,0.3490\" data-score=\"0.9671\"><p>3. 전지를 어린 아이가 빨거나 동물이 물어 Rd지 않도록 하세요.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1110,0.3520,0.9010,0.3900\" data-score=\"0.9716\"><p>4. 전지를 파손시키거나 강한 충격, 가열, 침수, 날카로운 물질로 뜻을 경우 폭발 위험이 있으므로 절대 금하여 주세요.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1130,0.3940,0.9010,0.4330\" data-score=\"0.9991\"><p>5. 전지가 포함되어 있는 제품을 직사광선이 드는 자동차 내부 등 밀폐된 고온의 장소에 두지 마세요. 변형, 고장, 폭발의 위험이 있습니다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1130,0.4360,0.9010,0.4740\" data-score=\"0.9987\"><p>6. 임의로 분해하거나 충격을 주지말고, 충전 중인 상태로 이용하지 마세요. 감전, 누전화재의 원인이 될 수 있습니다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1130,0.4780,0.9010,0.5160\" data-score=\"0.9911\"><p>7. 전지의 발열, 누액, 파열, 오염 등은 기기고장의 원인이 되거나 상해의 위험이 있으니 전지를 임의로 분해 및 개조하지 마세요.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1130,0.5200,0.9010,0.5580\" data-score=\"0.9929\"><p>8. 전지가 내장되어 있는 제품의(예:신발, 의류 등) 해당 부위를 구부리거나, 세탁, 외부적으로 강한 충격을 가할 경우 전지의 파손, 폭발의 위험이 있으므로 주의하십시오.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1110,0.5610,0.8990,0.5790\" data-score=\"0.9984\"><p>9. 전지가 내장되어 있는 제품을 유아동이 사용하는 경우 보호자의 지속적인 보호가 필요합니다.</p></div>\n<div data-label=\"page_number\" data-bbox=\"0.4750,0.9370,0.5260,0.9490\" data-score=\"0.9984\" style=\"color:#888;font-size:0.9em;\">- 7 -</div>\n<div data-label=\"footer\" data-bbox=\"0.2830,0.9790,0.7160,0.9940\" data-score=\"0.9583\" style=\"color:#888;font-size:0.9em;\">김용석/생활어린이제품안전과/2024-03-12 17:40:30</div>",
+            "page_visual_summary": "",
+            "element_analysis": [],
+            "unbound_visual_notes": null,
+            "table_markdown": null,
+            "arbitrated_blocks": 0,
+            "corrected_cells": 0,
+            "format_restored_cells": 0,
+            "name_consistency": null,
+            "applied_rotation": null,
+            "applied_skew": null
+          }
+        ]
+      },
+      "page_classifier": null
+    },
+    "latency_seconds": 12.393323,
+    "parsing_cost": 0.52484
+  },
+  "error_message": null
+}
