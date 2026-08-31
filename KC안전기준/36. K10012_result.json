@@ -1,0 +1,2172 @@
+{
+  "batch_id": "ceaa53203d75489f9da8a7df36cb7982",
+  "status": "completed",
+  "applied_fixes": null,
+  "filename": "36. K10012.pdf",
+  "mode": "onprem_compose",
+  "tagger": "hierarchy",
+  "translation_ko": false,
+  "total_pages": 9,
+  "total_chunks": 9,
+  "total_latency_seconds": 5.219373,
+  "result": {
+    "filename": "36. K10012.pdf",
+    "content": {
+      "ocr": {
+        "provider": "ocr_model_onprem",
+        "model": "ocr_model_onprem",
+        "text": "<div data-label=\"header\" data-bbox=\"0.4270,0.1400,0.8820,0.1570\" data-score=\"0.9875\" style=\"color:#888;font-size:0.9em;\">제정 기술표준원고시 제2008-789호(2008.11.14)</div>\n<div data-label=\"header\" data-bbox=\"0.4270,0.1620,0.8820,0.1800\" data-score=\"0.9850\" style=\"color:#888;font-size:0.9em;\">개정 기술표준원고시 제2009-837호(2009.12.15)</div>\n<div data-label=\"header\" data-bbox=\"0.4270,0.1850,0.8820,0.2020\" data-score=\"0.9827\" style=\"color:#888;font-size:0.9em;\">개정 기술표준원고시 제2013-694호(2013. 12. 11)</div>\n<div data-label=\"title\" data-bbox=\"0.3000,0.3050,0.7500,0.3460\" data-score=\"0.9767\"><h1>전기용품안전기준</h1></div>\n<div data-label=\"title\" data-bbox=\"0.6810,0.3870,0.9050,0.4230\" data-score=\"0.9999\"><h1>K 10012</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1940,0.5400,0.8270,0.5680\" data-score=\"0.9994\"><p>가정용 및 이와 유사한 전기기기의 안전성</p></div>\n<div data-label=\"text\" data-bbox=\"0.1830,0.6160,0.8370,0.6390\" data-score=\"0.9861\"><p>- 전기헬스기구 및 이와 유사한 기기의 개별요구사항</p></div>\n\n<div data-label=\"text\" data-bbox=\"0.3740,0.1160,0.6490,0.1310\" data-score=\"0.9977\"><p>부 칙(고시 제2013-694호, 2013.12.11)</p></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.1410,0.5340,0.1560\" data-score=\"0.9991\"><p>전기용품안전기준 K 10012는 고시한 날로부터 시행한다.</p></div>\n\n<div data-label=\"title\" data-bbox=\"0.4020,0.1190,0.5600,0.1370\" data-score=\"0.9747\"><h1>목 차</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1380,0.1960,0.8610,0.2120\" data-score=\"0.9722\"><p>1. 적용범위 1</p></div>\n<div data-label=\"text\" data-bbox=\"0.1390,0.2150,0.8600,0.2310\" data-score=\"0.8721\"><p>2 정의 1</p></div>\n<div data-label=\"text\" data-bbox=\"0.1400,0.2340,0.8610,0.2480\" data-score=\"0.9426\"><p>3 일반 요구사항 2</p></div>\n<div data-label=\"text\" data-bbox=\"0.1400,0.2520,0.8620,0.2670\" data-score=\"0.9584\"><p>4 시험에 관한 일반 조건 2</p></div>\n<div data-label=\"text\" data-bbox=\"0.1400,0.2710,0.8620,0.2850\" data-score=\"0.9014\"><p>5 공란 2</p></div>\n<div data-label=\"text\" data-bbox=\"0.1400,0.2900,0.8620,0.3040\" data-score=\"0.9604\"><p>6 분 류 2</p></div>\n<div data-label=\"text\" data-bbox=\"0.1400,0.3080,0.8620,0.3230\" data-score=\"0.9879\"><p>7 표시 및 사용설명 2</p></div>\n<div data-label=\"text\" data-bbox=\"0.1400,0.3260,0.8620,0.3410\" data-score=\"0.9863\"><p>8 충전부에 대한 감전보호 2</p></div>\n<div data-label=\"text\" data-bbox=\"0.1400,0.3450,0.8620,0.3600\" data-score=\"0.9908\"><p>9 전동기 구동기기의 기동 2</p></div>\n<div data-label=\"text\" data-bbox=\"0.1390,0.3630,0.8620,0.3780\" data-score=\"0.9878\"><p>10 정격 입력 및 전류 2</p></div>\n<div data-label=\"text\" data-bbox=\"0.1380,0.3820,0.8620,0.3970\" data-score=\"0.9879\"><p>11 온도상승 2</p></div>\n<div data-label=\"text\" data-bbox=\"0.1380,0.4010,0.8620,0.4150\" data-score=\"0.9208\"><p>12 공란 3</p></div>\n<div data-label=\"text\" data-bbox=\"0.1380,0.4190,0.8620,0.4340\" data-score=\"0.9927\"><p>13 운전시의 누설 전류 및 절연내력 3</p></div>\n<div data-label=\"text\" data-bbox=\"0.1380,0.4380,0.8620,0.4530\" data-score=\"0.9458\"><p>14 공란 3</p></div>\n<div data-label=\"text\" data-bbox=\"0.1380,0.4560,0.8620,0.4710\" data-score=\"0.9649\"><p>15 내습성 3</p></div>\n<div data-label=\"text\" data-bbox=\"0.1380,0.4750,0.8620,0.4900\" data-score=\"0.9870\"><p>16 누설전류 및 절연내력 3</p></div>\n<div data-label=\"text\" data-bbox=\"0.1380,0.4940,0.8620,0.5080\" data-score=\"0.9954\"><p>17 변압기 및 관련 회로의 과부하 보호 3</p></div>\n<div data-label=\"text\" data-bbox=\"0.1380,0.5120,0.8620,0.5270\" data-score=\"0.8895\"><p>18 내구성.... 3</p></div>\n<div data-label=\"text\" data-bbox=\"0.1380,0.5310,0.8620,0.5450\" data-score=\"0.9713\"><p>19 이상 운전 3</p></div>\n<div data-label=\"text\" data-bbox=\"0.1380,0.5490,0.8620,0.5640\" data-score=\"0.9897\"><p>20 안정성 및 기계적 위험 3</p></div>\n<div data-label=\"text\" data-bbox=\"0.1380,0.5680,0.8620,0.5830\" data-score=\"0.8890\"><p>21 기계적 강도...... 4</p></div>\n<div data-label=\"text\" data-bbox=\"0.1380,0.5870,0.8620,0.6010\" data-score=\"0.8721\"><p>22 구 조 4</p></div>\n<div data-label=\"text\" data-bbox=\"0.1380,0.6050,0.8620,0.6200\" data-score=\"0.9868\"><p>23 내부 배선 4</p></div>\n<div data-label=\"text\" data-bbox=\"0.1380,0.6240,0.8620,0.6380\" data-score=\"0.9431\"><p>24 부품 4</p></div>\n<div data-label=\"text\" data-bbox=\"0.1380,0.6420,0.8620,0.6570\" data-score=\"0.9960\"><p>25 전원 접속 및 외부 유연성 코드 4</p></div>\n<div data-label=\"text\" data-bbox=\"0.1380,0.6610,0.8620,0.6750\" data-score=\"0.8791\"><p>26 외부 전선행 단자 4</p></div>\n<div data-label=\"text\" data-bbox=\"0.1380,0.6790,0.8620,0.6930\" data-score=\"0.9616\"><p>27 접지 접속 5</p></div>\n<div data-label=\"text\" data-bbox=\"0.1380,0.6980,0.8620,0.7120\" data-score=\"0.9725\"><p>28 나사 및 접속 5</p></div>\n<div data-label=\"text\" data-bbox=\"0.1380,0.7160,0.8620,0.7310\" data-score=\"0.9884\"><p>29 연면거리, 공간거리 및 절연물을 통한 절연거리 5</p></div>\n<div data-label=\"text\" data-bbox=\"0.1380,0.7350,0.8620,0.7500\" data-score=\"0.9917\"><p>30 내열성 내화성 및 내트래킹성 5</p></div>\n<div data-label=\"text\" data-bbox=\"0.1380,0.7540,0.8620,0.7680\" data-score=\"0.9859\"><p>31 내부식성 5</p></div>\n<div data-label=\"text\" data-bbox=\"0.1380,0.7720,0.8620,0.7870\" data-score=\"0.9373\"><p>32 방사선, 유독성 및 이와 유사한 위험성 5</p></div>\n<div data-label=\"text\" data-bbox=\"0.1200,0.8070,0.8610,0.8230\" data-score=\"0.9866\"><p>부속서 5</p></div>\n\n<div data-label=\"title\" data-bbox=\"0.3730,0.1270,0.6460,0.1450\" data-score=\"0.9996\"><h1>전기용품안전기준(K 10012)</h1></div>\n<div data-label=\"title\" data-bbox=\"0.3120,0.1730,0.7070,0.1910\" data-score=\"0.9999\"><h1>가정용 및 이와 유사한 전기기기의 안전성</h1></div>\n<div data-label=\"title\" data-bbox=\"0.2260,0.1950,0.8060,0.2140\" data-score=\"0.9800\"><h1>제2부 : 전기헬스기구 및 이와 유사한 기기의 개별요구사항</h1></div>\n<div data-label=\"title\" data-bbox=\"0.2390,0.2420,0.7820,0.2820\" data-score=\"0.9771\"><h1>Safety of household and similar electrical appliances\n- Particular requirements for health appliances</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1130,0.3060,0.8750,0.3390\" data-score=\"0.9892\"><p>서문 이 기준의 기본 시험은 K 60335-1(가정용 및 이와 유사한 전기기기의 안전성, 제1부 : 일반 요구사항)에 따른다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1140,0.3600,0.2120,0.3760\" data-score=\"0.9993\"><h1>1. 적용범위</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.3990,0.4200,0.4130\" data-score=\"0.9995\"><p>제1부의 이 항목을 다음으로 대체한다:</p></div>\n<div data-label=\"text\" data-bbox=\"0.1140,0.4360,0.9060,0.4700\" data-score=\"0.9846\"><p>본 규격은 정격 전압이 단상인 경우 250 V 이하, 기타인 경우 480 V 이하인 가정용 전기헬스기구 및 이와 유사한 목적으로 사용되는 기기의 안전성에 적용한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1140,0.4920,0.9060,0.5260\" data-score=\"0.9992\"><p>통상 가정에서 사용하지 않은 기기라도, 점포, 경공업 및 농장에서 일반인이 사용할 수 있는 것으로 일반대중에게 위험의 소지가 있는 것은 이 기준을 적용한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1360,0.5480,0.5710,0.5620\" data-score=\"0.9737\"><p>비고1 - 이러한 기기의 예는 가정 및 헬스클럽에서 사용된다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1140,0.5850,0.7310,0.6000\" data-score=\"0.9853\"><p>이 규격은 가정 내 외부의 사람들이 실제 겪게 될 일반적 위험 요소를 다룬다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1140,0.6230,0.5450,0.6370\" data-score=\"0.9999\"><p>이 규격은 일반적으로 다음 사항들을 고려하지 않는다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1640,0.6610,0.6670,0.6750\" data-score=\"0.9945\"><p>-보호자가 없는 상태에서의 어린이나 환자에 의한 기기의 사용</p></div>\n<div data-label=\"text\" data-bbox=\"0.1650,0.6800,0.4390,0.6930\" data-score=\"0.9985\"><p>-어린이가 기기를 갖고 노는 행위</p></div>\n<div data-label=\"text\" data-bbox=\"0.1300,0.7180,0.4140,0.7310\" data-score=\"0.9850\"><p>비고 2 - 다음 사항에 주의하여야 한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1800,0.7350,0.7470,0.7480\" data-score=\"0.9709\"><p>-차량이나배,항공기에서사용되는기기는별도의요구사항이필요할수있다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1810,0.7520,0.7360,0.7650\" data-score=\"0.9937\"><p>-열대지방에서 사용하도록 제조된 기기는 별도의 요구사항이 필요할 수 있다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1800,0.7690,0.9050,0.7990\" data-score=\"0.9944\"><p>- 많은 나라에서는 국가 보건 관계기관, 노동안전 관계기관에 의해 요구사항을 별도로 추가 규정할 수 있다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1290,0.8200,0.9060,0.8510\" data-score=\"0.9918\"><p>비고 3 - 이 규격은 부식성, 폭발성의 물질(먼지, 증기, 가스)이 있는 특수 조건에서 사용하는 기기일 경우 적용하지 않는다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1140,0.8730,0.2380,0.8890\" data-score=\"0.9820\"><h1>2. 용어의 정의</h1></div>\n<div data-label=\"page_number\" data-bbox=\"0.4880,0.9380,0.5360,0.9500\" data-score=\"0.9505\" style=\"color:#888;font-size:0.9em;\">- 1 -</div>\n\n<div data-label=\"text\" data-bbox=\"0.1150,0.1160,0.4950,0.1300\" data-score=\"0.9999\"><p>다음 사항을 제외하고 제1부의 항목을 적용한다:</p></div>\n<div data-label=\"text\" data-bbox=\"0.1140,0.1540,0.2020,0.1680\" data-score=\"0.9987\"><p>2.2.9 대체:</p></div>\n<div data-label=\"text\" data-bbox=\"0.1140,0.1910,0.4950,0.2060\" data-score=\"0.9795\"><p>통상동작 : 기기는 무부하 최고속도로 운전한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1140,0.2300,0.2060,0.2440\" data-score=\"0.9999\"><p>2.101 추가</p></div>\n<div data-label=\"text\" data-bbox=\"0.1140,0.2670,0.7610,0.2820\" data-score=\"0.9891\"><p>러닝 벨트: 걷기나 달리기를 할 수 있도록 한 방향으로 움직이는 면을 가지는 벨트</p></div>\n<div data-label=\"title\" data-bbox=\"0.1140,0.3050,0.2570,0.3200\" data-score=\"0.8984\"><h1>3.일반 요구사항</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.3430,0.3430,0.3580\" data-score=\"0.9997\"><p>제1부의 이 항목을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1140,0.3810,0.3270,0.3960\" data-score=\"0.9738\"><h1>4. 시험에 관한 일반 조건</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.4190,0.3430,0.4340\" data-score=\"0.9997\"><p>제1부의 이 항목을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1140,0.4570,0.1780,0.4720\" data-score=\"0.9896\"><h1>5. 공란</h1></div>\n<div data-label=\"title\" data-bbox=\"0.1140,0.4950,0.1780,0.5100\" data-score=\"0.9982\"><h1>6. 분류</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.5330,0.3430,0.5480\" data-score=\"0.9997\"><p>제1부의 이 항목을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1140,0.5710,0.2820,0.5860\" data-score=\"0.9959\"><h1>7. 표시 및 사용설명</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1140,0.6090,0.4950,0.6240\" data-score=\"1.0000\"><p>다음 사항을 제외하고 제1부의 항목을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1140,0.6470,0.1840,0.6620\" data-score=\"0.9995\"><h1>7.1 추가</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1140,0.6850,0.6490,0.7000\" data-score=\"0.9986\"><p>러닝벨트가 있는 기기는 최대 사용가능 체중(kg)을 표기하여야 한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1140,0.7230,0.1920,0.7370\" data-score=\"0.9991\"><h1>7.12 추가</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1140,0.7610,0.6960,0.7760\" data-score=\"0.9976\"><p>러닝 벨트가 있는 기기는 사용설명서에 다음과 항목들이 포함되어야 한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1140,0.7800,0.8310,0.7950\" data-score=\"0.9862\"><p>- 늘어지는 의류나 타월 등을 걸치고 사용하지 마시오,수건 등을 기기에 걸쳐 놓지 마시오</p></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.7990,0.5910,0.8140\" data-score=\"0.9748\"><p>-주행면의 불균형을 조정하는 방법과 오일사용에 대한 내용</p></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.8180,0.4150,0.8330\" data-score=\"0.9917\"><p>-설치 시 안전공간 확보에 관한 내용</p></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.8370,0.4060,0.8520\" data-score=\"0.9891\"><p>- 비상착지 및 비상정지에 관한 내용</p></div>\n<div data-label=\"title\" data-bbox=\"0.1140,0.8750,0.3360,0.8900\" data-score=\"0.9981\"><h1>8. 충전부에 대한 감전보호</h1></div>\n<div data-label=\"page_number\" data-bbox=\"0.4890,0.9370,0.5360,0.9500\" data-score=\"0.8086\" style=\"color:#888;font-size:0.9em;\">-2-</div>\n\n<div data-label=\"text\" data-bbox=\"0.1160,0.1350,0.3420,0.1490\" data-score=\"0.9997\"><p>제1부의 이 항목을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1140,0.1730,0.3350,0.1880\" data-score=\"0.9981\"><h1>9. 전동기 구동기기의 기동</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1160,0.2110,0.4010,0.2250\" data-score=\"0.9996\"><p>제1부의 이 항목을 적용하지 않는다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1160,0.2490,0.2570,0.2630\" data-score=\"0.9994\"><h1>10. 입력 및 전류</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1160,0.2870,0.3420,0.3010\" data-score=\"0.9997\"><p>제1부의 이 항목을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1160,0.3250,0.2220,0.3390\" data-score=\"0.9832\"><h1>11. 온도상승</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1160,0.3620,0.3420,0.3770\" data-score=\"0.9997\"><p>제1부의 이 항목을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1160,0.4200,0.1870,0.4340\" data-score=\"0.9951\"><h1>12. 공란</h1></div>\n<div data-label=\"title\" data-bbox=\"0.1160,0.4570,0.4140,0.4720\" data-score=\"0.9988\"><h1>13. 운전시의 누설 전류 및 절연내력</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1160,0.4960,0.3420,0.5100\" data-score=\"0.9997\"><p>제1부의 이 항목을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1160,0.5340,0.1870,0.5480\" data-score=\"0.9962\"><h1>14. 공란</h1></div>\n<div data-label=\"title\" data-bbox=\"0.1160,0.5720,0.2030,0.5860\" data-score=\"0.9821\"><h1>15. 내습성</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1160,0.6100,0.3420,0.6240\" data-score=\"0.9997\"><p>제1부의 이 항목을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1160,0.6470,0.3340,0.6620\" data-score=\"0.9963\"><h1>16. 누설 전류 및 절연내력</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1160,0.6860,0.3420,0.7000\" data-score=\"0.9997\"><p>제1부의 이 항목을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1160,0.7230,0.4400,0.7380\" data-score=\"0.9976\"><h1>17. 변압기 및 관련 회로의 과부하 보호</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1160,0.7610,0.3420,0.7750\" data-score=\"0.9996\"><p>제1부의 이 항목을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1160,0.8000,0.2030,0.8140\" data-score=\"0.9976\"><h1>18. 내구성</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1160,0.8370,0.4010,0.8510\" data-score=\"0.9995\"><p>제1부의 이 항목을 적용하지 않는다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1160,0.8750,0.2300,0.8900\" data-score=\"0.9982\"><h1>19. 이상 운전</h1></div>\n<div data-label=\"page_number\" data-bbox=\"0.4890,0.9380,0.5360,0.9500\" data-score=\"0.9645\" style=\"color:#888;font-size:0.9em;\">- 3 -</div>\n\n<div data-label=\"text\" data-bbox=\"0.1140,0.1350,0.4950,0.1490\" data-score=\"0.9999\"><p>다음 사항을 제외하고 제1부의 항목을 적용한다:</p></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.1730,0.1970,0.1870\" data-score=\"0.9998\"><p>19.7 추가:</p></div>\n<div data-label=\"text\" data-bbox=\"0.1140,0.2110,0.9050,0.2450\" data-score=\"0.9923\"><p>사람의 발 아래에서 사용되는 기기는 온도가 포화 될 때까지 동작시킨다. 기타 기기는 30초간 동작시킨다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.2680,0.2700,0.2830\" data-score=\"0.9996\"><p>19.9 적용하지 않음.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.3060,0.2040,0.3200\" data-score=\"0.9994\"><p>19.10 추가:</p></div>\n<div data-label=\"text\" data-bbox=\"0.1140,0.3430,0.5760,0.3580\" data-score=\"0.9996\"><p>분리할 수 있는 부분은 분리된 상태에서도 시험을 행한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1140,0.3810,0.3350,0.3960\" data-score=\"0.9983\"><h1>20. 안정성 및 기계적 위험</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.4190,0.3420,0.4340\" data-score=\"0.9997\"><p>제1부의 이 항목을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1140,0.4570,0.2480,0.4720\" data-score=\"0.9970\"><h1>21. 기계적 강도</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.4960,0.4950,0.5100\" data-score=\"0.9999\"><p>다음 사항을 제외하고 제1부의 항목을 적용한다:</p></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.5330,0.1590,0.5470\" data-score=\"0.9999\"><p>추가:</p></div>\n<div data-label=\"text\" data-bbox=\"0.1140,0.5720,0.9060,0.6050\" data-score=\"0.9853\"><p>발 밑에서 사용되는 기기는 20 cm x 30 cm의 면적에 고르게 분포된 90 kg 무게로 15 cm ± 2 cm 높이에서 10회 자유낙하 시킨다.시험후 기기는 이 규격의 적합성을 상실하는 손상이 없어야 한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1140,0.6290,0.1870,0.6430\" data-score=\"0.9993\"><h1>22. 구조</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1140,0.6670,0.4950,0.6810\" data-score=\"0.9999\"><p>다음 사항을 제외하고 제1부의 항목을 적용한다:</p></div>\n<div data-label=\"text\" data-bbox=\"0.1140,0.7040,0.9050,0.7370\" data-score=\"0.9853\"><p>22.101 기기는 신체의 일부를 끌어당길 수 없는 구조이고, 움직이는 부위에 걸리지 않는 구조이어야 한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.7610,0.4010,0.7760\" data-score=\"0.9999\"><p>적합여부는 검사에 의해서 판정한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1130,0.7990,0.9050,0.8520\" data-score=\"0.9899\"><p>22.102 의도되지 않은 오작동 및 비상상태에 대비하기 위하여 기기를 정지시킬 수 있는 장치를 가져야 한다. 스위치는 기기 사용자에 의하여 신속히 땅을 수 있는 곳에 위치하여야 하며, 장치를 동작시켰을 경우에 기기의 급제동으로 위험을 가져다 줄 경우 기기는 급제동 되지 말아야 한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.8750,0.4010,0.8900\" data-score=\"0.9999\"><p>적합여부는 검사에 의해서 판정한다.</p></div>\n<div data-label=\"page_number\" data-bbox=\"0.4890,0.9380,0.5360,0.9500\" data-score=\"0.9385\" style=\"color:#888;font-size:0.9em;\">- 4 -</div>\n\n<div data-label=\"text\" data-bbox=\"0.1140,0.1350,0.2080,0.1480\" data-score=\"0.9996\"><p>20.103 추가</p></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.1720,0.6950,0.1870\" data-score=\"0.9996\"><p>접을 수 있는 기기의 경우 접혀진 상태에서 기기는 동작되지 않아야 한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.2110,0.4010,0.2250\" data-score=\"0.9997\"><p>적합여부는 검사에 의해서 판정한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1140,0.2480,0.2310,0.2630\" data-score=\"0.9991\"><h1>23. 내부 배선</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.2870,0.3420,0.3010\" data-score=\"0.9997\"><p>제1부의 이 항목을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1140,0.3250,0.1860,0.3390\" data-score=\"0.9972\"><h1>24. 부품</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.3620,0.3420,0.3760\" data-score=\"0.9996\"><p>제1부의 이 항목을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1140,0.4010,0.4050,0.4150\" data-score=\"0.9969\"><h1>25. 전원 접속 및 외부 유연성 코드</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.4390,0.3420,0.4530\" data-score=\"0.9996\"><p>제1부의 이 항목을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1140,0.4770,0.2920,0.4910\" data-score=\"0.9553\"><h1>26. 외부 전선용 단자</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.5150,0.3420,0.5290\" data-score=\"0.9997\"><p>제1부의 이 항목을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1140,0.5530,0.2310,0.5670\" data-score=\"0.9711\"><h1>27. 접지 접속</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.5910,0.3420,0.6050\" data-score=\"0.9996\"><p>제1부의 이 항목을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1140,0.6290,0.2560,0.6430\" data-score=\"0.9952\"><h1>28. 나사 및 접속</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.6670,0.3420,0.6810\" data-score=\"0.9996\"><p>제1부의 이 항목을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1140,0.7040,0.5320,0.7190\" data-score=\"0.9702\"><h1>29. 연면거리, 공간거리 및 절연물을 통한 절연거리</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.7430,0.3420,0.7570\" data-score=\"0.9997\"><p>제1부의 이 항목을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1140,0.7800,0.3920,0.7950\" data-score=\"0.9970\"><h1>30. 내열성, 내화성 및 내트래킹성</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.8180,0.4940,0.8330\" data-score=\"0.9999\"><p>다음 사항을 제외하고 제1부의 항목을 적용한다:</p></div>\n<div data-label=\"text\" data-bbox=\"0.1140,0.8570,0.3000,0.8710\" data-score=\"0.9996\"><p>30.2.3 적용하지 않는다.</p></div>\n<div data-label=\"page_number\" data-bbox=\"0.4890,0.9380,0.5360,0.9500\" data-score=\"0.9718\" style=\"color:#888;font-size:0.9em;\">- 5 -</div>\n\n<div data-label=\"title\" data-bbox=\"0.1140,0.1160,0.2210,0.1300\" data-score=\"0.9991\"><h1>31. 내부식성</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.1540,0.3440,0.1680\" data-score=\"0.9997\"><p>제1부의 이 항목을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1140,0.1920,0.4630,0.2060\" data-score=\"0.9958\"><h1>32. 방사선, 유독성 및 이와 유사한 위험성</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.2290,0.4010,0.2440\" data-score=\"0.9995\"><p>제1부의 이 항목을 적용하지 않는다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.4840,0.3240,0.5360,0.3380\" data-score=\"1.0000\"><h1>부속서</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.3630,0.3440,0.3770\" data-score=\"0.9989\"><p>제 1부의 부속서를 적용한다.</p></div>\n<div data-label=\"page_number\" data-bbox=\"0.4890,0.9380,0.5370,0.9510\" data-score=\"0.7906\" style=\"color:#888;font-size:0.9em;\">-6-</div>",
+        "text_ko": null,
+        "pages": [
+          {
+            "page_number": 1,
+            "part_number": null,
+            "text": "<div data-label=\"header\" data-bbox=\"0.4270,0.1400,0.8820,0.1570\" data-score=\"0.9875\" style=\"color:#888;font-size:0.9em;\">제정 기술표준원고시 제2008-789호(2008.11.14)</div>\n<div data-label=\"header\" data-bbox=\"0.4270,0.1620,0.8820,0.1800\" data-score=\"0.9850\" style=\"color:#888;font-size:0.9em;\">개정 기술표준원고시 제2009-837호(2009.12.15)</div>\n<div data-label=\"header\" data-bbox=\"0.4270,0.1850,0.8820,0.2020\" data-score=\"0.9827\" style=\"color:#888;font-size:0.9em;\">개정 기술표준원고시 제2013-694호(2013. 12. 11)</div>\n<div data-label=\"title\" data-bbox=\"0.3000,0.3050,0.7500,0.3460\" data-score=\"0.9767\"><h1>전기용품안전기준</h1></div>\n<div data-label=\"title\" data-bbox=\"0.6810,0.3870,0.9050,0.4230\" data-score=\"0.9999\"><h1>K 10012</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1940,0.5400,0.8270,0.5680\" data-score=\"0.9994\"><p>가정용 및 이와 유사한 전기기기의 안전성</p></div>\n<div data-label=\"text\" data-bbox=\"0.1830,0.6160,0.8370,0.6390\" data-score=\"0.9861\"><p>- 전기헬스기구 및 이와 유사한 기기의 개별요구사항</p></div>",
+            "text_ko": null,
+            "links": null,
+            "confidence": 0.9882
+          },
+          {
+            "page_number": 2,
+            "part_number": null,
+            "text": "<div data-label=\"text\" data-bbox=\"0.3740,0.1160,0.6490,0.1310\" data-score=\"0.9977\"><p>부 칙(고시 제2013-694호, 2013.12.11)</p></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.1410,0.5340,0.1560\" data-score=\"0.9991\"><p>전기용품안전기준 K 10012는 고시한 날로부터 시행한다.</p></div>",
+            "text_ko": null,
+            "links": null,
+            "confidence": 0.9984
+          },
+          {
+            "page_number": 3,
+            "part_number": null,
+            "text": "<div data-label=\"title\" data-bbox=\"0.4020,0.1190,0.5600,0.1370\" data-score=\"0.9747\"><h1>목 차</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1380,0.1960,0.8610,0.2120\" data-score=\"0.9722\"><p>1. 적용범위 1</p></div>\n<div data-label=\"text\" data-bbox=\"0.1390,0.2150,0.8600,0.2310\" data-score=\"0.8721\"><p>2 정의 1</p></div>\n<div data-label=\"text\" data-bbox=\"0.1400,0.2340,0.8610,0.2480\" data-score=\"0.9426\"><p>3 일반 요구사항 2</p></div>\n<div data-label=\"text\" data-bbox=\"0.1400,0.2520,0.8620,0.2670\" data-score=\"0.9584\"><p>4 시험에 관한 일반 조건 2</p></div>\n<div data-label=\"text\" data-bbox=\"0.1400,0.2710,0.8620,0.2850\" data-score=\"0.9014\"><p>5 공란 2</p></div>\n<div data-label=\"text\" data-bbox=\"0.1400,0.2900,0.8620,0.3040\" data-score=\"0.9604\"><p>6 분 류 2</p></div>\n<div data-label=\"text\" data-bbox=\"0.1400,0.3080,0.8620,0.3230\" data-score=\"0.9879\"><p>7 표시 및 사용설명 2</p></div>\n<div data-label=\"text\" data-bbox=\"0.1400,0.3260,0.8620,0.3410\" data-score=\"0.9863\"><p>8 충전부에 대한 감전보호 2</p></div>\n<div data-label=\"text\" data-bbox=\"0.1400,0.3450,0.8620,0.3600\" data-score=\"0.9908\"><p>9 전동기 구동기기의 기동 2</p></div>\n<div data-label=\"text\" data-bbox=\"0.1390,0.3630,0.8620,0.3780\" data-score=\"0.9878\"><p>10 정격 입력 및 전류 2</p></div>\n<div data-label=\"text\" data-bbox=\"0.1380,0.3820,0.8620,0.3970\" data-score=\"0.9879\"><p>11 온도상승 2</p></div>\n<div data-label=\"text\" data-bbox=\"0.1380,0.4010,0.8620,0.4150\" data-score=\"0.9208\"><p>12 공란 3</p></div>\n<div data-label=\"text\" data-bbox=\"0.1380,0.4190,0.8620,0.4340\" data-score=\"0.9927\"><p>13 운전시의 누설 전류 및 절연내력 3</p></div>\n<div data-label=\"text\" data-bbox=\"0.1380,0.4380,0.8620,0.4530\" data-score=\"0.9458\"><p>14 공란 3</p></div>\n<div data-label=\"text\" data-bbox=\"0.1380,0.4560,0.8620,0.4710\" data-score=\"0.9649\"><p>15 내습성 3</p></div>\n<div data-label=\"text\" data-bbox=\"0.1380,0.4750,0.8620,0.4900\" data-score=\"0.9870\"><p>16 누설전류 및 절연내력 3</p></div>\n<div data-label=\"text\" data-bbox=\"0.1380,0.4940,0.8620,0.5080\" data-score=\"0.9954\"><p>17 변압기 및 관련 회로의 과부하 보호 3</p></div>\n<div data-label=\"text\" data-bbox=\"0.1380,0.5120,0.8620,0.5270\" data-score=\"0.8895\"><p>18 내구성.... 3</p></div>\n<div data-label=\"text\" data-bbox=\"0.1380,0.5310,0.8620,0.5450\" data-score=\"0.9713\"><p>19 이상 운전 3</p></div>\n<div data-label=\"text\" data-bbox=\"0.1380,0.5490,0.8620,0.5640\" data-score=\"0.9897\"><p>20 안정성 및 기계적 위험 3</p></div>\n<div data-label=\"text\" data-bbox=\"0.1380,0.5680,0.8620,0.5830\" data-score=\"0.8890\"><p>21 기계적 강도...... 4</p></div>\n<div data-label=\"text\" data-bbox=\"0.1380,0.5870,0.8620,0.6010\" data-score=\"0.8721\"><p>22 구 조 4</p></div>\n<div data-label=\"text\" data-bbox=\"0.1380,0.6050,0.8620,0.6200\" data-score=\"0.9868\"><p>23 내부 배선 4</p></div>\n<div data-label=\"text\" data-bbox=\"0.1380,0.6240,0.8620,0.6380\" data-score=\"0.9431\"><p>24 부품 4</p></div>\n<div data-label=\"text\" data-bbox=\"0.1380,0.6420,0.8620,0.6570\" data-score=\"0.9960\"><p>25 전원 접속 및 외부 유연성 코드 4</p></div>\n<div data-label=\"text\" data-bbox=\"0.1380,0.6610,0.8620,0.6750\" data-score=\"0.8791\"><p>26 외부 전선행 단자 4</p></div>\n<div data-label=\"text\" data-bbox=\"0.1380,0.6790,0.8620,0.6930\" data-score=\"0.9616\"><p>27 접지 접속 5</p></div>\n<div data-label=\"text\" data-bbox=\"0.1380,0.6980,0.8620,0.7120\" data-score=\"0.9725\"><p>28 나사 및 접속 5</p></div>\n<div data-label=\"text\" data-bbox=\"0.1380,0.7160,0.8620,0.7310\" data-score=\"0.9884\"><p>29 연면거리, 공간거리 및 절연물을 통한 절연거리 5</p></div>\n<div data-label=\"text\" data-bbox=\"0.1380,0.7350,0.8620,0.7500\" data-score=\"0.9917\"><p>30 내열성 내화성 및 내트래킹성 5</p></div>\n<div data-label=\"text\" data-bbox=\"0.1380,0.7540,0.8620,0.7680\" data-score=\"0.9859\"><p>31 내부식성 5</p></div>\n<div data-label=\"text\" data-bbox=\"0.1380,0.7720,0.8620,0.7870\" data-score=\"0.9373\"><p>32 방사선, 유독성 및 이와 유사한 위험성 5</p></div>\n<div data-label=\"text\" data-bbox=\"0.1200,0.8070,0.8610,0.8230\" data-score=\"0.9866\"><p>부속서 5</p></div>",
+            "text_ko": null,
+            "links": null,
+            "confidence": 0.9579
+          },
+          {
+            "page_number": 4,
+            "part_number": null,
+            "text": "<div data-label=\"title\" data-bbox=\"0.3730,0.1270,0.6460,0.1450\" data-score=\"0.9996\"><h1>전기용품안전기준(K 10012)</h1></div>\n<div data-label=\"title\" data-bbox=\"0.3120,0.1730,0.7070,0.1910\" data-score=\"0.9999\"><h1>가정용 및 이와 유사한 전기기기의 안전성</h1></div>\n<div data-label=\"title\" data-bbox=\"0.2260,0.1950,0.8060,0.2140\" data-score=\"0.9800\"><h1>제2부 : 전기헬스기구 및 이와 유사한 기기의 개별요구사항</h1></div>\n<div data-label=\"title\" data-bbox=\"0.2390,0.2420,0.7820,0.2820\" data-score=\"0.9771\"><h1>Safety of household and similar electrical appliances\n- Particular requirements for health appliances</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1130,0.3060,0.8750,0.3390\" data-score=\"0.9892\"><p>서문 이 기준의 기본 시험은 K 60335-1(가정용 및 이와 유사한 전기기기의 안전성, 제1부 : 일반 요구사항)에 따른다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1140,0.3600,0.2120,0.3760\" data-score=\"0.9993\"><h1>1. 적용범위</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.3990,0.4200,0.4130\" data-score=\"0.9995\"><p>제1부의 이 항목을 다음으로 대체한다:</p></div>\n<div data-label=\"text\" data-bbox=\"0.1140,0.4360,0.9060,0.4700\" data-score=\"0.9846\"><p>본 규격은 정격 전압이 단상인 경우 250 V 이하, 기타인 경우 480 V 이하인 가정용 전기헬스기구 및 이와 유사한 목적으로 사용되는 기기의 안전성에 적용한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1140,0.4920,0.9060,0.5260\" data-score=\"0.9992\"><p>통상 가정에서 사용하지 않은 기기라도, 점포, 경공업 및 농장에서 일반인이 사용할 수 있는 것으로 일반대중에게 위험의 소지가 있는 것은 이 기준을 적용한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1360,0.5480,0.5710,0.5620\" data-score=\"0.9737\"><p>비고1 - 이러한 기기의 예는 가정 및 헬스클럽에서 사용된다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1140,0.5850,0.7310,0.6000\" data-score=\"0.9853\"><p>이 규격은 가정 내 외부의 사람들이 실제 겪게 될 일반적 위험 요소를 다룬다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1140,0.6230,0.5450,0.6370\" data-score=\"0.9999\"><p>이 규격은 일반적으로 다음 사항들을 고려하지 않는다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1640,0.6610,0.6670,0.6750\" data-score=\"0.9945\"><p>-보호자가 없는 상태에서의 어린이나 환자에 의한 기기의 사용</p></div>\n<div data-label=\"text\" data-bbox=\"0.1650,0.6800,0.4390,0.6930\" data-score=\"0.9985\"><p>-어린이가 기기를 갖고 노는 행위</p></div>\n<div data-label=\"text\" data-bbox=\"0.1300,0.7180,0.4140,0.7310\" data-score=\"0.9850\"><p>비고 2 - 다음 사항에 주의하여야 한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1800,0.7350,0.7470,0.7480\" data-score=\"0.9709\"><p>-차량이나배,항공기에서사용되는기기는별도의요구사항이필요할수있다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1810,0.7520,0.7360,0.7650\" data-score=\"0.9937\"><p>-열대지방에서 사용하도록 제조된 기기는 별도의 요구사항이 필요할 수 있다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1800,0.7690,0.9050,0.7990\" data-score=\"0.9944\"><p>- 많은 나라에서는 국가 보건 관계기관, 노동안전 관계기관에 의해 요구사항을 별도로 추가 규정할 수 있다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1290,0.8200,0.9060,0.8510\" data-score=\"0.9918\"><p>비고 3 - 이 규격은 부식성, 폭발성의 물질(먼지, 증기, 가스)이 있는 특수 조건에서 사용하는 기기일 경우 적용하지 않는다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1140,0.8730,0.2380,0.8890\" data-score=\"0.9820\"><h1>2. 용어의 정의</h1></div>\n<div data-label=\"page_number\" data-bbox=\"0.4880,0.9380,0.5360,0.9500\" data-score=\"0.9505\" style=\"color:#888;font-size:0.9em;\">- 1 -</div>",
+            "text_ko": null,
+            "links": null,
+            "confidence": 0.988
+          },
+          {
+            "page_number": 5,
+            "part_number": null,
+            "text": "<div data-label=\"text\" data-bbox=\"0.1150,0.1160,0.4950,0.1300\" data-score=\"0.9999\"><p>다음 사항을 제외하고 제1부의 항목을 적용한다:</p></div>\n<div data-label=\"text\" data-bbox=\"0.1140,0.1540,0.2020,0.1680\" data-score=\"0.9987\"><p>2.2.9 대체:</p></div>\n<div data-label=\"text\" data-bbox=\"0.1140,0.1910,0.4950,0.2060\" data-score=\"0.9795\"><p>통상동작 : 기기는 무부하 최고속도로 운전한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1140,0.2300,0.2060,0.2440\" data-score=\"0.9999\"><p>2.101 추가</p></div>\n<div data-label=\"text\" data-bbox=\"0.1140,0.2670,0.7610,0.2820\" data-score=\"0.9891\"><p>러닝 벨트: 걷기나 달리기를 할 수 있도록 한 방향으로 움직이는 면을 가지는 벨트</p></div>\n<div data-label=\"title\" data-bbox=\"0.1140,0.3050,0.2570,0.3200\" data-score=\"0.8984\"><h1>3.일반 요구사항</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.3430,0.3430,0.3580\" data-score=\"0.9997\"><p>제1부의 이 항목을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1140,0.3810,0.3270,0.3960\" data-score=\"0.9738\"><h1>4. 시험에 관한 일반 조건</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.4190,0.3430,0.4340\" data-score=\"0.9997\"><p>제1부의 이 항목을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1140,0.4570,0.1780,0.4720\" data-score=\"0.9896\"><h1>5. 공란</h1></div>\n<div data-label=\"title\" data-bbox=\"0.1140,0.4950,0.1780,0.5100\" data-score=\"0.9982\"><h1>6. 분류</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.5330,0.3430,0.5480\" data-score=\"0.9997\"><p>제1부의 이 항목을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1140,0.5710,0.2820,0.5860\" data-score=\"0.9959\"><h1>7. 표시 및 사용설명</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1140,0.6090,0.4950,0.6240\" data-score=\"1.0000\"><p>다음 사항을 제외하고 제1부의 항목을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1140,0.6470,0.1840,0.6620\" data-score=\"0.9995\"><h1>7.1 추가</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1140,0.6850,0.6490,0.7000\" data-score=\"0.9986\"><p>러닝벨트가 있는 기기는 최대 사용가능 체중(kg)을 표기하여야 한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1140,0.7230,0.1920,0.7370\" data-score=\"0.9991\"><h1>7.12 추가</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1140,0.7610,0.6960,0.7760\" data-score=\"0.9976\"><p>러닝 벨트가 있는 기기는 사용설명서에 다음과 항목들이 포함되어야 한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1140,0.7800,0.8310,0.7950\" data-score=\"0.9862\"><p>- 늘어지는 의류나 타월 등을 걸치고 사용하지 마시오,수건 등을 기기에 걸쳐 놓지 마시오</p></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.7990,0.5910,0.8140\" data-score=\"0.9748\"><p>-주행면의 불균형을 조정하는 방법과 오일사용에 대한 내용</p></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.8180,0.4150,0.8330\" data-score=\"0.9917\"><p>-설치 시 안전공간 확보에 관한 내용</p></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.8370,0.4060,0.8520\" data-score=\"0.9891\"><p>- 비상착지 및 비상정지에 관한 내용</p></div>\n<div data-label=\"title\" data-bbox=\"0.1140,0.8750,0.3360,0.8900\" data-score=\"0.9981\"><h1>8. 충전부에 대한 감전보호</h1></div>\n<div data-label=\"page_number\" data-bbox=\"0.4890,0.9370,0.5360,0.9500\" data-score=\"0.8086\" style=\"color:#888;font-size:0.9em;\">-2-</div>",
+            "text_ko": null,
+            "links": null,
+            "confidence": 0.9819
+          },
+          {
+            "page_number": 6,
+            "part_number": null,
+            "text": "<div data-label=\"text\" data-bbox=\"0.1160,0.1350,0.3420,0.1490\" data-score=\"0.9997\"><p>제1부의 이 항목을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1140,0.1730,0.3350,0.1880\" data-score=\"0.9981\"><h1>9. 전동기 구동기기의 기동</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1160,0.2110,0.4010,0.2250\" data-score=\"0.9996\"><p>제1부의 이 항목을 적용하지 않는다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1160,0.2490,0.2570,0.2630\" data-score=\"0.9994\"><h1>10. 입력 및 전류</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1160,0.2870,0.3420,0.3010\" data-score=\"0.9997\"><p>제1부의 이 항목을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1160,0.3250,0.2220,0.3390\" data-score=\"0.9832\"><h1>11. 온도상승</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1160,0.3620,0.3420,0.3770\" data-score=\"0.9997\"><p>제1부의 이 항목을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1160,0.4200,0.1870,0.4340\" data-score=\"0.9951\"><h1>12. 공란</h1></div>\n<div data-label=\"title\" data-bbox=\"0.1160,0.4570,0.4140,0.4720\" data-score=\"0.9988\"><h1>13. 운전시의 누설 전류 및 절연내력</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1160,0.4960,0.3420,0.5100\" data-score=\"0.9997\"><p>제1부의 이 항목을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1160,0.5340,0.1870,0.5480\" data-score=\"0.9962\"><h1>14. 공란</h1></div>\n<div data-label=\"title\" data-bbox=\"0.1160,0.5720,0.2030,0.5860\" data-score=\"0.9821\"><h1>15. 내습성</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1160,0.6100,0.3420,0.6240\" data-score=\"0.9997\"><p>제1부의 이 항목을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1160,0.6470,0.3340,0.6620\" data-score=\"0.9963\"><h1>16. 누설 전류 및 절연내력</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1160,0.6860,0.3420,0.7000\" data-score=\"0.9997\"><p>제1부의 이 항목을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1160,0.7230,0.4400,0.7380\" data-score=\"0.9976\"><h1>17. 변압기 및 관련 회로의 과부하 보호</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1160,0.7610,0.3420,0.7750\" data-score=\"0.9996\"><p>제1부의 이 항목을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1160,0.8000,0.2030,0.8140\" data-score=\"0.9976\"><h1>18. 내구성</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1160,0.8370,0.4010,0.8510\" data-score=\"0.9995\"><p>제1부의 이 항목을 적용하지 않는다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1160,0.8750,0.2300,0.8900\" data-score=\"0.9982\"><h1>19. 이상 운전</h1></div>\n<div data-label=\"page_number\" data-bbox=\"0.4890,0.9380,0.5360,0.9500\" data-score=\"0.9645\" style=\"color:#888;font-size:0.9em;\">- 3 -</div>",
+            "text_ko": null,
+            "links": null,
+            "confidence": 0.9954
+          },
+          {
+            "page_number": 7,
+            "part_number": null,
+            "text": "<div data-label=\"text\" data-bbox=\"0.1140,0.1350,0.4950,0.1490\" data-score=\"0.9999\"><p>다음 사항을 제외하고 제1부의 항목을 적용한다:</p></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.1730,0.1970,0.1870\" data-score=\"0.9998\"><p>19.7 추가:</p></div>\n<div data-label=\"text\" data-bbox=\"0.1140,0.2110,0.9050,0.2450\" data-score=\"0.9923\"><p>사람의 발 아래에서 사용되는 기기는 온도가 포화 될 때까지 동작시킨다. 기타 기기는 30초간 동작시킨다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.2680,0.2700,0.2830\" data-score=\"0.9996\"><p>19.9 적용하지 않음.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.3060,0.2040,0.3200\" data-score=\"0.9994\"><p>19.10 추가:</p></div>\n<div data-label=\"text\" data-bbox=\"0.1140,0.3430,0.5760,0.3580\" data-score=\"0.9996\"><p>분리할 수 있는 부분은 분리된 상태에서도 시험을 행한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1140,0.3810,0.3350,0.3960\" data-score=\"0.9983\"><h1>20. 안정성 및 기계적 위험</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.4190,0.3420,0.4340\" data-score=\"0.9997\"><p>제1부의 이 항목을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1140,0.4570,0.2480,0.4720\" data-score=\"0.9970\"><h1>21. 기계적 강도</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.4960,0.4950,0.5100\" data-score=\"0.9999\"><p>다음 사항을 제외하고 제1부의 항목을 적용한다:</p></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.5330,0.1590,0.5470\" data-score=\"0.9999\"><p>추가:</p></div>\n<div data-label=\"text\" data-bbox=\"0.1140,0.5720,0.9060,0.6050\" data-score=\"0.9853\"><p>발 밑에서 사용되는 기기는 20 cm x 30 cm의 면적에 고르게 분포된 90 kg 무게로 15 cm ± 2 cm 높이에서 10회 자유낙하 시킨다.시험후 기기는 이 규격의 적합성을 상실하는 손상이 없어야 한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1140,0.6290,0.1870,0.6430\" data-score=\"0.9993\"><h1>22. 구조</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1140,0.6670,0.4950,0.6810\" data-score=\"0.9999\"><p>다음 사항을 제외하고 제1부의 항목을 적용한다:</p></div>\n<div data-label=\"text\" data-bbox=\"0.1140,0.7040,0.9050,0.7370\" data-score=\"0.9853\"><p>22.101 기기는 신체의 일부를 끌어당길 수 없는 구조이고, 움직이는 부위에 걸리지 않는 구조이어야 한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.7610,0.4010,0.7760\" data-score=\"0.9999\"><p>적합여부는 검사에 의해서 판정한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1130,0.7990,0.9050,0.8520\" data-score=\"0.9899\"><p>22.102 의도되지 않은 오작동 및 비상상태에 대비하기 위하여 기기를 정지시킬 수 있는 장치를 가져야 한다. 스위치는 기기 사용자에 의하여 신속히 땅을 수 있는 곳에 위치하여야 하며, 장치를 동작시켰을 경우에 기기의 급제동으로 위험을 가져다 줄 경우 기기는 급제동 되지 말아야 한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.8750,0.4010,0.8900\" data-score=\"0.9999\"><p>적합여부는 검사에 의해서 판정한다.</p></div>\n<div data-label=\"page_number\" data-bbox=\"0.4890,0.9380,0.5360,0.9500\" data-score=\"0.9385\" style=\"color:#888;font-size:0.9em;\">- 4 -</div>",
+            "text_ko": null,
+            "links": null,
+            "confidence": 0.9939
+          },
+          {
+            "page_number": 8,
+            "part_number": null,
+            "text": "<div data-label=\"text\" data-bbox=\"0.1140,0.1350,0.2080,0.1480\" data-score=\"0.9996\"><p>20.103 추가</p></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.1720,0.6950,0.1870\" data-score=\"0.9996\"><p>접을 수 있는 기기의 경우 접혀진 상태에서 기기는 동작되지 않아야 한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.2110,0.4010,0.2250\" data-score=\"0.9997\"><p>적합여부는 검사에 의해서 판정한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1140,0.2480,0.2310,0.2630\" data-score=\"0.9991\"><h1>23. 내부 배선</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.2870,0.3420,0.3010\" data-score=\"0.9997\"><p>제1부의 이 항목을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1140,0.3250,0.1860,0.3390\" data-score=\"0.9972\"><h1>24. 부품</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.3620,0.3420,0.3760\" data-score=\"0.9996\"><p>제1부의 이 항목을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1140,0.4010,0.4050,0.4150\" data-score=\"0.9969\"><h1>25. 전원 접속 및 외부 유연성 코드</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.4390,0.3420,0.4530\" data-score=\"0.9996\"><p>제1부의 이 항목을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1140,0.4770,0.2920,0.4910\" data-score=\"0.9553\"><h1>26. 외부 전선용 단자</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.5150,0.3420,0.5290\" data-score=\"0.9997\"><p>제1부의 이 항목을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1140,0.5530,0.2310,0.5670\" data-score=\"0.9711\"><h1>27. 접지 접속</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.5910,0.3420,0.6050\" data-score=\"0.9996\"><p>제1부의 이 항목을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1140,0.6290,0.2560,0.6430\" data-score=\"0.9952\"><h1>28. 나사 및 접속</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.6670,0.3420,0.6810\" data-score=\"0.9996\"><p>제1부의 이 항목을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1140,0.7040,0.5320,0.7190\" data-score=\"0.9702\"><h1>29. 연면거리, 공간거리 및 절연물을 통한 절연거리</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.7430,0.3420,0.7570\" data-score=\"0.9997\"><p>제1부의 이 항목을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1140,0.7800,0.3920,0.7950\" data-score=\"0.9970\"><h1>30. 내열성, 내화성 및 내트래킹성</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.8180,0.4940,0.8330\" data-score=\"0.9999\"><p>다음 사항을 제외하고 제1부의 항목을 적용한다:</p></div>\n<div data-label=\"text\" data-bbox=\"0.1140,0.8570,0.3000,0.8710\" data-score=\"0.9996\"><p>30.2.3 적용하지 않는다.</p></div>\n<div data-label=\"page_number\" data-bbox=\"0.4890,0.9380,0.5360,0.9500\" data-score=\"0.9718\" style=\"color:#888;font-size:0.9em;\">- 5 -</div>",
+            "text_ko": null,
+            "links": null,
+            "confidence": 0.9929
+          },
+          {
+            "page_number": 9,
+            "part_number": null,
+            "text": "<div data-label=\"title\" data-bbox=\"0.1140,0.1160,0.2210,0.1300\" data-score=\"0.9991\"><h1>31. 내부식성</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.1540,0.3440,0.1680\" data-score=\"0.9997\"><p>제1부의 이 항목을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1140,0.1920,0.4630,0.2060\" data-score=\"0.9958\"><h1>32. 방사선, 유독성 및 이와 유사한 위험성</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.2290,0.4010,0.2440\" data-score=\"0.9995\"><p>제1부의 이 항목을 적용하지 않는다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.4840,0.3240,0.5360,0.3380\" data-score=\"1.0000\"><h1>부속서</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.3630,0.3440,0.3770\" data-score=\"0.9989\"><p>제 1부의 부속서를 적용한다.</p></div>\n<div data-label=\"page_number\" data-bbox=\"0.4890,0.9380,0.5370,0.9510\" data-score=\"0.7906\" style=\"color:#888;font-size:0.9em;\">-6-</div>",
+            "text_ko": null,
+            "links": null,
+            "confidence": 0.9691
+          }
+        ],
+        "latency_seconds": 13.523004693000075,
+        "confidence": 0.9851,
+        "truncated": false,
+        "full_text_length": null
+      },
+      "caption": {
+        "provider": "inference_provider",
+        "model": "caption_model_onprem",
+        "pages": [
+          {
+            "page_number": 1,
+            "part_number": null,
+            "entities": {
+              "text": "전기용품안전기준\nK 10012\n가정용 및 이와 유사한 전기기기의 안전성\n- 전기헬스기구 및 이와 유사한 기기의 개별요구사항",
+              "graph": "",
+              "diagram": "",
+              "image_overview": "",
+              "table_markdown": "| 제정 | 기술표준원고시 제2008-789호(2008. 11. 14) |\n| --- | --- |\n| 개정 | 기술표준원고시 제2009-837호(2009. 12. 15) |\n| 개정 | 기술표준원고시 제2013-694호(2013. 12. 11) |",
+              "visual_elements": ""
+            },
+            "entities_ko": null
+          },
+          {
+            "page_number": 2,
+            "part_number": null,
+            "entities": {
+              "text": "부 칙(고시 제2013-694호, 2013.12.11)\n전기용품안전기준 K 10012는 고시한 날로부터 시행한다.",
+              "graph": "",
+              "diagram": "",
+              "image_overview": "",
+              "table_markdown": "",
+              "visual_elements": ""
+            },
+            "entities_ko": null
+          },
+          {
+            "page_number": 3,
+            "part_number": null,
+            "entities": {
+              "text": "목    차\n1. 적용범위 ..................................................... 1\n2 정 의........................................................ 1\n3 일반 요구사항 ................................................. 2\n4 시험에 관한 일반 조건 ......................................... 2\n5 공 란 .......................................................... 2\n6 분 류........................................................... 2\n7 표시 및 사용설명 .............................................. 2\n8 충전부에 대한 감전보호 ....................................... 2\n9 전동기 구동기기의 기동 ....................................... 2\n10 정격 입력 및 전류 ............................................ 2\n11 온도상승 ...................................................... 2\n12 공 란 .......................................................... 3\n13 운전시의 누설 전류 및 절연내력 .............................. 3\n14 공 란 .......................................................... 3\n15 내습성 ........................................................ 3\n16 누설전류 및 절연내력 ......................................... 3\n17 변압기 및 관련 회로의 과부하 보호 ............................ 3\n18 내구성 ....................................................... 3\n19 이상 운전 ..................................................... 3\n20 안정성 및 기계적 위험 ....................................... 3\n21 기계적 강도................................................... 4\n22 구 조 .......................................................... 4\n23 내부 배선 ..................................................... 4\n24 부 품 .......................................................... 4\n25 전원 접속 및 외부 유연성 코드 ................................. 4\n26 외부 전선용 단자 ............................................. 4\n27 접지 접속 ..................................................... 5\n28 나사 및 접속 .................................................. 5\n29 연면거리, 공간거리 및 절연물을 통한 절연거리 ................. 5\n30 내열성 내화성 및 내트래킹성 ................................. 5\n31 내부식성 ...................................................... 5\n32 방사선, 유독성 및 이와 유사한 위험성........................ 5\n부속서 ............................................................. 5",
+              "graph": "",
+              "diagram": "",
+              "image_overview": "",
+              "table_markdown": "",
+              "visual_elements": ""
+            },
+            "entities_ko": null
+          },
+          {
+            "page_number": 4,
+            "part_number": null,
+            "entities": {
+              "text": "전기용품안전기준(K 10012)\n\n가정용 및 이와 유사한 전기기기의 안전성\n제2부 : 전기헬스기구 및 이와 유사한 기기의 개별요구사항\n\nSafety of household and similar electrical appliances\n- Particular requirements for health appliances\n\n서문 이 기준의 기본 시험은 K 60335-1(가정용 및 이와 유사한 전기기기의 안전성, 제1부 : 일반 요구사항)에 따른다.\n\n1. 적용범위\n\n제1부의 이 항목을 다음과 같이 대체한다:\n\n본 규격은 정격 전압이 단상인 경우 250 V 이하, 기타인 경우 480 V 이하인 가정용 전기헬스기구 및 이와 유사한 목적으로 사용되는 기기의 안전성에 적용한다.\n\n통상 가정에서 사용하지 않은 기기라도, 점포, 경공업 및 농장에서一般人이 사용할 수 있는 것으로 일반대중에게 위험의 소지가 있는 것은 이 기준을 적용한다.\n\n비교 1 - 이러한 기기의 예는 가정 및 헬스클럽에서 사용된다.\n\n이 규격은 가정 내 외부의 사람들이 실제로 겪게 될 일반적 위험 요소를 다룬다.\n\n이 규격은 일반적으로 다음 사항들을 고려하지 않는다.\n\n- 보호자가 없는 상태에서의 어린이나 환자에 의한 기기의 사용\n- 어린이가 기기를 갖고 노는 행위\n\n비교 2 - 다음 사항에 주의하여야 한다.\n- 차량이나 배, 항공기에서 사용되는 기기는 별도의 요구사항이 필요할 수 있다.\n- 열대지방에서 사용하도록 제조된 기기는 별도의 요구사항이 필요할 수 있다.\n- 많은 나라에서는 국가 보건 관계기관, 노동안전 관계기관에 의해 요구사항을 별도로 추가 규정할 수 있다.\n\n비교 3 - 이 규격은 부식성, 폭발성의 물질(먼지, 증기, 가스)이 있는 특수 조건에서 사용하는 기기일 경우 적용하지 않는다.\n\n2. 용어의 정의",
+              "graph": "",
+              "diagram": "",
+              "image_overview": "",
+              "table_markdown": "",
+              "visual_elements": "문서의 주요 요소는 제목과 본문의 적용범위 조항입니다. 하단에는 다른 문서의 조항을 참조하고 있다는 서문(서문 이 기준의 기본 시험은...)과 별표 주석으로 제시된 비교 1, 비교 2, 비교 3이 배치되어 있어 본문 내용을 보완하는 구조를 가지고 있습니다."
+            },
+            "entities_ko": null
+          },
+          {
+            "page_number": 5,
+            "part_number": null,
+            "entities": {
+              "text": "다음 사항을 제외하고 제1부의 항목을 적용한다:\n\n2.2.9 대체:\n통상동작 : 기기는 무부하 최고속도로 운전한다.\n\n2.101 추가\n러닝 벨트 : 걷거나 달리기를 할 수 있도록 한 방향으로 움직이는 면을 가지는 벨트\n\n3. 일반 요구사항\n제1부의 이 항목을 적용한다.\n\n4. 시험에 관한 일반 조건\n제1부의 이 항목을 적용한다.\n\n5. 공란\n\n6. 분류\n제1부의 이 항목을 적용한다.\n\n7. 표시 및 사용설명\n다음 사항을 제외하고 제1부의 항목을 적용한다.\n\n7.1 추가\n러닝벨트가 있는 기계는 최대 사용가능 체중(kg)을 표기하여야 한다.\n\n7.12 추가\n러닝 벨트가 있는 기계는 사용설명서에 다음과 항목들이 포함되어야 한다.\n- 늘어지는 의류나 타월 등을 걸치고 사용하지 마시오, 수건 등을 기계에 걸쳐 놓지 마시오\n- 주행면의 불균형을 조정하는 방법과 오일사용에 대한 내용\n- 설치 시 안전공간 확보에 관한 내용\n- 비상착지 및 비상정지에 관한 내용\n\n8. 충전부에 대한 감전보호\n\n- 2 -",
+              "graph": "",
+              "diagram": "",
+              "image_overview": "",
+              "table_markdown": "",
+              "visual_elements": "문서의 상단부에는 '2.2.9 대체' 및 '2.101 추가'와 같은 번호가 매겨진 소제목들이 텍스트 형식으로 나열되어 있으며, 하단부에는 '3. 일반 요구사항', '4. 시험에 관한 일반 조건', '5. 공란', '6. 분류', '7. 표시 및 사용설명', '8. 충전부에 대한 감전보호'와 같이 굵은 글씨체로 강조된 주요 섹션 제목들이 수직으로 배치되어 있습니다."
+            },
+            "entities_ko": null
+          },
+          {
+            "page_number": 6,
+            "part_number": null,
+            "entities": {
+              "text": "- 3 -\n제1부의 이 항목을 적용한다.\n9. 전동기 구동기기의 기동\n제1부의 이 항목을 적용하지 않는다.\n10. 입력 및 전류\n제1부의 이 항목을 적용한다.\n11. 온도상승\n제1부의 이 항목을 적용한다.\n12. 공란\n13. 운전시의 누설 전류 및 절연내력\n제1부의 이 항목을 적용한다.\n14. 공란\n15. 내습성\n제1부의 이 항목을 적용한다.\n16. 누설 전류 및 절연내력\n제1부의 이 항목을 적용한다.\n17. 변압기 및 관련 회로의 과부하 보호\n제1부의 이 항목을 적용한다.\n18. 내구성\n제1부의 이 항목을 적용하지 않는다.\n19. 이상 운전자",
+              "graph": "",
+              "diagram": "",
+              "image_overview": "",
+              "table_markdown": "",
+              "visual_elements": ""
+            },
+            "entities_ko": null
+          },
+          {
+            "page_number": 7,
+            "part_number": null,
+            "entities": {
+              "text": "다음 사항을 제외하고 제1부의 항목을 적용한다:\n\n19.7 추가:\n사람의 발 아래에서 사용되는 기기는 온도가 포화 될 때까지 동작시킨다. 기타 기기는 30초간 동작시킨다.\n\n19.9 적용하지 않음.\n\n19.10 추가:\n분리할 수 있는 부분은 분리된 상태에서도 시험을 행한다.\n\n20. 안정성 및 기계적 위험\n제1부의 이 항목을 적용한다.\n\n21. 기계적 강도\n다음 사항을 제외하고 제1부의 항목을 적용한다:\n추가:\n발 밑에서 사용되는 기기는 20 cm x 30 cm의 면적에 고르게 분포된 90 kg 무게로 15 cm ± 2 cm 높이에서 10회 자유낙하 시킨다. 실험후 기기는 이 규격의 적합성을 상실하는 손상이 없어야 한다.\n\n22. 구조\n다음 사항을 제외하고 제1부의 항목을 적용한다:\n22.101 기기는 신체의 일부를 끌어당길 수 없는 구조이고, 움직이는 부위에 걸리지 않는 구조이어야 한다.\n적합여부는 검사에 의해서 판정한다.\n22.102 의도되지 않은 오작동 및 비상상태에 대비하기 위하여 기기를 정지시킬 수 있는 장치를 가져야 한다. 스위치는 기기 사용자에 의하여 신속히 닿을 수 있는 곳에 위치하여야 하며, 장치를 작동시켰을 경우에 기기의 급제동으로 위험을 가져다 줄 경우 기기는 급제동 되지 말아야 한다.\n적합여부는 검사에 의해서 판정한다.\n\n- 4 -",
+              "graph": "",
+              "diagram": "",
+              "image_overview": "",
+              "table_markdown": "",
+              "visual_elements": ""
+            },
+            "entities_ko": null
+          },
+          {
+            "page_number": 8,
+            "part_number": null,
+            "entities": {
+              "text": "20.103 추가\n접을 수 있는 기기의 경우 접혀진 상태에서 기기는 동작되지 않아야 한다.\n적합여부는 검사에 의해서 판정한다.\n\n23. 내부 배선\n제1부의 이 항목을 적용한다.\n\n24. 부품\n제1부의 이 항목을 적용한다.\n\n25. 전원 접속 및 외부 유연성 코드\n제1부의 이 항목을 적용한다.\n\n26. 외부 전선용 단자\n제1부의 이 항목을 적용한다.\n\n27. 접지 접속\n제1부의 이 항목을 적용한다.\n\n28. 나사 및 접속\n제1부의 이 항목을 적용한다.\n\n29. 연면거리, 공간거리 및 절연물을 통한 절연거리\n제1부의 이 항목을 적용한다.\n\n30. 내열성, 내화성 및 내트래킹성\n다음 사항을 제외하고 제1부의 항목을 적용한다:\n30.2.3 적용하지 않는다.\n\n- 5 -",
+              "graph": "",
+              "diagram": "",
+              "image_overview": "",
+              "table_markdown": "",
+              "visual_elements": "이 페이지는 문서의 주요 내용을 나열한 목록 구조를 보여줍니다. 각 항목은 번호(예: 23, 24)와 해당 제목(예: 내부 배선, 부품)으로 구성된 굵은 글씨의 헤더 섹션과, 그 바로 아래에 위치한 본문 설명으로 구성됩니다."
+            },
+            "entities_ko": null
+          },
+          {
+            "page_number": 9,
+            "part_number": null,
+            "entities": {
+              "text": "31. 내부식성\n제1부의 이 항목을 적용한다.\n32. 방사선, 유독성 및 이와 유사한 위험성\n제1부의 이 항목을 적용하지 않는다.\n부속서\n제 1부의 부속서를 적용한다.\n- 6 -",
+              "graph": "",
+              "diagram": "",
+              "image_overview": "",
+              "table_markdown": "",
+              "visual_elements": ""
+            },
+            "entities_ko": null
+          }
+        ],
+        "latency_seconds": 21.52917559100206
+      },
+      "tagger": {
+        "provider": "hierarchy",
+        "model": "hierarchy-ko",
+        "pages": [
+          {
+            "page_number": 1,
+            "part_number": null,
+            "keywords": [],
+            "summary": null,
+            "hierarchy": [
+              {
+                "x0": 0.183,
+                "type": "item",
+                "title": "- 전기헬스기구 및 이와 유사한 기기의 개별요구사항",
+                "confidence": 0.9861,
+                "level_code": "L7",
+                "level_name": "열거항목"
+              }
+            ],
+            "n_nodes": 1,
+            "graph": {
+              "edges": [
+                {
+                  "to": "4:4",
+                  "from": "4:3",
+                  "type": "HAS_NOTE"
+                },
+                {
+                  "to": "4:3",
+                  "from": "4:5",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "4:3",
+                  "from": "4:6",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "4:7",
+                  "from": "4:3",
+                  "type": "HAS_NOTE"
+                },
+                {
+                  "to": "4:3",
+                  "from": "4:8",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "4:3",
+                  "from": "4:9",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "4:3",
+                  "from": "4:10",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "4:11",
+                  "from": "4:3",
+                  "type": "HAS_NOTE"
+                },
+                {
+                  "to": "4:12",
+                  "from": "5:14",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "4:12",
+                  "from": "5:15",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "5:21",
+                  "from": "5:22",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "5:21",
+                  "from": "5:23",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "5:23",
+                  "from": "5:24",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "5:23",
+                  "from": "5:25",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "5:23",
+                  "from": "5:26",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "5:23",
+                  "from": "5:27",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "6:39",
+                  "from": "7:40",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "7:41",
+                  "from": "7:42",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "7:41",
+                  "from": "7:43",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "7:46",
+                  "from": "7:47",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "7:46",
+                  "from": "7:48",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "7:44",
+                  "from": "8:49",
+                  "type": "PART_OF"
+                },
+                {
+                  "to": "8:58",
+                  "from": "8:60",
+                  "type": "PART_OF"
+                }
+              ],
+              "nodes": [
+                {
+                  "id": "1:0",
+                  "page": 1,
+                  "part": null,
+                  "type": "item",
+                  "order": 0,
+                  "title": "- 전기헬스기구 및 이와 유사한 기기의 개별요구사항",
+                  "confidence": 0.9861,
+                  "level_code": "L7",
+                  "level_name": "열거항목",
+                  "number_path": []
+                },
+                {
+                  "id": "4:1",
+                  "page": 4,
+                  "part": "제2부",
+                  "type": "part",
+                  "order": 1,
+                  "title": "제2부 : 전기헬스기구 및 이와 유사한 기기의 개별요구사항",
+                  "confidence": 0.98,
+                  "level_code": "L2",
+                  "level_name": "부",
+                  "number_path": [
+                    "2"
+                  ]
+                },
+                {
+                  "id": "4:2",
+                  "page": 4,
+                  "part": "제2부",
+                  "type": "preamble",
+                  "order": 2,
+                  "title": "서문 이 기준의 기본 시험은 K 60335-1(가정용 및 이와 유사한 전기기기의 안전성, 제1부 : 일반 요구사항)에 따른다.",
+                  "confidence": 0.9892,
+                  "level_code": "L1",
+                  "level_name": "서문",
+                  "number_path": [
+                    "서문"
+                  ]
+                },
+                {
+                  "id": "4:3",
+                  "page": 4,
+                  "part": "제2부",
+                  "type": "section",
+                  "order": 3,
+                  "title": "적용범위",
+                  "confidence": 0.9993,
+                  "level_code": "L3",
+                  "level_name": "절",
+                  "number_path": [
+                    "1"
+                  ]
+                },
+                {
+                  "id": "4:4",
+                  "page": 4,
+                  "part": "제2부",
+                  "type": "note",
+                  "order": 4,
+                  "title": "비고1 - 이러한 기기의 예는 가정 및 헬스클럽에서 사용된다.",
+                  "confidence": 0.9737,
+                  "level_code": "LN",
+                  "level_name": "주석",
+                  "number_path": []
+                },
+                {
+                  "id": "4:5",
+                  "page": 4,
+                  "part": "제2부",
+                  "type": "item",
+                  "order": 5,
+                  "title": "-보호자가 없는 상태에서의 어린이나 환자에 의한 기기의 사용",
+                  "confidence": 0.9945,
+                  "level_code": "L7",
+                  "level_name": "열거항목",
+                  "number_path": []
+                },
+                {
+                  "id": "4:6",
+                  "page": 4,
+                  "part": "제2부",
+                  "type": "item",
+                  "order": 6,
+                  "title": "-어린이가 기기를 갖고 노는 행위",
+                  "confidence": 0.9985,
+                  "level_code": "L7",
+                  "level_name": "열거항목",
+                  "number_path": []
+                },
+                {
+                  "id": "4:7",
+                  "page": 4,
+                  "part": "제2부",
+                  "type": "note",
+                  "order": 7,
+                  "title": "비고 2 - 다음 사항에 주의하여야 한다.",
+                  "confidence": 0.985,
+                  "level_code": "LN",
+                  "level_name": "주석",
+                  "number_path": []
+                },
+                {
+                  "id": "4:8",
+                  "page": 4,
+                  "part": "제2부",
+                  "type": "item",
+                  "order": 8,
+                  "title": "-차량이나배,항공기에서사용되는기기는별도의요구사항이필요할수있다.",
+                  "confidence": 0.9709,
+                  "level_code": "L7",
+                  "level_name": "열거항목",
+                  "number_path": []
+                },
+                {
+                  "id": "4:9",
+                  "page": 4,
+                  "part": "제2부",
+                  "type": "item",
+                  "order": 9,
+                  "title": "-열대지방에서 사용하도록 제조된 기기는 별도의 요구사항이 필요할 수 있다.",
+                  "confidence": 0.9937,
+                  "level_code": "L7",
+                  "level_name": "열거항목",
+                  "number_path": []
+                },
+                {
+                  "id": "4:10",
+                  "page": 4,
+                  "part": "제2부",
+                  "type": "item",
+                  "order": 10,
+                  "title": "- 많은 나라에서는 국가 보건 관계기관, 노동안전 관계기관에 의해 요구사항을 별도로 추가 규정할 수 있다.",
+                  "confidence": 0.9944,
+                  "level_code": "L7",
+                  "level_name": "열거항목",
+                  "number_path": []
+                },
+                {
+                  "id": "4:11",
+                  "page": 4,
+                  "part": "제2부",
+                  "type": "note",
+                  "order": 11,
+                  "title": "비고 3 - 이 규격은 부식성, 폭발성의 물질(먼지, 증기, 가스)이 있는 특수 조건에서 사용하는 기기일 경우 적용하지 않는다.",
+                  "confidence": 0.9918,
+                  "level_code": "LN",
+                  "level_name": "주석",
+                  "number_path": []
+                },
+                {
+                  "id": "4:12",
+                  "page": 4,
+                  "part": "제2부",
+                  "type": "section",
+                  "order": 12,
+                  "title": "용어의 정의",
+                  "confidence": 0.982,
+                  "level_code": "L3",
+                  "level_name": "절",
+                  "number_path": [
+                    "2"
+                  ]
+                },
+                {
+                  "id": "5:13",
+                  "page": 5,
+                  "part": "제2부",
+                  "type": "subsubsection",
+                  "order": 13,
+                  "title": "대체:",
+                  "confidence": 0.9987,
+                  "level_code": "L5",
+                  "level_name": "세부항목",
+                  "number_path": [
+                    "2",
+                    "2",
+                    "9"
+                  ]
+                },
+                {
+                  "id": "5:14",
+                  "page": 5,
+                  "part": "제2부",
+                  "type": "subsection",
+                  "order": 14,
+                  "title": "2.2 (개정 대상 상위 — 베이스표준 참조)",
+                  "confidence": null,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "2",
+                    "2"
+                  ]
+                },
+                {
+                  "id": "5:15",
+                  "page": 5,
+                  "part": "제2부",
+                  "type": "subsection",
+                  "order": 15,
+                  "title": "추가",
+                  "confidence": 0.9999,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "2",
+                    "101"
+                  ]
+                },
+                {
+                  "id": "5:16",
+                  "page": 5,
+                  "part": "제2부",
+                  "type": "section",
+                  "order": 16,
+                  "title": "2 (개정 대상 상위 — 베이스표준 참조)",
+                  "confidence": null,
+                  "level_code": "L3",
+                  "level_name": "절",
+                  "number_path": [
+                    "2"
+                  ]
+                },
+                {
+                  "id": "5:17",
+                  "page": 5,
+                  "part": "제2부",
+                  "type": "section",
+                  "order": 17,
+                  "title": "일반 요구사항",
+                  "confidence": 0.8984,
+                  "level_code": "L3",
+                  "level_name": "절",
+                  "number_path": [
+                    "3"
+                  ]
+                },
+                {
+                  "id": "5:18",
+                  "page": 5,
+                  "part": "제2부",
+                  "type": "section",
+                  "order": 18,
+                  "title": "시험에 관한 일반 조건",
+                  "confidence": 0.9738,
+                  "level_code": "L3",
+                  "level_name": "절",
+                  "number_path": [
+                    "4"
+                  ]
+                },
+                {
+                  "id": "5:19",
+                  "page": 5,
+                  "part": "제2부",
+                  "type": "section",
+                  "order": 19,
+                  "title": "공란",
+                  "confidence": 0.9896,
+                  "level_code": "L3",
+                  "level_name": "절",
+                  "number_path": [
+                    "5"
+                  ]
+                },
+                {
+                  "id": "5:20",
+                  "page": 5,
+                  "part": "제2부",
+                  "type": "section",
+                  "order": 20,
+                  "title": "분류",
+                  "confidence": 0.9982,
+                  "level_code": "L3",
+                  "level_name": "절",
+                  "number_path": [
+                    "6"
+                  ]
+                },
+                {
+                  "id": "5:21",
+                  "page": 5,
+                  "part": "제2부",
+                  "type": "section",
+                  "order": 21,
+                  "title": "표시 및 사용설명",
+                  "confidence": 0.9959,
+                  "level_code": "L3",
+                  "level_name": "절",
+                  "number_path": [
+                    "7"
+                  ]
+                },
+                {
+                  "id": "5:22",
+                  "page": 5,
+                  "part": "제2부",
+                  "type": "subsection",
+                  "order": 22,
+                  "title": "추가",
+                  "confidence": 0.9995,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "7",
+                    "1"
+                  ]
+                },
+                {
+                  "id": "5:23",
+                  "page": 5,
+                  "part": "제2부",
+                  "type": "subsection",
+                  "order": 23,
+                  "title": "추가",
+                  "confidence": 0.9991,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "7",
+                    "12"
+                  ]
+                },
+                {
+                  "id": "5:24",
+                  "page": 5,
+                  "part": "제2부",
+                  "type": "item",
+                  "order": 24,
+                  "title": "- 늘어지는 의류나 타월 등을 걸치고 사용하지 마시오,수건 등을 기기에 걸쳐 놓지 마시오",
+                  "confidence": 0.9862,
+                  "level_code": "L7",
+                  "level_name": "열거항목",
+                  "number_path": []
+                },
+                {
+                  "id": "5:25",
+                  "page": 5,
+                  "part": "제2부",
+                  "type": "item",
+                  "order": 25,
+                  "title": "-주행면의 불균형을 조정하는 방법과 오일사용에 대한 내용",
+                  "confidence": 0.9748,
+                  "level_code": "L7",
+                  "level_name": "열거항목",
+                  "number_path": []
+                },
+                {
+                  "id": "5:26",
+                  "page": 5,
+                  "part": "제2부",
+                  "type": "item",
+                  "order": 26,
+                  "title": "-설치 시 안전공간 확보에 관한 내용",
+                  "confidence": 0.9917,
+                  "level_code": "L7",
+                  "level_name": "열거항목",
+                  "number_path": []
+                },
+                {
+                  "id": "5:27",
+                  "page": 5,
+                  "part": "제2부",
+                  "type": "item",
+                  "order": 27,
+                  "title": "- 비상착지 및 비상정지에 관한 내용",
+                  "confidence": 0.9891,
+                  "level_code": "L7",
+                  "level_name": "열거항목",
+                  "number_path": []
+                },
+                {
+                  "id": "5:28",
+                  "page": 5,
+                  "part": "제2부",
+                  "type": "section",
+                  "order": 28,
+                  "title": "충전부에 대한 감전보호",
+                  "confidence": 0.9981,
+                  "level_code": "L3",
+                  "level_name": "절",
+                  "number_path": [
+                    "8"
+                  ]
+                },
+                {
+                  "id": "6:29",
+                  "page": 6,
+                  "part": "제2부",
+                  "type": "section",
+                  "order": 29,
+                  "title": "전동기 구동기기의 기동",
+                  "confidence": 0.9981,
+                  "level_code": "L3",
+                  "level_name": "절",
+                  "number_path": [
+                    "9"
+                  ]
+                },
+                {
+                  "id": "6:30",
+                  "page": 6,
+                  "part": "제2부",
+                  "type": "section",
+                  "order": 30,
+                  "title": "입력 및 전류",
+                  "confidence": 0.9994,
+                  "level_code": "L3",
+                  "level_name": "절",
+                  "number_path": [
+                    "10"
+                  ]
+                },
+                {
+                  "id": "6:31",
+                  "page": 6,
+                  "part": "제2부",
+                  "type": "section",
+                  "order": 31,
+                  "title": "온도상승",
+                  "confidence": 0.9832,
+                  "level_code": "L3",
+                  "level_name": "절",
+                  "number_path": [
+                    "11"
+                  ]
+                },
+                {
+                  "id": "6:32",
+                  "page": 6,
+                  "part": "제2부",
+                  "type": "section",
+                  "order": 32,
+                  "title": "공란",
+                  "confidence": 0.9951,
+                  "level_code": "L3",
+                  "level_name": "절",
+                  "number_path": [
+                    "12"
+                  ]
+                },
+                {
+                  "id": "6:33",
+                  "page": 6,
+                  "part": "제2부",
+                  "type": "section",
+                  "order": 33,
+                  "title": "운전시의 누설 전류 및 절연내력",
+                  "confidence": 0.9988,
+                  "level_code": "L3",
+                  "level_name": "절",
+                  "number_path": [
+                    "13"
+                  ]
+                },
+                {
+                  "id": "6:34",
+                  "page": 6,
+                  "part": "제2부",
+                  "type": "section",
+                  "order": 34,
+                  "title": "공란",
+                  "confidence": 0.9962,
+                  "level_code": "L3",
+                  "level_name": "절",
+                  "number_path": [
+                    "14"
+                  ]
+                },
+                {
+                  "id": "6:35",
+                  "page": 6,
+                  "part": "제2부",
+                  "type": "section",
+                  "order": 35,
+                  "title": "내습성",
+                  "confidence": 0.9821,
+                  "level_code": "L3",
+                  "level_name": "절",
+                  "number_path": [
+                    "15"
+                  ]
+                },
+                {
+                  "id": "6:36",
+                  "page": 6,
+                  "part": "제2부",
+                  "type": "section",
+                  "order": 36,
+                  "title": "누설 전류 및 절연내력",
+                  "confidence": 0.9963,
+                  "level_code": "L3",
+                  "level_name": "절",
+                  "number_path": [
+                    "16"
+                  ]
+                },
+                {
+                  "id": "6:37",
+                  "page": 6,
+                  "part": "제2부",
+                  "type": "section",
+                  "order": 37,
+                  "title": "변압기 및 관련 회로의 과부하 보호",
+                  "confidence": 0.9976,
+                  "level_code": "L3",
+                  "level_name": "절",
+                  "number_path": [
+                    "17"
+                  ]
+                },
+                {
+                  "id": "6:38",
+                  "page": 6,
+                  "part": "제2부",
+                  "type": "section",
+                  "order": 38,
+                  "title": "내구성",
+                  "confidence": 0.9976,
+                  "level_code": "L3",
+                  "level_name": "절",
+                  "number_path": [
+                    "18"
+                  ]
+                },
+                {
+                  "id": "6:39",
+                  "page": 6,
+                  "part": "제2부",
+                  "type": "section",
+                  "order": 39,
+                  "title": "이상 운전",
+                  "confidence": 0.9982,
+                  "level_code": "L3",
+                  "level_name": "절",
+                  "number_path": [
+                    "19"
+                  ]
+                },
+                {
+                  "id": "7:40",
+                  "page": 7,
+                  "part": "제2부",
+                  "type": "subsection",
+                  "order": 40,
+                  "title": "추가:",
+                  "confidence": 0.9998,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "19",
+                    "7"
+                  ]
+                },
+                {
+                  "id": "7:41",
+                  "page": 7,
+                  "part": "제2부",
+                  "type": "section",
+                  "order": 41,
+                  "title": "19 (개정 대상 상위 — 베이스표준 참조)",
+                  "confidence": null,
+                  "level_code": "L3",
+                  "level_name": "절",
+                  "number_path": [
+                    "19"
+                  ]
+                },
+                {
+                  "id": "7:42",
+                  "page": 7,
+                  "part": "제2부",
+                  "type": "subsection",
+                  "order": 42,
+                  "title": "적용하지 않음.",
+                  "confidence": 0.9996,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "19",
+                    "9"
+                  ]
+                },
+                {
+                  "id": "7:43",
+                  "page": 7,
+                  "part": "제2부",
+                  "type": "subsection",
+                  "order": 43,
+                  "title": "추가:",
+                  "confidence": 0.9994,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "19",
+                    "10"
+                  ]
+                },
+                {
+                  "id": "7:44",
+                  "page": 7,
+                  "part": "제2부",
+                  "type": "section",
+                  "order": 44,
+                  "title": "안정성 및 기계적 위험",
+                  "confidence": 0.9983,
+                  "level_code": "L3",
+                  "level_name": "절",
+                  "number_path": [
+                    "20"
+                  ]
+                },
+                {
+                  "id": "7:45",
+                  "page": 7,
+                  "part": "제2부",
+                  "type": "section",
+                  "order": 45,
+                  "title": "기계적 강도",
+                  "confidence": 0.997,
+                  "level_code": "L3",
+                  "level_name": "절",
+                  "number_path": [
+                    "21"
+                  ]
+                },
+                {
+                  "id": "7:46",
+                  "page": 7,
+                  "part": "제2부",
+                  "type": "section",
+                  "order": 46,
+                  "title": "구조",
+                  "confidence": 0.9993,
+                  "level_code": "L3",
+                  "level_name": "절",
+                  "number_path": [
+                    "22"
+                  ]
+                },
+                {
+                  "id": "7:47",
+                  "page": 7,
+                  "part": "제2부",
+                  "type": "subsection",
+                  "order": 47,
+                  "title": "기기는 신체의 일부를 끌어당길 수 없는 구조이고, 움직이는 부위에 걸리지",
+                  "confidence": 0.9853,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "22",
+                    "101"
+                  ]
+                },
+                {
+                  "id": "7:48",
+                  "page": 7,
+                  "part": "제2부",
+                  "type": "subsection",
+                  "order": 48,
+                  "title": "의도되지 않은 오작동 및 비상상태에 대비하기 위하여 기기를 정지시킬 수",
+                  "confidence": 0.9899,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "22",
+                    "102"
+                  ]
+                },
+                {
+                  "id": "8:49",
+                  "page": 8,
+                  "part": "제2부",
+                  "type": "subsection",
+                  "order": 49,
+                  "title": "추가",
+                  "confidence": 0.9996,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "20",
+                    "103"
+                  ]
+                },
+                {
+                  "id": "8:50",
+                  "page": 8,
+                  "part": "제2부",
+                  "type": "section",
+                  "order": 50,
+                  "title": "20 (개정 대상 상위 — 베이스표준 참조)",
+                  "confidence": null,
+                  "level_code": "L3",
+                  "level_name": "절",
+                  "number_path": [
+                    "20"
+                  ]
+                },
+                {
+                  "id": "8:51",
+                  "page": 8,
+                  "part": "제2부",
+                  "type": "section",
+                  "order": 51,
+                  "title": "내부 배선",
+                  "confidence": 0.9991,
+                  "level_code": "L3",
+                  "level_name": "절",
+                  "number_path": [
+                    "23"
+                  ]
+                },
+                {
+                  "id": "8:52",
+                  "page": 8,
+                  "part": "제2부",
+                  "type": "section",
+                  "order": 52,
+                  "title": "부품",
+                  "confidence": 0.9972,
+                  "level_code": "L3",
+                  "level_name": "절",
+                  "number_path": [
+                    "24"
+                  ]
+                },
+                {
+                  "id": "8:53",
+                  "page": 8,
+                  "part": "제2부",
+                  "type": "section",
+                  "order": 53,
+                  "title": "전원 접속 및 외부 유연성 코드",
+                  "confidence": 0.9969,
+                  "level_code": "L3",
+                  "level_name": "절",
+                  "number_path": [
+                    "25"
+                  ]
+                },
+                {
+                  "id": "8:54",
+                  "page": 8,
+                  "part": "제2부",
+                  "type": "section",
+                  "order": 54,
+                  "title": "외부 전선용 단자",
+                  "confidence": 0.9553,
+                  "level_code": "L3",
+                  "level_name": "절",
+                  "number_path": [
+                    "26"
+                  ]
+                },
+                {
+                  "id": "8:55",
+                  "page": 8,
+                  "part": "제2부",
+                  "type": "section",
+                  "order": 55,
+                  "title": "접지 접속",
+                  "confidence": 0.9711,
+                  "level_code": "L3",
+                  "level_name": "절",
+                  "number_path": [
+                    "27"
+                  ]
+                },
+                {
+                  "id": "8:56",
+                  "page": 8,
+                  "part": "제2부",
+                  "type": "section",
+                  "order": 56,
+                  "title": "나사 및 접속",
+                  "confidence": 0.9952,
+                  "level_code": "L3",
+                  "level_name": "절",
+                  "number_path": [
+                    "28"
+                  ]
+                },
+                {
+                  "id": "8:57",
+                  "page": 8,
+                  "part": "제2부",
+                  "type": "section",
+                  "order": 57,
+                  "title": "연면거리, 공간거리 및 절연물을 통한 절연거리",
+                  "confidence": 0.9702,
+                  "level_code": "L3",
+                  "level_name": "절",
+                  "number_path": [
+                    "29"
+                  ]
+                },
+                {
+                  "id": "8:58",
+                  "page": 8,
+                  "part": "제2부",
+                  "type": "section",
+                  "order": 58,
+                  "title": "내열성, 내화성 및 내트래킹성",
+                  "confidence": 0.997,
+                  "level_code": "L3",
+                  "level_name": "절",
+                  "number_path": [
+                    "30"
+                  ]
+                },
+                {
+                  "id": "8:59",
+                  "page": 8,
+                  "part": "제2부",
+                  "type": "subsubsection",
+                  "order": 59,
+                  "title": "적용하지 않는다.",
+                  "confidence": 0.9996,
+                  "level_code": "L5",
+                  "level_name": "세부항목",
+                  "number_path": [
+                    "30",
+                    "2",
+                    "3"
+                  ]
+                },
+                {
+                  "id": "8:60",
+                  "page": 8,
+                  "part": "제2부",
+                  "type": "subsection",
+                  "order": 60,
+                  "title": "30.2 (개정 대상 상위 — 베이스표준 참조)",
+                  "confidence": null,
+                  "level_code": "L4",
+                  "level_name": "소절",
+                  "number_path": [
+                    "30",
+                    "2"
+                  ]
+                },
+                {
+                  "id": "9:61",
+                  "page": 9,
+                  "part": "제2부",
+                  "type": "section",
+                  "order": 61,
+                  "title": "내부식성",
+                  "confidence": 0.9991,
+                  "level_code": "L3",
+                  "level_name": "절",
+                  "number_path": [
+                    "31"
+                  ]
+                },
+                {
+                  "id": "9:62",
+                  "page": 9,
+                  "part": "제2부",
+                  "type": "section",
+                  "order": 62,
+                  "title": "방사선, 유독성 및 이와 유사한 위험성",
+                  "confidence": 0.9958,
+                  "level_code": "L3",
+                  "level_name": "절",
+                  "number_path": [
+                    "32"
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "page_number": 2,
+            "part_number": null,
+            "keywords": [],
+            "summary": null,
+            "hierarchy": [],
+            "n_nodes": 0,
+            "graph": null
+          },
+          {
+            "page_number": 3,
+            "part_number": null,
+            "keywords": [],
+            "summary": null,
+            "hierarchy": [],
+            "n_nodes": 0,
+            "graph": null
+          },
+          {
+            "page_number": 4,
+            "part_number": null,
+            "keywords": [],
+            "summary": null,
+            "hierarchy": [
+              {
+                "x0": 0.226,
+                "part": "제2부",
+                "text": "Safety of household and similar electrical appliances\n- Particular requirements for health appliances",
+                "type": "part",
+                "title": "제2부 : 전기헬스기구 및 이와 유사한 기기의 개별요구사항",
+                "marker": "2",
+                "confidence": 0.98,
+                "level_code": "L2",
+                "level_name": "부"
+              },
+              {
+                "x0": 0.113,
+                "part": "제2부",
+                "type": "preamble",
+                "title": "서문 이 기준의 기본 시험은 K 60335-1(가정용 및 이와 유사한 전기기기의 안전성, 제1부 : 일반 요구사항)에 따른다.",
+                "marker": "서문",
+                "confidence": 0.9892,
+                "level_code": "L1",
+                "level_name": "서문"
+              },
+              {
+                "x0": 0.114,
+                "part": "제2부",
+                "text": "제1부의 이 항목을 다음으로 대체한다:\n본 규격은 정격 전압이 단상인 경우 250 V 이하, 기타인 경우 480 V 이하인 가정용 전기헬스기구 및 이와 유사한 목적으로 사용되는 기기의 안전성에 적용한다.\n통상 가정에서 사용하지 않은 기기라도, 점포, 경공업 및 농장에서 일반인이 사용할 수 있는 것으로 일반대중에게 위험의 소지가 있는 것은 이 기준을 적용한다.\n이 규격은 가정 내 외부의 사람들이 실제 겪게 될 일반적 위험 요소를 다룬다.\n이 규격은 일반적으로 다음 사항들을 고려하지 않는다.",
+                "type": "section",
+                "title": "적용범위",
+                "marker": "1",
+                "confidence": 0.9993,
+                "level_code": "L3",
+                "level_name": "절"
+              },
+              {
+                "x0": 0.136,
+                "part": "제2부",
+                "type": "note",
+                "title": "비고1 - 이러한 기기의 예는 가정 및 헬스클럽에서 사용된다.",
+                "breadcrumb": [
+                  "1"
+                ],
+                "confidence": 0.9737,
+                "level_code": "LN",
+                "level_name": "주석"
+              },
+              {
+                "x0": 0.164,
+                "part": "제2부",
+                "type": "item",
+                "title": "-보호자가 없는 상태에서의 어린이나 환자에 의한 기기의 사용",
+                "breadcrumb": [
+                  "1"
+                ],
+                "confidence": 0.9945,
+                "level_code": "L7",
+                "level_name": "열거항목"
+              },
+              {
+                "x0": 0.165,
+                "part": "제2부",
+                "type": "item",
+                "title": "-어린이가 기기를 갖고 노는 행위",
+                "breadcrumb": [
+                  "1"
+                ],
+                "confidence": 0.9985,
+                "level_code": "L7",
+                "level_name": "열거항목"
+              },
+              {
+                "x0": 0.13,
+                "part": "제2부",
+                "type": "note",
+                "title": "비고 2 - 다음 사항에 주의하여야 한다.",
+                "breadcrumb": [
+                  "1"
+                ],
+                "confidence": 0.985,
+                "level_code": "LN",
+                "level_name": "주석"
+              },
+              {
+                "x0": 0.18,
+                "part": "제2부",
+                "type": "item",
+                "title": "-차량이나배,항공기에서사용되는기기는별도의요구사항이필요할수있다.",
+                "breadcrumb": [
+                  "1"
+                ],
+                "confidence": 0.9709,
+                "level_code": "L7",
+                "level_name": "열거항목"
+              },
+              {
+                "x0": 0.181,
+                "part": "제2부",
+                "type": "item",
+                "title": "-열대지방에서 사용하도록 제조된 기기는 별도의 요구사항이 필요할 수 있다.",
+                "breadcrumb": [
+                  "1"
+                ],
+                "confidence": 0.9937,
+                "level_code": "L7",
+                "level_name": "열거항목"
+              },
+              {
+                "x0": 0.18,
+                "part": "제2부",
+                "type": "item",
+                "title": "- 많은 나라에서는 국가 보건 관계기관, 노동안전 관계기관에 의해 요구사항을 별도로 추가 규정할 수 있다.",
+                "breadcrumb": [
+                  "1"
+                ],
+                "confidence": 0.9944,
+                "level_code": "L7",
+                "level_name": "열거항목"
+              },
+              {
+                "x0": 0.129,
+                "part": "제2부",
+                "type": "note",
+                "title": "비고 3 - 이 규격은 부식성, 폭발성의 물질(먼지, 증기, 가스)이 있는 특수 조건에서 사용하는 기기일 경우 적용하지 않는다.",
+                "breadcrumb": [
+                  "1"
+                ],
+                "confidence": 0.9918,
+                "level_code": "LN",
+                "level_name": "주석"
+              },
+              {
+                "x0": 0.114,
+                "part": "제2부",
+                "type": "section",
+                "title": "용어의 정의",
+                "marker": "2",
+                "confidence": 0.982,
+                "level_code": "L3",
+                "level_name": "절"
+              }
+            ],
+            "n_nodes": 12,
+            "graph": null
+          },
+          {
+            "page_number": 5,
+            "part_number": null,
+            "keywords": [],
+            "summary": null,
+            "hierarchy": [
+              {
+                "x0": 0.114,
+                "part": "제2부",
+                "text": "통상동작 : 기기는 무부하 최고속도로 운전한다.",
+                "type": "subsubsection",
+                "title": "대체:",
+                "marker": "2.2.9",
+                "breadcrumb": [
+                  "2",
+                  "2.2"
+                ],
+                "confidence": 0.9987,
+                "level_code": "L5",
+                "level_name": "세부항목"
+              },
+              {
+                "part": "제2부",
+                "type": "subsection",
+                "title": "2.2 (개정 대상 상위 — 베이스표준 참조)",
+                "marker": "2.2",
+                "breadcrumb": [
+                  "2"
+                ],
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "x0": 0.114,
+                "part": "제2부",
+                "text": "러닝 벨트: 걷기나 달리기를 할 수 있도록 한 방향으로 움직이는 면을 가지는 벨트",
+                "type": "subsection",
+                "title": "추가",
+                "marker": "2.101",
+                "breadcrumb": [
+                  "2"
+                ],
+                "confidence": 0.9999,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "part": "제2부",
+                "type": "section",
+                "title": "2 (개정 대상 상위 — 베이스표준 참조)",
+                "marker": "2",
+                "level_code": "L3",
+                "level_name": "절"
+              },
+              {
+                "x0": 0.114,
+                "part": "제2부",
+                "text": "제1부의 이 항목을 적용한다.",
+                "type": "section",
+                "title": "일반 요구사항",
+                "marker": "3",
+                "confidence": 0.8984,
+                "level_code": "L3",
+                "level_name": "절"
+              },
+              {
+                "x0": 0.114,
+                "part": "제2부",
+                "text": "제1부의 이 항목을 적용한다.",
+                "type": "section",
+                "title": "시험에 관한 일반 조건",
+                "marker": "4",
+                "confidence": 0.9738,
+                "level_code": "L3",
+                "level_name": "절"
+              },
+              {
+                "x0": 0.114,
+                "part": "제2부",
+                "type": "section",
+                "title": "공란",
+                "marker": "5",
+                "confidence": 0.9896,
+                "level_code": "L3",
+                "level_name": "절"
+              },
+              {
+                "x0": 0.114,
+                "part": "제2부",
+                "text": "제1부의 이 항목을 적용한다.",
+                "type": "section",
+                "title": "분류",
+                "marker": "6",
+                "confidence": 0.9982,
+                "level_code": "L3",
+                "level_name": "절"
+              },
+              {
+                "x0": 0.114,
+                "part": "제2부",
+                "text": "다음 사항을 제외하고 제1부의 항목을 적용한다.",
+                "type": "section",
+                "title": "표시 및 사용설명",
+                "marker": "7",
+                "confidence": 0.9959,
+                "level_code": "L3",
+                "level_name": "절"
+              },
+              {
+                "x0": 0.114,
+                "part": "제2부",
+                "text": "러닝벨트가 있는 기기는 최대 사용가능 체중(kg)을 표기하여야 한다.",
+                "type": "subsection",
+                "title": "추가",
+                "marker": "7.1",
+                "breadcrumb": [
+                  "7"
+                ],
+                "confidence": 0.9995,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "x0": 0.114,
+                "part": "제2부",
+                "text": "러닝 벨트가 있는 기기는 사용설명서에 다음과 항목들이 포함되어야 한다.",
+                "type": "subsection",
+                "title": "추가",
+                "marker": "7.12",
+                "breadcrumb": [
+                  "7"
+                ],
+                "confidence": 0.9991,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "x0": 0.114,
+                "part": "제2부",
+                "type": "item",
+                "title": "- 늘어지는 의류나 타월 등을 걸치고 사용하지 마시오,수건 등을 기기에 걸쳐 놓지 마시오",
+                "breadcrumb": [
+                  "7",
+                  "7.12"
+                ],
+                "confidence": 0.9862,
+                "level_code": "L7",
+                "level_name": "열거항목"
+              },
+              {
+                "x0": 0.115,
+                "part": "제2부",
+                "type": "item",
+                "title": "-주행면의 불균형을 조정하는 방법과 오일사용에 대한 내용",
+                "breadcrumb": [
+                  "7",
+                  "7.12"
+                ],
+                "confidence": 0.9748,
+                "level_code": "L7",
+                "level_name": "열거항목"
+              },
+              {
+                "x0": 0.115,
+                "part": "제2부",
+                "type": "item",
+                "title": "-설치 시 안전공간 확보에 관한 내용",
+                "breadcrumb": [
+                  "7",
+                  "7.12"
+                ],
+                "confidence": 0.9917,
+                "level_code": "L7",
+                "level_name": "열거항목"
+              },
+              {
+                "x0": 0.115,
+                "part": "제2부",
+                "type": "item",
+                "title": "- 비상착지 및 비상정지에 관한 내용",
+                "breadcrumb": [
+                  "7",
+                  "7.12"
+                ],
+                "confidence": 0.9891,
+                "level_code": "L7",
+                "level_name": "열거항목"
+              },
+              {
+                "x0": 0.114,
+                "part": "제2부",
+                "type": "section",
+                "title": "충전부에 대한 감전보호",
+                "marker": "8",
+                "confidence": 0.9981,
+                "level_code": "L3",
+                "level_name": "절"
+              }
+            ],
+            "n_nodes": 16,
+            "graph": null
+          },
+          {
+            "page_number": 6,
+            "part_number": null,
+            "keywords": [],
+            "summary": null,
+            "hierarchy": [
+              {
+                "x0": 0.114,
+                "part": "제2부",
+                "text": "제1부의 이 항목을 적용하지 않는다.",
+                "type": "section",
+                "title": "전동기 구동기기의 기동",
+                "marker": "9",
+                "confidence": 0.9981,
+                "level_code": "L3",
+                "level_name": "절"
+              },
+              {
+                "x0": 0.116,
+                "part": "제2부",
+                "text": "제1부의 이 항목을 적용한다.",
+                "type": "section",
+                "title": "입력 및 전류",
+                "marker": "10",
+                "confidence": 0.9994,
+                "level_code": "L3",
+                "level_name": "절"
+              },
+              {
+                "x0": 0.116,
+                "part": "제2부",
+                "text": "제1부의 이 항목을 적용한다.",
+                "type": "section",
+                "title": "온도상승",
+                "marker": "11",
+                "confidence": 0.9832,
+                "level_code": "L3",
+                "level_name": "절"
+              },
+              {
+                "x0": 0.116,
+                "part": "제2부",
+                "type": "section",
+                "title": "공란",
+                "marker": "12",
+                "confidence": 0.9951,
+                "level_code": "L3",
+                "level_name": "절"
+              },
+              {
+                "x0": 0.116,
+                "part": "제2부",
+                "text": "제1부의 이 항목을 적용한다.",
+                "type": "section",
+                "title": "운전시의 누설 전류 및 절연내력",
+                "marker": "13",
+                "confidence": 0.9988,
+                "level_code": "L3",
+                "level_name": "절"
+              },
+              {
+                "x0": 0.116,
+                "part": "제2부",
+                "type": "section",
+                "title": "공란",
+                "marker": "14",
+                "confidence": 0.9962,
+                "level_code": "L3",
+                "level_name": "절"
+              },
+              {
+                "x0": 0.116,
+                "part": "제2부",
+                "text": "제1부의 이 항목을 적용한다.",
+                "type": "section",
+                "title": "내습성",
+                "marker": "15",
+                "confidence": 0.9821,
+                "level_code": "L3",
+                "level_name": "절"
+              },
+              {
+                "x0": 0.116,
+                "part": "제2부",
+                "text": "제1부의 이 항목을 적용한다.",
+                "type": "section",
+                "title": "누설 전류 및 절연내력",
+                "marker": "16",
+                "confidence": 0.9963,
+                "level_code": "L3",
+                "level_name": "절"
+              },
+              {
+                "x0": 0.116,
+                "part": "제2부",
+                "text": "제1부의 이 항목을 적용한다.",
+                "type": "section",
+                "title": "변압기 및 관련 회로의 과부하 보호",
+                "marker": "17",
+                "confidence": 0.9976,
+                "level_code": "L3",
+                "level_name": "절"
+              },
+              {
+                "x0": 0.116,
+                "part": "제2부",
+                "text": "제1부의 이 항목을 적용하지 않는다.",
+                "type": "section",
+                "title": "내구성",
+                "marker": "18",
+                "confidence": 0.9976,
+                "level_code": "L3",
+                "level_name": "절"
+              },
+              {
+                "x0": 0.116,
+                "part": "제2부",
+                "type": "section",
+                "title": "이상 운전",
+                "marker": "19",
+                "confidence": 0.9982,
+                "level_code": "L3",
+                "level_name": "절"
+              }
+            ],
+            "n_nodes": 11,
+            "graph": null
+          },
+          {
+            "page_number": 7,
+            "part_number": null,
+            "keywords": [],
+            "summary": null,
+            "hierarchy": [
+              {
+                "x0": 0.115,
+                "part": "제2부",
+                "text": "사람의 발 아래에서 사용되는 기기는 온도가 포화 될 때까지 동작시킨다. 기타 기기는 30초간 동작시킨다.",
+                "type": "subsection",
+                "title": "추가:",
+                "marker": "19.7",
+                "breadcrumb": [
+                  "19"
+                ],
+                "confidence": 0.9998,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "part": "제2부",
+                "type": "section",
+                "title": "19 (개정 대상 상위 — 베이스표준 참조)",
+                "marker": "19",
+                "level_code": "L3",
+                "level_name": "절"
+              },
+              {
+                "x0": 0.115,
+                "part": "제2부",
+                "type": "subsection",
+                "title": "적용하지 않음.",
+                "marker": "19.9",
+                "breadcrumb": [
+                  "19"
+                ],
+                "confidence": 0.9996,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "x0": 0.115,
+                "part": "제2부",
+                "text": "분리할 수 있는 부분은 분리된 상태에서도 시험을 행한다.",
+                "type": "subsection",
+                "title": "추가:",
+                "marker": "19.10",
+                "breadcrumb": [
+                  "19"
+                ],
+                "confidence": 0.9994,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "x0": 0.114,
+                "part": "제2부",
+                "text": "제1부의 이 항목을 적용한다.",
+                "type": "section",
+                "title": "안정성 및 기계적 위험",
+                "marker": "20",
+                "confidence": 0.9983,
+                "level_code": "L3",
+                "level_name": "절"
+              },
+              {
+                "x0": 0.114,
+                "part": "제2부",
+                "text": "다음 사항을 제외하고 제1부의 항목을 적용한다:\n추가:\n발 밑에서 사용되는 기기는 20 cm x 30 cm의 면적에 고르게 분포된 90 kg 무게로 15 cm ± 2 cm 높이에서 10회 자유낙하 시킨다.시험후 기기는 이 규격의 적합성을 상실하는 손상이 없어야 한다.",
+                "type": "section",
+                "title": "기계적 강도",
+                "marker": "21",
+                "confidence": 0.997,
+                "level_code": "L3",
+                "level_name": "절"
+              },
+              {
+                "x0": 0.114,
+                "part": "제2부",
+                "text": "다음 사항을 제외하고 제1부의 항목을 적용한다:",
+                "type": "section",
+                "title": "구조",
+                "marker": "22",
+                "confidence": 0.9993,
+                "level_code": "L3",
+                "level_name": "절"
+              },
+              {
+                "x0": 0.114,
+                "part": "제2부",
+                "text": "기기는 신체의 일부를 끌어당길 수 없는 구조이고, 움직이는 부위에 걸리지 않는 구조이어야 한다.\n적합여부는 검사에 의해서 판정한다.",
+                "type": "subsection",
+                "title": "기기는 신체의 일부를 끌어당길 수 없는 구조이고, 움직이는 부위에 걸리지",
+                "marker": "22.101",
+                "breadcrumb": [
+                  "22"
+                ],
+                "confidence": 0.9853,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "x0": 0.113,
+                "part": "제2부",
+                "text": "의도되지 않은 오작동 및 비상상태에 대비하기 위하여 기기를 정지시킬 수 있는 장치를 가져야 한다. 스위치는 기기 사용자에 의하여 신속히 땅을 수 있는 곳에 위치하여야 하며, 장치를 동작시켰을 경우에 기기의 급제동으로 위험을 가져다 줄 경우 기기는 급제동 되지 말아야 한다.\n적합여부는 검사에 의해서 판정한다.",
+                "type": "subsection",
+                "title": "의도되지 않은 오작동 및 비상상태에 대비하기 위하여 기기를 정지시킬 수",
+                "marker": "22.102",
+                "breadcrumb": [
+                  "22"
+                ],
+                "confidence": 0.9899,
+                "level_code": "L4",
+                "level_name": "소절"
+              }
+            ],
+            "n_nodes": 9,
+            "graph": null
+          },
+          {
+            "page_number": 8,
+            "part_number": null,
+            "keywords": [],
+            "summary": null,
+            "hierarchy": [
+              {
+                "x0": 0.114,
+                "part": "제2부",
+                "text": "접을 수 있는 기기의 경우 접혀진 상태에서 기기는 동작되지 않아야 한다.\n적합여부는 검사에 의해서 판정한다.",
+                "type": "subsection",
+                "title": "추가",
+                "marker": "20.103",
+                "breadcrumb": [
+                  "20"
+                ],
+                "confidence": 0.9996,
+                "level_code": "L4",
+                "level_name": "소절"
+              },
+              {
+                "part": "제2부",
+                "type": "section",
+                "title": "20 (개정 대상 상위 — 베이스표준 참조)",
+                "marker": "20",
+                "level_code": "L3",
+                "level_name": "절"
+              },
+              {
+                "x0": 0.114,
+                "part": "제2부",
+                "text": "제1부의 이 항목을 적용한다.",
+                "type": "section",
+                "title": "내부 배선",
+                "marker": "23",
+                "confidence": 0.9991,
+                "level_code": "L3",
+                "level_name": "절"
+              },
+              {
+                "x0": 0.114,
+                "part": "제2부",
+                "text": "제1부의 이 항목을 적용한다.",
+                "type": "section",
+                "title": "부품",
+                "marker": "24",
+                "confidence": 0.9972,
+                "level_code": "L3",
+                "level_name": "절"
+              },
+              {
+                "x0": 0.114,
+                "part": "제2부",
+                "text": "제1부의 이 항목을 적용한다.",
+                "type": "section",
+                "title": "전원 접속 및 외부 유연성 코드",
+                "marker": "25",
+                "confidence": 0.9969,
+                "level_code": "L3",
+                "level_name": "절"
+              },
+              {
+                "x0": 0.114,
+                "part": "제2부",
+                "text": "제1부의 이 항목을 적용한다.",
+                "type": "section",
+                "title": "외부 전선용 단자",
+                "marker": "26",
+                "confidence": 0.9553,
+                "level_code": "L3",
+                "level_name": "절"
+              },
+              {
+                "x0": 0.114,
+                "part": "제2부",
+                "text": "제1부의 이 항목을 적용한다.",
+                "type": "section",
+                "title": "접지 접속",
+                "marker": "27",
+                "confidence": 0.9711,
+                "level_code": "L3",
+                "level_name": "절"
+              },
+              {
+                "x0": 0.114,
+                "part": "제2부",
+                "text": "제1부의 이 항목을 적용한다.",
+                "type": "section",
+                "title": "나사 및 접속",
+                "marker": "28",
+                "confidence": 0.9952,
+                "level_code": "L3",
+                "level_name": "절"
+              },
+              {
+                "x0": 0.114,
+                "part": "제2부",
+                "text": "제1부의 이 항목을 적용한다.",
+                "type": "section",
+                "title": "연면거리, 공간거리 및 절연물을 통한 절연거리",
+                "marker": "29",
+                "confidence": 0.9702,
+                "level_code": "L3",
+                "level_name": "절"
+              },
+              {
+                "x0": 0.114,
+                "part": "제2부",
+                "text": "다음 사항을 제외하고 제1부의 항목을 적용한다:",
+                "type": "section",
+                "title": "내열성, 내화성 및 내트래킹성",
+                "marker": "30",
+                "confidence": 0.997,
+                "level_code": "L3",
+                "level_name": "절"
+              },
+              {
+                "x0": 0.114,
+                "part": "제2부",
+                "type": "subsubsection",
+                "title": "적용하지 않는다.",
+                "marker": "30.2.3",
+                "breadcrumb": [
+                  "30",
+                  "30.2"
+                ],
+                "confidence": 0.9996,
+                "level_code": "L5",
+                "level_name": "세부항목"
+              },
+              {
+                "part": "제2부",
+                "type": "subsection",
+                "title": "30.2 (개정 대상 상위 — 베이스표준 참조)",
+                "marker": "30.2",
+                "breadcrumb": [
+                  "30"
+                ],
+                "level_code": "L4",
+                "level_name": "소절"
+              }
+            ],
+            "n_nodes": 12,
+            "graph": null
+          },
+          {
+            "page_number": 9,
+            "part_number": null,
+            "keywords": [],
+            "summary": null,
+            "hierarchy": [
+              {
+                "x0": 0.114,
+                "part": "제2부",
+                "text": "제1부의 이 항목을 적용한다.",
+                "type": "section",
+                "title": "내부식성",
+                "marker": "31",
+                "confidence": 0.9991,
+                "level_code": "L3",
+                "level_name": "절"
+              },
+              {
+                "x0": 0.114,
+                "part": "제2부",
+                "text": "제1부의 이 항목을 적용하지 않는다.\n부속서\n제 1부의 부속서를 적용한다.",
+                "type": "section",
+                "title": "방사선, 유독성 및 이와 유사한 위험성",
+                "marker": "32",
+                "confidence": 0.9958,
+                "level_code": "L3",
+                "level_name": "절"
+              }
+            ],
+            "n_nodes": 2,
+            "graph": null
+          }
+        ],
+        "latency_seconds": 0.00777284499599773
+      },
+      "dimension_ocr": {
+        "enabled": true,
+        "model": "dimension_ocr_model",
+        "method": "text-segment",
+        "applied_fixes": null,
+        "pages": [
+          {
+            "page_number": 1,
+            "body_html": "<div data-label=\"header\" data-bbox=\"0.4270,0.1400,0.8820,0.1570\" data-score=\"0.9875\" style=\"color:#888;font-size:0.9em;\">제정 기술표준원고시 제2008-789호(2008.11.14)</div>\n<div data-label=\"header\" data-bbox=\"0.4270,0.1620,0.8820,0.1800\" data-score=\"0.9850\" style=\"color:#888;font-size:0.9em;\">개정 기술표준원고시 제2009-837호(2009.12.15)</div>\n<div data-label=\"header\" data-bbox=\"0.4270,0.1850,0.8820,0.2020\" data-score=\"0.9827\" style=\"color:#888;font-size:0.9em;\">개정 기술표준원고시 제2013-694호(2013. 12. 11)</div>\n<div data-label=\"title\" data-bbox=\"0.3000,0.3050,0.7500,0.3460\" data-score=\"0.9767\"><h1>전기용품안전기준</h1></div>\n<div data-label=\"title\" data-bbox=\"0.6810,0.3870,0.9050,0.4230\" data-score=\"0.9999\"><h1>K 10012</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1940,0.5400,0.8270,0.5680\" data-score=\"0.9994\"><p>가정용 및 이와 유사한 전기기기의 안전성</p></div>\n<div data-label=\"text\" data-bbox=\"0.1830,0.6160,0.8370,0.6390\" data-score=\"0.9861\"><p>- 전기헬스기구 및 이와 유사한 기기의 개별요구사항</p></div>",
+            "page_visual_summary": "",
+            "element_analysis": [],
+            "unbound_visual_notes": null,
+            "table_markdown": "| 제정 | 기술표준원고시 제2008-789호(2008. 11. 14) |\n| --- | --- |\n| 개정 | 기술표준원고시 제2009-837호(2009. 12. 15) |\n| 개정 | 기술표준원고시 제2013-694호(2013. 12. 11) |",
+            "arbitrated_blocks": 0,
+            "corrected_cells": 0,
+            "format_restored_cells": 0,
+            "name_consistency": null,
+            "applied_rotation": null,
+            "applied_skew": null
+          },
+          {
+            "page_number": 2,
+            "body_html": "<div data-label=\"text\" data-bbox=\"0.3740,0.1160,0.6490,0.1310\" data-score=\"0.9977\"><p>부 칙(고시 제2013-694호, 2013.12.11)</p></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.1410,0.5340,0.1560\" data-score=\"0.9991\"><p>전기용품안전기준 K 10012는 고시한 날로부터 시행한다.</p></div>",
+            "page_visual_summary": "",
+            "element_analysis": [],
+            "unbound_visual_notes": null,
+            "table_markdown": null,
+            "arbitrated_blocks": 0,
+            "corrected_cells": 0,
+            "format_restored_cells": 0,
+            "name_consistency": null,
+            "applied_rotation": null,
+            "applied_skew": null
+          },
+          {
+            "page_number": 3,
+            "body_html": "<div data-label=\"title\" data-bbox=\"0.4020,0.1190,0.5600,0.1370\" data-score=\"0.9747\"><h1>목 차</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1380,0.1960,0.8610,0.2120\" data-score=\"0.9722\"><p>1. 적용범위 1</p></div>\n<div data-label=\"text\" data-bbox=\"0.1390,0.2150,0.8600,0.2310\" data-score=\"0.8721\"><p>2 정의 1</p></div>\n<div data-label=\"text\" data-bbox=\"0.1400,0.2340,0.8610,0.2480\" data-score=\"0.9426\"><p>3 일반 요구사항 2</p></div>\n<div data-label=\"text\" data-bbox=\"0.1400,0.2520,0.8620,0.2670\" data-score=\"0.9584\"><p>4 시험에 관한 일반 조건 2</p></div>\n<div data-label=\"text\" data-bbox=\"0.1400,0.2710,0.8620,0.2850\" data-score=\"0.9014\"><p>5 공란 2</p></div>\n<div data-label=\"text\" data-bbox=\"0.1400,0.2900,0.8620,0.3040\" data-score=\"0.9604\"><p>6 분 류 2</p></div>\n<div data-label=\"text\" data-bbox=\"0.1400,0.3080,0.8620,0.3230\" data-score=\"0.9879\"><p>7 표시 및 사용설명 2</p></div>\n<div data-label=\"text\" data-bbox=\"0.1400,0.3260,0.8620,0.3410\" data-score=\"0.9863\"><p>8 충전부에 대한 감전보호 2</p></div>\n<div data-label=\"text\" data-bbox=\"0.1400,0.3450,0.8620,0.3600\" data-score=\"0.9908\"><p>9 전동기 구동기기의 기동 2</p></div>\n<div data-label=\"text\" data-bbox=\"0.1390,0.3630,0.8620,0.3780\" data-score=\"0.9878\"><p>10 정격 입력 및 전류 2</p></div>\n<div data-label=\"text\" data-bbox=\"0.1380,0.3820,0.8620,0.3970\" data-score=\"0.9879\"><p>11 온도상승 2</p></div>\n<div data-label=\"text\" data-bbox=\"0.1380,0.4010,0.8620,0.4150\" data-score=\"0.9208\"><p>12 공란 3</p></div>\n<div data-label=\"text\" data-bbox=\"0.1380,0.4190,0.8620,0.4340\" data-score=\"0.9927\"><p>13 운전시의 누설 전류 및 절연내력 3</p></div>\n<div data-label=\"text\" data-bbox=\"0.1380,0.4380,0.8620,0.4530\" data-score=\"0.9458\"><p>14 공란 3</p></div>\n<div data-label=\"text\" data-bbox=\"0.1380,0.4560,0.8620,0.4710\" data-score=\"0.9649\"><p>15 내습성 3</p></div>\n<div data-label=\"text\" data-bbox=\"0.1380,0.4750,0.8620,0.4900\" data-score=\"0.9870\"><p>16 누설전류 및 절연내력 3</p></div>\n<div data-label=\"text\" data-bbox=\"0.1380,0.4940,0.8620,0.5080\" data-score=\"0.9954\"><p>17 변압기 및 관련 회로의 과부하 보호 3</p></div>\n<div data-label=\"text\" data-bbox=\"0.1380,0.5120,0.8620,0.5270\" data-score=\"0.8895\"><p>18 내구성.... 3</p></div>\n<div data-label=\"text\" data-bbox=\"0.1380,0.5310,0.8620,0.5450\" data-score=\"0.9713\"><p>19 이상 운전 3</p></div>\n<div data-label=\"text\" data-bbox=\"0.1380,0.5490,0.8620,0.5640\" data-score=\"0.9897\"><p>20 안정성 및 기계적 위험 3</p></div>\n<div data-label=\"text\" data-bbox=\"0.1380,0.5680,0.8620,0.5830\" data-score=\"0.8890\"><p>21 기계적 강도...... 4</p></div>\n<div data-label=\"text\" data-bbox=\"0.1380,0.5870,0.8620,0.6010\" data-score=\"0.8721\"><p>22 구 조 4</p></div>\n<div data-label=\"text\" data-bbox=\"0.1380,0.6050,0.8620,0.6200\" data-score=\"0.9868\"><p>23 내부 배선 4</p></div>\n<div data-label=\"text\" data-bbox=\"0.1380,0.6240,0.8620,0.6380\" data-score=\"0.9431\"><p>24 부품 4</p></div>\n<div data-label=\"text\" data-bbox=\"0.1380,0.6420,0.8620,0.6570\" data-score=\"0.9960\"><p>25 전원 접속 및 외부 유연성 코드 4</p></div>\n<div data-label=\"text\" data-bbox=\"0.1380,0.6610,0.8620,0.6750\" data-score=\"0.8791\"><p>26 외부 전선행 단자 4</p></div>\n<div data-label=\"text\" data-bbox=\"0.1380,0.6790,0.8620,0.6930\" data-score=\"0.9616\"><p>27 접지 접속 5</p></div>\n<div data-label=\"text\" data-bbox=\"0.1380,0.6980,0.8620,0.7120\" data-score=\"0.9725\"><p>28 나사 및 접속 5</p></div>\n<div data-label=\"text\" data-bbox=\"0.1380,0.7160,0.8620,0.7310\" data-score=\"0.9884\"><p>29 연면거리, 공간거리 및 절연물을 통한 절연거리 5</p></div>\n<div data-label=\"text\" data-bbox=\"0.1380,0.7350,0.8620,0.7500\" data-score=\"0.9917\"><p>30 내열성 내화성 및 내트래킹성 5</p></div>\n<div data-label=\"text\" data-bbox=\"0.1380,0.7540,0.8620,0.7680\" data-score=\"0.9859\"><p>31 내부식성 5</p></div>\n<div data-label=\"text\" data-bbox=\"0.1380,0.7720,0.8620,0.7870\" data-score=\"0.9373\"><p>32 방사선, 유독성 및 이와 유사한 위험성 5</p></div>\n<div data-label=\"text\" data-bbox=\"0.1200,0.8070,0.8610,0.8230\" data-score=\"0.9866\"><p>부속서 5</p></div>",
+            "page_visual_summary": "",
+            "element_analysis": [],
+            "unbound_visual_notes": null,
+            "table_markdown": null,
+            "arbitrated_blocks": 0,
+            "corrected_cells": 0,
+            "format_restored_cells": 0,
+            "name_consistency": null,
+            "applied_rotation": null,
+            "applied_skew": null
+          },
+          {
+            "page_number": 4,
+            "body_html": "<div data-label=\"title\" data-bbox=\"0.3730,0.1270,0.6460,0.1450\" data-score=\"0.9996\"><h1>전기용품안전기준(K 10012)</h1></div>\n<div data-label=\"title\" data-bbox=\"0.3120,0.1730,0.7070,0.1910\" data-score=\"0.9999\"><h1>가정용 및 이와 유사한 전기기기의 안전성</h1></div>\n<div data-label=\"title\" data-bbox=\"0.2260,0.1950,0.8060,0.2140\" data-score=\"0.9800\"><h1>제2부 : 전기헬스기구 및 이와 유사한 기기의 개별요구사항</h1></div>\n<div data-label=\"title\" data-bbox=\"0.2390,0.2420,0.7820,0.2820\" data-score=\"0.9771\"><h1>Safety of household and similar electrical appliances\n- Particular requirements for health appliances</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1130,0.3060,0.8750,0.3390\" data-score=\"0.9892\"><p>서문 이 기준의 기본 시험은 K 60335-1(가정용 및 이와 유사한 전기기기의 안전성, 제1부 : 일반 요구사항)에 따른다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1140,0.3600,0.2120,0.3760\" data-score=\"0.9993\"><h1>1. 적용범위</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.3990,0.4200,0.4130\" data-score=\"0.9995\"><p>제1부의 이 항목을 다음으로 대체한다:</p></div>\n<div data-label=\"text\" data-bbox=\"0.1140,0.4360,0.9060,0.4700\" data-score=\"0.9846\"><p>본 규격은 정격 전압이 단상인 경우 250 V 이하, 기타인 경우 480 V 이하인 가정용 전기헬스기구 및 이와 유사한 목적으로 사용되는 기기의 안전성에 적용한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1140,0.4920,0.9060,0.5260\" data-score=\"0.9992\"><p>통상 가정에서 사용하지 않은 기기라도, 점포, 경공업 및 농장에서 일반인이 사용할 수 있는 것으로 일반대중에게 위험의 소지가 있는 것은 이 기준을 적용한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1360,0.5480,0.5710,0.5620\" data-score=\"0.9737\"><p>비고1 - 이러한 기기의 예는 가정 및 헬스클럽에서 사용된다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1140,0.5850,0.7310,0.6000\" data-score=\"0.9853\"><p>이 규격은 가정 내 외부의 사람들이 실제 겪게 될 일반적 위험 요소를 다룬다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1140,0.6230,0.5450,0.6370\" data-score=\"0.9999\"><p>이 규격은 일반적으로 다음 사항들을 고려하지 않는다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1640,0.6610,0.6670,0.6750\" data-score=\"0.9945\"><p>-보호자가 없는 상태에서의 어린이나 환자에 의한 기기의 사용</p></div>\n<div data-label=\"text\" data-bbox=\"0.1650,0.6800,0.4390,0.6930\" data-score=\"0.9985\"><p>-어린이가 기기를 갖고 노는 행위</p></div>\n<div data-label=\"text\" data-bbox=\"0.1300,0.7180,0.4140,0.7310\" data-score=\"0.9850\"><p>비고 2 - 다음 사항에 주의하여야 한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1800,0.7350,0.7470,0.7480\" data-score=\"0.9709\"><p>-차량이나배,항공기에서사용되는기기는별도의요구사항이필요할수있다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1810,0.7520,0.7360,0.7650\" data-score=\"0.9937\"><p>-열대지방에서 사용하도록 제조된 기기는 별도의 요구사항이 필요할 수 있다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1800,0.7690,0.9050,0.7990\" data-score=\"0.9944\"><p>- 많은 나라에서는 국가 보건 관계기관, 노동안전 관계기관에 의해 요구사항을 별도로 추가 규정할 수 있다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1290,0.8200,0.9060,0.8510\" data-score=\"0.9918\"><p>비고 3 - 이 규격은 부식성, 폭발성의 물질(먼지, 증기, 가스)이 있는 특수 조건에서 사용하는 기기일 경우 적용하지 않는다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1140,0.8730,0.2380,0.8890\" data-score=\"0.9820\"><h1>2. 용어의 정의</h1></div>\n<div data-label=\"page_number\" data-bbox=\"0.4880,0.9380,0.5360,0.9500\" data-score=\"0.9505\" style=\"color:#888;font-size:0.9em;\">- 1 -</div>",
+            "page_visual_summary": "문서의 주요 요소는 제목과 본문의 적용범위 조항입니다. 하단에는 다른 문서의 조항을 참조하고 있다는 서문(서문 이 기준의 기본 시험은...)과 별표 주석으로 제시된 비교 1, 비교 2, 비교 3이 배치되어 있어 본문 내용을 보완하는 구조를 가지고 있습니다.",
+            "element_analysis": [],
+            "unbound_visual_notes": "문서의 주요 요소는 제목과 본문의 적용범위 조항입니다. 하단에는 다른 문서의 조항을 참조하고 있다는 서문(서문 이 기준의 기본 시험은...)과 별표 주석으로 제시된 비교 1, 비교 2, 비교 3이 배치되어 있어 본문 내용을 보완하는 구조를 가지고 있습니다.",
+            "table_markdown": null,
+            "arbitrated_blocks": 0,
+            "corrected_cells": 0,
+            "format_restored_cells": 0,
+            "name_consistency": null,
+            "applied_rotation": null,
+            "applied_skew": null
+          },
+          {
+            "page_number": 5,
+            "body_html": "<div data-label=\"text\" data-bbox=\"0.1150,0.1160,0.4950,0.1300\" data-score=\"0.9999\"><p>다음 사항을 제외하고 제1부의 항목을 적용한다:</p></div>\n<div data-label=\"text\" data-bbox=\"0.1140,0.1540,0.2020,0.1680\" data-score=\"0.9987\"><p>2.2.9 대체:</p></div>\n<div data-label=\"text\" data-bbox=\"0.1140,0.1910,0.4950,0.2060\" data-score=\"0.9795\"><p>통상동작 : 기기는 무부하 최고속도로 운전한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1140,0.2300,0.2060,0.2440\" data-score=\"0.9999\"><p>2.101 추가</p></div>\n<div data-label=\"text\" data-bbox=\"0.1140,0.2670,0.7610,0.2820\" data-score=\"0.9891\"><p>러닝 벨트: 걷기나 달리기를 할 수 있도록 한 방향으로 움직이는 면을 가지는 벨트</p></div>\n<div data-label=\"title\" data-bbox=\"0.1140,0.3050,0.2570,0.3200\" data-score=\"0.8984\"><h1>3.일반 요구사항</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.3430,0.3430,0.3580\" data-score=\"0.9997\"><p>제1부의 이 항목을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1140,0.3810,0.3270,0.3960\" data-score=\"0.9738\"><h1>4. 시험에 관한 일반 조건</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.4190,0.3430,0.4340\" data-score=\"0.9997\"><p>제1부의 이 항목을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1140,0.4570,0.1780,0.4720\" data-score=\"0.9896\"><h1>5. 공란</h1></div>\n<div data-label=\"title\" data-bbox=\"0.1140,0.4950,0.1780,0.5100\" data-score=\"0.9982\"><h1>6. 분류</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.5330,0.3430,0.5480\" data-score=\"0.9997\"><p>제1부의 이 항목을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1140,0.5710,0.2820,0.5860\" data-score=\"0.9959\"><h1>7. 표시 및 사용설명</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1140,0.6090,0.4950,0.6240\" data-score=\"1.0000\"><p>다음 사항을 제외하고 제1부의 항목을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1140,0.6470,0.1840,0.6620\" data-score=\"0.9995\"><h1>7.1 추가</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1140,0.6850,0.6490,0.7000\" data-score=\"0.9986\"><p>러닝벨트가 있는 기기는 최대 사용가능 체중(kg)을 표기하여야 한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1140,0.7230,0.1920,0.7370\" data-score=\"0.9991\"><h1>7.12 추가</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1140,0.7610,0.6960,0.7760\" data-score=\"0.9976\"><p>러닝 벨트가 있는 기기는 사용설명서에 다음과 항목들이 포함되어야 한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1140,0.7800,0.8310,0.7950\" data-score=\"0.9862\"><p>- 늘어지는 의류나 타월 등을 걸치고 사용하지 마시오,수건 등을 기기에 걸쳐 놓지 마시오</p></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.7990,0.5910,0.8140\" data-score=\"0.9748\"><p>-주행면의 불균형을 조정하는 방법과 오일사용에 대한 내용</p></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.8180,0.4150,0.8330\" data-score=\"0.9917\"><p>-설치 시 안전공간 확보에 관한 내용</p></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.8370,0.4060,0.8520\" data-score=\"0.9891\"><p>- 비상착지 및 비상정지에 관한 내용</p></div>\n<div data-label=\"title\" data-bbox=\"0.1140,0.8750,0.3360,0.8900\" data-score=\"0.9981\"><h1>8. 충전부에 대한 감전보호</h1></div>\n<div data-label=\"page_number\" data-bbox=\"0.4890,0.9370,0.5360,0.9500\" data-score=\"0.8086\" style=\"color:#888;font-size:0.9em;\">-2-</div>",
+            "page_visual_summary": "문서의 상단부에는 '2.2.9 대체' 및 '2.101 추가'와 같은 번호가 매겨진 소제목들이 텍스트 형식으로 나열되어 있으며, 하단부에는 '3. 일반 요구사항', '4. 시험에 관한 일반 조건', '5. 공란', '6. 분류', '7. 표시 및 사용설명', '8. 충전부에 대한 감전보호'와 같이 굵은 글씨체로 강조된 주요 섹션 제목들이 수직으로 배치되어 있습니다.",
+            "element_analysis": [],
+            "unbound_visual_notes": "문서의 상단부에는 '2.2.9 대체' 및 '2.101 추가'와 같은 번호가 매겨진 소제목들이 텍스트 형식으로 나열되어 있으며, 하단부에는 '3. 일반 요구사항', '4. 시험에 관한 일반 조건', '5. 공란', '6. 분류', '7. 표시 및 사용설명', '8. 충전부에 대한 감전보호'와 같이 굵은 글씨체로 강조된 주요 섹션 제목들이 수직으로 배치되어 있습니다.",
+            "table_markdown": null,
+            "arbitrated_blocks": 0,
+            "corrected_cells": 0,
+            "format_restored_cells": 0,
+            "name_consistency": null,
+            "applied_rotation": null,
+            "applied_skew": null
+          },
+          {
+            "page_number": 6,
+            "body_html": "<div data-label=\"text\" data-bbox=\"0.1160,0.1350,0.3420,0.1490\" data-score=\"0.9997\"><p>제1부의 이 항목을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1140,0.1730,0.3350,0.1880\" data-score=\"0.9981\"><h1>9. 전동기 구동기기의 기동</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1160,0.2110,0.4010,0.2250\" data-score=\"0.9996\"><p>제1부의 이 항목을 적용하지 않는다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1160,0.2490,0.2570,0.2630\" data-score=\"0.9994\"><h1>10. 입력 및 전류</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1160,0.2870,0.3420,0.3010\" data-score=\"0.9997\"><p>제1부의 이 항목을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1160,0.3250,0.2220,0.3390\" data-score=\"0.9832\"><h1>11. 온도상승</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1160,0.3620,0.3420,0.3770\" data-score=\"0.9997\"><p>제1부의 이 항목을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1160,0.4200,0.1870,0.4340\" data-score=\"0.9951\"><h1>12. 공란</h1></div>\n<div data-label=\"title\" data-bbox=\"0.1160,0.4570,0.4140,0.4720\" data-score=\"0.9988\"><h1>13. 운전시의 누설 전류 및 절연내력</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1160,0.4960,0.3420,0.5100\" data-score=\"0.9997\"><p>제1부의 이 항목을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1160,0.5340,0.1870,0.5480\" data-score=\"0.9962\"><h1>14. 공란</h1></div>\n<div data-label=\"title\" data-bbox=\"0.1160,0.5720,0.2030,0.5860\" data-score=\"0.9821\"><h1>15. 내습성</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1160,0.6100,0.3420,0.6240\" data-score=\"0.9997\"><p>제1부의 이 항목을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1160,0.6470,0.3340,0.6620\" data-score=\"0.9963\"><h1>16. 누설 전류 및 절연내력</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1160,0.6860,0.3420,0.7000\" data-score=\"0.9997\"><p>제1부의 이 항목을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1160,0.7230,0.4400,0.7380\" data-score=\"0.9976\"><h1>17. 변압기 및 관련 회로의 과부하 보호</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1160,0.7610,0.3420,0.7750\" data-score=\"0.9996\"><p>제1부의 이 항목을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1160,0.8000,0.2030,0.8140\" data-score=\"0.9976\"><h1>18. 내구성</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1160,0.8370,0.4010,0.8510\" data-score=\"0.9995\"><p>제1부의 이 항목을 적용하지 않는다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1160,0.8750,0.2300,0.8900\" data-score=\"0.9982\"><h1>19. 이상 운전</h1></div>\n<div data-label=\"page_number\" data-bbox=\"0.4890,0.9380,0.5360,0.9500\" data-score=\"0.9645\" style=\"color:#888;font-size:0.9em;\">- 3 -</div>",
+            "page_visual_summary": "",
+            "element_analysis": [],
+            "unbound_visual_notes": null,
+            "table_markdown": null,
+            "arbitrated_blocks": 0,
+            "corrected_cells": 0,
+            "format_restored_cells": 0,
+            "name_consistency": null,
+            "applied_rotation": null,
+            "applied_skew": null
+          },
+          {
+            "page_number": 7,
+            "body_html": "<div data-label=\"text\" data-bbox=\"0.1140,0.1350,0.4950,0.1490\" data-score=\"0.9999\"><p>다음 사항을 제외하고 제1부의 항목을 적용한다:</p></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.1730,0.1970,0.1870\" data-score=\"0.9998\"><p>19.7 추가:</p></div>\n<div data-label=\"text\" data-bbox=\"0.1140,0.2110,0.9050,0.2450\" data-score=\"0.9923\"><p>사람의 발 아래에서 사용되는 기기는 온도가 포화 될 때까지 동작시킨다. 기타 기기는 30초간 동작시킨다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.2680,0.2700,0.2830\" data-score=\"0.9996\"><p>19.9 적용하지 않음.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.3060,0.2040,0.3200\" data-score=\"0.9994\"><p>19.10 추가:</p></div>\n<div data-label=\"text\" data-bbox=\"0.1140,0.3430,0.5760,0.3580\" data-score=\"0.9996\"><p>분리할 수 있는 부분은 분리된 상태에서도 시험을 행한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1140,0.3810,0.3350,0.3960\" data-score=\"0.9983\"><h1>20. 안정성 및 기계적 위험</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.4190,0.3420,0.4340\" data-score=\"0.9997\"><p>제1부의 이 항목을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1140,0.4570,0.2480,0.4720\" data-score=\"0.9970\"><h1>21. 기계적 강도</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.4960,0.4950,0.5100\" data-score=\"0.9999\"><p>다음 사항을 제외하고 제1부의 항목을 적용한다:</p></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.5330,0.1590,0.5470\" data-score=\"0.9999\"><p>추가:</p></div>\n<div data-label=\"text\" data-bbox=\"0.1140,0.5720,0.9060,0.6050\" data-score=\"0.9853\"><p>발 밑에서 사용되는 기기는 20 cm x 30 cm의 면적에 고르게 분포된 90 kg 무게로 15 cm ± 2 cm 높이에서 10회 자유낙하 시킨다.시험후 기기는 이 규격의 적합성을 상실하는 손상이 없어야 한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1140,0.6290,0.1870,0.6430\" data-score=\"0.9993\"><h1>22. 구조</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1140,0.6670,0.4950,0.6810\" data-score=\"0.9999\"><p>다음 사항을 제외하고 제1부의 항목을 적용한다:</p></div>\n<div data-label=\"text\" data-bbox=\"0.1140,0.7040,0.9050,0.7370\" data-score=\"0.9853\"><p>22.101 기기는 신체의 일부를 끌어당길 수 없는 구조이고, 움직이는 부위에 걸리지 않는 구조이어야 한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.7610,0.4010,0.7760\" data-score=\"0.9999\"><p>적합여부는 검사에 의해서 판정한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1130,0.7990,0.9050,0.8520\" data-score=\"0.9899\"><p>22.102 의도되지 않은 오작동 및 비상상태에 대비하기 위하여 기기를 정지시킬 수 있는 장치를 가져야 한다. 스위치는 기기 사용자에 의하여 신속히 땅을 수 있는 곳에 위치하여야 하며, 장치를 동작시켰을 경우에 기기의 급제동으로 위험을 가져다 줄 경우 기기는 급제동 되지 말아야 한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.8750,0.4010,0.8900\" data-score=\"0.9999\"><p>적합여부는 검사에 의해서 판정한다.</p></div>\n<div data-label=\"page_number\" data-bbox=\"0.4890,0.9380,0.5360,0.9500\" data-score=\"0.9385\" style=\"color:#888;font-size:0.9em;\">- 4 -</div>",
+            "page_visual_summary": "",
+            "element_analysis": [],
+            "unbound_visual_notes": null,
+            "table_markdown": null,
+            "arbitrated_blocks": 0,
+            "corrected_cells": 0,
+            "format_restored_cells": 0,
+            "name_consistency": null,
+            "applied_rotation": null,
+            "applied_skew": null
+          },
+          {
+            "page_number": 8,
+            "body_html": "<div data-label=\"text\" data-bbox=\"0.1140,0.1350,0.2080,0.1480\" data-score=\"0.9996\"><p>20.103 추가</p></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.1720,0.6950,0.1870\" data-score=\"0.9996\"><p>접을 수 있는 기기의 경우 접혀진 상태에서 기기는 동작되지 않아야 한다.</p></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.2110,0.4010,0.2250\" data-score=\"0.9997\"><p>적합여부는 검사에 의해서 판정한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1140,0.2480,0.2310,0.2630\" data-score=\"0.9991\"><h1>23. 내부 배선</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.2870,0.3420,0.3010\" data-score=\"0.9997\"><p>제1부의 이 항목을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1140,0.3250,0.1860,0.3390\" data-score=\"0.9972\"><h1>24. 부품</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.3620,0.3420,0.3760\" data-score=\"0.9996\"><p>제1부의 이 항목을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1140,0.4010,0.4050,0.4150\" data-score=\"0.9969\"><h1>25. 전원 접속 및 외부 유연성 코드</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.4390,0.3420,0.4530\" data-score=\"0.9996\"><p>제1부의 이 항목을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1140,0.4770,0.2920,0.4910\" data-score=\"0.9553\"><h1>26. 외부 전선용 단자</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.5150,0.3420,0.5290\" data-score=\"0.9997\"><p>제1부의 이 항목을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1140,0.5530,0.2310,0.5670\" data-score=\"0.9711\"><h1>27. 접지 접속</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.5910,0.3420,0.6050\" data-score=\"0.9996\"><p>제1부의 이 항목을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1140,0.6290,0.2560,0.6430\" data-score=\"0.9952\"><h1>28. 나사 및 접속</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.6670,0.3420,0.6810\" data-score=\"0.9996\"><p>제1부의 이 항목을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1140,0.7040,0.5320,0.7190\" data-score=\"0.9702\"><h1>29. 연면거리, 공간거리 및 절연물을 통한 절연거리</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.7430,0.3420,0.7570\" data-score=\"0.9997\"><p>제1부의 이 항목을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1140,0.7800,0.3920,0.7950\" data-score=\"0.9970\"><h1>30. 내열성, 내화성 및 내트래킹성</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.8180,0.4940,0.8330\" data-score=\"0.9999\"><p>다음 사항을 제외하고 제1부의 항목을 적용한다:</p></div>\n<div data-label=\"text\" data-bbox=\"0.1140,0.8570,0.3000,0.8710\" data-score=\"0.9996\"><p>30.2.3 적용하지 않는다.</p></div>\n<div data-label=\"page_number\" data-bbox=\"0.4890,0.9380,0.5360,0.9500\" data-score=\"0.9718\" style=\"color:#888;font-size:0.9em;\">- 5 -</div>",
+            "page_visual_summary": "이 페이지는 문서의 주요 내용을 나열한 목록 구조를 보여줍니다. 각 항목은 번호(예: 23, 24)와 해당 제목(예: 내부 배선, 부품)으로 구성된 굵은 글씨의 헤더 섹션과, 그 바로 아래에 위치한 본문 설명으로 구성됩니다.",
+            "element_analysis": [],
+            "unbound_visual_notes": "이 페이지는 문서의 주요 내용을 나열한 목록 구조를 보여줍니다. 각 항목은 번호(예: 23, 24)와 해당 제목(예: 내부 배선, 부품)으로 구성된 굵은 글씨의 헤더 섹션과, 그 바로 아래에 위치한 본문 설명으로 구성됩니다.",
+            "table_markdown": null,
+            "arbitrated_blocks": 0,
+            "corrected_cells": 0,
+            "format_restored_cells": 0,
+            "name_consistency": null,
+            "applied_rotation": null,
+            "applied_skew": null
+          },
+          {
+            "page_number": 9,
+            "body_html": "<div data-label=\"title\" data-bbox=\"0.1140,0.1160,0.2210,0.1300\" data-score=\"0.9991\"><h1>31. 내부식성</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.1540,0.3440,0.1680\" data-score=\"0.9997\"><p>제1부의 이 항목을 적용한다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.1140,0.1920,0.4630,0.2060\" data-score=\"0.9958\"><h1>32. 방사선, 유독성 및 이와 유사한 위험성</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.2290,0.4010,0.2440\" data-score=\"0.9995\"><p>제1부의 이 항목을 적용하지 않는다.</p></div>\n<div data-label=\"title\" data-bbox=\"0.4840,0.3240,0.5360,0.3380\" data-score=\"1.0000\"><h1>부속서</h1></div>\n<div data-label=\"text\" data-bbox=\"0.1150,0.3630,0.3440,0.3770\" data-score=\"0.9989\"><p>제 1부의 부속서를 적용한다.</p></div>\n<div data-label=\"page_number\" data-bbox=\"0.4890,0.9380,0.5370,0.9510\" data-score=\"0.7906\" style=\"color:#888;font-size:0.9em;\">-6-</div>",
+            "page_visual_summary": "",
+            "element_analysis": [],
+            "unbound_visual_notes": null,
+            "table_markdown": null,
+            "arbitrated_blocks": 0,
+            "corrected_cells": 0,
+            "format_restored_cells": 0,
+            "name_consistency": null,
+            "applied_rotation": null,
+            "applied_skew": null
+          }
+        ]
+      },
+      "page_classifier": null
+    },
+    "latency_seconds": 5.219373,
+    "parsing_cost": 0.28048
+  },
+  "error_message": null
+}
