@@ -18,7 +18,9 @@
     "embed": "tsx scripts/embed-clauses.ts",
     "search": "tsx scripts/search.ts",
     "eval": "tsx scripts/eval.ts",
-    "codebook:emit": "tsx codebook/scripts/emit-codebook-sql.ts"
+    "codebook:emit": "tsx codebook/scripts/emit-codebook-sql.ts",
+    "standards:sync": "tsx scripts/sync-standards.ts",
+    "cases:load": "tsx scripts/load-cases.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.58.0",
