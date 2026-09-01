@@ -20,7 +20,8 @@
     "eval": "tsx scripts/eval.ts",
     "codebook:emit": "tsx codebook/scripts/emit-codebook-sql.ts",
     "standards:sync": "tsx scripts/sync-standards.ts",
-    "cases:load": "cross-env NODE_OPTIONS=--use-system-ca tsx scripts/load-cases.ts"
+    "cases:load": "cross-env NODE_OPTIONS=--use-system-ca tsx scripts/load-cases.ts",
+    "standards:roles": "tsx scripts/backfill-roles.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.58.0",

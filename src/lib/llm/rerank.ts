@@ -24,7 +24,8 @@
  *   0C 에서 켜고 비교한다. match_run.use_rerank 스위치가 그 실험을 위한 것이다.
  */
 
-import { structuredCall } from './client';
+import { structuredCall, type ReasoningEffort } from './client';
+import { openaiConfig } from '../env';
 
 export interface RerankCandidate {
   clauseId: number;
@@ -110,19 +111,21 @@ export async function rerankCandidates(
     .filter(Boolean)
     .join('\n');
 
+  // 리랭킹은 분석 1회에 후보 20건 — 건수가 적고 담당자가 화면 앞에서 기다린다.
+  // 태깅과 달리 비용보다 품질·지연이 중요하므로 상위 모델을 쓰되 사고 강도는 낮춘다.
   const res = await structuredCall<{ scores: RerankScore[] }>({
     model,
     system: SYSTEM,
     user,
     schemaName: 'rerank_scores',
     schema,
-    temperature: 0,
+    effort: openaiConfig().rerankEffort as ReasoningEffort,
   });
 
   // 스키마를 통과했더라도 한 번 더 거른다. enum 이 뚫리는 일은 없어야 하지만,
   // "후보를 새로 만들지 못한다"는 규칙은 두 겹으로 지킨다.
   const allowed = new Set(allowedIds);
-  return res.scores
+  return res.value.scores
     .filter((s) => allowed.has(s.clause_id))
     .map((s) => ({ ...s, relevance: Math.min(1, Math.max(0, s.relevance)) }));
 }

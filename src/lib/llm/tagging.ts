@@ -17,8 +17,8 @@
  *     두 값이 엇갈리는 구간(자신 있다는데 답이 흔들림)이 가장 위험하다(§10 11번).
  */
 
-import { structuredCall } from './client';
-import { optionalNumber, tuning } from '../env';
+import { structuredCall, type ReasoningEffort } from './client';
+import { openaiConfig, tuning } from '../env';
 
 // ---------------------------------------------------------------------------
 // 코드북 스냅샷 — 프롬프트의 enum 재료
@@ -149,14 +149,28 @@ ${MSHELL_PRIORITY}`;
 // ---------------------------------------------------------------------------
 
 export interface TagResult {
-  /** 다수결로 확정된 출력 */
+  /** 최종 확정된 출력. 승격됐으면 상위 모델의 답, 아니면 1차 다수결 */
   output: TaggingOutput;
-  /** 같은 입력 반복 호출에서 같은 코드가 나온 비율 (§5.2.3) */
+  /** 1차 반복 호출의 일치도 (§5.2.3). 승격 여부와 무관하게 1차 값을 남긴다 */
   agreementScore: number;
-  /** 실제 호출 횟수 — 위험 기반 재호출이면 건마다 다르다 */
+  /** 총 호출 횟수 (1차 반복 + 승격 1회) */
   callCount: number;
   /** 모든 호출의 원응답. 실행 매니페스트에 남긴다 */
   attempts: TaggingOutput[];
+  /** 최종 답을 낸 모델. clause_tag.tagging_model 에 저장한다 */
+  model: string;
+  /** 상위 모델로 승격됐는가 */
+  escalated: boolean;
+  /**
+   * 승격한 상위 모델이 1차 다수결과 다른 답을 냈는가.
+   *
+   * §5.2.3 이 "가장 위험한 구간"이라 부른 자리다. 싼 모델이 흔들렸고 비싼 모델도
+   * 다른 답을 냈다면, 그 조항은 코드 체계로 깔끔히 표현되지 않는다는 뜻일 수 있다.
+   * 검수 대기열의 맨 앞에 놓아야 하고, 반복되면 코드 체계 개선 신호로 본다.
+   */
+  escalationDisagreed: boolean;
+  /** 누적 토큰 — 비용 실측용 */
+  usage: { inputTokens: number; outputTokens: number; reasoningTokens: number };
 }
 
 /** 코드 집합의 일치도 — 반복 호출이 같은 답을 냈는가 */
@@ -180,54 +194,94 @@ function majority(attempts: TaggingOutput[]): TaggingOutput {
 }
 
 /**
- * 반복 호출 정책
+ * 2단 태깅 — 싼 모델을 여러 번, 흔들린 것만 비싼 모델로
  *
- * v0.6 §4.3 은 조항 태깅에 3~5회 반복을 권했다.
- * v0.7 §0.4 는 "비용이 크고 반복 일치도가 정확도 보증은 아니다. 위험 기반 재호출이
- * 적절하다"며 축소를 지시했다.
+ * v0.6 §4.3 은 3~5회 반복을, v0.7 §0.4 는 "비용이 크다"며 축소를 지시했다.
+ * 둘 다 "반복 = 비싸다"를 전제하는데, 실측하니 그 전제가 지금 모델 가격에서는
+ * 성립하지 않는다.
  *
- * 그래서 기본은 1회로 두고, 자기보고 확신도가 임계값 아래일 때만 더 부른다.
- * 임계값을 1.0 으로 올리면 v0.6 처럼 전건 반복이 되므로 두 방식을 모두 실험할 수 있다.
+ *   프롬프트 2,500토큰 실측 기준 (조항 1건당)
+ *     Luna  3회  $0.00222
+ *     Terra 1회  $0.00740      ← 싼 모델 세 번이 비싼 모델 한 번보다 3.3배 싸다
+ *
+ * 그래서 반복을 줄이는 대신 **반복을 싼 모델로 옮긴다**. 이렇게 하면
+ * §5.2.3 이 "검수 정렬의 주 지표"라 한 반복 일치도를 포기하지 않아도 된다.
+ *
+ * 왜 자기보고 확신도로 승격하지 않는가
+ *   §5.2.3 이 명시한다 — "LLM 이 스스로 매긴 확신도는 실제 정확도와 어긋나는
+ *   경향이 있다. 틀린 답에도 0.9 를 주는 경우가 흔하다."
+ *   1차를 1회만 부르면 쓸 수 있는 신호가 그 못 믿을 자기보고뿐이다.
+ *   3회 부르면 일치도라는 믿을 만한 신호가 생기고, 그게 승격 기준이 된다.
  */
-function repeatPolicy() {
-  return {
-    maxCalls: tuning().repeatCount,
-    /** 이 값 미만이면 재호출한다. 1.0 이면 전건 반복(v0.6 방식) */
-    recallBelow: optionalNumber('TAGGING_RECALL_BELOW_CONFIDENCE', 0.85),
-  };
-}
-
 async function runTagging(
   system: string,
   user: string,
   snapshot: CodebookSnapshot,
-  model: string,
 ): Promise<TagResult> {
   const schema = buildSchema(snapshot);
-  const policy = repeatPolicy();
-  const attempts: TaggingOutput[] = [];
+  const cfg = openaiConfig();
+  const t = tuning();
 
-  for (let i = 0; i < Math.max(1, policy.maxCalls); i++) {
-    const out = await structuredCall<TaggingOutput>({
+  const attempts: TaggingOutput[] = [];
+  const usage = { inputTokens: 0, outputTokens: 0, reasoningTokens: 0 };
+
+  const call = async (model: string, effort: string) => {
+    const r = await structuredCall<TaggingOutput>({
       model,
       system,
       user,
       schemaName: 'hazard_tagging',
       schema,
-      // 1회차는 결정론적으로, 반복분은 흔들어야 일치도가 의미를 갖는다(§5.2.3)
-      temperature: i === 0 ? 0 : 0.7,
+      effort: effort as ReasoningEffort,
     });
-    attempts.push(out);
+    usage.inputTokens += r.usage.inputTokens;
+    usage.outputTokens += r.usage.outputTokens;
+    usage.reasoningTokens += r.usage.reasoningTokens;
+    return r.value;
+  };
 
-    // 첫 답이 충분히 확신하면 더 부르지 않는다 (v0.7 §0.4 위험 기반 재호출)
-    if (i === 0 && out.confidence_score >= policy.recallBelow) break;
+  // 1차 — 싼 모델을 반복해 일치도를 얻는다.
+  // temperature 를 못 쓰지만 GPT-5.6 은 기본이 비결정적이라 반복만으로 흔들린다.
+  for (let i = 0; i < Math.max(1, t.bulkRepeat); i++) {
+    attempts.push(await call(cfg.bulkModel, cfg.bulkEffort));
   }
 
+  const bulkAgreement = agreementOf(attempts);
+  const bulkMajority = majority(attempts);
+
+  // 2차 — 답이 흔들린 건만 상위 모델에 다시 묻는다
+  if (bulkAgreement >= t.escalateBelowAgreement) {
+    return {
+      output: bulkMajority,
+      agreementScore: bulkAgreement,
+      callCount: attempts.length,
+      attempts,
+      model: cfg.bulkModel,
+      escalated: false,
+      escalationDisagreed: false,
+      usage,
+    };
+  }
+
+  const escalated = await call(cfg.escalateModel, cfg.escalateEffort);
+  attempts.push(escalated);
+
+  const sameAsBulk =
+    escalated.hf_primary === bulkMajority.hf_primary &&
+    escalated.dt_primary === bulkMajority.dt_primary;
+
   return {
-    output: majority(attempts),
-    agreementScore: agreementOf(attempts),
+    // 상위 모델의 답을 채택한다. 1차가 흔들렸다는 것 자체가 1차를 못 믿을 이유다.
+    output: escalated,
+    // 저장하는 일치도는 1차 값이다 — 이 조항이 얼마나 애매한지를 나타내는 수치이고,
+    // 승격했다고 해서 애매함이 사라지는 것은 아니다.
+    agreementScore: bulkAgreement,
     callCount: attempts.length,
     attempts,
+    model: cfg.escalateModel,
+    escalated: true,
+    escalationDisagreed: !sameAsBulk,
+    usage,
   };
 }
 
@@ -235,7 +289,6 @@ async function runTagging(
 export function tagClause(
   clause: { contextHeader: string; marker: string; body: string; testConditions?: string[] },
   snapshot: CodebookSnapshot,
-  model: string,
 ): Promise<TagResult> {
   const user = [
     '[위해요인(HF) 코드 목록]',
@@ -253,14 +306,13 @@ export function tagClause(
     .filter(Boolean)
     .join('\n');
 
-  return runTagging(SYSTEM_CLAUSE, user, snapshot, model);
+  return runTagging(SYSTEM_CLAUSE, user, snapshot);
 }
 
 /** L2 — 사고·국내리콜 코드화 */
 export function tagCase(
   event: { itemName: string | null; title: string | null; narrative: string },
   snapshot: CodebookSnapshot,
-  model: string,
 ): Promise<TagResult> {
   const user = [
     '[위해요인(HF) 코드 목록]',
@@ -277,7 +329,7 @@ export function tagCase(
     .filter(Boolean)
     .join('\n');
 
-  return runTagging(SYSTEM_CASE, user, snapshot, model);
+  return runTagging(SYSTEM_CASE, user, snapshot);
 }
 
 /** 태깅 결과를 clause_tag / case_tag 행 모양으로 편다 (축별 행 — v0.7 §5.2) */
