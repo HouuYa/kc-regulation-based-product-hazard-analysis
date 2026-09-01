@@ -13,6 +13,7 @@
 
 import type { TransactionSql } from 'postgres';
 import type { ParsedStandard } from './types';
+import { classifyClause } from './clause-role';
 
 /**
  * 조각에 붙일 머리말 (§5.2.4 맥락 결합)
@@ -63,6 +64,15 @@ export async function insertParsedStandard(
     returning id
   `;
 
+  // 최상위 절의 제목을 먼저 모은다. 하위 조항은 이 제목으로 역할을 물려받는다 —
+  // "3.3 가량이 벨트 …를 말한다"는 그 자체로는 애매하지만 "3 용어의 정의" 아래면
+  // 확실히 정의다(v0.7 §5.3).
+  const rootTitle = new Map<string, string>();
+  for (const c of p.clauses) {
+    if (c.marker.includes('.')) continue;
+    rootTitle.set(`${c.part ?? ''}|${c.marker}`, c.title_raw?.trim() || c.body.slice(0, 30));
+  }
+
   // 조항 — id 를 돌려받아야 연결과 시험조건을 붙일 수 있다
   const clauseRows = p.clauses.map((c) => ({
     standard_id: std.id,
@@ -72,6 +82,10 @@ export async function insertParsedStandard(
     level_code: c.level_code,
     level_name: c.level_name,
     clause_type: c.clause_type,
+    clause_role: classifyClause({
+      levelCode: c.level_code,
+      rootTitle: rootTitle.get(`${c.part ?? ''}|${c.marker.split('.')[0]}`) ?? null,
+    }),
     title_raw: c.title_raw,
     body: c.body,
     page_no: c.page_no,
@@ -84,7 +98,7 @@ export async function insertParsedStandard(
     insert into public.clause ${tx(
       clauseRows as never,
       'standard_id', 'marker', 'part', 'breadcrumb_path', 'level_code', 'level_name',
-      'clause_type', 'title_raw', 'body', 'page_no', 'parse_confidence',
+      'clause_type', 'clause_role', 'title_raw', 'body', 'page_no', 'parse_confidence',
       'order_index', 'context_header',
     )}
     returning id, marker, part

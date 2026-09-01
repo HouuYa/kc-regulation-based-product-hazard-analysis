@@ -12,8 +12,9 @@
  */
 
 import { getDb, closeDb } from '../src/lib/db';
+import { standardsForCase } from '../src/lib/cases/resolve-scope';
 import {
-  searchCandidates, diagnoseEmpty, persistRun,
+  searchCandidates, diagnoseEmpty, persistRun, isCauseUnresolved,
   type MatchConfig, type MatchInput, type Candidate,
 } from '../src/lib/search/match';
 import { rerankCandidates } from '../src/lib/llm/rerank';
@@ -44,13 +45,9 @@ async function loadCase(caseId: number): Promise<MatchInput> {
     where case_id = ${caseId} and review_status <> 'rejected'
   `;
 
-  // 품목으로 적용 기준을 좁힌다 (v0.7 §3.2 — 범위를 먼저 확정한 뒤 검색)
-  const standards = ev.item_name
-    ? await db<{ id: number }[]>`
-        select id from public.standard
-        where is_current and item_name = ${ev.item_name}
-      `
-    : [];
+  // 품목으로 적용 기준을 좁힌다 (v0.7 §3.2 — 범위를 먼저 확정한 뒤 검색).
+  // 등록된 품목이면 부속서+공통안전기준 세트를, 전기용품이면 적용범위 원문 검색 결과를 쓴다.
+  const standardIds = await standardsForCase(caseId);
 
   return {
     caseId: ev.id,
@@ -60,7 +57,7 @@ async function loadCase(caseId: number): Promise<MatchInput> {
     dtCodes: tags.filter((t) => t.axis === 'DT').map((t) => t.code),
     keywords: ev.keywords ?? [],
     embedding: ev.embedding ? JSON.parse(ev.embedding) : null,
-    standardIds: standards.length ? standards.map((s) => s.id) : null,
+    standardIds: standardIds.length ? standardIds : null,
   };
 }
 
@@ -118,6 +115,8 @@ async function main() {
   console.log(`적용 기준 : ${input.standardIds?.length ?? 0}건`);
   console.log(`갈래      : 코드=${config.useCode} 키워드=${config.useKeyword} 의미=${config.useVector} 리랭킹=${config.useRerank}`);
 
+  const causeUnresolved = isCauseUnresolved(input.hfCodes);
+
   // v0.7 §3.2: 품목이 불명확하면 전 품목 검색을 자동 실행하지 않는다
   if (!input.standardIds?.length) {
     console.log('');
@@ -161,6 +160,14 @@ async function main() {
     console.log('검색 0건 자체를 기준 사각지대로 집계하지 않습니다(v0.7 §7.8).');
     console.log('전문가가 조항 부재 신호로 확인한 건만 정책 신호에 포함합니다.');
   } else {
+    if (causeUnresolved) {
+      // v0.7 §7.3 — 결과(DT)만으로 특정 시험을 단정하지 않는다
+      console.log('※ 이 사건은 원인(HF)이 확정되지 않았습니다.');
+      console.log('  조사에서 결함이 확인되지 않았거나 원인 서술이 없는 경우입니다.');
+      console.log('  아래 후보는 피해유형·어휘·의미만으로 넓게 건진 것이므로, 코드 근거가 없습니다.');
+      console.log('  특정 시험을 단정하지 말고 담당자가 직접 검토해 주세요.');
+      console.log('');
+    }
     console.log(`관련될 수 있는 조항 ${candidates.length}건 — 확인을 권고합니다.`);
     candidates.slice(0, SHORTLIST).forEach((c, i) => render(c, i + 1));
     if (candidates.length > SHORTLIST) {
