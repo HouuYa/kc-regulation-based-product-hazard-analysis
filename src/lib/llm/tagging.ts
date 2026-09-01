@@ -62,21 +62,63 @@ export interface TaggingOutput {
   chunk_summary: string;
   confidence_score: number;
   evidence_span: string;
+  /** 사건 코드화에만 있다 — 사고경위 원문 인용 */
+  incident_summary?: string;
+  /** 사건 코드화에만 있다 — 원인 서술 원문 인용. 없으면 빈 문자열 */
+  stated_cause?: string;
 }
 
-function buildSchema(snapshot: CodebookSnapshot): Record<string, unknown> {
+/**
+ * @param withIncidentFields 사건 코드화용 필드를 넣는다.
+ *
+ * 왜 사건에만 넣는가 (실측으로 확인한 문제)
+ *   사고조사보고서는 표·목차·시험절차가 뒤섞인 1만 자 넘는 문서다. 그 안에
+ *   "가열식 가습기의 물 부족시 자동 전원 차단 기능 미작동으로 화재 발생" 같은
+ *   한 줄이 묻혀 있는데, 코드만 물었더니 5건 모두 HF.UNKNOWN 이 나왔다.
+ *   원인이 없어서가 아니라 못 찾은 것이다.
+ *
+ *   그래서 코드를 고르기 전에 사고경위와 원인 서술을 **먼저 인용하게** 만든다.
+ *   인용을 required 로 두면 모델이 그 구절을 찾아 읽어야만 스키마를 채울 수 있다.
+ *   부수적으로 설계문서 §8.1 이 화면에 보이라고 한 "자동 추출된 항목과 근거 위치"가
+ *   그대로 생긴다.
+ */
+function buildSchema(
+  snapshot: CodebookSnapshot,
+  withIncidentFields = false,
+): Record<string, unknown> {
   const hfCodes = snapshot.hf.map((o) => o.code);
   const dtCodes = snapshot.dt.map((o) => o.code);
+
+  const incidentProps = withIncidentFields
+    ? {
+        incident_summary: {
+          type: 'string',
+          description:
+            '사고경위를 원문에서 그대로 인용한다. "사고경위", "사고 개요", "결함조사" 같은 ' +
+            '항목 뒤의 서술을 찾는다. 목차나 조사 절차 설명이 아니라 실제로 무슨 일이 ' +
+            '있었는지를 적은 문장이어야 한다.',
+        },
+        stated_cause: {
+          type: 'string',
+          description:
+            '원인이 서술돼 있으면 그 구절을 원문에서 그대로 인용한다. ' +
+            '"…미작동으로 화재 발생", "…결함으로 인한" 같은 서술이 해당한다. ' +
+            '시험 결과 결함이 확인되지 않았거나 원인 서술이 없으면 빈 문자열로 둔다.',
+        },
+      }
+    : {};
 
   return {
     type: 'object',
     additionalProperties: false,
     // 전부 required — 요약만 쓰고 근거를 빠뜨리는 일을 구조로 막는다(§5.2.2)
     required: [
+      ...(withIncidentFields ? ['incident_summary', 'stated_cause'] : []),
       'hf_primary', 'hf_secondary', 'dt_primary', 'dt_secondary',
       'keywords', 'chunk_summary', 'confidence_score', 'evidence_span',
     ],
     properties: {
+      ...incidentProps,
       // 주된 위해요인 1개 필수 (PDR §4.3)
       hf_primary: { type: 'string', enum: hfCodes },
       hf_secondary: { type: 'array', items: { type: 'string', enum: hfCodes } },
@@ -141,6 +183,15 @@ const SYSTEM_CASE = `당신은 제품 사고·리콜 서술문에 2차원 위해
   원인이 서술되어 있지 않으면 HF 는 미확인 코드를 쓰고 confidence_score 를 낮춘다.
 - 원인(HF)과 결과(DT)를 구분한다. "화재가 났다"는 결과이고, 원인은 배터리·과열 같은 것이다.
 - 사용자 오용 코드(HF.L0/L1)는 단독으로 쓰지 않는다. 쓸 경우 설계·품질관리 코드를 함께 낸다.
+
+순서를 지킨다
+- 코드를 고르기 전에 incident_summary 와 stated_cause 를 먼저 채운다.
+  사고조사보고서는 표·목차·시험절차가 뒤섞여 있어 실제 사고 서술이 묻히기 쉽다.
+  "사고경위", "사고 개요", "결함조사", "사고원인" 항목 뒤의 문장을 찾아 인용한다.
+- 그 인용에 근거해 코드를 정한다. stated_cause 가 비어 있을 때만 HF.UNKNOWN 을 쓴다.
+  원인이 적혀 있는데 UNKNOWN 을 쓰면 안 된다.
+- 시험 결과 결함이 확인되지 않았다면(예: "발화 및 폭발이 발생되지 않음")
+  stated_cause 를 비우고 HF.UNKNOWN 을 쓰는 것이 맞다.
 
 ${MSHELL_PRIORITY}`;
 
@@ -217,8 +268,9 @@ async function runTagging(
   system: string,
   user: string,
   snapshot: CodebookSnapshot,
+  withIncidentFields = false,
 ): Promise<TagResult> {
-  const schema = buildSchema(snapshot);
+  const schema = buildSchema(snapshot, withIncidentFields);
   const cfg = openaiConfig();
   const t = tuning();
 
@@ -329,7 +381,7 @@ export function tagCase(
     .filter(Boolean)
     .join('\n');
 
-  return runTagging(SYSTEM_CASE, user, snapshot);
+  return runTagging(SYSTEM_CASE, user, snapshot, true);
 }
 
 /** 태깅 결과를 clause_tag / case_tag 행 모양으로 편다 (축별 행 — v0.7 §5.2) */

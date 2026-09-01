@@ -91,6 +91,25 @@ export interface MatchOutcome {
 }
 
 /**
+ * 원인(HF)이 확정되지 않은 사건인가 (v0.7 §7.3)
+ *
+ *   "HF 가 없고 DT 만 있는 사건은 결과만으로 특정 시험을 단정하지 않고
+ *    폭넓은 후보 또는 수동검토로 보낸다."
+ *
+ * 실물에서 자주 나온다. 사고조사보고서 5건 중 5건이 HF.UNKNOWN 이었는데,
+ * 모델이 못 찾아서가 아니라 조사 자체가 결함을 확인하지 못했기 때문이다
+ * (예: "제품 시험(이상운전) 결과 모두 안전기준에 적합", "특이사항을 식별하지 못함").
+ *
+ * 이때 코드 갈래는 근거가 될 수 없다. HF.UNKNOWN 은 "원인이 이것"이 아니라
+ * "원인을 모른다"는 뜻이므로, 그것으로 조항을 좁히면 근거 없는 좁히기가 된다.
+ * 화면과 CLI 가 이 사실을 담당자에게 알려야 한다.
+ */
+export function isCauseUnresolved(hfCodes: string[]): boolean {
+  const meaningful = hfCodes.filter((c) => c && c !== 'HF.UNKNOWN');
+  return meaningful.length === 0;
+}
+
+/**
  * 증거수준 판정 (v0.7 §7.7)
  *
  * A  품목·기준 확정 + 검수 태그 일치 + 조항관계 검수완료 → 구조화 근거 강함

@@ -1,0 +1,292 @@
+/**
+ * §5.8 정확도 비교표 — 0단계의 목적 그 자체
+ *
+ *   npm run eval                    정답셋으로 5개 구성을 비교
+ *   npm run eval -- --case 4        한 사건만
+ *   npm run eval -- --k 5           상위 k건 기준 (기본 5)
+ *
+ * 설계문서 §5.8 이 채우라고 한 표를 만든다.
+ *
+ *   구성                        재현율   오탐률   상위k 정답포함률
+ *   ① 코드만
+ *   ①+② 코드+키워드
+ *   ①+②+③ 하이브리드
+ *   + 맥락 결합
+ *   + 리랭킹
+ *
+ * "각 행을 하나씩 켜면서 측정 — 한꺼번에 다 켜면 무엇이 효과를 냈는지 알 수 없다."
+ *
+ * 정답셋을 어디서 가져오는가 — v0.6 과 v0.7 이 갈리는 지점
+ *   v0.6 §5.8 은 "정답지는 별도로 만들지 않음. 담당자가 실제로 채택·반려한
+ *   기록(review_log)이 그대로 정답지가 된다"고 했다.
+ *   v0.7 §0.2 는 이것을 "평가 설계 오류"로 지목했다 — 시스템이 제시한 후보를 보고
+ *   담당자가 고른 기록은, 시스템이 애초에 제시하지 않은 조항을 정답에 포함할 수
+ *   없다. 재현율의 분모가 시스템 출력에 의존하므로 재현율이 늘 부풀려진다.
+ *
+ *   그래서 두 경로를 모두 지원하되 기본은 v0.7 을 따른다.
+ *     --source expert  docs/eval/answer-key.json (전문가가 시스템 결과 보기 전에 작성)
+ *     --source review  review_log (운영 로그. 사후 개선용이며 정확도 근거로 쓰지 않는다)
+ *   review 로 낸 수치에는 경고를 붙여 출력한다.
+ */
+
+import { readFileSync, existsSync } from 'node:fs';
+import { join } from 'node:path';
+import { getDb, closeDb } from '../src/lib/db';
+import { standardsForCase } from '../src/lib/cases/resolve-scope';
+import { searchCandidates, type MatchConfig, type MatchInput } from '../src/lib/search/match';
+import { rerankCandidates } from '../src/lib/llm/rerank';
+import { openaiConfig, tuning } from '../src/lib/env';
+
+const ANSWER_KEY = join(import.meta.dirname, '..', 'docs', 'eval', 'answer-key.json');
+
+function argValue(name: string): string | null {
+  const i = process.argv.indexOf(name);
+  return i >= 0 ? (process.argv[i + 1] ?? null) : null;
+}
+
+/**
+ * 전문가 정답셋 형식.
+ *
+ * 담당자가 시스템 결과를 보기 전에 "이 사고면 어느 조항의 시험을 의뢰하겠는가"를
+ * 적어 둔 것이다. 조항은 (기준 표시명, 조항번호)로 지목한다 — clause id 는
+ * 재적재하면 바뀌므로 정답셋에 넣으면 안 된다.
+ */
+interface AnswerKey {
+  cases: Array<{
+    caseId: number;
+    note?: string;
+    expected: Array<{ standard: string; marker: string; part?: string }>;
+  }>;
+}
+
+interface Metrics {
+  label: string;
+  recall: number;
+  falsePositiveRate: number;
+  hitAtK: number;
+  returned: number;
+  expected: number;
+  found: number;
+}
+
+/** §5.8 이 켜라고 한 순서대로. 앞 행에서 한 갈래씩만 더한다 */
+function configs(base: MatchConfig): Array<{ label: string; config: MatchConfig }> {
+  return [
+    { label: '① 코드만', config: { ...base, useCode: true, useKeyword: false, useVector: false, useRerank: false } },
+    { label: '①+② 코드+어휘', config: { ...base, useCode: true, useKeyword: true, useVector: false, useRerank: false } },
+    { label: '①+②+③ 하이브리드', config: { ...base, useCode: true, useKeyword: true, useVector: true, useRerank: false } },
+    { label: '+ 리랭킹', config: { ...base, useCode: true, useKeyword: true, useVector: true, useRerank: true } },
+  ];
+}
+
+async function loadCase(caseId: number): Promise<MatchInput> {
+  const db = getDb();
+  const [ev] = await db<{
+    id: number; item_name: string | null; narrative: string;
+    keywords: string[]; embedding: string | null;
+  }[]>`
+    select id, item_name, narrative, keywords, embedding::text
+    from public.case_event where id = ${caseId}
+  `;
+  if (!ev) throw new Error(`사건 ${caseId} 이 없습니다.`);
+
+  const tags = await db<{ axis: string; code: string }[]>`
+    select axis, code from public.case_tag
+    where case_id = ${caseId} and review_status <> 'rejected'
+  `;
+  const standardIds = await standardsForCase(caseId);
+
+  return {
+    caseId: ev.id,
+    itemName: ev.item_name,
+    narrative: ev.narrative,
+    hfCodes: tags.filter((t) => t.axis === 'HF').map((t) => t.code),
+    dtCodes: tags.filter((t) => t.axis === 'DT').map((t) => t.code),
+    keywords: ev.keywords ?? [],
+    embedding: ev.embedding ? JSON.parse(ev.embedding) : null,
+    standardIds: standardIds.length ? standardIds : null,
+  };
+}
+
+/** 정답셋의 (기준명, 조항번호)를 실제 clause id 로 옮긴다 */
+async function resolveExpected(
+  expected: Array<{ standard: string; marker: string; part?: string }>,
+): Promise<Set<number>> {
+  const db = getDb();
+  const ids = new Set<number>();
+  for (const e of expected) {
+    const rows = await db<{ id: number }[]>`
+      select c.id from public.clause c
+      join public.standard s on s.id = c.standard_id
+      where s.is_current
+        and s.display_name ilike ${'%' + e.standard + '%'}
+        and c.marker = ${e.marker}
+        ${e.part ? db`and c.part = ${e.part}` : db``}
+    `;
+    if (rows.length === 0) {
+      console.warn(`  경고: 정답 조항을 찾지 못했습니다 — ${e.standard} ${e.marker}`);
+    }
+    for (const r of rows) ids.add(r.id);
+  }
+  return ids;
+}
+
+function measure(
+  label: string,
+  returned: number[],
+  expected: Set<number>,
+  k: number,
+): Metrics {
+  const found = returned.filter((id) => expected.has(id)).length;
+  const inTopK = returned.slice(0, k).filter((id) => expected.has(id)).length;
+  return {
+    label,
+    // 재현율 — 담당자가 실제 의뢰했을 시험 중 시스템이 제시한 비율
+    recall: expected.size ? found / expected.size : 0,
+    // 오탐률 — 제시했으나 정답이 아닌 비율. 이게 급증하면 담당자가 목록을 안 믿는다
+    falsePositiveRate: returned.length ? (returned.length - found) / returned.length : 0,
+    // 상위 k건 내 정답 포함률 — 리랭킹의 효과가 가장 잘 드러나는 지표
+    hitAtK: expected.size ? inTopK / Math.min(k, expected.size) : 0,
+    returned: returned.length,
+    expected: expected.size,
+    found,
+  };
+}
+
+async function runCase(
+  caseId: number,
+  expected: Set<number>,
+  k: number,
+  base: MatchConfig,
+): Promise<Metrics[]> {
+  const input = await loadCase(caseId);
+  if (!input.standardIds?.length) {
+    console.warn(`  사건 ${caseId}: 품목에 대응하는 기준을 찾지 못해 건너뜁니다(SCOPE_UNRESOLVED).`);
+    return [];
+  }
+
+  const out: Metrics[] = [];
+  for (const { label, config } of configs(base)) {
+    let candidates = await searchCandidates(input, config);
+
+    if (config.useRerank && candidates.length > 1) {
+      const cfg = openaiConfig();
+      const scores = await rerankCandidates(
+        { itemName: input.itemName, narrative: input.narrative, hfCodes: input.hfCodes, dtCodes: input.dtCodes },
+        candidates.map((c) => ({
+          clauseId: c.clauseId, marker: c.marker,
+          contextHeader: c.contextHeader, body: c.body, testConditions: c.testConditions,
+        })),
+        cfg.rerankModel,
+      );
+      const byId = new Map(scores.map((s) => [s.clause_id, s]));
+      candidates = [...candidates].sort(
+        (a, b) => (byId.get(b.clauseId)?.relevance ?? -1) - (byId.get(a.clauseId)?.relevance ?? -1),
+      );
+    }
+
+    out.push(measure(label, candidates.map((c) => c.clauseId), expected, k));
+  }
+  return out;
+}
+
+function printTable(rows: Metrics[]) {
+  const pct = (n: number) => `${(n * 100).toFixed(1)}%`;
+  console.log('');
+  console.log('구성                    재현율    오탐률   상위k포함률   제시  정답  적중');
+  console.log('─'.repeat(76));
+  for (const r of rows) {
+    console.log(
+      r.label.padEnd(22),
+      pct(r.recall).padStart(6),
+      pct(r.falsePositiveRate).padStart(8),
+      pct(r.hitAtK).padStart(11),
+      String(r.returned).padStart(6),
+      String(r.expected).padStart(5),
+      String(r.found).padStart(5),
+    );
+  }
+}
+
+/** 여러 사건의 지표를 구성별로 평균한다 */
+function average(all: Metrics[][]): Metrics[] {
+  if (all.length === 0) return [];
+  const n = all.length;
+  return all[0].map((_, i) => {
+    const group = all.map((m) => m[i]);
+    return {
+      label: group[0].label,
+      recall: group.reduce((s, m) => s + m.recall, 0) / n,
+      falsePositiveRate: group.reduce((s, m) => s + m.falsePositiveRate, 0) / n,
+      hitAtK: group.reduce((s, m) => s + m.hitAtK, 0) / n,
+      returned: Math.round(group.reduce((s, m) => s + m.returned, 0) / n),
+      expected: Math.round(group.reduce((s, m) => s + m.expected, 0) / n),
+      found: Math.round(group.reduce((s, m) => s + m.found, 0) / n),
+    };
+  });
+}
+
+async function main() {
+  const k = Number(argValue('--k') ?? '5');
+  const onlyCase = argValue('--case') ? Number(argValue('--case')) : null;
+  const t = tuning();
+
+  const base: MatchConfig = {
+    useCode: true, useKeyword: true, useVector: true, useRerank: false,
+    candidateCount: Number(argValue('--candidates') ?? '20'),
+    rrfK: t.rrfK, wCode: t.weightCode, wCodePartial: t.weightCodePartial,
+  };
+
+  if (!existsSync(ANSWER_KEY)) {
+    console.log('전문가 정답셋이 없습니다:', ANSWER_KEY);
+    console.log('');
+    console.log('§5.8 의 수치를 내려면 담당자가 시스템 결과를 보기 전에 작성한 정답셋이');
+    console.log('있어야 합니다. v0.7 §0.2 는 시스템 결과를 본 뒤의 검토 기록(review_log)을');
+    console.log('정답지로 쓰는 것을 평가 설계 오류로 지목했습니다 — 시스템이 제시하지 않은');
+    console.log('조항은 정답에 들어갈 수 없어 재현율이 늘 부풀려지기 때문입니다.');
+    console.log('');
+    console.log('docs/eval/answer-key.example.json 을 복사해 answer-key.json 으로 채우세요.');
+    process.exitCode = 1;
+    return;
+  }
+
+  const key = JSON.parse(readFileSync(ANSWER_KEY, 'utf8')) as AnswerKey;
+  const targets = onlyCase ? key.cases.filter((c) => c.caseId === onlyCase) : key.cases;
+  if (targets.length === 0) throw new Error('정답셋에 해당 사건이 없습니다.');
+
+  console.log(`정답셋 ${targets.length}건 · 상위 ${k}건 기준`);
+  console.log(`갈래별 후보 수 ${base.candidateCount} · RRF k=${base.rrfK} · 코드가산 ${base.wCode}`);
+
+  const all: Metrics[][] = [];
+  for (const c of targets) {
+    console.log(`\n[사건 ${c.caseId}] ${c.note ?? ''}`);
+    const expected = await resolveExpected(c.expected);
+    const rows = await runCase(c.caseId, expected, k, base);
+    if (rows.length === 0) continue;
+    printTable(rows);
+    all.push(rows);
+  }
+
+  if (all.length > 1) {
+    console.log(`\n\n=== ${all.length}건 평균 ===`);
+    printTable(average(all));
+  }
+
+  console.log('');
+  console.log('판단 기준 (§5.8)');
+  console.log('  재현율이 크게 오르면서 오탐률이 감당할 수준이면 채택합니다.');
+  console.log('  오탐이 급증하면 담당자가 목록을 신뢰하지 않게 되므로 재현율만 보고 정하지 않습니다.');
+  console.log('  리랭킹은 후보를 늘리지 않으므로 재현율은 그대로이고 상위k포함률만 좋아지는 것이 정상입니다.');
+  if (all.length < 20) {
+    console.log('');
+    console.log(`주의: 사건 ${all.length}건은 통계적 확정이 아니라 예비 관찰입니다(v0.7 §12.3).`);
+    console.log('      0B 는 주요 위해유형을 포함한 20~30건 이상을 권고합니다.');
+  }
+}
+
+main()
+  .catch((e) => {
+    console.error('실패:', e instanceof Error ? e.message : e);
+    process.exitCode = 1;
+  })
+  .finally(closeDb);
