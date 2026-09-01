@@ -17,7 +17,7 @@
     "tag": "cross-env NODE_OPTIONS=--use-system-ca tsx scripts/tag-clauses.ts",
     "embed": "cross-env NODE_OPTIONS=--use-system-ca tsx scripts/embed-clauses.ts",
     "search": "cross-env NODE_OPTIONS=--use-system-ca tsx scripts/search.ts",
-    "eval": "tsx scripts/eval.ts",
+    "eval": "cross-env NODE_OPTIONS=--use-system-ca tsx scripts/eval.ts",
     "codebook:emit": "tsx codebook/scripts/emit-codebook-sql.ts",
     "standards:sync": "tsx scripts/sync-standards.ts",
     "cases:load": "cross-env NODE_OPTIONS=--use-system-ca tsx scripts/load-cases.ts",

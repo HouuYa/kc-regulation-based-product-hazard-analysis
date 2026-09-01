@@ -71,7 +71,9 @@ async function withGeneralPart(standardIds: number[]): Promise<number[]> {
     where is_current
       and regexp_replace(display_name, '^[^0-9]*', '') = any (${[...wanted]}::text[])
   `;
-  return [...new Set([...standardIds, ...parts.map((p) => p.id)])];
+  // Number() 로 맞춰 둔다. postgres.js 가 bigint 를 문자열로 주므로 숫자와 문자열이
+  // 섞이면 같은 기준이 Set 안에 두 번 들어간다.
+  return [...new Set([...standardIds.map(Number), ...parts.map((p) => Number(p.id))])];
 }
 
 export async function resolveProductScope(itemName: string): Promise<ResolvedScope | null> {
@@ -160,7 +162,7 @@ export async function standardsForCase(caseId: number): Promise<number[]> {
       join public.standard s on s.id = a.standard_id
       where a.product_scope_id = ${ev.product_scope_id} and s.is_current
     `;
-    return withGeneralPart(rows.map((r) => r.id));
+    return withGeneralPart(rows.map((r) => Number(r.id)));
   }
 
   // 품목이 등록되지 않은 전기용품 등 — 적용범위 검색으로 그때그때 찾는다

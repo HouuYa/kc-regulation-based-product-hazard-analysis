@@ -199,7 +199,10 @@ export async function searchCandidates(
   `;
 
   return rows.map((r) => ({
-    clauseId: r.clause_id,
+    // postgres.js 는 bigint 를 문자열로 돌려준다. 타입 선언이 number 라 컴파일러가
+    // 잡아 주지 못하고, 조용히 틀린다 — 리랭커 점수를 clauseId 로 되찾을 때
+    // 숫자 키와 문자열 키가 어긋나 전부 못 찾는 식이다. 경계에서 한 번 씻어 낸다.
+    clauseId: Number(r.clause_id),
     marker: r.marker,
     part: r.part,
     breadcrumbPath: r.breadcrumb_path,
@@ -213,7 +216,7 @@ export async function searchCandidates(
     rankVector: r.rank_vector,
     // SQL 은 snake_case 로 돌려주므로 여기서 한 번만 바꾼다
     testMethods: (r.test_methods ?? []).map((t) => ({
-      clauseId: t.clause_id,
+      clauseId: t.clause_id == null ? null : Number(t.clause_id),
       marker: t.marker,
       body: t.body,
       evidence: t.evidence,

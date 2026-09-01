@@ -65,7 +65,11 @@ export async function rerankCandidates(
 ): Promise<RerankScore[]> {
   if (candidates.length === 0) return [];
 
-  const allowedIds = candidates.map((c) => c.clauseId);
+  // Number() 로 한 번 씻어 낸다. postgres.js 는 bigint 컬럼을 문자열로 돌려주는데,
+  // 그대로 enum 에 넣으면 OpenAI 가 거절한다 —
+  //   enum value 6070 does not validate against {'type': 'integer'}
+  // 타입 선언상으로는 number 라 컴파일러가 잡아 주지 못하는 자리다.
+  const allowedIds = candidates.map((c) => Number(c.clauseId));
 
   const schema = {
     type: 'object',

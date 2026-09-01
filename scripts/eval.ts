@@ -126,7 +126,9 @@ async function resolveExpected(
     if (rows.length === 0) {
       console.warn(`  경고: 정답 조항을 찾지 못했습니다 — ${e.standard} ${e.marker}`);
     }
-    for (const r of rows) ids.add(r.id);
+    // postgres.js 는 bigint 를 문자열로 준다. 후보 쪽 clauseId 는 숫자이므로
+    // 여기서 씻지 않으면 Set 대조가 전부 빗나가 재현율이 늘 0 으로 나온다.
+    for (const r of rows) ids.add(Number(r.id));
   }
   return ids;
 }
