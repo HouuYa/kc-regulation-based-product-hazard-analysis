@@ -4,9 +4,9 @@
   "private": true,
   "description": "KC안전기준 기반 제품위해 심층분석 체계 — 0단계(개념검증)",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
+    "dev": "cross-env NODE_OPTIONS=--use-system-ca next dev",
+    "build": "cross-env NODE_OPTIONS=--use-system-ca next build",
+    "start": "cross-env NODE_OPTIONS=--use-system-ca next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
     "db:push": "tsx scripts/db-push.ts",
@@ -14,13 +14,13 @@
     "codebook:inspect": "tsx codebook/scripts/inspect-codebook.ts",
     "standards:inspect": "tsx scripts/inspect-standards.ts",
     "standards:load": "tsx scripts/load-standards.ts",
-    "tag": "tsx scripts/tag-clauses.ts",
-    "embed": "tsx scripts/embed-clauses.ts",
-    "search": "tsx scripts/search.ts",
+    "tag": "cross-env NODE_OPTIONS=--use-system-ca tsx scripts/tag-clauses.ts",
+    "embed": "cross-env NODE_OPTIONS=--use-system-ca tsx scripts/embed-clauses.ts",
+    "search": "cross-env NODE_OPTIONS=--use-system-ca tsx scripts/search.ts",
     "eval": "tsx scripts/eval.ts",
     "codebook:emit": "tsx codebook/scripts/emit-codebook-sql.ts",
     "standards:sync": "tsx scripts/sync-standards.ts",
-    "cases:load": "tsx scripts/load-cases.ts"
+    "cases:load": "cross-env NODE_OPTIONS=--use-system-ca tsx scripts/load-cases.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.58.0",
@@ -37,6 +37,7 @@
     "@types/node": "^22.10.0",
     "@types/react": "^19.1.0",
     "@types/react-dom": "^19.1.0",
+    "cross-env": "^10.1.0",
     "dotenv": "^17.2.0",
     "tailwindcss": "^4.1.0",
     "tsx": "^4.20.0",

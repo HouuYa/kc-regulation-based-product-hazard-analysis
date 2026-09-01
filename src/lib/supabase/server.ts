@@ -31,10 +31,28 @@ export function getStorageClient(): SupabaseClient {
 }
 
 /**
+ * 파일명에서 확장자만 안전하게 뽑는다. 확장자는 거의 항상 ASCII(pdf, md, json)라
+ * 키에 넣어도 안전하다. 못 뽑으면 빈 문자열 — 확장자 없이 저장된다.
+ */
+function safeExt(filename: string): string {
+  const m = /\.([A-Za-z0-9]{1,8})$/.exec(filename);
+  return m ? `.${m[1].toLowerCase()}` : '';
+}
+
+/**
  * 원본 파일을 보관한다.
  *
- * 경로에 내용 해시를 넣는다. 같은 파일을 다시 올려도 같은 자리에 놓이므로
- * 사본이 늘지 않고, 파일명이 바뀌어도 같은 내용임을 알 수 있다.
+ * 경로에는 내용 해시만 쓰고 원본 파일명은 넣지 않는다.
+ *
+ *   실제로 겪은 문제: 사고조사보고서 파일명이 전부 한글이라
+ *   ("가습기 사고조사 보고서_비식별화_f.pdf") 경로에 그대로 넣었더니
+ *   Supabase Storage 가 "Invalid key" 로 5건 전부 거부했다. 특수문자(★, 괄호,
+ *   공백) 때문이 아니라 **한글 자체**가 원인이었다 — 한글만 남긴 키("가습기.txt")도
+ *   똑같이 거부됐다. Storage 키는 안전한 ASCII 만 허용한다.
+ *
+ *   사람이 읽는 파일명은 이미 source_file.filename 컬럼에 그대로 저장돼 있으므로
+ *   키에서 빼도 잃는 정보가 없다. 해시가 이미 유일성을 보장하고, 확장자만
+ *   붙여 두면 다운로드했을 때 어떤 파일인지는 여전히 알 수 있다.
  */
 export async function putOriginal(
   kind: 'accident' | 'codebook' | 'standard',
@@ -43,7 +61,7 @@ export async function putOriginal(
   body: Uint8Array | Blob,
   contentType: string,
 ): Promise<string> {
-  const path = `${kind}/${sha256.slice(0, 2)}/${sha256}/${filename}`;
+  const path = `${kind}/${sha256.slice(0, 2)}/${sha256}${safeExt(filename)}`;
   const { error } = await getStorageClient()
     .storage.from(ORIGINAL_BUCKET)
     .upload(path, body, { contentType, upsert: true });

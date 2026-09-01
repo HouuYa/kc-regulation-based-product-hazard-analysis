@@ -53,7 +53,10 @@ async function loadOne(filename: string, force: boolean): Promise<string> {
   let storagePath: string | null = null;
   try {
     storagePath = await putOriginal('accident', sha256, filename, bytes, 'application/pdf');
-  } catch {
+  } catch (e) {
+    // 조용히 넘어가되 원인은 남긴다 — 예전에 이 자리가 완전히 침묵해서
+    // "Invalid key"(한글 파일명) 버그를 한참 찾아야 했다.
+    console.warn(`  경고: 원본 보관 실패 (${filename}): ${e instanceof Error ? e.message : e}`);
     storagePath = null;
   }
 

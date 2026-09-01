@@ -54,7 +54,8 @@ export async function uploadAccidentPdfs(formData: FormData): Promise<void> {
       let storagePath: string | null = null;
       try {
         storagePath = await putOriginal('accident', sha256, file.name, bytes, 'application/pdf');
-      } catch {
+      } catch (e) {
+        console.warn(`원본 보관 실패 (${file.name}): ${e instanceof Error ? e.message : e}`);
         storagePath = null;
       }
 
