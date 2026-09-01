@@ -60,7 +60,10 @@ export function classifyRootTitle(rawTitle: string | null | undefined): ClauseRo
   if (/^인용표준|^관련표준|^참고문헌|^인용규격/.test(t)) return 'REFERENCE';
   if (/^용어(의|와)?정의|^정의$/.test(t)) return 'DEFINITION';
   if (/시험방법|검사방법|^시험에관한|^시험$|^검사$/.test(t)) return 'TEST_METHOD';
-  if (/^표시사항|^표시$|^사용설명서|^경고문/.test(t)) return 'MARKING';
+  // "표시 및 사용설명서"(IEC 60335 제7절 Marking and instructions)처럼 묶인 제목이
+  // 실제 기준에 더 많다. 이 형태를 빼 두었더니 같은 성격의 절이 기준마다 다르게
+  // 분류됐다 — "표시사항"은 MARKING 28건, "표시 및 사용설명서"는 REQUIREMENT 14건.
+  if (/^표시사항|^표시$|^표시및|^사용설명서|^경고문|^주의사항/.test(t)) return 'MARKING';
   if (/^부록|^부속서|^별표|^참고$/.test(t)) return 'ANNEX';
   if (/^공란$|^서문|^머리말/.test(t)) return 'OTHER';
 
@@ -89,6 +92,10 @@ export function classifyClause(input: {
  *
  * 표시사항은 트랙별 선택이라 기본 제외로 둔다 — 사고 원인이 경고·표시와 관련될 때
  * 별도 후보로 켜는 것이 v0.7 §5.3 의 지시다. 지금 켜면 그 구분이 사라진다.
+ *
+ * 다만 그 "켜는" 쪽은 아직 만들지 않았다. 지금은 표시 조항 879건이 어떤 사건에서도
+ * 후보가 되지 않는다. 화상·질식처럼 경고 표시가 실제 확인 항목이 되는 사고가 있으므로,
+ * 조건부로 켜는 장치가 다음 과제로 남아 있다.
  */
 export function shouldTag(role: ClauseRole): boolean {
   return role === 'REQUIREMENT';
