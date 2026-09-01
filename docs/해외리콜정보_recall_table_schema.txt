@@ -1,0 +1,279 @@
+create table public.recalls (
+  id bigint generated always as identity not null,
+  source public.recall_source not null,
+  guid text not null,
+  product_name text null,
+  product_name_original text null,
+  brand_name text null,
+  model_name text null,
+  product_description text null,
+  product_category text null,
+  product_class text null,
+  country_of_origin text null,
+  units_affected text null,
+  manufacturer_name text null,
+  hazard_description text null,
+  hazard_description_original text null,
+  hazard_type text null,
+  risk_level text null,
+  injuries_reported text null,
+  recall_cause text null,
+  remedy_type text null,
+  recall_type text null,
+  consumer_action text null,
+  operator_name text null,
+  operator_contact text null,
+  operator_type text null,
+  source_url text null,
+  recall_country text null,
+  published_date date null,
+  additional_info text null,
+  image_1 text null,
+  image_2 text null,
+  image_3 text null,
+  image_4 text null,
+  image_5 text null,
+  pdf_1 text null,
+  pdf_2 text null,
+  pdf_3 text null,
+  korea_relevance boolean null default false,
+  korea_investigation_id uuid null,
+  korea_status text null,
+  raw_data jsonb null,
+  created_at timestamp with time zone not null default now(),
+  updated_at timestamp with time zone not null default now(),
+  created_at_text text null,
+  search_vector tsvector GENERATED ALWAYS as (
+    to_tsvector(
+      'simple'::regconfig,
+      (
+        (
+          (
+            (
+              (
+                (
+                  (
+                    (
+                      (
+                        (
+                          (
+                            (
+                              (
+                                (
+                                  (
+                                    (COALESCE(product_name, ''::text) || ' '::text) || COALESCE(product_name_original, ''::text)
+                                  ) || ' '::text
+                                ) || COALESCE(brand_name, ''::text)
+                              ) || ' '::text
+                            ) || COALESCE(model_name, ''::text)
+                          ) || ' '::text
+                        ) || COALESCE(product_description, ''::text)
+                      ) || ' '::text
+                    ) || COALESCE(operator_name, ''::text)
+                  ) || ' '::text
+                ) || COALESCE(hazard_description, ''::text)
+              ) || ' '::text
+            ) || COALESCE(hazard_description_original, ''::text)
+          ) || ' '::text
+        ) || COALESCE(product_category, ''::text)
+      )
+    )
+  ) STORED null,
+  product_description_original text null,
+  product_category_original text null,
+  hazard_type_original text null,
+  recall_cause_original text null,
+  remedy_type_original text null,
+  consumer_action_original text null,
+  recall_type_original text null,
+  country_of_origin_original text null,
+  injuries_reported_original text null,
+  risk_level_original text null,
+  operator_name_original text null,
+  operator_contact_original text null,
+  additional_info_original text null,
+  units_affected_original text null,
+  brand_name_original text null,
+  product_class_original text null,
+  model_name_original text null,
+  manufacturer_name_original text null,
+  operator_type_original text null,
+  recall_country_original text null,
+  hazard_factor_code character varying(30) null,
+  hazard_factor_sub text[] null default '{}'::text[],
+  damage_type_codes text[] null default '{}'::text[],
+  damage_type_primary character varying(30) null,
+  iso5665_severity integer null,
+  approval_status text not null default 'pending'::text,
+  product_sub_category text null,
+  product_sub_category_original text null,
+  source_last_updated timestamp with time zone null,
+  source_last_updated_raw text null,
+  is_updated boolean null default false,
+  update_history jsonb null default '[]'::jsonb,
+  classification_code text null,
+  classification_confidence real null,
+  classification_method text null,
+  classification_reason text null,
+  has_confirmed_injuries boolean null,
+  injuries_count integer null,
+  has_injuries_reported boolean GENERATED ALWAYS as (
+    COALESCE(
+      has_confirmed_injuries,
+      (
+        NULLIF(btrim(injuries_reported), ''::text) is not null
+      )
+    )
+  ) STORED null,
+  authority_revision bigint not null default 0,
+  reviewed_revision bigint not null default 0,
+  constraint recalls_pkey primary key (id),
+  constraint recalls_source_guid_unique unique (source, guid),
+  constraint recalls_classification_code_fkey foreign KEY (classification_code) references product_categories (code) on delete set null,
+  constraint recalls_revision_order check (
+    (
+      (reviewed_revision >= 0)
+      and (authority_revision >= reviewed_revision)
+    )
+  ) not VALID,
+  constraint recalls_classification_method_check check (
+    (
+      (classification_method is null)
+      or (
+        classification_method = any (
+          array[
+            'manual'::text,
+            'ai_auto'::text,
+            'ai_suggested'::text
+          ]
+        )
+      )
+    )
+  ),
+  constraint recalls_classification_confidence_check check (
+    (
+      (classification_confidence is null)
+      or (
+        (
+          classification_confidence >= (0)::double precision
+        )
+        and (
+          classification_confidence <= (1)::double precision
+        )
+      )
+    )
+  ),
+  constraint recalls_approval_status_check check (
+    (
+      approval_status = any (
+        array[
+          'pending'::text,
+          'approved'::text,
+          'rejected'::text
+        ]
+      )
+    )
+  )
+) TABLESPACE pg_default;
+
+create index IF not exists recalls_source_idx on public.recalls using btree (source) TABLESPACE pg_default;
+
+create index IF not exists recalls_source_created_idx on public.recalls using btree (source, created_at desc) TABLESPACE pg_default;
+
+create index IF not exists recalls_search_idx on public.recalls using gin (search_vector) TABLESPACE pg_default;
+
+create index IF not exists recalls_created_at_idx on public.recalls using btree (created_at desc) TABLESPACE pg_default;
+
+create index IF not exists recalls_korea_relevance_idx on public.recalls using btree (korea_relevance) TABLESPACE pg_default
+where
+  (korea_relevance = true);
+
+create index IF not exists recalls_published_date_idx on public.recalls using btree (published_date desc nulls last) TABLESPACE pg_default;
+
+create index IF not exists recalls_source_published_idx on public.recalls using btree (source, published_date desc nulls last) TABLESPACE pg_default;
+
+create index IF not exists idx_recalls_hf_code on public.recalls using btree (hazard_factor_code) TABLESPACE pg_default;
+
+create index IF not exists idx_recalls_dt_codes on public.recalls using gin (damage_type_codes) TABLESPACE pg_default;
+
+create index IF not exists idx_recalls_dt_primary on public.recalls using btree (damage_type_primary) TABLESPACE pg_default;
+
+create index IF not exists idx_recalls_severity on public.recalls using btree (iso5665_severity) TABLESPACE pg_default;
+
+create index IF not exists idx_recalls_approval_status on public.recalls using btree (approval_status) TABLESPACE pg_default;
+
+create index IF not exists idx_recalls_classification on public.recalls using btree (classification_code) TABLESPACE pg_default
+where
+  (classification_code is not null);
+
+create index IF not exists recalls_stats_approved_published_cover_idx on public.recalls using btree (published_date desc nulls last) INCLUDE (
+  source,
+  id,
+  hazard_type,
+  korea_relevance,
+  hazard_factor_code,
+  damage_type_primary,
+  classification_code
+) TABLESPACE pg_default
+where
+  (approval_status = 'approved'::text);
+
+create index IF not exists recalls_stats_approved_source_published_cover_idx on public.recalls using btree (source, published_date desc nulls last) INCLUDE (
+  id,
+  hazard_type,
+  korea_relevance,
+  hazard_factor_code,
+  damage_type_primary,
+  classification_code
+) TABLESPACE pg_default
+where
+  (approval_status = 'approved'::text);
+
+create index IF not exists recalls_stats_approved_classified_id_idx on public.recalls using btree (id) INCLUDE (source, published_date, classification_code) TABLESPACE pg_default
+where
+  (
+    (approval_status = 'approved'::text)
+    and (classification_code is not null)
+  );
+
+create index IF not exists recalls_stats_approved_korea_classified_id_idx on public.recalls using btree (id) INCLUDE (source, published_date, classification_code) TABLESPACE pg_default
+where
+  (
+    (approval_status = 'approved'::text)
+    and (korea_relevance = true)
+    and (classification_code is not null)
+  );
+
+create index IF not exists recalls_approved_product_category_idx on public.recalls using btree (product_category) TABLESPACE pg_default
+where
+  (
+    (approval_status = 'approved'::text)
+    and (product_category is not null)
+    and (product_category <> ''::text)
+  );
+
+create index IF not exists recalls_has_injuries_idx on public.recalls using btree (has_injuries_reported) TABLESPACE pg_default
+where
+  (has_injuries_reported = true);
+
+create trigger recalls_normalize BEFORE INSERT
+or
+update on recalls for EACH row
+execute FUNCTION recalls_normalize_trigger ();
+
+create trigger recalls_normalize_date BEFORE INSERT
+or
+update on recalls for EACH row
+execute FUNCTION recalls_normalize_date_trigger ();
+
+create trigger recalls_normalize_glossary BEFORE INSERT
+or
+update on recalls for EACH row
+execute FUNCTION recalls_glossary_trigger ();
+
+create trigger recalls_updated_at_trigger BEFORE
+update on recalls for EACH row
+execute FUNCTION update_updated_at_column ();
+
+create trigger trg_auto_reject_oecd BEFORE INSERT on recalls for EACH row
+execute FUNCTION auto_reject_oecd_recalls ();
