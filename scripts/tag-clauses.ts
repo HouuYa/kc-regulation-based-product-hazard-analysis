@@ -29,10 +29,15 @@ function argValue(name: string): string | null {
 }
 
 /**
- * 직접 후보가 되지 않는 조항 유형 (v0.7 §5.3)
- * 표(LT)·그림(LF)·비고(LN)는 시험방법의 상세 근거로 제공될 뿐 후보가 아니다.
+ * 요건 조항만 태깅한다 (v0.7 §5.3)
+ *
+ * 역할은 clause_role 컬럼에 이미 매겨져 있다(npm run standards:roles).
+ * 정의·적용범위를 태깅하면 안 되는 이유는 비용이 아니라 오염이다 —
+ * "가량이 벨트란 …장치를 말한다"에 HF.M.DES 가 붙으면, 아무것도 요구하지 않는
+ * 정의문이 진짜 안전요건과 같은 자격으로 검색에 걸린다.
+ * 시험방법은 clause_link 로 도달하므로 코드를 붙일 필요가 없다.
  */
-const NON_CANDIDATE_LEVELS = ['LT', 'LF', 'LN', 'L1', 'L2'];
+const TAGGABLE_ROLE = 'REQUIREMENT';
 
 interface ClauseRow {
   id: number;
@@ -68,7 +73,7 @@ async function main() {
     join public.standard s on s.id = c.standard_id
     where s.is_current
       and length(btrim(c.body)) >= 15
-      and not (c.level_code = any (${NON_CANDIDATE_LEVELS}::text[]))
+      and c.clause_role = ${TAGGABLE_ROLE}
       ${standardFilter ? db`and s.display_name ilike ${'%' + standardFilter + '%'}` : db``}
       ${retag
         ? db`and not exists (
@@ -95,18 +100,27 @@ async function main() {
   console.log(`코드북    : ${snapshot.version} (HF ${snapshot.hf.length} / DT ${snapshot.dt.length})`);
 
   // 프롬프트·모델·규칙 묶음의 판번호. 부분 재태깅과 성능 비교의 기준이 된다(§2.3 결정 B)
-  const taggingVersion = `L1-${cfg.taggingModel}-${snapshot.version}-${variant}`;
+  // 2단 구조이므로 두 모델을 모두 판번호에 넣는다 — 나중에 "어느 조합으로 붙인
+  // 태깅인가"를 판번호만 보고 알 수 있어야 하기 때문이다.
+  const t = tuning();
+  const taggingVersion =
+    `L1-${cfg.bulkModel}x${t.bulkRepeat}+${cfg.escalateModel}-${snapshot.version}-${variant}`;
+  console.log(`1차 모델  : ${cfg.bulkModel} (reasoning ${cfg.bulkEffort}) × ${t.bulkRepeat}회`);
+  console.log(`승격 모델 : ${cfg.escalateModel} (reasoning ${cfg.escalateEffort}) — 일치도 ${t.escalateBelowAgreement} 미만일 때`);
 
   const [run] = await db<{ id: number }[]>`
     insert into public.tagging_run
       (tagging_version, target_scope, model, repeat_count, codebook_version, clause_count)
-    values (${taggingVersion}, ${standardFilter}, ${cfg.taggingModel},
-            ${tuning().repeatCount}, ${snapshot.version}, ${rows.length})
+    values (${taggingVersion}, ${standardFilter}, ${cfg.bulkModel},
+            ${t.bulkRepeat}, ${snapshot.version}, ${rows.length})
     returning id
   `;
 
   let ok = 0;
   let fail = 0;
+  let escalatedCount = 0;
+  let disagreedCount = 0;
+  const usageTotal = { inputTokens: 0, outputTokens: 0, reasoningTokens: 0 };
 
   for (const [i, c] of rows.entries()) {
     const header = buildContextHeader({
@@ -126,8 +140,13 @@ async function main() {
           testConditions: c.test_conditions ?? undefined,
         },
         snapshot,
-        cfg.taggingModel,
       );
+
+      if (result.escalated) escalatedCount++;
+      if (result.escalationDisagreed) disagreedCount++;
+      usageTotal.inputTokens += result.usage.inputTokens;
+      usageTotal.outputTokens += result.usage.outputTokens;
+      usageTotal.reasoningTokens += result.usage.reasoningTokens;
 
       const tagRows = toTagRows(result);
       const hf = tagRows.filter((t) => t.axis === 'HF').map((t) => t.code);
@@ -159,21 +178,34 @@ async function main() {
         variant,
       );
 
+      // 태그를 축별 행으로 편다 (v0.7 §5.2 — 한 행에 HF/DT 를 같이 두지 않는다).
+      //
+      // json_to_recordset 을 쓰지 않는 이유: postgres.js 는 json 캐스팅을 만나면
+      // 값을 스스로 직렬화한다. 이미 JSON.stringify 한 문자열을 넘기면 두 번
+      // 인코딩되어 배열이 아니라 문자열 스칼라가 되고, DB 가
+      // "cannot call json_to_recordset on a scalar" 로 거부한다.
+      // 저장소의 다른 적재 코드와 같이 postgres.js 의 다중행 삽입 헬퍼를 쓴다.
+      const tagInsertRows = tagRows.map((t) => ({
+        clause_id: c.id,
+        axis: t.axis,
+        code: t.code,
+        is_primary: t.is_primary,
+        confidence_score: t.confidence_score,
+        agreement_score: t.agreement_score,
+        evidence_span: result.output.evidence_span,
+        tagging_version: taggingVersion,
+        tagging_model: result.model,
+        codebook_version: snapshot.version,
+      }));
+
       await db.begin(async (tx) => {
         await tx`
-          insert into public.clause_tag
-            (clause_id, axis, code, is_primary, confidence_score, agreement_score,
-             evidence_span, tagging_version, tagging_model, codebook_version)
-          select ${c.id}, x.axis, x.code, x.is_primary, x.conf, x.agree,
-                 ${result.output.evidence_span}, ${taggingVersion},
-                 ${cfg.taggingModel}, ${snapshot.version}
-          from json_to_recordset(${JSON.stringify(
-            tagRows.map((t) => ({
-              axis: t.axis, code: t.code, is_primary: t.is_primary,
-              conf: t.confidence_score, agree: t.agreement_score,
-            })),
-          )}::json)
-            as x(axis text, code text, is_primary boolean, conf numeric, agree numeric)
+          insert into public.clause_tag ${tx(
+            tagInsertRows as never,
+            'clause_id', 'axis', 'code', 'is_primary', 'confidence_score',
+            'agreement_score', 'evidence_span', 'tagging_version',
+            'tagging_model', 'codebook_version',
+          )}
           on conflict (clause_id, axis, code, tagging_version) do nothing
         `;
 
@@ -214,6 +246,23 @@ async function main() {
 
   console.log('');
   console.log(`태깅 완료 : 성공 ${ok} / 실패 ${fail} (tagging_version = ${taggingVersion})`);
+
+  // 2단 구조가 실제로 어떻게 갈렸는지 남긴다.
+  // 승격률이 예상(15%)보다 훨씬 높으면 1차 모델이나 프롬프트를 손봐야 한다는 신호이고,
+  // 반대로 0% 에 가까우면 승격 임계값이 느슨한 것이다.
+  if (ok > 0) {
+    const rate = ((escalatedCount / ok) * 100).toFixed(1);
+    console.log(`승격      : ${escalatedCount}/${ok}건 (${rate}%) — 1차 반복이 일치하지 않아 상위 모델로`);
+    console.log(`  그중 상위 모델이 1차 다수결과 다른 답 : ${disagreedCount}건`);
+    if (disagreedCount > 0) {
+      console.log('  이 건들이 검수 최우선 대상입니다(§5.2.3 "가장 위험한 구간").');
+    }
+  }
+  console.log(
+    `토큰      : 입력 ${usageTotal.inputTokens.toLocaleString()} / ` +
+      `출력 ${usageTotal.outputTokens.toLocaleString()}` +
+      `(사고 ${usageTotal.reasoningTokens.toLocaleString()})`,
+  );
   console.log('다음      : npm run embed  — 검색용 텍스트가 바뀌었으므로 임베딩을 다시 만듭니다.');
 }
 

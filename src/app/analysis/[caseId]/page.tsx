@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { getDb } from '@/lib/db';
+import { standardsForCase } from '@/lib/cases/resolve-scope';
 import { EvidenceStrip, type EvidenceLevel, type MatchPath } from '@/components/EvidenceStrip';
 import { recordReview } from './actions';
 import { REJECT_REASONS } from './review-options';
@@ -58,11 +59,45 @@ async function load(caseId: number) {
   const [ev] = await db<{
     id: number; title: string | null; narrative: string; item_name: string | null;
     source_type: string; occurred_on: string | null;
+    product_scope_id: number | null; scope_evidence: string | null; basis_date: string | null;
+    scope_name: string | null;
   }[]>`
-    select id, title, narrative, item_name, source_type, occurred_on::text
-    from public.case_event where id = ${caseId}
+    select e.id, e.title, e.narrative, e.item_name, e.source_type, e.occurred_on::text,
+           e.product_scope_id, e.scope_evidence, e.basis_date::text,
+           ps.name as scope_name
+    from public.case_event e
+    left join public.product_scope ps on ps.id = e.product_scope_id
+    where e.id = ${caseId}
   `;
   if (!ev) return null;
+
+  // 이 사건에 적용되는 기준. 품목 확정의 결과이자 검색 범위 그 자체다(v0.7 §3.2).
+  // 명령줄 분석과 같은 함수를 쓴다 — 화면과 실제 검색 범위가 어긋나면 안 된다.
+  const standardIds = await standardsForCase(caseId);
+  const standards = standardIds.length
+    ? await db<{ display_name: string; relation: string | null }[]>`
+        select s.display_name,
+               (select a.relation from public.standard_applicability a
+                where a.standard_id = s.id and a.product_scope_id = ${ev.product_scope_id}
+                limit 1) as relation
+        from public.standard s
+        where s.id = any(${standardIds}::bigint[])
+        order by s.display_name
+      `
+    : [];
+
+  // 해외 리콜이면 트랙 B 의 재료를 함께 싣는다
+  const [recall] = ev.source_type === 'RECALL_OVERSEAS'
+    ? await db<{
+        source: string; guid: string; recall_country: string | null;
+        hazard_type: string | null; detail_url: string | null;
+        cited_standards: string[]; matched_standard_ids: number[]; domestic_check: string;
+      }[]>`
+        select source, guid, recall_country, hazard_type, detail_url,
+               cited_standards, matched_standard_ids, domestic_check
+        from public.recall_cache where case_id = ${caseId} limit 1
+      `
+    : [];
 
   const tags = await db<{ axis: string; code: string; is_primary: boolean }[]>`
     select axis, code, is_primary from public.case_tag
@@ -111,7 +146,18 @@ async function load(caseId: number) {
       `
     : [];
 
-  return { ev, tags, run, results };
+  return { ev, tags, run, results, standards, recall };
+}
+
+/**
+ * 원인(HF)이 확정되지 않았는가.
+ *
+ * 사고조사에서 결함을 찾지 못한 사건이 실제로 있다 — 보고서에 "제품 시험 결과
+ * 안전기준에 적합", "특이사항을 식별하지 못함"이라고 적힌 경우다. 이때 결과(DT)만
+ * 가지고 특정 시험을 지목하면 근거 없는 지목이 된다(v0.7 §7.3).
+ */
+function causeUnresolved(codes: string[]): boolean {
+  return codes.filter((c) => c && c !== 'HF.UNKNOWN').length === 0;
 }
 
 function Candidate({ r, caseId }: { r: ResultRow; caseId: number }) {
@@ -274,9 +320,11 @@ export default async function AnalysisPage({
     );
   }
 
-  const { ev, tags, run, results } = data;
+  const { ev, tags, run, results, standards, recall } = data;
   const shortlist = results.slice(0, SHORTLIST);
   const rest = results.slice(SHORTLIST);
+  const hfUnresolved = tags.length > 0
+    && causeUnresolved(tags.filter((t) => t.axis === 'HF').map((t) => t.code));
 
   return (
     <div className="mx-auto max-w-4xl px-6 py-10 lg:px-10 lg:py-14">
@@ -305,6 +353,103 @@ export default async function AnalysisPage({
           ))}
         </div>
       </header>
+
+      {/* 품목·적용기준 — 검색보다 먼저 결정되는 것이므로 후보 목록보다 위에 둔다 */}
+      <section className="mt-6 border-t border-rule pt-5">
+        <div className="grid gap-4 sm:grid-cols-[10rem_1fr]">
+          <span className="label">품목·적용기준</span>
+          <div className="text-[13px] leading-relaxed">
+            {ev.product_scope_id || ev.item_name ? (
+              <>
+                <div>
+                  <span className="font-medium">{ev.scope_name ?? ev.item_name}</span>
+                  {ev.basis_date && (
+                    <span className="ml-2 text-[11px] text-ink-3">기준일 {ev.basis_date}</span>
+                  )}
+                </div>
+                {ev.scope_evidence && (
+                  <p className="mt-1 text-[12px] text-ink-2">{ev.scope_evidence}</p>
+                )}
+                {standards.length > 0 && (
+                  <div className="mt-2 flex flex-wrap gap-1.5">
+                    {standards.map((s) => (
+                      <span key={s.display_name} className="addr border border-rule px-1.5 py-0.5 text-[11px] text-ink-2">
+                        {s.display_name}
+                        {s.relation && <span className="ml-1 text-ink-3">{s.relation === 'ANNEX' ? '부속서' : '공통'}</span>}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </>
+            ) : (
+              <div className="border border-caution bg-caution-soft px-3 py-2 text-[12px] leading-relaxed text-caution">
+                <strong className="font-semibold">품목 미확정 (SCOPE_UNRESOLVED)</strong>
+                <p className="mt-1">
+                  적용할 기준을 정하지 못해 분석을 실행하지 않습니다. 전 품목을 뒤지면 다른
+                  제품의 시험이 섞이기 때문입니다. 품목을 등록한 뒤 다시 실행하세요.
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* 트랙 B — 해외 리콜에만 있는 것들 */}
+      {recall && (
+        <section className="mt-4 border-t border-rule pt-5">
+          <div className="grid gap-4 sm:grid-cols-[10rem_1fr]">
+            <span className="label">해외 리콜</span>
+            <div className="text-[13px] leading-relaxed">
+              <div className="addr text-[12px] text-ink-2">
+                {recall.source} {recall.guid}
+                {recall.recall_country && ` · ${recall.recall_country}`}
+                {recall.detail_url && (
+                  <>
+                    {' · '}
+                    <a href={recall.detail_url} target="_blank" rel="noreferrer"
+                       className="text-measure underline">원문</a>
+                  </>
+                )}
+              </div>
+              {recall.hazard_type && <p className="mt-1">{recall.hazard_type}</p>}
+
+              <div className="mt-3">
+                <span className="label">상대국 근거</span>
+                {recall.cited_standards.length === 0 ? (
+                  <p className="mt-1 text-[12px] text-ink-2">
+                    공고에 위반 표준이 명시되지 않았습니다. 해외 리콜의 72%가 여기 해당하며,
+                    이 경우 국가 간 기준 수준 비교는 할 수 없습니다.
+                  </p>
+                ) : (
+                  <div className="mt-1 flex flex-wrap gap-1.5">
+                    {recall.cited_standards.map((s) => (
+                      <span key={s} className="addr border border-rule px-1.5 py-0.5 text-[11px] text-ink-2">{s}</span>
+                    ))}
+                    <span className="text-[11px] text-ink-3">
+                      {recall.matched_standard_ids.length > 0
+                        ? `· 우리 기준 ${recall.matched_standard_ids.length}건과 번호가 같습니다`
+                        : '· 우리 기준과 번호 체계가 달라 사람이 판단해야 합니다'}
+                    </span>
+                  </div>
+                )}
+              </div>
+
+              <div className="mt-3">
+                <span className="label">국내 유통 동일성</span>
+                <p className="mt-1 text-[12px] leading-relaxed text-ink-2">
+                  {recall.domestic_check === 'DISTRIBUTED' ? '유통 확인됨'
+                    : recall.domestic_check === 'NOT_DISTRIBUTED' ? '유통되지 않음'
+                    : recall.domestic_check === 'UNKNOWN' ? '확인 불가'
+                    : '미확인 — 담당자 확인이 필요합니다.'}
+                  {' '}동일 제품의 국내 유통이 확인되면 제품안전기본법 제13조 제3항의 사업자
+                  즉시 보고 의무 대상인지 검토 대상이 됩니다. 이 체계는 유통 여부를 추정하지
+                  않습니다.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
 
       {!run ? (
         <section className="mt-10 border-t border-rule pt-6">
@@ -350,6 +495,17 @@ export default async function AnalysisPage({
             </section>
           ) : (
             <>
+              {hfUnresolved && (
+                <div className="mt-4 border border-caution bg-caution-soft px-4 py-3 text-[12px] leading-relaxed text-caution">
+                  <strong className="font-semibold">이 사건은 원인이 확정되지 않았습니다.</strong>
+                  <p className="mt-1">
+                    조사에서 결함이 확인되지 않았거나 보고서에 원인 서술이 없는 경우입니다.
+                    아래 후보는 피해유형·어휘·의미만으로 넓게 건진 것이어서 코드 근거가 없습니다.
+                    특정 시험을 단정하지 마시고 직접 검토해 주세요.
+                  </p>
+                </div>
+              )}
+
               <div className="mt-2">
                 {shortlist.map((r) => <Candidate key={r.id} r={r} caseId={ev.id} />)}
               </div>

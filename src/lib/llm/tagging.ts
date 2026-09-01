@@ -17,8 +17,8 @@
  *     두 값이 엇갈리는 구간(자신 있다는데 답이 흔들림)이 가장 위험하다(§10 11번).
  */
 
-import { structuredCall } from './client';
-import { optionalNumber, tuning } from '../env';
+import { structuredCall, type ReasoningEffort } from './client';
+import { openaiConfig, tuning } from '../env';
 
 // ---------------------------------------------------------------------------
 // 코드북 스냅샷 — 프롬프트의 enum 재료
@@ -62,21 +62,63 @@ export interface TaggingOutput {
   chunk_summary: string;
   confidence_score: number;
   evidence_span: string;
+  /** 사건 코드화에만 있다 — 사고경위 원문 인용 */
+  incident_summary?: string;
+  /** 사건 코드화에만 있다 — 원인 서술 원문 인용. 없으면 빈 문자열 */
+  stated_cause?: string;
 }
 
-function buildSchema(snapshot: CodebookSnapshot): Record<string, unknown> {
+/**
+ * @param withIncidentFields 사건 코드화용 필드를 넣는다.
+ *
+ * 왜 사건에만 넣는가 (실측으로 확인한 문제)
+ *   사고조사보고서는 표·목차·시험절차가 뒤섞인 1만 자 넘는 문서다. 그 안에
+ *   "가열식 가습기의 물 부족시 자동 전원 차단 기능 미작동으로 화재 발생" 같은
+ *   한 줄이 묻혀 있는데, 코드만 물었더니 5건 모두 HF.UNKNOWN 이 나왔다.
+ *   원인이 없어서가 아니라 못 찾은 것이다.
+ *
+ *   그래서 코드를 고르기 전에 사고경위와 원인 서술을 **먼저 인용하게** 만든다.
+ *   인용을 required 로 두면 모델이 그 구절을 찾아 읽어야만 스키마를 채울 수 있다.
+ *   부수적으로 설계문서 §8.1 이 화면에 보이라고 한 "자동 추출된 항목과 근거 위치"가
+ *   그대로 생긴다.
+ */
+function buildSchema(
+  snapshot: CodebookSnapshot,
+  withIncidentFields = false,
+): Record<string, unknown> {
   const hfCodes = snapshot.hf.map((o) => o.code);
   const dtCodes = snapshot.dt.map((o) => o.code);
+
+  const incidentProps = withIncidentFields
+    ? {
+        incident_summary: {
+          type: 'string',
+          description:
+            '사고경위를 원문에서 그대로 인용한다. "사고경위", "사고 개요", "결함조사" 같은 ' +
+            '항목 뒤의 서술을 찾는다. 목차나 조사 절차 설명이 아니라 실제로 무슨 일이 ' +
+            '있었는지를 적은 문장이어야 한다.',
+        },
+        stated_cause: {
+          type: 'string',
+          description:
+            '원인이 서술돼 있으면 그 구절을 원문에서 그대로 인용한다. ' +
+            '"…미작동으로 화재 발생", "…결함으로 인한" 같은 서술이 해당한다. ' +
+            '시험 결과 결함이 확인되지 않았거나 원인 서술이 없으면 빈 문자열로 둔다.',
+        },
+      }
+    : {};
 
   return {
     type: 'object',
     additionalProperties: false,
     // 전부 required — 요약만 쓰고 근거를 빠뜨리는 일을 구조로 막는다(§5.2.2)
     required: [
+      ...(withIncidentFields ? ['incident_summary', 'stated_cause'] : []),
       'hf_primary', 'hf_secondary', 'dt_primary', 'dt_secondary',
       'keywords', 'chunk_summary', 'confidence_score', 'evidence_span',
     ],
     properties: {
+      ...incidentProps,
       // 주된 위해요인 1개 필수 (PDR §4.3)
       hf_primary: { type: 'string', enum: hfCodes },
       hf_secondary: { type: 'array', items: { type: 'string', enum: hfCodes } },
@@ -142,6 +184,15 @@ const SYSTEM_CASE = `당신은 제품 사고·리콜 서술문에 2차원 위해
 - 원인(HF)과 결과(DT)를 구분한다. "화재가 났다"는 결과이고, 원인은 배터리·과열 같은 것이다.
 - 사용자 오용 코드(HF.L0/L1)는 단독으로 쓰지 않는다. 쓸 경우 설계·품질관리 코드를 함께 낸다.
 
+순서를 지킨다
+- 코드를 고르기 전에 incident_summary 와 stated_cause 를 먼저 채운다.
+  사고조사보고서는 표·목차·시험절차가 뒤섞여 있어 실제 사고 서술이 묻히기 쉽다.
+  "사고경위", "사고 개요", "결함조사", "사고원인" 항목 뒤의 문장을 찾아 인용한다.
+- 그 인용에 근거해 코드를 정한다. stated_cause 가 비어 있을 때만 HF.UNKNOWN 을 쓴다.
+  원인이 적혀 있는데 UNKNOWN 을 쓰면 안 된다.
+- 시험 결과 결함이 확인되지 않았다면(예: "발화 및 폭발이 발생되지 않음")
+  stated_cause 를 비우고 HF.UNKNOWN 을 쓰는 것이 맞다.
+
 ${MSHELL_PRIORITY}`;
 
 // ---------------------------------------------------------------------------
@@ -149,14 +200,28 @@ ${MSHELL_PRIORITY}`;
 // ---------------------------------------------------------------------------
 
 export interface TagResult {
-  /** 다수결로 확정된 출력 */
+  /** 최종 확정된 출력. 승격됐으면 상위 모델의 답, 아니면 1차 다수결 */
   output: TaggingOutput;
-  /** 같은 입력 반복 호출에서 같은 코드가 나온 비율 (§5.2.3) */
+  /** 1차 반복 호출의 일치도 (§5.2.3). 승격 여부와 무관하게 1차 값을 남긴다 */
   agreementScore: number;
-  /** 실제 호출 횟수 — 위험 기반 재호출이면 건마다 다르다 */
+  /** 총 호출 횟수 (1차 반복 + 승격 1회) */
   callCount: number;
   /** 모든 호출의 원응답. 실행 매니페스트에 남긴다 */
   attempts: TaggingOutput[];
+  /** 최종 답을 낸 모델. clause_tag.tagging_model 에 저장한다 */
+  model: string;
+  /** 상위 모델로 승격됐는가 */
+  escalated: boolean;
+  /**
+   * 승격한 상위 모델이 1차 다수결과 다른 답을 냈는가.
+   *
+   * §5.2.3 이 "가장 위험한 구간"이라 부른 자리다. 싼 모델이 흔들렸고 비싼 모델도
+   * 다른 답을 냈다면, 그 조항은 코드 체계로 깔끔히 표현되지 않는다는 뜻일 수 있다.
+   * 검수 대기열의 맨 앞에 놓아야 하고, 반복되면 코드 체계 개선 신호로 본다.
+   */
+  escalationDisagreed: boolean;
+  /** 누적 토큰 — 비용 실측용 */
+  usage: { inputTokens: number; outputTokens: number; reasoningTokens: number };
 }
 
 /** 코드 집합의 일치도 — 반복 호출이 같은 답을 냈는가 */
@@ -180,54 +245,95 @@ function majority(attempts: TaggingOutput[]): TaggingOutput {
 }
 
 /**
- * 반복 호출 정책
+ * 2단 태깅 — 싼 모델을 여러 번, 흔들린 것만 비싼 모델로
  *
- * v0.6 §4.3 은 조항 태깅에 3~5회 반복을 권했다.
- * v0.7 §0.4 는 "비용이 크고 반복 일치도가 정확도 보증은 아니다. 위험 기반 재호출이
- * 적절하다"며 축소를 지시했다.
+ * v0.6 §4.3 은 3~5회 반복을, v0.7 §0.4 는 "비용이 크다"며 축소를 지시했다.
+ * 둘 다 "반복 = 비싸다"를 전제하는데, 실측하니 그 전제가 지금 모델 가격에서는
+ * 성립하지 않는다.
  *
- * 그래서 기본은 1회로 두고, 자기보고 확신도가 임계값 아래일 때만 더 부른다.
- * 임계값을 1.0 으로 올리면 v0.6 처럼 전건 반복이 되므로 두 방식을 모두 실험할 수 있다.
+ *   프롬프트 2,500토큰 실측 기준 (조항 1건당)
+ *     Luna  3회  $0.00222
+ *     Terra 1회  $0.00740      ← 싼 모델 세 번이 비싼 모델 한 번보다 3.3배 싸다
+ *
+ * 그래서 반복을 줄이는 대신 **반복을 싼 모델로 옮긴다**. 이렇게 하면
+ * §5.2.3 이 "검수 정렬의 주 지표"라 한 반복 일치도를 포기하지 않아도 된다.
+ *
+ * 왜 자기보고 확신도로 승격하지 않는가
+ *   §5.2.3 이 명시한다 — "LLM 이 스스로 매긴 확신도는 실제 정확도와 어긋나는
+ *   경향이 있다. 틀린 답에도 0.9 를 주는 경우가 흔하다."
+ *   1차를 1회만 부르면 쓸 수 있는 신호가 그 못 믿을 자기보고뿐이다.
+ *   3회 부르면 일치도라는 믿을 만한 신호가 생기고, 그게 승격 기준이 된다.
  */
-function repeatPolicy() {
-  return {
-    maxCalls: tuning().repeatCount,
-    /** 이 값 미만이면 재호출한다. 1.0 이면 전건 반복(v0.6 방식) */
-    recallBelow: optionalNumber('TAGGING_RECALL_BELOW_CONFIDENCE', 0.85),
-  };
-}
-
 async function runTagging(
   system: string,
   user: string,
   snapshot: CodebookSnapshot,
-  model: string,
+  withIncidentFields = false,
 ): Promise<TagResult> {
-  const schema = buildSchema(snapshot);
-  const policy = repeatPolicy();
-  const attempts: TaggingOutput[] = [];
+  const schema = buildSchema(snapshot, withIncidentFields);
+  const cfg = openaiConfig();
+  const t = tuning();
 
-  for (let i = 0; i < Math.max(1, policy.maxCalls); i++) {
-    const out = await structuredCall<TaggingOutput>({
+  const attempts: TaggingOutput[] = [];
+  const usage = { inputTokens: 0, outputTokens: 0, reasoningTokens: 0 };
+
+  const call = async (model: string, effort: string) => {
+    const r = await structuredCall<TaggingOutput>({
       model,
       system,
       user,
       schemaName: 'hazard_tagging',
       schema,
-      // 1회차는 결정론적으로, 반복분은 흔들어야 일치도가 의미를 갖는다(§5.2.3)
-      temperature: i === 0 ? 0 : 0.7,
+      effort: effort as ReasoningEffort,
     });
-    attempts.push(out);
+    usage.inputTokens += r.usage.inputTokens;
+    usage.outputTokens += r.usage.outputTokens;
+    usage.reasoningTokens += r.usage.reasoningTokens;
+    return r.value;
+  };
 
-    // 첫 답이 충분히 확신하면 더 부르지 않는다 (v0.7 §0.4 위험 기반 재호출)
-    if (i === 0 && out.confidence_score >= policy.recallBelow) break;
+  // 1차 — 싼 모델을 반복해 일치도를 얻는다.
+  // temperature 를 못 쓰지만 GPT-5.6 은 기본이 비결정적이라 반복만으로 흔들린다.
+  for (let i = 0; i < Math.max(1, t.bulkRepeat); i++) {
+    attempts.push(await call(cfg.bulkModel, cfg.bulkEffort));
   }
 
+  const bulkAgreement = agreementOf(attempts);
+  const bulkMajority = majority(attempts);
+
+  // 2차 — 답이 흔들린 건만 상위 모델에 다시 묻는다
+  if (bulkAgreement >= t.escalateBelowAgreement) {
+    return {
+      output: bulkMajority,
+      agreementScore: bulkAgreement,
+      callCount: attempts.length,
+      attempts,
+      model: cfg.bulkModel,
+      escalated: false,
+      escalationDisagreed: false,
+      usage,
+    };
+  }
+
+  const escalated = await call(cfg.escalateModel, cfg.escalateEffort);
+  attempts.push(escalated);
+
+  const sameAsBulk =
+    escalated.hf_primary === bulkMajority.hf_primary &&
+    escalated.dt_primary === bulkMajority.dt_primary;
+
   return {
-    output: majority(attempts),
-    agreementScore: agreementOf(attempts),
+    // 상위 모델의 답을 채택한다. 1차가 흔들렸다는 것 자체가 1차를 못 믿을 이유다.
+    output: escalated,
+    // 저장하는 일치도는 1차 값이다 — 이 조항이 얼마나 애매한지를 나타내는 수치이고,
+    // 승격했다고 해서 애매함이 사라지는 것은 아니다.
+    agreementScore: bulkAgreement,
     callCount: attempts.length,
     attempts,
+    model: cfg.escalateModel,
+    escalated: true,
+    escalationDisagreed: !sameAsBulk,
+    usage,
   };
 }
 
@@ -235,7 +341,6 @@ async function runTagging(
 export function tagClause(
   clause: { contextHeader: string; marker: string; body: string; testConditions?: string[] },
   snapshot: CodebookSnapshot,
-  model: string,
 ): Promise<TagResult> {
   const user = [
     '[위해요인(HF) 코드 목록]',
@@ -253,14 +358,13 @@ export function tagClause(
     .filter(Boolean)
     .join('\n');
 
-  return runTagging(SYSTEM_CLAUSE, user, snapshot, model);
+  return runTagging(SYSTEM_CLAUSE, user, snapshot);
 }
 
 /** L2 — 사고·국내리콜 코드화 */
 export function tagCase(
   event: { itemName: string | null; title: string | null; narrative: string },
   snapshot: CodebookSnapshot,
-  model: string,
 ): Promise<TagResult> {
   const user = [
     '[위해요인(HF) 코드 목록]',
@@ -277,7 +381,7 @@ export function tagCase(
     .filter(Boolean)
     .join('\n');
 
-  return runTagging(SYSTEM_CASE, user, snapshot, model);
+  return runTagging(SYSTEM_CASE, user, snapshot, true);
 }
 
 /** 태깅 결과를 clause_tag / case_tag 행 모양으로 편다 (축별 행 — v0.7 §5.2) */
