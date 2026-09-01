@@ -11,13 +11,13 @@
  * 관련 가능성과 근거만 제시한다.
  */
 
-import { getDb, closeDb } from '../src/lib/db.js';
+import { getDb, closeDb } from '../src/lib/db';
 import {
   searchCandidates, diagnoseEmpty, persistRun,
   type MatchConfig, type MatchInput, type Candidate,
-} from '../src/lib/search/match.js';
-import { rerankCandidates } from '../src/lib/llm/rerank.js';
-import { openaiConfig, tuning } from '../src/lib/env.js';
+} from '../src/lib/search/match';
+import { rerankCandidates } from '../src/lib/llm/rerank';
+import { openaiConfig, tuning } from '../src/lib/env';
 
 function argValue(name: string): string | null {
   const i = process.argv.indexOf(name);

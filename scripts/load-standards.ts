@@ -16,10 +16,10 @@
 
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { getDb, closeDb, insertMany } from '../src/lib/db.js';
-import { parseStandardJson } from '../src/lib/standards/parse-result-json.js';
-import type { ParsedStandard } from '../src/lib/standards/types.js';
-import { listStandardFiles, STANDARDS_DIR } from './inspect-standards.js';
+import { getDb, closeDb, insertMany } from '../src/lib/db';
+import { parseStandardJson } from '../src/lib/standards/parse-result-json';
+import type { ParsedStandard } from '../src/lib/standards/types';
+import { listStandardFiles, STANDARDS_DIR } from './inspect-standards';
 
 function argValue(name: string): string | null {
   const i = process.argv.indexOf(name);

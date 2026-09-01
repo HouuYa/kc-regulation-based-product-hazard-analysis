@@ -17,11 +17,11 @@
  *   적용범위·정의·표·그림은 직접 후보가 아니므로 태깅 비용을 쓰지 않는다.
  */
 
-import { getDb, closeDb } from '../src/lib/db.js';
-import { loadCodebookSnapshot, validateCodes, codeLabelMap } from '../src/lib/codebook/snapshot.js';
-import { tagClause, toTagRows } from '../src/lib/llm/tagging.js';
-import { buildClauseSearchText, buildContextHeader, type SearchTextVariant } from '../src/lib/search/search-text.js';
-import { openaiConfig, tuning } from '../src/lib/env.js';
+import { getDb, closeDb } from '../src/lib/db';
+import { loadCodebookSnapshot, validateCodes, codeLabelMap } from '../src/lib/codebook/snapshot';
+import { tagClause, toTagRows } from '../src/lib/llm/tagging';
+import { buildClauseSearchText, buildContextHeader, type SearchTextVariant } from '../src/lib/search/search-text';
+import { openaiConfig, tuning } from '../src/lib/env';
 
 function argValue(name: string): string | null {
   const i = process.argv.indexOf(name);

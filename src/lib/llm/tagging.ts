@@ -17,8 +17,8 @@
  *     두 값이 엇갈리는 구간(자신 있다는데 답이 흔들림)이 가장 위험하다(§10 11번).
  */
 
-import { structuredCall } from './client.js';
-import { optionalNumber, tuning } from '../env.js';
+import { structuredCall } from './client';
+import { optionalNumber, tuning } from '../env';
 
 // ---------------------------------------------------------------------------
 // 코드북 스냅샷 — 프롬프트의 enum 재료

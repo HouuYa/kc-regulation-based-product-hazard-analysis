@@ -11,8 +11,8 @@
  *   지금은 같은 DB 의 codebook 스키마가 그 스냅샷 역할을 한다.
  */
 
-import { getDb } from '../db.js';
-import type { CodebookSnapshot, CodeOption } from '../llm/tagging.js';
+import { getDb } from '../db';
+import type { CodebookSnapshot, CodeOption } from '../llm/tagging';
 
 interface CodeRow {
   axis: 'HF' | 'DT';

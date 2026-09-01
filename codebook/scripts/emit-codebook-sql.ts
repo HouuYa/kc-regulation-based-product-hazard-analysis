@@ -16,8 +16,8 @@
 
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
-import { parsePdr, versionFromFilename } from '../src/parse-pdr.js';
-import { findCodebookFile } from './inspect-codebook.js';
+import { parsePdr, versionFromFilename } from '../src/parse-pdr';
+import { findCodebookFile } from './inspect-codebook';
 
 /** SQL 리터럴. 코드북 정의문에 작은따옴표가 실제로 들어 있다 */
 function lit(v: string | number | boolean | null): string {

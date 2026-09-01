@@ -18,7 +18,7 @@
  */
 
 import postgres, { type Sql } from 'postgres';
-import { required } from './env.js';
+import { required } from './env';
 
 let sql: Sql | null = null;
 

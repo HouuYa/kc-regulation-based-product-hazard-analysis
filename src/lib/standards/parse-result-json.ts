@@ -17,7 +17,7 @@ import type {
   ParsedTestCondition,
   StandardMeta,
   StandardResultJson,
-} from './types.js';
+} from './types';
 
 // -----------------------------------------------------------------------------
 // 파일명 → 기준 메타

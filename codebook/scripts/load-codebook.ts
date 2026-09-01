@@ -12,9 +12,9 @@
 
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
-import { parsePdr, versionFromFilename } from '../src/parse-pdr.js';
-import { findCodebookFile } from './inspect-codebook.js';
-import { getDb, closeDb, insertMany } from '../../src/lib/db.js';
+import { parsePdr, versionFromFilename } from '../src/parse-pdr';
+import { findCodebookFile } from './inspect-codebook';
+import { getDb, closeDb, insertMany } from '../../src/lib/db';
 
 function argValue(name: string): string | null {
   const i = process.argv.indexOf(name);

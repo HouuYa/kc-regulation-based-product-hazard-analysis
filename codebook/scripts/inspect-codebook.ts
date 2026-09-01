@@ -11,7 +11,7 @@
 import { readFileSync, readdirSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
 import { join } from 'node:path';
-import { parsePdr, versionFromFilename } from '../src/parse-pdr.js';
+import { parsePdr, versionFromFilename } from '../src/parse-pdr';
 
 const REPO_ROOT = join(import.meta.dirname, '..', '..');
 

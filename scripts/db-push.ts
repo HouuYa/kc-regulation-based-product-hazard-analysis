@@ -17,7 +17,7 @@ import { readFileSync, readdirSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { join } from 'node:path';
 import postgres from 'postgres';
-import { required } from '../src/lib/env.js';
+import { required } from '../src/lib/env';
 
 const ROOT = join(import.meta.dirname, '..');
 const SOURCES = [

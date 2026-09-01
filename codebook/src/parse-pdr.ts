@@ -10,7 +10,7 @@
  *   - HF.S.INTL, HF.M.REG 같은 중간 계위는 어디에도 행이 없다 → 자동 보완한다
  */
 
-import { extractTables, pickHeader, cleanCell, type MarkdownTable } from './markdown-table.js';
+import { extractTables, pickHeader, cleanCell, type MarkdownTable } from './markdown-table';
 import type {
   CodebookParseResult,
   CodeConstraint,
@@ -20,7 +20,7 @@ import type {
   HazardFactorCode,
   MshellLevel1,
   ParseFailure,
-} from './types.js';
+} from './types';
 
 const MSHELL_LEVELS: MshellLevel1[] = ['H', 'S', 'M', 'E', 'L0', 'L1', 'UNKNOWN'];
 const DT_GROUPS: DtGroup[] = [

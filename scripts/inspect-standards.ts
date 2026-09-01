@@ -12,7 +12,7 @@
 import { readFileSync, readdirSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
 import { join } from 'node:path';
-import { parseStandardJson } from '../src/lib/standards/parse-result-json.js';
+import { parseStandardJson } from '../src/lib/standards/parse-result-json';
 
 const REPO_ROOT = join(import.meta.dirname, '..');
 export const STANDARDS_DIR = join(REPO_ROOT, 'KC안전기준');

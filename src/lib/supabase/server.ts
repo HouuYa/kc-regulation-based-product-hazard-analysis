@@ -14,7 +14,7 @@
  */
 
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
-import { required } from '../env.js';
+import { required } from '../env';
 
 export const ORIGINAL_BUCKET = 'originals';
 

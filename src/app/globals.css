@@ -1,0 +1,104 @@
+@import 'tailwindcss';
+
+/* ---------------------------------------------------------------------------
+   KC안전기준 제품위해 분석 콘솔 — 디자인 토큰
+
+   이 화면이 지켜야 하는 것 (설계문서 §5.4 · §8.4)
+     "판정하지 않는다"는 정책 선언이 아니라 화면 제약이다.
+     - 적색 경고 아이콘을 쓰지 않는다
+     - 문구를 "관련될 수 있음 / 확인 권고" 로 고정한다
+     - 자동 결과와 사람이 확정한 결과를 시각적으로 구분한다
+     - 상위 후보만 보여 주고 나머지를 감추지 않는다
+
+   그래서 팔레트에서 적색은 후보 표시에 쓰지 않는다.
+   빨강은 오직 시스템 실패(업로드 오류, 개인정보 차단)에만 남긴다.
+   시스템이 위험을 판정하는 것처럼 보이는 순간 이 도구는 설계를 배반한다.
+
+   색은 계측기의 색이다. 이 영역의 사물이 하중계·캘리퍼·시험대이기 때문이다.
+--------------------------------------------------------------------------- */
+
+@theme {
+  --color-ink:        #16191d;
+  --color-ink-2:      #4a5157;
+  --color-ink-3:      #838c93;
+  --color-paper:      #fbfbf9;
+  --color-surface:    #ffffff;
+  --color-rule:       #e2e5e3;
+  --color-rule-soft:  #eef0ee;
+
+  /* 계측의 색 — 차분하고 경고하지 않는다 */
+  --color-measure:      #0f6e68;
+  --color-measure-soft: #e6f0ee;
+
+  /* 확인이 필요하다는 신호. 경고가 아니라 권고다 */
+  --color-caution:      #8a6a1f;
+  --color-caution-soft: #f6efdd;
+
+  /* 시스템 실패 전용. 후보 표시에는 절대 쓰지 않는다 */
+  --color-halt:      #a03328;
+  --color-halt-soft: #f7e8e6;
+
+  --font-sans: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont,
+               'Malgun Gothic', system-ui, sans-serif;
+  /* 조항번호·코드·수치는 주소이지 산문이 아니다. 등폭으로 세로줄을 맞춘다 */
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+}
+
+@font-face {
+  font-family: 'Pretendard Variable';
+  font-weight: 45 920;
+  font-style: normal;
+  font-display: swap;
+  src: url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/woff2/PretendardVariable.woff2')
+       format('woff2-variations');
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.6;
+  word-break: keep-all;      /* 한국어는 어절 단위로 끊는다 */
+  overflow-wrap: anywhere;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 숫자는 항상 자리를 맞춘다 — 표에서 세로로 읽히게 */
+.tnum { font-variant-numeric: tabular-nums; }
+
+/* 코드·조항번호. 이 제품의 고유명사다 */
+.addr {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+
+/* 라벨은 작고 넓게 — 내용이 아니라 안내라는 것을 형태로 알린다 */
+.label {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-ink-3);
+  font-weight: 600;
+}
+
+a { color: inherit; }
+
+:focus-visible {
+  outline: 2px solid var(--color-measure);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

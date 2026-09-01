@@ -21,7 +21,7 @@
  *   그래서 0건의 사유를 구분해 돌려준다.
  */
 
-import { getDb, toVectorLiteral } from '../db.js';
+import { getDb, toVectorLiteral } from '../db';
 
 /** 검색 0건일 때의 사유 (v0.7 §7.8) */
 export type EmptyReason =

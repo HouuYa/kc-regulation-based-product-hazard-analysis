@@ -24,7 +24,7 @@
  *   0C 에서 켜고 비교한다. match_run.use_rerank 스위치가 그 실험을 위한 것이다.
  */
 
-import { structuredCall } from './client.js';
+import { structuredCall } from './client';
 
 export interface RerankCandidate {
   clauseId: number;

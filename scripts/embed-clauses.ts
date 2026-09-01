@@ -18,9 +18,9 @@
  *   하나는 도로명 주소인 상황과 같다.
  */
 
-import { getDb, closeDb, toVectorLiteral } from '../src/lib/db.js';
-import { embedBatch } from '../src/lib/llm/client.js';
-import { openaiConfig } from '../src/lib/env.js';
+import { getDb, closeDb, toVectorLiteral } from '../src/lib/db';
+import { embedBatch } from '../src/lib/llm/client';
+import { openaiConfig } from '../src/lib/env';
 
 function argValue(name: string): string | null {
   const i = process.argv.indexOf(name);

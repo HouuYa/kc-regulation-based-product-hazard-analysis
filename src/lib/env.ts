@@ -12,12 +12,26 @@ import { join } from 'node:path';
 
 let loaded = false;
 
-/** CLI 에서 실행할 때 .env.local 을 읽는다. Next.js 는 스스로 읽으므로 무해하다. */
+/**
+ * CLI 에서 실행할 때 .env.local 을 읽는다.
+ *
+ * Next.js 는 .env.local 을 스스로 읽으므로 여기서 할 일이 없다.
+ * 그런데 번들 안에서는 import.meta.dirname 이 undefined 라 경로 조합이 터진다.
+ * 그 예외가 "DATABASE_URL 이 없다"는 진짜 원인을 가려 버리므로, 로딩 실패는
+ * 조용히 넘기고 값 검증에서 걸리게 둔다.
+ */
 export function loadEnv(): void {
   if (loaded) return;
-  const root = join(import.meta.dirname, '..', '..');
-  config({ path: join(root, '.env.local'), quiet: true });
   loaded = true;
+
+  const dir = import.meta.dirname;
+  if (!dir) return; // 번들 환경 — 호스트가 이미 환경변수를 넣어 준다
+
+  try {
+    config({ path: join(dir, '..', '..', '.env.local'), quiet: true });
+  } catch {
+    // 파일이 없어도 진행한다. 필요한 값이 비면 required() 가 정확한 이름을 알려 준다
+  }
 }
 
 export function required(name: string): string {
