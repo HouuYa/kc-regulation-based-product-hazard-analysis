@@ -29,7 +29,7 @@ export function middleware(request: NextRequest) {
 
   return new NextResponse('Authentication required', {
     status: 401,
-    headers: { 'WWW-Authenticate': 'Basic realm="KC 제품위해 분석"' },
+    headers: { 'WWW-Authenticate': 'Basic realm="KC Hazard Analysis"' },
   });
 }
 
