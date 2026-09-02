@@ -1,2 +1,11 @@
 [build]
   command = "npm run build"
+
+# 아래 키들은 진짜 자격증명(API 키·서비스 롤 키·DB 연결 문자열)이 아니라
+# 모델명·강도·차원수 같은 튜닝 파라미터, 또는 별도 키 없이는 접근 불가능한
+# 호스트 URL이다. Netlify는 등록된 모든 환경변수 값을 무조건 "비밀"로 보고
+# 저장소 전체에서 같은 문자열을 찾으므로, 코드 기본값·설계문서 실측 기록에
+# 이 값들이 그대로 등장해 오탐으로 빌드가 막힌다. 진짜 키(SUPABASE_SERVICE_ROLE_KEY,
+# DATABASE_URL, *_SECRET_KEY, *_ANON_KEY 등)는 이 목록에 없다 — 계속 스캔 대상이다.
+[build.environment]
+  SECRETS_SCAN_OMIT_KEYS = "OPENAI_BULK_MODEL,OPENAI_BULK_EFFORT,OPENAI_ESCALATE_MODEL,OPENAI_ESCALATE_EFFORT,OPENAI_RERANK_MODEL,OPENAI_RERANK_EFFORT,OPENAI_VISION_MODEL,OPENAI_VISION_EFFORT,OPENAI_EMBEDDING_MODEL,OPENAI_EMBEDDING_DIM,TAGGING_BULK_REPEAT,TAGGING_ESCALATE_BELOW_AGREEMENT,SEARCH_TEXT_VARIANT,RRF_K,RRF_WEIGHT_CODE,RRF_WEIGHT_CODE_PARTIAL,GPC_LOOKUP_URL,RECALL_SOURCE_SUPABASE_URL"
