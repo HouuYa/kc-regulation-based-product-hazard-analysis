@@ -24,6 +24,20 @@ export const dynamic = 'force-dynamic';
 
 const SHORTLIST = 5;
 
+/** src/lib/gpc/lookup.ts 의 GpcCandidate 를 그대로 저장한 것 (case_event.raw_fields.gpc_candidates) */
+interface GpcCandidate {
+  rank: number;
+  brickCode: string;
+  brickTitle: string;
+  classCode: string;
+  classTitle: string;
+  familyCode: string;
+  familyTitle: string;
+  segmentCode: string;
+  segmentTitle: string;
+  similarity: number;
+}
+
 interface ResultRow {
   id: number;
   clause_id: number;
@@ -61,10 +75,12 @@ async function load(caseId: number) {
     source_type: string; occurred_on: string | null;
     product_scope_id: number | null; scope_evidence: string | null; basis_date: string | null;
     scope_name: string | null;
+    gpc_brick_code: string | null; gpc_candidates: GpcCandidate[] | null;
   }[]>`
     select e.id, e.title, e.narrative, e.item_name, e.source_type, e.occurred_on::text,
            e.product_scope_id, e.scope_evidence, e.basis_date::text,
-           ps.name as scope_name
+           ps.name as scope_name,
+           e.gpc_brick_code, e.raw_fields->'gpc_candidates' as gpc_candidates
     from public.case_event e
     left join public.product_scope ps on ps.id = e.product_scope_id
     where e.id = ${caseId}
@@ -393,6 +409,41 @@ export default async function AnalysisPage({
           </div>
         </div>
       </section>
+
+      {/* GPC(GS1 국제 품목분류) 후보 — 사고사진 비전 분석에서 뽑은 제품 서술로 조회한 것.
+          절대 유사도가 낮아(src/lib/gpc/lookup.ts 참고) 1위를 확정으로 보여주지 않고
+          순위 목록으로만 제시한다 — 이 화면의 "판정하지 않는다" 원칙과 같다. */}
+      {ev.gpc_candidates && ev.gpc_candidates.length > 0 && (
+        <section className="mt-4 border-t border-rule pt-5">
+          <div className="grid gap-4 sm:grid-cols-[10rem_1fr]">
+            <span className="label">GPC 품목분류 후보</span>
+            <div className="text-[13px] leading-relaxed">
+              <p className="text-[12px] text-ink-3">
+                사고사진 분석에서 뽑은 제품 서술로 조회한 순위입니다. 절대 유사도가 낮아
+                1위가 항상 맞는 것은 아니니 순위 전체를 참고해 사람이 확인하세요.
+              </p>
+              <ul className="mt-2 space-y-1">
+                {ev.gpc_candidates.map((c) => (
+                  <li
+                    key={c.rank}
+                    className={`flex flex-wrap items-baseline gap-x-2 gap-y-0.5 px-2 py-1 text-[12px] ${
+                      c.brickCode === ev.gpc_brick_code ? 'border border-measure text-measure' : 'text-ink-2'
+                    }`}
+                  >
+                    <span className="addr tnum text-ink-3">{c.rank}위</span>
+                    <span className="addr">{c.brickCode}</span>
+                    <span className="font-medium">{c.brickTitle}</span>
+                    <span className="text-ink-3">
+                      {c.segmentTitle} &gt; {c.familyTitle} &gt; {c.classTitle}
+                    </span>
+                    <span className="addr tnum ml-auto text-ink-3">{c.similarity.toFixed(3)}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* 트랙 B — 해외 리콜에만 있는 것들 */}
       {recall && (

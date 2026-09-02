@@ -19,6 +19,7 @@ build/
 dist/
 *.tsbuildinfo
 next-env.d.ts
+.netlify/
 
 # ---------------------------------------------------------------
 # 원본 자료 (개인정보 포함 가능 — 7.1 원본층은 Supabase Storage에 둔다)

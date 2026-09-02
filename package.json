@@ -26,7 +26,8 @@
     "cases:code": "cross-env NODE_OPTIONS=--use-system-ca tsx scripts/tag-cases.ts",
     "recalls:fetch": "cross-env NODE_OPTIONS=--use-system-ca tsx scripts/load-recalls.ts",
     "recalls:code": "cross-env NODE_OPTIONS=--use-system-ca tsx scripts/tag-cases.ts --source-type RECALL_OVERSEAS --all",
-    "recalls:analyze": "cross-env NODE_OPTIONS=--use-system-ca tsx scripts/analyze-recall.ts"
+    "recalls:analyze": "cross-env NODE_OPTIONS=--use-system-ca tsx scripts/analyze-recall.ts",
+    "standards:gpc": "cross-env NODE_OPTIONS=--use-system-ca tsx scripts/tag-standards-gpc.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.58.0",
