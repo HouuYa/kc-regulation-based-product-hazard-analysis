@@ -1,0 +1,42 @@
+create table public.recalls_oecd_staging (
+  id serial not null,
+  "recallUid" text not null,
+  "oecdId" text null,
+  status public.ProcessingStatus not null default 'FETCHED'::"ProcessingStatus",
+  "xmlContent" text null,
+  "assignedGpcBrickCode" text null default ''::text,
+  "assignedGpcSegmentCode" text null,
+  "assignedGpcFamilyCode" text null,
+  "assignedGpcClassCode" text null,
+  "gpcSource" text null,
+  tags text[] null,
+  "translatedFields" jsonb null,
+  "processedImages" jsonb null,
+  "zipFilePath" text null,
+  "zipGeneratedAt" timestamp without time zone null,
+  "rejectionReason" text null,
+  "reviewerId" text null,
+  "reviewedAt" timestamp without time zone null,
+  "createdAt" timestamp without time zone not null default CURRENT_TIMESTAMP,
+  "updatedAt" timestamp without time zone not null,
+  "originalSafetyKoreaData" jsonb null,
+  search_text_ko tsvector null,
+  constraint recalls_oecd_staging_pkey primary key (id)
+) TABLESPACE pg_default;
+
+create index IF not exists idx_gin_recalls_search_text_ko on public.recalls_oecd_staging using gin (search_text_ko) TABLESPACE pg_default;
+
+create index IF not exists idx_gin_search_text_ko on public.recalls_oecd_staging using gin (search_text_ko) TABLESPACE pg_default;
+
+create unique INDEX IF not exists "recalls_oecd_staging_oecdId_key" on public.recalls_oecd_staging using btree ("oecdId") TABLESPACE pg_default;
+
+create index IF not exists "recalls_oecd_staging_recallUid_idx" on public.recalls_oecd_staging using btree ("recallUid") TABLESPACE pg_default;
+
+create unique INDEX IF not exists "recalls_oecd_staging_recallUid_key" on public.recalls_oecd_staging using btree ("recallUid") TABLESPACE pg_default;
+
+create index IF not exists recalls_oecd_staging_status_idx on public.recalls_oecd_staging using btree (status) TABLESPACE pg_default;
+
+create trigger trg_update_search_text_ko BEFORE INSERT
+or
+update on recalls_oecd_staging for EACH row
+execute FUNCTION update_search_text_ko ();

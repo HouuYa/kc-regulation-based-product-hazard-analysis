@@ -1,0 +1,2421 @@
+{
+  "name": "[한국리콜<>OECD] 리콜 생성시 (매일)",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -416,
+        448
+      ],
+      "id": "ff2f0866-3c6f-4ec3-a207-7197827cf856",
+      "name": "When clicking ‘Test workflow’"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "1dbc19d1-cbd0-48ac-b4ef-573416ff2b39",
+              "leftValue": "={{ $json.resultData }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "array",
+                "operation": "lengthGt",
+                "rightType": "number"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        240,
+        80
+      ],
+      "id": "c8c1d380-da9c-446e-a59c-038eb56f7c35",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.imageUrls.imageUrl }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1840,
+        128
+      ],
+      "id": "c6e65fd6-5a0e-4a48-a9b2-072b0df3d173",
+      "name": "각 리콜 데이터의 이미지",
+      "retryOnFail": true,
+      "waitBetweenTries": 3000,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"leftRight\": {{ Math.floor((500 - $json.size.width) / 2) }},\n  \"topBot\": {{ Math.floor((500 - $json.size.height) / 2) }}\n}\n",
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "name": "Set Offsets",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        2320,
+        128
+      ],
+      "id": "17c186c6-0ae3-41a6-92ac-fb6d99d2f2b6",
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "content": "## Image Resizing\n(500x500)",
+        "height": 280,
+        "width": 2020,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1504,
+        32
+      ],
+      "typeVersion": 1,
+      "id": "870d2199-0cf3-4b2c-a708-44b9d1b99d66",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## Recall Details",
+        "height": 260,
+        "width": 400,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        880,
+        0
+      ],
+      "typeVersion": 1,
+      "id": "88a318e4-79ee-4200-985c-159430570da7",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## Recall Data Fetching",
+        "height": 260,
+        "width": 820,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        0,
+        0
+      ],
+      "typeVersion": 1,
+      "id": "fd6332d6-f562-4b1d-af93-55364058dd05",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n\t\"recallUid\": \"\",\n\t\"recallProductName\": \"\",\n\t\"recallBrandName\": \"\",\n\t\"recallModelName\": \"\",\n\t\"recallModelCnt\": 1,\n\t\"recallTypeName\": \"\",\n\t\"recallMeans\": \"\",\n\t\"barcodeNum\": null,\n\t\"categoryName\": null,\n\t\"certNum\": \"\",\n\t\"productItemName\": \"\",\n\t\"recallCmpnyDivName\": \"\",\n\t\"recallInqryTel\": \"\",\n\t\"recallCmpnyName\": \"\",\n\t\"recallCmpnySsn\": \"\",\n\t\"recallFrgnCmpnyName\": null,\n\t\"makerCntryName\": \"\",\n\t\"makerName\": \"\",\n\t\"makingCntryName\": \"\",\n\t\"publishDate\": \"\",\n\t\"publishRecallVol\": null,\n\t\"recallActionAmt\": \"\",\n\t\"recallStaDate\": \"\",\n\t\"recallEndDate\": \"\",\n\t\"harmDscr\": null,\n\t\"accidentCaseDscr\": \"\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.2,
+      "position": [
+        1904,
+        -144
+      ],
+      "id": "ab8d484e-1ebd-4507-a47b-768d981f7676",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "content": "## 번역 (한글 > 영어)",
+        "height": 440,
+        "width": 776,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1504,
+        -448
+      ],
+      "typeVersion": 1,
+      "id": "39d463b9-8d63-4ed1-a98f-611af2223656",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "operation": "information"
+      },
+      "name": "이미지 정보 추출",
+      "type": "n8n-nodes-base.editImage",
+      "position": [
+        2160,
+        128
+      ],
+      "id": "a4e89615-2c64-4e48-858f-64fc5088eb43",
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "inputText": "=Product Name: {{ $('Fetch Recall Details').item.json.resultData.recallProductName }}\nProduct Cateory: {{ $('Fetch Recall Details').item.json.resultData.productItemName }}\nMaker Name: {{ $('Fetch Recall Details').item.json.resultData.makerName }}",
+        "categories": {
+          "categories": [
+            {
+              "category": "EP",
+              "description": "전기용품"
+            },
+            {
+              "category": "HP",
+              "description": "생활용품"
+            },
+            {
+              "category": "CP",
+              "description": "어린이제품"
+            }
+          ]
+        },
+        "options": {
+          "fallback": "other"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.textClassifier",
+      "typeVersion": 1,
+      "position": [
+        1632,
+        512
+      ],
+      "id": "11e65678-02e1-454b-868d-bebc41fd5701",
+      "name": "Source Classifier"
+    },
+    {
+      "parameters": {
+        "content": "## <Source> 판단\nEP(전기용품)\nHP(생활용품)\nCP(어린이용품)",
+        "height": 360,
+        "width": 460
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1552,
+        384
+      ],
+      "typeVersion": 1,
+      "id": "dee4f5ef-1059-486d-a648-045e182fbb50",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://fczencruxulddednkint.supabase.co/storage/v1/object/product-images/{{ $('Fetch Recall Details').item.json.resultData.recallUid }}_{{ $json.imageFileNameSuffix }}.jpg",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "sendBody": true,
+        "contentType": "binaryData",
+        "inputDataFieldName": "data",
+        "options": {
+          "batching": {
+            "batch": {
+              "batchSize": 5
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2896,
+        128
+      ],
+      "id": "36616544-0cb5-4f7b-88aa-38218131debe",
+      "name": "Image Upload - Supabase",
+      "retryOnFail": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "yVLT3s0EESoZSB73",
+          "name": "Supabase account(협회/국내공표->oecd번역)"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Change this line:\n// const publishDate = $json.resultData?.publishDate;\n\n// To this:\nconst publishDate = $('Fetch Recall Details').first().json.resultData?.publishDate;\n\n// The rest of your code remains the same\nlet yearFull = null;\nlet yearYY = null;\nlet usedFallback = false;\n\nif (publishDate && typeof publishDate === 'string' && publishDate.length >= 4) {\n  try {\n    const parsedYear = parseInt(publishDate.substring(0, 4), 10);\n    if (!isNaN(parsedYear) && parsedYear > 1900 && parsedYear < 2100) {\n      yearFull = parsedYear;\n      yearYY = String(yearFull).slice(-2);\n      // console.log(`Extracted year ${yearFull} (YY: ${yearYY}) from publishDate: ${publishDate}`);\n    } else {\n      // console.warn(`Parsed year (${parsedYear}) from publishDate \"${publishDate}\" seems invalid.`);\n    }\n  } catch (error) {\n    // console.warn(`Error parsing year from publishDate \"${publishDate}\": ${error.message}`);\n  }\n}\n\nif (yearFull === null || yearYY === null) {\n  usedFallback = true;\n  // console.warn(`publishDate (\"${publishDate}\") is missing or invalid. Using current KST date as fallback.`);\n  try {\n    const now = new Date();\n    const formatter = new Intl.DateTimeFormat('en-US', {\n      timeZone: 'Asia/Seoul',\n      year: 'numeric',\n    });\n    const kstYearString = formatter.format(now);\n    yearFull = parseInt(kstYearString, 10);\n    yearYY = String(yearFull).slice(-2);\n    // console.log(`Using fallback KST year: ${yearFull} (YY: ${yearYY})`);\n  } catch (error) {\n    console.error(`FATAL: Failed to get current KST year: ${error.message}`);\n  }\n}\n\nif (yearFull === null || yearYY === null) {\n  console.error(\"Unexpected error: Year could not be determined after fallback.\");\n}\n\nreturn {\n  \"yearFull\" : yearFull,\n  \"yearYY\" : yearYY,\n  \"usedFallback\": usedFallback\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1680,
+        880
+      ],
+      "id": "a16e9fcd-a03e-46ad-81bb-07163bc14b56",
+      "name": "Extract Year"
+    },
+    {
+      "parameters": {
+        "content": "## Extract Year\n1. from PublishedData\n2. using $now",
+        "height": 240,
+        "width": 300
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1552,
+        768
+      ],
+      "typeVersion": 1,
+      "id": "76d99db0-26e2-4c4f-be6f-0fcc3ad4dbaa",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "content": "## Generate OECD ID (e.g., K25/CP/00001)",
+        "height": 700,
+        "width": 1440,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1504,
+        320
+      ],
+      "typeVersion": 1,
+      "id": "210ad291-4da6-4e2f-9856-0607c01e9c50",
+      "name": "Sticky Note6"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://fczencruxulddednkint.supabase.co/rest/v1/rpc/get_next_oecd_sequence",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "input_year",
+              "value": "={{ $json.yearFull }}"
+            },
+            {
+              "name": "input_source",
+              "value": "={{ $json.source }}"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "text"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2528,
+        480
+      ],
+      "id": "43343d70-9992-45bb-aadb-d3dd834e0a23",
+      "name": "Generate Sequence",
+      "credentials": {
+        "supabaseApi": {
+          "id": "yVLT3s0EESoZSB73",
+          "name": "Supabase account(협회/국내공표->oecd번역)"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.1,
+      "position": [
+        2432,
+        816
+      ],
+      "id": "24b50fd5-e03f-4fac-9978-d4c029776be0",
+      "name": "Merge ID parts"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "fea21c7a-bdcc-4634-bd26-b6e226c20004",
+              "name": "oecd_id",
+              "value": "=K{{ $('Merge ID parts').item.json.yearYY }}/{{ $('Merge ID parts').item.json.source }}/{{ $('Fetch Recall Details').item.json.resultData.recallUid }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2592,
+        816
+      ],
+      "id": "21b018cb-6a19-4390-a7c2-339a47883111",
+      "name": "Combine"
+    },
+    {
+      "parameters": {
+        "dataPropertyName": "=data",
+        "borderWidth": "={{$json.leftRight}}",
+        "borderHeight": "={{$json.topBot}}",
+        "borderColor": "#ffffff",
+        "options": {}
+      },
+      "name": "Resize 500x500",
+      "type": "n8n-nodes-base.editImage",
+      "position": [
+        2480,
+        128
+      ],
+      "id": "6e6d612e-e7de-4306-ab23-7486630732b4",
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "operation": "multiStep",
+        "operations": {
+          "operations": [
+            {
+              "operation": "resize",
+              "resizeOption": "onlyIfLarger"
+            },
+            {
+              "operation": "resize",
+              "resizeOption": "onlyIfSmaller"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Max 500",
+      "type": "n8n-nodes-base.editImage",
+      "position": [
+        2000,
+        128
+      ],
+      "id": "b59fba6b-3a73-4d33-b326-c7e833f0592d",
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "url": "https://www.safetykorea.kr/openapi/api/recall/recallDetail.json",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "recallUid",
+              "value": "={{ $('Loop Each Recalls').item.json.resultData.recallUid }}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1168,
+        96
+      ],
+      "id": "4f3d8686-2dc4-4956-a085-16841f77cf77",
+      "name": "Fetch Recall Details",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "naaa58nW1ssVzrdn",
+          "name": "SaftyKorea API AuthKey"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "content": "## K25/CP/00000\n숫자 5자리를 순차적으로 처리할 시 사용",
+        "height": 280,
+        "width": 340,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2464,
+        384
+      ],
+      "typeVersion": 1,
+      "id": "2e96687f-073a-4dbd-9f6b-f34c26b7a927",
+      "name": "Sticky Note7"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "fea21c7a-bdcc-4634-bd26-b6e226c20004",
+              "name": "oecd_id",
+              "value": "=K{{ $('Merge ID parts').item.json.yearYY }}/{{ $('Merge ID parts').item.json.source }}/{{ $('Generate Sequence').item.json.data }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2672,
+        480
+      ],
+      "id": "ac82786c-7b64-4d7f-b153-6e1967d94a94",
+      "name": "Combine1",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "recalls_oecd_staging",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "recallUid",
+              "condition": "eq",
+              "keyValue": "={{ $('Create Row').item.json.recallUid }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "oecdId",
+              "fieldValue": "={{ $json.oecd_id }}"
+            },
+            {
+              "fieldId": "updatedAt",
+              "fieldValue": "={{ $now.toUTC() }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        2752,
+        816
+      ],
+      "id": "9c84512a-ed2d-4f3b-9ecb-b13e9e7099fe",
+      "name": "Update OECD Code",
+      "credentials": {
+        "supabaseApi": {
+          "id": "yVLT3s0EESoZSB73",
+          "name": "Supabase account(협회/국내공표->oecd번역)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "tableId": "recalls_oecd_staging",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "recallUid",
+              "fieldValue": "={{ $('Loop Each Recalls').item.json.resultData.recallUid }}"
+            },
+            {
+              "fieldId": "status",
+              "fieldValue": "FETCHED"
+            },
+            {
+              "fieldId": "updatedAt",
+              "fieldValue": "={{ $now.toUTC() }}"
+            },
+            {
+              "fieldId": "originalSafetyKoreaData",
+              "fieldValue": "={{ $json.resultData }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1328,
+        96
+      ],
+      "id": "4a6aae5c-a869-47c3-bc0c-9765d7c5ddb9",
+      "name": "Create Row",
+      "retryOnFail": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "yVLT3s0EESoZSB73",
+          "name": "Supabase account(협회/국내공표->oecd번역)"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "recalls_oecd_staging",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "recallUid",
+              "condition": "eq",
+              "keyValue": "={{ $('Fetch Recall Details').item.json.resultData.recallUid }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "processedImages",
+              "fieldValue": "={{ $json.finalProcessedImages }}"
+            },
+            {
+              "fieldId": "updatedAt",
+              "fieldValue": "={{ $now.toUTC() }}"
+            },
+            {
+              "fieldId": "status",
+              "fieldValue": "IMAGES_PROCESSED"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        3360,
+        128
+      ],
+      "id": "07f6783d-d969-4a81-ba29-0b62433aa690",
+      "name": "Update Image url",
+      "credentials": {
+        "supabaseApi": {
+          "id": "yVLT3s0EESoZSB73",
+          "name": "Supabase account(협회/국내공표->oecd번역)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://www.safetykorea.kr/openapi/api/recall/recallList.json",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "conditionKey",
+              "value": "={{ $json.type }}"
+            },
+            {
+              "name": "conditionValue",
+              "value": "={{ $json.timestamp.toDateTime().format('yyyyMMdd') }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        64,
+        80
+      ],
+      "id": "83275b3d-ae24-4f26-802b-6402b97bbbec",
+      "name": "Fetch Recall Info",
+      "retryOnFail": true,
+      "maxTries": 4,
+      "waitBetweenTries": 3000,
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "naaa58nW1ssVzrdn",
+          "name": "SaftyKorea API AuthKey"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "22efb848-c8a0-4a77-8a4d-2fa511d07929",
+              "name": "=finalProcessedImages",
+              "value": "={{ $json.data.map(item => ({ filename: item.Key.replace(\"product-images/\", \"\"), url: \"https://fczencrexulddednkint.supabase.co/storage/v1/object/public/\" + item.Key })) }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3200,
+        128
+      ],
+      "id": "52ec94ab-aa27-42ab-9c43-55d8b91cac1d",
+      "name": "Set Image urls"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "imageUrls",
+        "include": "allOtherFields",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        1680,
+        128
+      ],
+      "id": "a245cc83-9bb1-4284-95d7-f757251f3e07",
+      "name": "Split Out Images"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "6c14ceb9-b9f3-4960-ac35-4029064cfaa5",
+              "name": "recallUid",
+              "value": "={{ $('Loop Each Recalls').item.json.resultData.recallUid }}",
+              "type": "string"
+            },
+            {
+              "id": "466f74e8-6098-4dad-9906-ced16fcef5e7",
+              "name": "imageUrls",
+              "value": "={{ $('Fetch Recall Details').item.json.resultData.recallFiles }}",
+              "type": "array"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1520,
+        128
+      ],
+      "id": "c63adc40-4506-4fc4-aa60-f338666e3564",
+      "name": "Pick Image Info"
+    },
+    {
+      "parameters": {
+        "batchSize": "=1",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        672,
+        80
+      ],
+      "id": "0f10279b-fce4-4a56-bbd9-99b2c1bb47ca",
+      "name": "Loop Each Recalls"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "resultData",
+        "include": "allOtherFields",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        480,
+        80
+      ],
+      "id": "6fdd03e3-f948-40ba-b129-e49f7d6fc240",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ba28ace4-e150-4859-b404-74e1ed18c164",
+              "name": "source",
+              "value": "EP",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2080,
+        416
+      ],
+      "id": "5e394c23-cdc2-4b17-954f-f60651223691",
+      "name": "Set EP"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ba28ace4-e150-4859-b404-74e1ed18c164",
+              "name": "source",
+              "value": "HP",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2080,
+        576
+      ],
+      "id": "1f952ae1-d03b-4fa4-830d-528f56526b86",
+      "name": "Set HP"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ba28ace4-e150-4859-b404-74e1ed18c164",
+              "name": "source",
+              "value": "CP",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2080,
+        736
+      ],
+      "id": "a089a0cf-e028-47dc-bb63-fadbc97c8d67",
+      "name": "Set CP"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "recalls_oecd_staging",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "recallUid",
+              "condition": "eq",
+              "keyValue": "={{ $('Fetch Recall Details').item.json.resultData.recallUid }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "status",
+              "fieldValue": "=TRANSLATED"
+            },
+            {
+              "fieldId": "updatedAt",
+              "fieldValue": "={{ $now.toUTC() }}"
+            },
+            {
+              "fieldId": "translatedFields",
+              "fieldValue": "={{ $json.output.toJsonString() }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        2112,
+        -368
+      ],
+      "id": "1e2f518c-0269-488a-847d-853881030277",
+      "name": "Update Translation",
+      "credentials": {
+        "supabaseApi": {
+          "id": "yVLT3s0EESoZSB73",
+          "name": "Supabase account(협회/국내공표->oecd번역)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "numberInputs": 4,
+        "options": {
+          "includeUnpaired": true
+        }
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.1,
+      "position": [
+        3488,
+        1136
+      ],
+      "id": "11192a07-2f90-4a78-b84d-10146d3088a7",
+      "name": "Merge All"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "06f228c4-d1df-4377-8c39-6bd2b2400765",
+              "name": "manufacturer",
+              "value": "={{ $('AI Agent').item.json.output.makerName }}",
+              "type": "string"
+            },
+            {
+              "id": "86bba356-6455-4f57-80cc-231ebbbb981d",
+              "name": "=manufacturerCode",
+              "value": "={{ $('AI Agent').item.json.output.makingCntryName }}",
+              "type": "string"
+            },
+            {
+              "id": "94a889f2-4a7a-4e7a-8108-a75059b3d48a",
+              "name": "productName",
+              "value": "={{ $('AI Agent').item.json.output.recallProductName }}",
+              "type": "string"
+            },
+            {
+              "id": "ff6b39c9-404d-4f90-811d-774ae0f463d0",
+              "name": "productDesc",
+              "value": "=Brand name: {{ $('AI Agent').item.json.output.recallBrandName ?? \"\" }}, Certification number: {{ $json.originalSafetyKoreaData.certNum ?? \"\" }}",
+              "type": "string"
+            },
+            {
+              "id": "8fac2279-022c-46f2-901f-1661c4631db9",
+              "name": "publishDate",
+              "value": "={{ $json.originalSafetyKoreaData.publishDate?.toDateTime().format('yyyy-MM-dd') ?? \"-\" }}",
+              "type": "string"
+            },
+            {
+              "id": "abbcb6e6-2243-4e7a-b24d-6d7e818fbba9",
+              "name": "modelNo",
+              "value": "={{ $('AI Agent').item.json.output.recallModelName ?? \"\"}}",
+              "type": "string"
+            },
+            {
+              "id": "3e4c5737-e69c-4ee5-92f2-af5339a208b9",
+              "name": "hazard",
+              "value": "={{ $('AI Agent').item.json.output.harmDscr ?? \"-\"}}\n{{ $('AI Agent').item.json.output.accidentCaseDscr ?? \"\" }}",
+              "type": "string"
+            },
+            {
+              "id": "814fefbb-5d9c-4784-9649-dd8747aed4d0",
+              "name": "injuries",
+              "value": "=No injury has been reported",
+              "type": "string"
+            },
+            {
+              "id": "ffc6b7a9-2f53-46a1-ae7f-85995c15782f",
+              "name": "action",
+              "value": "={{ $('AI Agent').item.json.output.publishActionDscr ?? \"\"}}",
+              "type": "string"
+            },
+            {
+              "id": "81c8e712-6c87-419b-932d-4d4ac7110e74",
+              "name": "url",
+              "value": "=http://www.safetykorea.kr/recall/ajax/recallBoard?recallUid={{ $json.recallUid }}",
+              "type": "string"
+            },
+            {
+              "id": "9806ac14-8f7b-4b26-b671-04f755ab3721",
+              "name": "productCategory",
+              "value": "={{ $('AI Agent').item.json.output.productItemName ?? \"\"}}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2320,
+        -368
+      ],
+      "id": "5a3d87d2-419f-4c3c-8412-330272926928",
+      "name": "Set Translated Fields",
+      "notes": "<action> 태그의 원래 세팅 :\n{{ $('AI Agent').item.json.output.recallMeans ?? \"◇ Consumers who have it must stop using the product immediately. \"}}\n{{ $('AI Agent').item.json.output.recallMeans ?? \"◇ Contact and visit the place of purchase for exchange, refund or repair, etc.\"}}\n\nproductDesc 원래코드\nBrand name: {{ $('AI Agent').item.json.output.recallBrandName ?? \"\" }}, Certification number: {{ $('AI Agent').item.json.output.certNum ?? \"\" }}"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "11a11dac-4fa5-4d51-b330-93b46774028b",
+              "name": "recallUid",
+              "value": "={{ $json.recallUid }}",
+              "type": "string"
+            },
+            {
+              "id": "24df7736-29c2-4425-94a4-1983ce0280dd",
+              "name": "edit_type",
+              "value": "=I",
+              "type": "string"
+            },
+            {
+              "id": "dd738f9f-3cbf-4ef0-b4a7-65aa22a4d85b",
+              "name": "oecdId",
+              "value": "={{ $json.oecdId }}",
+              "type": "string"
+            },
+            {
+              "id": "004ed79d-e26f-4d0c-a02c-6bb166880b9d",
+              "name": "countryId",
+              "value": "=KR",
+              "type": "string"
+            },
+            {
+              "id": "06f228c4-d1df-4377-8c39-6bd2b2400765",
+              "name": "manufacturer",
+              "value": "={{ $json.manufacturer }}",
+              "type": "string"
+            },
+            {
+              "id": "62167f84-025c-4e52-8676-e693076572c5",
+              "name": "manufacturerCountryCode",
+              "value": "={{ $json.manufacturerCode }}",
+              "type": "string"
+            },
+            {
+              "id": "010f1983-cf79-4368-9cb5-1cc8b53187d6",
+              "name": "productType",
+              "value": "={{ $if($json.productCategory, $json.productCategory + \" ; \" + $json.productName, $json.productName).replace(\">\", \" ; \") }}",
+              "type": "string"
+            },
+            {
+              "id": "94a889f2-4a7a-4e7a-8108-a75059b3d48a",
+              "name": "productName",
+              "value": "={{ $json.productName }}",
+              "type": "string"
+            },
+            {
+              "id": "ff6b39c9-404d-4f90-811d-774ae0f463d0",
+              "name": "productDesc",
+              "value": "={{ $json.productDesc }}",
+              "type": "string"
+            },
+            {
+              "id": "8fac2279-022c-46f2-901f-1661c4631db9",
+              "name": "publishDate",
+              "value": "={{ $json.publishDate }}",
+              "type": "string"
+            },
+            {
+              "id": "a954cd47-ade8-497f-9af5-3439360cbfd8",
+              "name": "brickCode",
+              "value": "={{ $json.output.brick_code }}",
+              "type": "string"
+            },
+            {
+              "id": "60b33836-4acf-4be8-9cf3-31086f2fc9f7",
+              "name": "segmentCode",
+              "value": "={{ $if($json.output.brick_code.length > 0, \"\", $json.output.segment_code ) }}",
+              "type": "string"
+            },
+            {
+              "id": "cea45a6e-322f-4b99-90b6-cb4ac12324e5",
+              "name": "familyCode",
+              "value": "={{ $if($json.output.brick_code.length > 0, \"\", $json.output.family_code ) }}",
+              "type": "string"
+            },
+            {
+              "id": "469df01d-b575-43e8-a9a2-48748facb847",
+              "name": "classCode",
+              "value": "={{ $if($json.output.brick_code.length > 0, \"\", $json.output.class_code ) }}",
+              "type": "string"
+            },
+            {
+              "id": "abbcb6e6-2243-4e7a-b24d-6d7e818fbba9",
+              "name": "modelNo",
+              "value": "={{ $json.modelNo }}",
+              "type": "string"
+            },
+            {
+              "id": "3e4c5737-e69c-4ee5-92f2-af5339a208b9",
+              "name": "hazard",
+              "value": "={{ $json.hazard }}",
+              "type": "string"
+            },
+            {
+              "id": "814fefbb-5d9c-4784-9649-dd8747aed4d0",
+              "name": "injuries",
+              "value": "={{ $json.injuries }}",
+              "type": "string"
+            },
+            {
+              "id": "ffc6b7a9-2f53-46a1-ae7f-85995c15782f",
+              "name": "action",
+              "value": "={{ $json.action }}",
+              "type": "string"
+            },
+            {
+              "id": "81c8e712-6c87-419b-932d-4d4ac7110e74",
+              "name": "url",
+              "value": "=http://www.safetykorea.kr/recall/ajax/recallBoard?recallUid={{ $json.recallUid }}",
+              "type": "string"
+            },
+            {
+              "id": "40c9c921-2423-4bb4-93b5-0db0e93cd496",
+              "name": "imageFiles",
+              "value": "={{ $json.processedImages }}",
+              "type": "array"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3648,
+        1168
+      ],
+      "id": "9ff64aea-f614-4ea1-b463-8bc1a6c2fd08",
+      "name": "Prepare XML"
+    },
+    {
+      "parameters": {
+        "jsCode": "// HTML 엔티티 인코딩 함수 (매우 중요!)\nfunction escapeXml(unsafe) {\n  if (typeof unsafe !== 'string') {\n    return unsafe === null || typeof unsafe === 'undefined' ? '' : String(unsafe);\n  }\n  return unsafe\n       .replace(/&/g, \"&\")\n       .replace(/</g, \"<\")\n       .replace(/>/g, \">\")\n       .replace(/\"/g, \"\\\"\")\n       .replace(/'/g, \"'\");\n}\n\n// 입력 데이터 (Edit Fields 노드의 출력)\nconst data = $json;\n\n// 이미지 태그 생성\nlet imageTags = '';\nif (Array.isArray(data.imageFiles)) {\n  data.imageFiles.forEach(img => {\n    // imageFiles 배열의 각 요소가 {filename: '...'} 형태라고 가정\n    if (img && img.filename) {\n      imageTags += `\n  <image>\n    <data></data>\n    <filename>${escapeXml(img.filename)}</filename>\n    <media_type>image/jpeg</media_type>\n    <alt_text></alt_text>\n  </image>`;\n    }\n  });\n}\n\n// GPC 코드 태그 생성 (Brick 우선)\nlet gpcTags = '';\nif (data.brickCode) {\n  gpcTags = `<brick>${escapeXml(data.brickCode)}</brick>`;\n} else {\n  if (data.segmentCode) gpcTags += `<segment>${escapeXml(data.segmentCode)}</segment>`;\n  if (data.familyCode) gpcTags += `<family>${escapeXml(data.familyCode)}</family>`;\n  if (data.classCode) gpcTags += `<class>${escapeXml(data.classCode)}</class>`;\n}\n\nlet manufacturer = '';\nif (data.manufacturer) {\n  manufacturer = `<manufacturer>${escapeXml(data.manufacturer)}</manufacturer>`;\n} \n\nlet manufacturerCountry = '';\nif (data.manufacturerCountryCode) {\n  manufacturerCountry = `<manufacturer_country_id>${escapeXml(data.manufacturerCountryCode)}</manufacturer_country_id>`;\n} \n\n// 최종 XML 문자열 생성\nconst xmlString = `<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<recall xmlns=\"urn:recall-schema\" lang=\"en\">\n  <edit_type>${escapeXml(data.edit_type)}</edit_type>\n  <id>${escapeXml(data.oecdId)}</id>\n  <country_id>KR</country_id>\n  ${manufacturerCountry}\n  ${manufacturer}\n  <product_type>${escapeXml(data.productType)}</product_type>\n  <product_name>${escapeXml(data.productName)}</product_name>\n  <product_desc>${escapeXml(data.productDesc)}</product_desc>\n  <product_code>\n    <publication>${\"2024-05-01\"}</publication>\n    ${gpcTags}\n  </product_code>\n  <product_model_no>${escapeXml(data.modelNo)}</product_model_no>\n  <hazard>${escapeXml(data.hazard)}</hazard>\n  <injuries>${escapeXml(data.injuries)}</injuries>\n  <action>${escapeXml(data.action)}</action>\n  <units></units>\n  <URL>${escapeXml(data.url)}</URL>\n  <date>${data.publishDate}</date>\n  ${imageTags}\n  <manufacturer_website/>\n</recall>`;\n\n// 결과를 다음 노드로 전달 (입력 데이터에 xmlContent 추가)\nreturn { ...data, xmlContent: xmlString };"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3808,
+        1168
+      ],
+      "id": "0a22c422-e819-4966-921e-ab6b768a8292",
+      "name": "Generate XML"
+    },
+    {
+      "parameters": {
+        "content": "## Merge & Generate XML for OECD\n",
+        "height": 240,
+        "width": 740,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        3408,
+        1088
+      ],
+      "typeVersion": 1,
+      "id": "1e67b447-0901-4e3d-98df-e6236ba565d7",
+      "name": "Sticky Note8"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        3040,
+        128
+      ],
+      "id": "8eb9ae23-befb-424b-878d-8dc0dfebfc1d",
+      "name": "이미지 취합"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-pro-exp-03-25",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1520,
+        -640
+      ],
+      "id": "b88cbdd7-590a-44d8-837c-58cde79f6328",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "fIgS517wDql1kMBP",
+          "name": "Gemini Key for 2.5 pro"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-5.1",
+          "mode": "list",
+          "cachedResultName": "gpt-5.1"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        1776,
+        -160
+      ],
+      "id": "7b806f77-139d-4689-8fa6-3ede72eff3ee",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "b1sYKKa7Kt557JFS",
+          "name": "OpenAi account(ksafety@ksafety.kr)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-5.4-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-5.4-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        1712,
+        672
+      ],
+      "id": "c92a352a-c399-4ac4-b8b5-61058d630a08",
+      "name": "OpenAI Chat Model1",
+      "credentials": {
+        "openAiApi": {
+          "id": "b1sYKKa7Kt557JFS",
+          "name": "OpenAi account(ksafety@ksafety.kr)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 9
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -416,
+        80
+      ],
+      "id": "2cf1e392-57fa-4b9e-8630-9e2a5c8eb0dc",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "4815ef43-0a9f-4021-9826-44762748cc9d",
+        "authentication": "headerAuth",
+        "responseMode": "lastNode",
+        "responseData": "allEntries",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -416,
+        -96
+      ],
+      "id": "72655f18-b15e-4e5d-8aa4-d7d85b5d226f",
+      "name": "Webhook",
+      "webhookId": "4815ef43-0a9f-4021-9826-44762748cc9d",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "j4px93EgTjrEV5t6",
+          "name": "n8n Webhook Key"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"timestamp\": \"{{ $json.body.recallDate }}\",\n  \"type\": \"publishDate\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -176,
+        -96
+      ],
+      "id": "74041649-c962-4e86-a601-00ee46e7a99a",
+      "name": "Extract date"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "u3JEAg24QutFfjQl",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/u3JEAg24QutFfjQl",
+          "cachedResultName": "(GS1) [한국리콜<>OECD] OECD GPC RAG"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "product_name": "={{ $('Fetch Recall Details').item.json.resultData.recallProductName }}",
+            "product_description": "=category1: {{ $json.originalSafetyKoreaData.categoryName }} \ncategory2: {{ $json.originalSafetyKoreaData.productItemName }}  \nhazard: {{ $json.originalSafetyKoreaData.accidentCaseDscr }} {{ $json.originalSafetyKoreaData.harmDscr }} \nimageAnalysis: {{ $json.output }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "product_name",
+              "displayName": "product_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "product_description",
+              "displayName": "product_description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "mode": "each",
+        "options": {
+          "waitForSubWorkflow": true
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        1616,
+        1120
+      ],
+      "id": "08a5fd24-44eb-4cfd-ad35-b6055a4bd164",
+      "name": "Execute Workflow",
+      "retryOnFail": true,
+      "waitBetweenTries": 5000,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "content": "## OECD GPC RAG",
+        "height": 260,
+        "width": 300,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1504,
+        1040
+      ],
+      "typeVersion": 1,
+      "id": "5fba9d71-2efa-4845-9b58-97da66dd24d5",
+      "name": "Sticky Note9"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "recalls_oecd_staging",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "recallUid",
+              "condition": "eq",
+              "keyValue": "={{ $json.recallUid }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "updatedAt",
+              "fieldValue": "={{ $now.toUTC() }}"
+            },
+            {
+              "fieldId": "status",
+              "fieldValue": "PENDING_REVIEW"
+            },
+            {
+              "fieldId": "xmlContent",
+              "fieldValue": "={{ $json.xmlContent.replaceAll('\\u0000', '') }}"
+            },
+            {
+              "fieldId": "assignedGpcBrickCode",
+              "fieldValue": "={{ $json.brickCode }}"
+            },
+            {
+              "fieldId": "assignedGpcSegmentCode",
+              "fieldValue": "={{ $json.segmentCode }}"
+            },
+            {
+              "fieldId": "assignedGpcFamilyCode",
+              "fieldValue": "={{ $json.familyCode }}"
+            },
+            {
+              "fieldId": "assignedGpcClassCode",
+              "fieldValue": "={{ $json.classCode }}"
+            },
+            {
+              "fieldId": "gpcSource",
+              "fieldValue": "oecd"
+            },
+            {
+              "fieldId": "tags",
+              "fieldValue": "={{ [$('Merge All').item.json.output.brick_name] }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        3984,
+        1168
+      ],
+      "id": "8254eff3-f824-433a-9399-10c1cd185f0c",
+      "name": "Update Final Info",
+      "retryOnFail": false,
+      "credentials": {
+        "supabaseApi": {
+          "id": "yVLT3s0EESoZSB73",
+          "name": "Supabase account(협회/국내공표->oecd번역)"
+        }
+      },
+      "onError": "continueErrorOutput",
+      "notes": "{{ $('Create Row').item.json.recallUid }}"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "37a3aed2-6648-49fe-b20c-0e685bd6c4e0",
+              "name": "timestamp",
+              "value": "={{ $json.timestamp.toDateTime().minus(1, 'days') }}\n",
+              "type": "string"
+            },
+            {
+              "id": "a809b4b9-4710-436d-af55-7152015c1919",
+              "name": "type",
+              "value": "publishDate",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -176,
+        80
+      ],
+      "id": "2beecab6-bb5e-4f5c-925f-95569f9726b5",
+      "name": "Set type as publishDate"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "2b4cd6a4-8e58-4142-a83b-402c2e1b9878",
+              "leftValue": "={{ $json.type }}",
+              "rightValue": "publishDate",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -176,
+        448
+      ],
+      "id": "b1f4efd0-8700-4a5d-a33a-c5016ad09eb5",
+      "name": "If publishDate"
+    },
+    {
+      "parameters": {
+        "content": "## *향후 개발 추가사항\n(**용어 사전 RAG**)\ncsv 용어사전 파일을 생성하여 RAG 적용\n(**리콜 정보 변경 및 삭제 조회**)\nOpenAPI에서 결과코드(resultCode) 값만 조회하여 \"2004\"가 뜨는 것만 리스트 업 / 분기별 1회 정도 조회 ",
+        "height": 176,
+        "width": 276
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2000,
+        -192
+      ],
+      "id": "99c35059-fe91-40e9-952a-d4468ac0a797",
+      "name": "Sticky Note10"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "iZkUD24KTTpXCnML",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/iZkUD24KTTpXCnML",
+          "cachedResultName": "이미지 처리 연습_효율up"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {
+          "waitForSubWorkflow": true
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        1152,
+        1120
+      ],
+      "id": "a809570d-b19d-4a9c-8e65-16781c0ff9f9",
+      "name": "Execute Workflow1",
+      "retryOnFail": true,
+      "waitBetweenTries": 3000,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineAll",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1392,
+        1120
+      ],
+      "id": "8b2e0c8f-8a47-4d46-8dc4-7afbe4e0c729",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "VH3sjyVgMLKMZlGm",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/VH3sjyVgMLKMZlGm",
+          "cachedResultName": "이미지 처리 연습"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "recallUid": "={{ $json.recallUid }}"
+          },
+          "matchingColumns": [
+            "recallUid"
+          ],
+          "schema": [
+            {
+              "id": "recallUid",
+              "displayName": "recallUid",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        1152,
+        928
+      ],
+      "id": "74a131f8-b72d-4e0b-ae2f-967a8ad59603",
+      "name": "이미지 처리 연습1",
+      "retryOnFail": true,
+      "waitBetweenTries": 3000,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "amount": 2
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1568,
+        -368
+      ],
+      "id": "7ef073aa-ddc6-4fb8-b10c-d2eed57b5ec6",
+      "name": "Wait",
+      "webhookId": "40b3b349-e0ac-4321-a51a-2b9088db391a"
+    },
+    {
+      "parameters": {
+        "jsCode": "const recallUid = $('Fetch Recall Info').item.json.resultData.recallUid;\nconst totalItemsInBatch = $input.all().length;\n\nreturn $input.all().map((item, currentIndex) => {\n  if (!item.json || typeof item.json !== 'object') {\n    item.json = {};\n  }\n  let newFileSuffix;\n  if (totalItemsInBatch >= 2) {\n    if (currentIndex === 0) {\n      newFileSuffix = '2';\n    } else if (currentIndex === 1) {\n      newFileSuffix = '1';\n    } else {\n      newFileSuffix = `${currentIndex + 1}`;\n    }\n  } else {\n    newFileSuffix = `${currentIndex + 1}`;\n  }\n  item.json.imageFileNameSuffix = newFileSuffix;\n  item.json.finalImageUrlForSupabase = `https://fczencruxulddednkint.supabase.co/storage/v1/object/product-images/${recallUid}${newFileSuffix}.jpg`;\n  return item;\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2608,
+        128
+      ],
+      "id": "28b0a437-8621-40e1-b342-44ae6d189dc3",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "sortFieldsUi": {
+          "sortField": [
+            {
+              "fieldName": "imageFileNameSuffix"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.sort",
+      "typeVersion": 1,
+      "position": [
+        2752,
+        128
+      ],
+      "id": "12147394-047c-4193-8db5-d56f08ceb3ab",
+      "name": "Sort"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "86dc77a2-b871-4306-a980-01cc781cd9f4",
+              "leftValue": "={{ $json.recallUid }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "empty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1024,
+        96
+      ],
+      "id": "8114c359-e530-4411-a360-b73846d5245f",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=# ROLE: Expert Translator for International Product Safety Recalls\n\n# CONTEXT:\nYou are an expert translator specializing in converting official Korean product recall notices into precise, formal English suitable for the OECD Global Recalls portal (https://globalrecalls.oecd.org/). The accuracy and clarity of your translation, **especially regarding numerical values, units, and specific terminology**, are paramount for international consumer safety.\n\n# AVAILABLE TOOLS:\n1.  **RAG (Vector Store):** Contains previously human-translated recall documents. Use this as your PRIMARY source for verified terminology, phrasing, company names, chemical names, units, and style.\n2.  **Google Search:** Use this tool as a SECONDARY resource if the RAG tool lacks specific information, especially for verifying current official English company names or highly specific technical/chemical terms not found in the RAG examples. Always prioritize RAG results if available.\n\n# TASK:\nTranslate the *values* within the provided Korean JSON object into English. You will receive the JSON object as input. Your output must be a valid JSON object maintaining the exact original structure (keys must remain identical), containing only the translated values, adhering strictly to the special translation instructions below.\n\n# INSTRUCTIONS:\n1.  **Analyze Input:** You will receive a Korean JSON object containing recall details.\n2.  *Translate all text into clear and concise formal English suitable for international regulatory communication.\n3.  **Utilize Tools Strategically:**\n    *   Actively query the **RAG tool** first using relevant Korean text segments (product name, hazard description, manufacturer name, corrective action, chemical substances) to find established translations, industry-specific terminology, standard English representations of company names, and stylistic examples.\n    *   If the RAG tool does not yield sufficient information, use the **Google Search tool** to verify translations, particularly for official company names or niche technical/chemical terms. Cross-reference findings if possible. Always prefer RAG results when they exist.\n4.  **Translate Values (Adhering to Special Instructions):** Translate *only* the Korean string values found in the input JSON into formal, accurate English.\n    *   **[CRITICAL] Special Translation Rules & Numerical Accuracy:**\n        *   **Specific Word:** Always translate \"캐리어\" as \"suitcase\".\n        *   **Company Names:** Be aware that Korean and English manufacturer/business names may differ significantly. **Verify the official English name using RAG first, then Google Search if necessary.** Do not directly transliterate if an official English name exists.\n        *   **Numerical Precision:** Translate **ALL numbers** (measured values, threshold limits, multiplication factors like \"1.6배\", \"4110.0배\") **EXACTLY** as they appear in the Korean text. **DO NOT ROUND OR APPROXIMATE.** For factors like \"X배 초과\", translate accurately (e.g., \"exceeded by X times\", \"X times the limit\").\n        *   **Units:** Ensure all numerical measurements related to hazards (e.g., chemical content, physical measures) include the correct units (e.g., mg/kg, %, ppm). **If a unit is missing in the Korean text but clearly implied by the context (like a measurement value compared to a standard threshold with a unit), you MUST add the appropriate unit to the English translation.** Refer to RAG or standard scientific notation for correct unit representation. Examples: \"167 mg/kg\", \"308,250 mg/kg\" (use commas for thousands if appropriate for the locale/standard), \"19.84 %\", \"4.92 mg/kg\".\n        *   **Time zones:** For all operating hours or contact time expressions (e.g., 운영시간, 접수 가능 시간, 고객센터 운영), translate into English time format and always include “KST” (Korea Standard Time).\n        *   **Threshold Language:** Accurately translate terms indicating limits, such as \"이하\" (e.g., \"or less\", \"maximum\", \"limit:\") and \"초과\" (e.g., \"exceeded\", \"above limit\").\n        *   **Hazard Details Structure:** When translating detailed hazard information (often involving parts, measurements, and thresholds like the lead, cadmium, preservative, phthalate examples provided in training/context), maintain the logical structure: clearly state the substance, the factor by which the limit was exceeded, the affected part, the measured value(s) with units, and the threshold value with units. Translate chemical names (e.g., 납/Lead, 카드뮴/Cadmium, MIT, CMIT, DEHP, DIBP, DBP, DINP) accurately, using RAG/Search for standard English chemical nomenclature if unsure.\n        *   **Example Structure Interpretation:** For inputs like \"총 납 함유량 기준치의 1.6배 초과 / 부위: ... / 측정값: 167 mg/kg / 기준치: 100 mg/kg 이하\", the translation should reflect: \"Total lead content exceeded the standard limit by 1.6 times / Part: [Translated Part Name] / Measured value: 167 mg/kg / Standard limit: 100 mg/kg or less\". Preserve details for multiple measurements (e.g., \"① ... ② ...\").\n    *   **General Translation:** Pay close attention to domain-specific terms related to product types, hazards (e.g., choking hazard, fire risk, chemical exposure), corrective actions (e.g., recall, stop sale, repair, refund), and regulatory bodies, using RAG as the primary reference.\n    *   **Contextual Accuracy:** Ensure translations are contextually correct based on the field's purpose (e.g., '위해도정도' relates to hazard level, '대처방법' to corrective action).\n    *   **Country Name:** Translate \"대한민국\" to \"Republic of Korea\".\n    *   **Exclusions:** Do NOT translate identifiers, dates, URLs, or pre-defined codes (like GPC codes or recall IDs). Do not translate non-string values.\n5.  **Preserve Structure:** Ensure your output is a valid JSON object with the *exact same keys* as the input JSON. Only the corresponding string values should be translated.\n6.  **Format Output:** Your final output must be **ONLY the translated JSON object**. Do not include any introductory text, concluding remarks, markdown formatting (like ```json), or any other text outside the JSON structure itself. This is critical for the output parser to function correctly.\n7.  **Country Name to Code Conversion:** For fields representing country of manufacture or origin (e.g., `makingCntryName`), translate the identified country name into its corresponding ISO 3166-1 alpha-2 two-letter country code (e.g., \"대한민국\" -> \"KR\", \"중국\" -> \"CN\", \"대만\" -> \"TW\").\n            *   If the `makingCntryName` field contains a path-like structure (e.g., \"국외>아시아>중국\", \"국외>그 밖의 지역>대만\"), extract the most specific country name from the string (e.g., \"중국\", \"대만\") and then convert it to its ISO 3166-1 alpha-2 code.\n            *   If a direct mapping is ambiguous or the country name is not standard, use RAG or Google Search to find the most appropriate official two-letter code.\n\n# BEGIN TRANSLATION:\n{{ $('Fetch Recall Details').item.json.resultData.toJsonString() }}",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        1776,
+        -368
+      ],
+      "id": "3c41f24f-b11b-4368-906a-4f7fd960afb4",
+      "name": "AI Agent",
+      "retryOnFail": true,
+      "waitBetweenTries": 4000,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "recalls_oecd_staging",
+        "limit": 1
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -176,
+        240
+      ],
+      "id": "a8c2e76a-d651-4fd9-9205-b02fdebb7c88",
+      "name": "DB-heartbeat",
+      "credentials": {
+        "supabaseApi": {
+          "id": "sRk2u1aYYj0psM6r",
+          "name": "제품안전협회(OECD 리콜정보 등록 Project ID : fczencruxulddednkint)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "recalls_oecd_staging",
+        "limit": 1,
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "recallUid",
+              "condition": "eq",
+              "keyValue": "=={{ $json.resultData.recallUid }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        896,
+        96
+      ],
+      "id": "41f37b0d-1369-4656-ace7-0f8bd95f7a48",
+      "name": "Get many rows",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "yVLT3s0EESoZSB73",
+          "name": "Supabase account(협회/국내공표->oecd번역)"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "If publishDate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "각 리콜 데이터의 이미지": {
+      "main": [
+        [
+          {
+            "node": "Max 500",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Offsets": {
+      "main": [
+        [
+          {
+            "node": "Resize 500x500",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "이미지 정보 추출": {
+      "main": [
+        [
+          {
+            "node": "Set Offsets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Source Classifier": {
+      "main": [
+        [
+          {
+            "node": "Set EP",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Set HP",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Set CP",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Set HP",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Year": {
+      "main": [
+        [
+          {
+            "node": "Merge ID parts",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge ID parts": {
+      "main": [
+        [
+          {
+            "node": "Combine",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Sequence": {
+      "main": [
+        [
+          {
+            "node": "Combine1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Resize 500x500": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Max 500": {
+      "main": [
+        [
+          {
+            "node": "이미지 정보 추출",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Recall Details": {
+      "main": [
+        [
+          {
+            "node": "Create Row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Combine": {
+      "main": [
+        [
+          {
+            "node": "Update OECD Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Row": {
+      "main": [
+        [
+          {
+            "node": "Pick Image Info",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Source Classifier",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Extract Year",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Loop Each Recalls",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Image Upload - Supabase": {
+      "main": [
+        [
+          {
+            "node": "이미지 취합",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Recall Info": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Image urls": {
+      "main": [
+        [
+          {
+            "node": "Update Image url",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Image url": {
+      "main": [
+        [
+          {
+            "node": "Merge All",
+            "type": "main",
+            "index": 1
+          },
+          {
+            "node": "이미지 처리 연습1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out Images": {
+      "main": [
+        [
+          {
+            "node": "각 리콜 데이터의 이미지",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pick Image Info": {
+      "main": [
+        [
+          {
+            "node": "Split Out Images",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Each Recalls": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Get many rows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Loop Each Recalls",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set EP": {
+      "main": [
+        [
+          {
+            "node": "Merge ID parts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set HP": {
+      "main": [
+        [
+          {
+            "node": "Merge ID parts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set CP": {
+      "main": [
+        [
+          {
+            "node": "Merge ID parts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update OECD Code": {
+      "main": [
+        [
+          {
+            "node": "Merge All",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "Update Translation": {
+      "main": [
+        [
+          {
+            "node": "Set Translated Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge All": {
+      "main": [
+        [
+          {
+            "node": "Prepare XML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Translated Fields": {
+      "main": [
+        [
+          {
+            "node": "Merge All",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare XML": {
+      "main": [
+        [
+          {
+            "node": "Generate XML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate XML": {
+      "main": [
+        [
+          {
+            "node": "Update Final Info",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "이미지 취합": {
+      "main": [
+        [
+          {
+            "node": "Set Image urls",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        []
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Source Classifier",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Set type as publishDate",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "DB-heartbeat",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Extract date",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract date": {
+      "main": [
+        [
+          {
+            "node": "Fetch Recall Info",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute Workflow": {
+      "main": [
+        [
+          {
+            "node": "Merge All",
+            "type": "main",
+            "index": 3
+          }
+        ]
+      ]
+    },
+    "Update Final Info": {
+      "main": [
+        [
+          {
+            "node": "Loop Each Recalls",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set type as publishDate": {
+      "main": [
+        [
+          {
+            "node": "Fetch Recall Info",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If publishDate": {
+      "main": [
+        [
+          {
+            "node": "Fetch Recall Info",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Loop Each Recalls",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute Workflow1": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Execute Workflow",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "이미지 처리 연습1": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Sort",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sort": {
+      "main": [
+        [
+          {
+            "node": "Image Upload - Supabase",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Fetch Recall Details",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Loop Each Recalls",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Update Translation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many rows": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "hCG9MmBvDEExrIdU"
+  },
+  "versionId": "f1096c85-583c-4e87-ab98-ecd25a742b2f",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "68267bb544272e81cf428a801701ee0bdcf27c6e517d9bb7e6ce35161f67ea0e"
+  },
+  "nodeGroups": [],
+  "id": "jDvYHDtTPDqSM2BD",
+  "tags": []
+}

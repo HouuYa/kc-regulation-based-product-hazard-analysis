@@ -1,0 +1,580 @@
+{
+  "name": "이미지 처리 연습",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -1568,
+        128
+      ],
+      "id": "2fa2864e-094b-457a-9adc-4e2e7384b59c",
+      "name": "When clicking ‘Test workflow’",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "recallUid"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -1184,
+        -704
+      ],
+      "id": "39a9d21d-30f8-4f0b-bb05-c9e1c9465bfc",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "options": {
+          "reset": false
+        }
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        112,
+        -1264
+      ],
+      "id": "7f7eef93-10bf-480a-bbc0-48445e6e807f",
+      "name": "Loop Over Items",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "2a692c6e-4f43-4a09-a511-58b2b44cacca",
+              "name": "imageFileName",
+              "value": "={{ $json.recallUid }}_1.jpg",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -656,
+        -1376
+      ],
+      "id": "3147e034-3e54-4de9-b08c-1a03c70b5986",
+      "name": "Edit Fields",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c4e87c51-ceee-494f-90fe-a3e24d727f10",
+              "name": "imageFileName",
+              "value": "={{ $json.recallUid }}_2.jpg",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -656,
+        -1168
+      ],
+      "id": "87f92394-4540-481f-bd5f-373996488360",
+      "name": "Edit Fields1",
+      "disabled": true
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -400,
+        -1280
+      ],
+      "id": "26c5104a-71db-41f4-830f-a6011bd1a382",
+      "name": "Merge",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "fieldsToAggregate": {
+          "fieldToAggregate": [
+            {
+              "fieldToAggregate": "output"
+            },
+            {}
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        384,
+        -1440
+      ],
+      "id": "ee4c8e69-7042-4f65-9682-a7430b40a19c",
+      "name": "Aggregate",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "url": "=https://fczencruxulddednkint.supabase.co/storage/v1{{ $json.signedURL }}",
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": true,
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -208,
+        -480
+      ],
+      "id": "51436f0b-14d4-4dc8-a846-fe7b15a0d6a2",
+      "name": "Image Dwonload - Supabase",
+      "retryOnFail": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://fczencruxulddednkint.supabase.co/storage/v1/object/sign/product-images/{{ $json.imageFileName }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "expiresIn",
+              "value": "3600"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -416,
+        -480
+      ],
+      "id": "1b714ece-a1fa-4fa6-9cd0-fe374acfdabf",
+      "name": "Image Dwonload - Supabase1",
+      "credentials": {
+        "supabaseApi": {
+          "id": "sRk2u1aYYj0psM6r",
+          "name": "제품안전협회(OECD 리콜정보 등록 Project ID : fczencruxulddednkint)"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://fczencruxulddednkint.supabase.co/storage/v1/object/list-v2/product-images",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "prefix",
+              "value": "={{ $json.recallUid }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1280,
+        -496
+      ],
+      "id": "91ee105c-0ca7-4098-bbde-63db4ad2bca7",
+      "name": "Image List - Supabase",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 3000,
+      "credentials": {
+        "supabaseApi": {
+          "id": "sRk2u1aYYj0psM6r",
+          "name": "제품안전협회(OECD 리콜정보 등록 Project ID : fczencruxulddednkint)"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "options": {
+          "reset": false
+        }
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -848,
+        -496
+      ],
+      "id": "8c102587-a80f-4292-bafd-130d5354a1bc",
+      "name": "Loop Over Items1"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "objects",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        -1056,
+        -496
+      ],
+      "id": "31bf3e5e-312c-4ca1-8314-c92288a73de7",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "fieldsToAggregate": {
+          "fieldToAggregate": [
+            {
+              "fieldToAggregate": "output"
+            },
+            {}
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        -592,
+        -720
+      ],
+      "id": "98e2b0c8-4890-4584-9baa-4e39c10e9e7a",
+      "name": "Aggregate1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "f16a1692-f162-4543-a0b5-515830c24c36",
+              "name": "imageFileName",
+              "value": "={{ $json.name }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -608,
+        -480
+      ],
+      "id": "27e8ea6a-cd42-4341-b64c-fb0ad4bee5b8",
+      "name": "Edit Fields3"
+    },
+    {
+      "parameters": {
+        "content": "## 리콜제품 이미지 조회",
+        "height": 208,
+        "width": 384
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -464,
+        -544
+      ],
+      "typeVersion": 1,
+      "id": "f42a1d83-00e2-4b81-a762-ee7b7e639ca4",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## 리콜제품 이미지에서 특징 분석",
+        "height": 368,
+        "width": 384
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -48,
+        -544
+      ],
+      "typeVersion": 1,
+      "id": "15017301-36a2-45d8-a45c-3d0f54a0e036",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.0-flash",
+        "options": {}
+      },
+      "id": "f274f446-c1c3-43b3-a71f-55ca1ba698fd",
+      "name": "Google Gemini Chat Model1",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "position": [
+        16,
+        -80
+      ],
+      "typeVersion": 1,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "w0KH6UrDF5HRSOFi",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=# Product Image Analysis Prompt for Recalled Products\n\n*Role: You are a facilitator who analyzes and categorizes product photos (images).\n**Mission**: Analyze recalled product images to extract detailed information for determining whether the product falls under the \"Electrical Appliances and Consumer Products Safety Control Act\" or \"Special Act on Safety of Children's Products\" in South Korea.\n\n## Analysis Requirements\n\nPlease analyze the following items in order:\n\n### 1. Product Identification\n- **Product Name**: Specific product name or type visible in the image\n- **Brand/Manufacturer**: Identifiable brand names, logos, or manufacturer information\n- **Model Number/Product Code**: Visible model numbers, product codes, or barcodes\n\n### 2. Product Characteristics Analysis\n- **Primary Purpose**: Detailed description of what this product is used for\n- **Target Users**: Adults, children, all ages, etc.\n- **Operation Method**: Electric, battery-powered, manual, etc.\n\n### 3. Legal Classification Information\n- **Product Category**: Primary classification (electrical appliances, consumer products, children's products, etc.)\n- **Detailed Item Classification**: Specific item classification (e.g., small home appliances, toys, stationery, etc.)\n- **Safety-Related Features**: Electrical usage, chemical substances, small parts that could be swallowed, etc.\n\n### 4. Physical Characteristics\n- **Size/Scale**: Approximate size or portability\n- **Materials**: Identifiable main materials (plastic, metal, fabric, rubber, etc.)\n- **Color/Design**: Main colors and design features\n\n## Output Format\n\n```\n【PRODUCT IDENTIFICATION】\n- Product Name: \n- Brand/Manufacturer: \n- Model Number/Product Code: \n\n【PRODUCT CHARACTERISTICS】\n- Primary Purpose: \n- Target Users: \n- Operation Method: \n\n【LEGAL CLASSIFICATION INFO】\n- Product Category: \n- Detailed Item Classification: \n- Safety-Related Features: \n\n【PHYSICAL CHARACTERISTICS】\n- Size/Scale: \n- Materials: \n- Color/Design: \n\n【OVERALL ASSESSMENT】\n(Initial judgment on which regulations this product might be subject to)\n```\n\n## Critical Guidelines\n\n### ⚠️ Image Quality Considerations\n- **When Unclear**: If the image is blurry or unclear, state \"Image is unclear\" and avoid detailed classification, only describe visible appearance features\n\n### 🔍 Analysis Accuracy\n- **Confirmed Information Only**: Only describe information clearly visible in the image, avoid speculation\n- **Mark Uncertainties**: Use \"Cannot confirm\" or \"Estimated\" for unclear aspects\n- **Multiple Products**: If multiple products are visible, analyze each separately or focus on the main product\n\n### 📋 Regulatory Application Considerations\n- **Electrical Products**: Check for power cords, plugs, batteries, LEDs, or other electrical components\n- **Children's Products**: Verify target age (under 36 months), presence of small parts, toy characteristics\n- **Consumer Products**: Confirm characteristics as daily-use consumer goods\n\n### 🎯 Analysis Purpose\nThe goal is to provide sufficient and accurate information for precise legal classification in the next step.\n\n### 📷 Image Analysis Impossibility Response\n- **No Image Provided**: Respond with \"No image has been provided for analysis\"\n- **Image Corrupted/Error**: Respond with \"The image cannot be read or is corrupted, making analysis impossible\"\n- **Complete Identification Failure**: Respond with \"The product cannot be identified from the image, making detailed analysis impossible\"\n- **Technical Issues**: If any technical problems prevent image processing, clearly state the limitation\n\n**Standard Response Format for Analysis Impossibility:**\n\n## Important Notes\n- Respond in **Korean** despite the English prompt\n- Focus on details that will help determine regulatory compliance\n- Be specific about safety-related features that could trigger recall actions\n- If multiple interpretations are possible, mention all relevant possibilities",
+        "hasOutputParser": true,
+        "options": {
+          "passthroughBinaryImages": true
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        0,
+        -480
+      ],
+      "id": "16ab2097-a661-4a04-b2a3-6a869cb164af",
+      "name": "AI Agent1",
+      "retryOnFail": true,
+      "waitBetweenTries": 4000,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-5.1",
+          "mode": "list",
+          "cachedResultName": "gpt-5.1"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        0,
+        -288
+      ],
+      "id": "9ba741e6-af2c-406e-bcec-29e483920402",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "b1sYKKa7Kt557JFS",
+          "name": "OpenAi account(ksafety@ksafety.kr)"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Test workflow’": {
+      "main": [
+        []
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Image List - Supabase",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Image Dwonload - Supabase": {
+      "main": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Image Dwonload - Supabase1": {
+      "main": [
+        [
+          {
+            "node": "Image Dwonload - Supabase",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Image List - Supabase": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items1": {
+      "main": [
+        [
+          {
+            "node": "Aggregate1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate1": {
+      "main": [
+        []
+      ]
+    },
+    "Edit Fields3": {
+      "main": [
+        [
+          {
+            "node": "Image Dwonload - Supabase1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        []
+      ]
+    },
+    "AI Agent1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "callerPolicy": "any",
+    "errorWorkflow": "hCG9MmBvDEExrIdU"
+  },
+  "versionId": "c6d32394-6b09-46f2-afac-5ae89e581fde",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "68267bb544272e81cf428a801701ee0bdcf27c6e517d9bb7e6ce35161f67ea0e"
+  },
+  "nodeGroups": [],
+  "id": "VH3sjyVgMLKMZlGm",
+  "tags": []
+}

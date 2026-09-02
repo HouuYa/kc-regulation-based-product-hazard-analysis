@@ -1,0 +1,615 @@
+{
+  "name": "(GS1) [한국리콜<>OECD] OECD GPC RAG",
+  "nodes": [
+    {
+      "parameters": {
+        "mode": "insert",
+        "tableName": {
+          "__rl": true,
+          "value": "oecd_gpc_202405",
+          "mode": "list",
+          "cachedResultName": "oecd_gpc_202405"
+        },
+        "options": {
+          "queryName": "match_documents_202405"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1.1,
+      "position": [
+        368,
+        48
+      ],
+      "id": "56f0662c-d5bf-45bf-a45f-7db9c6c84842",
+      "name": "Supabase Vector Store",
+      "credentials": {
+        "supabaseApi": {
+          "id": "yVLT3s0EESoZSB73",
+          "name": "Supabase account(협회/국내공표->oecd번역)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        832,
+        608
+      ],
+      "id": "2022d795-89de-403c-93a4-7008f4980c1c",
+      "name": "Embeddings OpenAI",
+      "credentials": {
+        "openAiApi": {
+          "id": "b1sYKKa7Kt557JFS",
+          "name": "OpenAi account(ksafety@ksafety.kr)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonMode": "expressionData",
+        "jsonData": "={{ $json.toJsonString() }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "typeVersion": 1,
+      "position": [
+        544,
+        192
+      ],
+      "id": "1769c28c-0c75-48b7-a1ac-e3e22bd19588",
+      "name": "Default Data Loader"
+    },
+    {
+      "parameters": {
+        "authentication": "basicAuth",
+        "formTitle": "Import codes",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "CSV file",
+              "fieldType": "file",
+              "acceptFileTypes": ".csv",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [
+        -176,
+        48
+      ],
+      "id": "471490b4-8995-45d5-a4ac-6dbbbc5eb97e",
+      "name": "On form submission",
+      "webhookId": "898a7357-a131-4045-91b3-39ccae160475",
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "29Hq7MOtafrs04cS",
+          "name": "ksafety / kpsa8300"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "binaryPropertyName": "CSV_file",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        0,
+        48
+      ],
+      "id": "9d7f9574-64c6-4d52-bbc1-5defe4c7b0d9",
+      "name": "Extract from File"
+    },
+    {
+      "parameters": {
+        "jsCode": "// --- Configuration --- \nconst SEGMENT_CODE_COLUMN = 'SegmentCode';\nconst SEGMENT_TITLE_COLUMN = 'SegmentTitle';\n\nconst FAMILY_CODE_COLUMN = 'FamilyCode';\nconst FAMILY_TITLE_COLUMN = 'FamilyTitle';\n\nconst CLASS_CODE_COLUMN = 'ClassCode';\nconst CLASS_TITLE_COLUMN = 'ClassTitle';\n\nconst BRICK_CODE_COLUMN = 'BrickCode';\nconst BRICK_TITLE_COLUMN = 'BrickTitle';\n\n// --- Helper Function --- \nfunction safeGet(item, key, defaultValue = '') {\n  return item && item[key] !== undefined && item[key] !== null ? String(item[key]).trim() : defaultValue;\n}\n\n// --- Main Logic --- \nconst inputRows = items.map(item => item.json);\n\nconst gpcHierarchy = {}; // Segment > Family > Class > Brick 계층 구조 저장\n\n// 1. GPC 계층 정보 파싱 및 구조화\nfor (const row of inputRows) {\n  const segmentCode = safeGet(row, SEGMENT_CODE_COLUMN);\n  const familyCode = safeGet(row, FAMILY_CODE_COLUMN);\n  const classCode = safeGet(row, CLASS_CODE_COLUMN);\n  const brickCode = safeGet(row, BRICK_CODE_COLUMN);\n\n  // Segment 정보 저장\n  if (segmentCode && !gpcHierarchy[segmentCode]) {\n    gpcHierarchy[segmentCode] = {\n      code: segmentCode,\n      title: safeGet(row, SEGMENT_TITLE_COLUMN),\n      families: {}\n    };\n  }\n\n  // Family 정보 저장\n  if (segmentCode && familyCode && gpcHierarchy[segmentCode] && !gpcHierarchy[segmentCode].families[familyCode]) {\n    gpcHierarchy[segmentCode].families[familyCode] = {\n      code: familyCode,\n      title: safeGet(row, FAMILY_TITLE_COLUMN),\n      classes: {}\n    };\n  }\n\n  // Class 정보 저장\n  if (segmentCode && familyCode && classCode && \n      gpcHierarchy[segmentCode] && gpcHierarchy[segmentCode].families[familyCode] && \n      !gpcHierarchy[segmentCode].families[familyCode].classes[classCode]) {\n    gpcHierarchy[segmentCode].families[familyCode].classes[classCode] = {\n      code: classCode,\n      title: safeGet(row, CLASS_TITLE_COLUMN),\n      bricks: {}\n    };\n  }\n\n  // Brick 정보 저장\n  if (segmentCode && familyCode && classCode && brickCode && \n      gpcHierarchy[segmentCode] && gpcHierarchy[segmentCode].families[familyCode] && \n      gpcHierarchy[segmentCode].families[familyCode].classes[classCode] && \n      !gpcHierarchy[segmentCode].families[familyCode].classes[classCode].bricks[brickCode]) {\n    gpcHierarchy[segmentCode].families[familyCode].classes[classCode].bricks[brickCode] = {\n      code: brickCode,\n      title: safeGet(row, BRICK_TITLE_COLUMN),\n      // 상위 계층 정보도 미리 저장\n      classCode: classCode,\n      familyCode: familyCode,\n      segmentCode: segmentCode\n    };\n  }\n}\n\n// 2. \"통합 검색용 텍스트 문서\" 생성\nconst resultItems = [];\n\nfor (const segmentCode in gpcHierarchy) {\n  const segment = gpcHierarchy[segmentCode];\n  for (const familyCode in segment.families) {\n    const family = segment.families[familyCode];\n    for (const classCode in family.classes) {\n      const classObj = family.classes[classCode];\n      for (const brickCode in classObj.bricks) {\n        const brick = classObj.bricks[brickCode];\n        let integratedText = \"\";\n\n        // 순서: Brick -> Class -> Family -> Segment (Title만 사용)\n        if (brick.title) integratedText += `Brick: ${brick.title}; `;\n        if (classObj.title) integratedText += `Class: ${classObj.title}; `;\n        if (family.title) integratedText += `Family: ${family.title}; `;\n        if (segment.title) integratedText += `Segment: ${segment.title}; `;\n\n        if (integratedText.trim()) {\n          resultItems.push({\n            json: {\n              brick_code: brick.code,\n              brick_title: brick.title,\n              class_code: classObj.code,\n              class_title: classObj.title,\n              family_code: family.code,\n              family_title: family.title,\n              segment_code: segment.code,\n              segment_title: segment.title,\n              // 임베딩될 최종 텍스트\n              document_text: integratedText.trim().replace(/\\s\\s+/g, ' ')\n            }\n          });\n        }\n      }\n    }\n  }\n}\n\n// 최종 결과 반환\nreturn resultItems;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        192,
+        48
+      ],
+      "id": "a9d2f132-5190-4fb0-bd74-fdff4f548dd2",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "chunkSize": 100000
+      },
+      "type": "@n8n/n8n-nodes-langchain.textSplitterCharacterTextSplitter",
+      "typeVersion": 1,
+      "position": [
+        720,
+        304
+      ],
+      "id": "12cf7220-e92d-4511-98e9-c1f6b205ad0d",
+      "name": "Character Text Splitter"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "c866fcca-6b9f-4d84-94dc-f9b8280c19fc",
+        "authentication": "headerAuth",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        464,
+        -240
+      ],
+      "id": "8e55a957-b83a-44d6-8890-8abff463fe11",
+      "name": "Webhook",
+      "webhookId": "c866fcca-6b9f-4d84-94dc-f9b8280c19fc",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "j4px93EgTjrEV5t6",
+          "name": "n8n Webhook Key"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        1504,
+        -240
+      ],
+      "id": "39386607-77dc-44ed-bf96-8a46371de7c8",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "product_name"
+            },
+            {
+              "name": "product_description"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        464,
+        -416
+      ],
+      "id": "f826ee35-f181-466f-a448-1e57d6676534",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b03ec2b4-14ef-4da5-b15f-a58b3ee132e2",
+              "name": "prompt",
+              "value": "=당신은 OECD GPC (Global Product Classification) 제품 분류 전문가 AI 어시스턴트입니다. 당신의 임무는 제공된 한국 리콜 공고의 `product_name` (제품명)과 `product_description` (제품 설명 - 없을 수 있음)을 기반으로, RAG (Retrieval Augmented Generation)를 통해 접근 가능한 OECD GPC 지식 베이스를 활용하여 가장 정확한 GPC 코드를 식별하는 것입니다.\n\n**입력 (Input):**\n*   `product_name`: {{ $json.product_name }}\n*   `product_description`: {{ $json.product_description }}\n\n**핵심 목표 및 분류 계층 (Core Objective & Classification Hierarchy):**\n\n당신의 최우선 목표는 RAG 컨텍스트 내에서 주어진 제품을 **가장 정확하고 구체적으로 나타내는 GPC Brick 코드**를 찾는 것입니다. 다음의 엄격한 계층적 우선순위를 따르십시오:\n\n1.  **Brick 코드 우선 탐색 및 엄격한 적합성 평가:**\n    *   RAG 검색을 통해 제품과 잠재적으로 관련된 Brick 코드 후보들을 식별합니다.\n    *   **엄격한 적합성 평가 (CRITICAL FITNESS ASSESSMENT):**\n        *   각 Brick 코드 후보에 대해, RAG 컨텍스트(특히 `document_text` 내 설명)에서 제공하는 **해당 Brick의 정의, 용도, 범위**를 면밀히 검토합니다.\n        *   이 Brick의 name이, 입력된 `product_name` 및 `product_description`의 **핵심 기능, 주요 특성, 그리고 일반적인 사용 사례와 명확하고 직접적으로 일치하는지** 판단합니다.\n        *   `product_name`을 우선적으로 식별합니다. 이와 일치 또는 유사한 이름의 코드명이 있다면 이를 포함하여 관련된 것들을 우선적으로 검토합니다.\n        *   **만약 Brick 후보의 정의/범위가 입력 제품과 충분히 구체적으로 일치하지 않는다고 판단되면 (예: \"선풍기\"를 찾는데 \"창문/배기용 팬\" Brick이 나온 경우처럼, 포괄적이거나 다른 유형의 제품을 지칭하는 경우), 해당 Brick 후보는 부적합한 것으로 간주하고 Brick 코드로 사용하지 않습니다.**\n    *   **적합한 Brick 코드 식별 시:**\n        *   위의 엄격한 적합성 평가를 통과하여, 제품을 **정확하고 구체적으로 나타내는 Brick 코드가 명확히 식별된 경우에만**:\n            *   JSON 출력의 `brick_code`, `brick_name` 필드를 해당 Brick 정보로 채웁니다.\n            *   `class_code`, `class_name`, `family_code`, `family_name`, `segment_code`, `segment_name` 필드도 해당 Brick이 속한 상위 계층 정보로 채웁니다.\n    *   **적합한 Brick 코드 특정 불가 시:**\n        *   엄격한 적합성 평가 결과, 입력 제품을 정확하고 구체적으로 나타내는 Brick 코드를 RAG 컨텍스트 내에서 찾을 수 없다면, **`brick_code`와 `brick_name` 필드는 반드시 `null` (또는 JSON 스키마가 허용하는 경우 빈 문자열 `\"\"`)로 설정합니다.** 그 후, 아래의 Class 코드 탐색으로 넘어갑니다.\n\n2.  **Class 코드로 대체 (적합한 Brick 코드 특정 불가 시):**\n    *   만약 적합하고 특정한 Brick 코드를 찾을 수 없었다면, RAG 검색 결과 중에서 제품에 가장 관련성 높은 **Class 코드 (`class_code`)**를 찾으십시오.\n    *   **만약 적절한 Class 코드가 식별되면:**\n        *   `class_code`, `class_name` 필드를 해당 Class 정보로 채웁니다.\n        *   `family_code`, `family_name`, `segment_code`, `segment_name` 필드도 해당 Class가 속한 상위 계층 정보로 채웁니다.\n        *   **이 단계에서는 `brick_code`, `brick_name`은 이미 `null` (또는 `\"\"`)입니다.**\n\n3.  **Family 코드로 대체 (적합한 Brick 및 Class 코드 특정 불가 시):**\n    *   만약 특정 Brick 코드나 Class 코드도 찾을 수 없다면, 그 다음으로 가장 관련성 높은 **Family 코드 (`family_code`)**를 찾으십시오.\n    *   **만약 적절한 Family 코드가 식별되면:**\n        *   `family_code`, `family_name` 필드를 해당 Family 정보로 채웁니다.\n        *   `segment_code`, `segment_name` 필드도 해당 Family가 속한 상위 계층 정보로 채웁니다.\n        *   **이 단계에서는 `brick_code`, `brick_name`, `class_code`, `class_name`은 `null` (또는 `\"\"`)입니다.**\n\n4.  **Segment 코드로 대체 (적합한 Brick, Class, Family 코드 특정 불가 시):**\n    *   만약 특정 Brick, Class, Family 코드도 찾을 수 없다면, 가장 관련성 높은 **Segment 코드 (`segment_code`)**를 찾으십시오.\n    *   **만약 적절한 Segment 코드가 식별되면:**\n        *   `segment_code`, `segment_name` 필드를 해당 Segment 정보로 채웁니다.\n        *   **이 단계에서는 `brick_code`, `brick_name`, `class_code`, `class_name`, `family_code`, `family_name`은 `null` (또는 `\"\"`)입니다.**\n\n**매우 중요한 지시사항 (CRITICAL INSTRUCTIONS):**\n\n1.  **RAG 데이터 절대 준수 및 환각 금지 (Strict Adherence to RAG Data & No Hallucination):**\n    *   당신의 유일한 정보 출처는 RAG를 통해 제공되는 OECD GPC 데이터입니다. **절대로 추측하거나 존재하지 않는 정보를 생성해서는 안 됩니다.**\n    *   RAG 검색 결과에서 제품명 및 설명과 일치하는 **명확한 근거가 있는 코드만 사용**하십시오.\n    *   모든 코드(Brick, Class, Family, Segment)는 반드시 RAG 데이터베이스에 명시된 **정확한 8자리 숫자 형식**이어야 합니다.\n    *   모든 이름(Brick Name, Class Name, Family Name, Segment Name) 또한 RAG 데이터베이스에 있는 **정확한 한국어 명칭**을 그대로 사용해야 합니다.\n    *   절대로 RAG 데이터에 존재하지 않는 숫자를 산출하지 마십시오.\n    *   코드(8자리 숫자)는 오타, 임의 변형 없이 RAG 데이터베이스에 존재하는 값 그대로 사용해야 하며, 존재하지 않는 값을 산출할 경우 부적합으로 간주합니다.   \n    *   코드명과 그에 대응하는 코드값이 분명히 일치해야 합니다. 반드시 RAG 데이터베이스에 하나의 행으로 묶여 있는 명칭과 코드를 사용하십시오.\n    *   목표 달성 시 반복을 중단하여 max iterations으로 인한 에러를 방지하십시오.\n    *   You MUST call the vector search tool only once. Use the returned candidates to make the final decision. Do NOT perform additional searches.\n\n2.  **검색 전략 및 판단 (Search Strategy & Judgement):**\n    *   **초기 검색:** `product_name`과 `product_description`을 조합하여 RAG 질의를 생성하고, 위의 \"핵심 목표 및 분류 계층\"에 따라 코드를 식별합니다.\n    *   **코드 유형 명확히 구분:** RAG 결과에서 가져온 코드가 실제로 GPC 계층 구조상 Brick인지, Class인지, Family인지, Segment인지 명확히 구분하여 위의 \"핵심 목표 및 분류 계층\" 로직에 따라 출력 JSON 필드를 채워야 합니다. **상위 분류 코드를 `brick_code`로 잘못 할당하거나, 제품과 명확히 일치하지 않는 Brick 코드를 `brick_code`로 할당해서는 안 됩니다.**\n\n3.  **출력 형식 (Output Format):**\n    *   당신의 **전체 응답**은 제공된 JSON Schema를 **정확히 따르는 단일 JSON 객체**여야 합니다.\n    *   `attributes` 필드는 존재하지 않습니다.\n    *   `search_strategy_description` 필드에는 어떤 검색 전략을 사용했고, 왜 특정 코드를 선택했는지 (또는 Brick 후보가 있었으나 부적합 판정 후 상위 코드로 대체했는지 등)에 대한 간결하고 명확한 설명을 한국어로 포함해야 합니다. 예: \"초기 검색: 'Smartmi Standing Fan3'로 검색. RAG 결과에서 '팬 - 창/배기용'(Brick 79010600)이 후보로 나왔으나, 해당 Brick의 정의는 창문/배기용 팬에 국한되어 스탠딩 선풍기와는 명확히 일치하지 않아 부적합으로 판단함. 따라서 `brick_code`는 `null`로 설정하고, 가장 관련성 높은 상위 분류인 Class '팬 - 창/배기용'(79010600)으로 분류함 (만약 이 Class가 실제로 스탠딩 선풍기를 포괄한다면). 만약 이 Class 조차 적합하지 않다면, 더 상위인 Family '배관/난방/환기/냉방'(79010000)으로 분류함.\" (실제 GPC 데이터의 계층 구조 및 정의에 따라 기술)\n\n**JSON 출력 스키마 예시 (Illustrative JSON Output Schema - 실제 스키마를 따르시오):**\n```json\n{\n  \"output\": {\n    \"brick_code\": null /* 또는 \"\" */,\n    \"brick_name\": null /* 또는 \"\" */,\n    \"class_code\": \"79010600\" /* 또는 Family/Segment 코드로 대체될 수 있음 */,\n    \"class_name\": \"팬 - 창/배기용\" /* 또는 Family/Segment 이름으로 대체될 수 있음 */,\n    \"family_code\": \"79010000\",\n    \"family_name\": \"배관/난방/환기/냉방\",\n    \"segment_code\": \"79000000\",\n    \"segment_name\": \"배관/난방/환기/냉방\",\n    \"search_strategy_description\": \"분류 결정 과정에 대한 설명. Brick 후보가 있었으나 왜 부적합했는지 명시.\"\n  }\n}\n```\n",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        928,
+        -240
+      ],
+      "id": "f142774a-f189-4882-b6c4-5180ed28fbc3",
+      "name": "Prompt Generator"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        464,
+        -608
+      ],
+      "id": "dbeda9e9-1ae4-4ac3-be05-cea89f8cae80",
+      "name": "When clicking ‘Test workflow’"
+    },
+    {
+      "parameters": {
+        "content": "## OECD GPC 문서 Embedding",
+        "height": 480,
+        "width": 1060
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -224,
+        -16
+      ],
+      "typeVersion": 1,
+      "id": "b0338093-6037-4c06-9584-0b095fadf9e8",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## GPC 검색",
+        "height": 900,
+        "width": 1300,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        400,
+        -656
+      ],
+      "typeVersion": 1,
+      "id": "e4020799-e7c3-46be-83b1-bf01c61a9539",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c45b97df-defc-4bc4-b1f2-e8f50dc30a2a",
+              "name": "product_name",
+              "value": "={{ $json.body.product_name }}",
+              "type": "string"
+            },
+            {
+              "id": "7f4827b2-04a0-4c4d-9c28-f9b99067ddbe",
+              "name": "product_description",
+              "value": "={{ $json.body.product_description }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        672,
+        -240
+      ],
+      "id": "38b254e7-339e-4421-b851-b6b338642d20",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"brick_code\": \"10000508\",\n  \"brick_name\": \"반려동물 미용 보조용품\",\n  \"class_code\": \"10101500\",\n  \"class_name\": \"반려동물 복지/위생용품\",\n  \"family_code\": \"10100000\",\n  \"family_name\": \"반려동물 관리용품\",\n  \"segment_code\": \"10000000\",\n  \"segment_name\": \"반려동물 관리용품/사료\",\n  \"search_strategy_description\": \"Product name and description matched GPC Brick 10000508 via RAG.\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.2,
+      "position": [
+        1552,
+        112
+      ],
+      "id": "2231eb80-b77d-4aa3-8efe-5112bd346b64",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserAutofixing",
+      "typeVersion": 1,
+      "position": [
+        1392,
+        -64
+      ],
+      "id": "bfdd2c61-3b3e-4e97-b5be-89030dd0ceec",
+      "name": "Auto-fixing Output Parser"
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "toolDescription": "Fetch OECD GPC(Global Product Code) for given product name and decrriptions\nMake sure you fetch from  the \"oecd_gpc_202405\" table ONLY.",
+        "tableName": {
+          "__rl": true,
+          "value": "oecd_gpc_202405",
+          "mode": "list",
+          "cachedResultName": "oecd_gpc_202405"
+        },
+        "topK": 5,
+        "options": {
+          "queryName": "match_documents_202405"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1.3,
+      "position": [
+        1152,
+        112
+      ],
+      "id": "9eb7011b-0b57-4faa-9d56-5bceff01624d",
+      "name": "Supabase Vector Storeasdf",
+      "credentials": {
+        "supabaseApi": {
+          "id": "yVLT3s0EESoZSB73",
+          "name": "Supabase account(협회/국내공표->oecd번역)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.prompt }}",
+        "hasOutputParser": true,
+        "options": {
+          "maxIterations": 5
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        1168,
+        -224
+      ],
+      "id": "9cce4fc3-345a-4be0-a9dd-33e2a9cfbb68",
+      "name": "AI Agent1",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 3000,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-5.5",
+          "mode": "list",
+          "cachedResultName": "gpt-5.5"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        1152,
+        -32
+      ],
+      "id": "e77dba5d-ae86-4c21-ad68-90f760b67031",
+      "name": "OpenAI Chat Model1",
+      "credentials": {
+        "openAiApi": {
+          "id": "b1sYKKa7Kt557JFS",
+          "name": "OpenAi account(ksafety@ksafety.kr)"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "When clicking ‘Test workflow’": [
+      {
+        "json": {
+          "product_name": "Smartmi Standing Fan3",
+          "product_description": "category1: 전기용품>가전제품, category2: null, hazard: 원인을 알 수 없는 배터리 과열로 인한 위험성이 있음. null"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Embeddings OpenAI": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Supabase Vector Storeasdf",
+            "type": "ai_embedding",
+            "index": 0
+          },
+          {
+            "node": "Supabase Vector Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Default Data Loader": {
+      "ai_document": [
+        [
+          {
+            "node": "Supabase Vector Store",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase Vector Store": {
+      "main": [
+        []
+      ]
+    },
+    "Extract from File": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Supabase Vector Store",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Character Text Splitter": {
+      "ai_textSplitter": [
+        [
+          {
+            "node": "Default Data Loader",
+            "type": "ai_textSplitter",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Prompt Generator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prompt Generator": {
+      "main": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "Prompt Generator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Prompt Generator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Auto-fixing Output Parser",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Auto-fixing Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase Vector Storeasdf": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent1": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Auto-fixing Output Parser",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "callerPolicy": "any",
+    "errorWorkflow": "hCG9MmBvDEExrIdU",
+    "availableInMCP": true
+  },
+  "versionId": "b5c4b4e7-7ed5-4f3a-9163-1202bef33083",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "68267bb544272e81cf428a801701ee0bdcf27c6e517d9bb7e6ce35161f67ea0e"
+  },
+  "nodeGroups": [],
+  "id": "u3JEAg24QutFfjQl",
+  "tags": []
+}
