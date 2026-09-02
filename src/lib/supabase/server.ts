@@ -55,7 +55,7 @@ function safeExt(filename: string): string {
  *   붙여 두면 다운로드했을 때 어떤 파일인지는 여전히 알 수 있다.
  */
 export async function putOriginal(
-  kind: 'accident' | 'codebook' | 'standard',
+  kind: 'accident' | 'accident-photo' | 'codebook' | 'standard',
   sha256: string,
   filename: string,
   body: Uint8Array | Blob,

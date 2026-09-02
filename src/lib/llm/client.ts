@@ -46,10 +46,10 @@ export interface CallUsage {
  *   태깅은 한 번 하고 저장하는 준비 단계이고, 재현성이 필요한 것은
  *   매칭(SQL)이다(§1.1 원칙 2).
  */
-export async function structuredCall<T>(args: {
+async function chatJsonCall<T>(args: {
   model: string;
   system: string;
-  user: string;
+  userContent: string | Array<Record<string, unknown>>;
   schemaName: string;
   schema: Record<string, unknown>;
   effort?: ReasoningEffort;
@@ -59,7 +59,7 @@ export async function structuredCall<T>(args: {
     ...(args.effort ? { reasoning_effort: args.effort } : {}),
     messages: [
       { role: 'system', content: args.system },
-      { role: 'user', content: args.user },
+      { role: 'user', content: args.userContent },
     ],
     response_format: {
       type: 'json_schema',
@@ -85,6 +85,39 @@ export async function structuredCall<T>(args: {
       reasoningTokens: u?.completion_tokens_details?.reasoning_tokens ?? 0,
     },
   };
+}
+
+export async function structuredCall<T>(args: {
+  model: string;
+  system: string;
+  user: string;
+  schemaName: string;
+  schema: Record<string, unknown>;
+  effort?: ReasoningEffort;
+}): Promise<{ value: T; usage: CallUsage }> {
+  return chatJsonCall<T>({ ...args, userContent: args.user });
+}
+
+/**
+ * 이미지가 섞인 구조화 출력 호출 (사고조사보고서 첨부 사진 분석용, §4.2 확장)
+ *
+ * Chat Completions 의 멀티모달 content 파트(`image_url`, data URI 허용)를 그대로 쓴다.
+ * Storage 버킷이 비공개(§7.1)라 공개 URL을 못 주므로, 항상 base64 data URI로 보낸다.
+ */
+export async function structuredVisionCall<T>(args: {
+  model: string;
+  system: string;
+  user: string;
+  images: Array<{ dataUrl: string }>;
+  schemaName: string;
+  schema: Record<string, unknown>;
+  effort?: ReasoningEffort;
+}): Promise<{ value: T; usage: CallUsage }> {
+  const userContent = [
+    { type: 'text', text: args.user },
+    ...args.images.map((img) => ({ type: 'image_url', image_url: { url: img.dataUrl } })),
+  ];
+  return chatJsonCall<T>({ ...args, userContent });
 }
 
 /**

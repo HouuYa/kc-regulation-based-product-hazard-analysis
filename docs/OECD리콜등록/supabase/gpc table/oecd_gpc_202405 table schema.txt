@@ -1,0 +1,7 @@
+create table public.oecd_gpc_202405 (
+  id bigint not null default nextval('oecd_gpc_id_seq'::regclass),
+  content text null,
+  metadata jsonb null,
+  embedding extensions.vector null,
+  constraint oecd_gpc_202405_pkey1 primary key (id)
+) TABLESPACE pg_default;

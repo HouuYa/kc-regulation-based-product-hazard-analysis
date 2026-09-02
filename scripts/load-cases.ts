@@ -24,14 +24,93 @@ import { readdirSync, readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { join } from 'node:path';
 import { getDb, closeDb } from '../src/lib/db';
-import { extractPdf } from '../src/lib/cases/extract-pdf';
+import { extractPdf, extractPhotos, type ExtractedPhoto } from '../src/lib/cases/extract-pdf';
 import { putOriginal } from '../src/lib/supabase/server';
+import { analyzePhotos } from '../src/lib/llm/vision';
+import { findGpcCandidates } from '../src/lib/gpc/lookup';
+import { extractItemName } from '../src/lib/cases/item-name';
 
 const CASES_DIR = join(import.meta.dirname, '..', '사고조사보고서');
 
 function argValue(name: string): string | null {
   const i = process.argv.indexOf(name);
   return i >= 0 ? (process.argv[i + 1] ?? null) : null;
+}
+
+/**
+ * 첨부 사진을 추출·보관·분석하고, 증거 사진에서 뽑은 제품 서술로 GPC 코드까지
+ * 조회한다(2026-09-02). 실패해도 사건 적재 자체는 막지 않는다 — 텍스트만으로도
+ * 이미 유효한 사건이고, 사진 분석은 보강 정보다.
+ */
+async function processPhotos(
+  db: ReturnType<typeof getDb>,
+  sourceFileId: number,
+  bytes: Buffer,
+  itemName: string | null,
+  title: string,
+): Promise<string> {
+  const photos = await extractPhotos(new Uint8Array(bytes));
+  if (photos.length === 0) return '';
+
+  const stored: Array<ExtractedPhoto & { storagePath: string | null }> = [];
+  for (const p of photos) {
+    const photoHash = createHash('sha256').update(p.jpeg).digest('hex');
+    let storagePath: string | null = null;
+    try {
+      storagePath = await putOriginal('accident-photo', photoHash, `p${p.pageNumber}.jpg`, p.jpeg, 'image/jpeg');
+    } catch (e) {
+      console.warn(`  경고: 사진 보관 실패 (p${p.pageNumber}): ${e instanceof Error ? e.message : e}`);
+    }
+    stored.push({ ...p, storagePath });
+  }
+
+  let vision: Awaited<ReturnType<typeof analyzePhotos>> | null = null;
+  try {
+    vision = await analyzePhotos(photos, { itemName, title });
+  } catch (e) {
+    console.warn(`  경고: 사진 분석 실패: ${e instanceof Error ? e.message : e}`);
+  }
+
+  const byPage = new Map(vision?.photos.map((p) => [p.pageNumber, p]) ?? []);
+  for (const p of stored) {
+    if (!p.storagePath) continue;
+    const a = byPage.get(p.pageNumber);
+    await db`
+      insert into public.source_file_image
+        (source_file_id, page_number, storage_path, width, height, byte_size,
+         is_relevant_photo, description, hazard_note, vision_model, analyzed_at)
+      values (
+        ${sourceFileId}, ${p.pageNumber}, ${p.storagePath}, ${p.width}, ${p.height}, ${p.jpeg.byteLength},
+        ${a?.isRelevantPhoto ?? null}, ${a?.description ?? null}, ${a?.hazardNote ?? null},
+        ${vision?.model ?? null}, ${vision ? new Date().toISOString() : null}
+      )
+      on conflict (source_file_id, page_number, storage_path) do nothing
+    `;
+  }
+
+  let gpcNote = '';
+  if (vision?.productDescription) {
+    try {
+      // 후보 5개까지 받는다(담당자가 우선순위로 검토, 비법정관리 품목일 수 있어
+      // 1개로 단정하지 않는다). 1위만 case_event.gpc_brick_code 에 승격한다
+      const candidates = await findGpcCandidates(itemName ?? title, vision.productDescription, 5);
+      const top = candidates[0];
+      if (top) {
+        await db`
+          update public.case_event
+          set gpc_brick_code = ${top.brickCode},
+              raw_fields = raw_fields || ${db.json({ gpc_candidates: candidates } as never)}
+          where source_file_id = ${sourceFileId}
+        `;
+        gpcNote = ` · GPC 후보 ${candidates.length}개, 1위 ${top.brickCode}(${top.brickTitle})`;
+      }
+    } catch (e) {
+      console.warn(`  경고: GPC 조회 실패: ${e instanceof Error ? e.message : e}`);
+    }
+  }
+
+  const relevant = vision?.photos.filter((p) => p.isRelevantPhoto).length ?? 0;
+  return `\n           사진 ${photos.length}장 추출 · 증거사진 판정 ${relevant}장${gpcNote}`;
 }
 
 async function loadOne(filename: string, force: boolean): Promise<string> {
@@ -84,17 +163,26 @@ async function loadOne(filename: string, force: boolean): Promise<string> {
     returning id
   `;
 
+  let photoNote = '';
   if (status === 'extracted') {
+    const title = filename.replace(/\.pdf$/i, '');
     await db`
       insert into public.case_event (source_file_id, source_type, title, narrative)
-      values (${sf.id}, 'ACCIDENT', ${filename.replace(/\.pdf$/i, '')}, ${extracted.text.slice(0, 20000)})
+      values (${sf.id}, 'ACCIDENT', ${title}, ${extracted.text.slice(0, 20000)})
     `;
+
+    try {
+      photoNote = await processPhotos(db, sf.id, bytes, extractItemName(extracted.text), title);
+    } catch (e) {
+      console.warn(`  경고: 사진 처리 실패 (${filename}): ${e instanceof Error ? e.message : e}`);
+    }
   }
 
   return (
     `${status === 'extracted' ? '적재 완료' : '보류    '} ${filename}\n` +
     `           ${extracted.pageCount}쪽 · 추출 ${extracted.charCount.toLocaleString()}자` +
-    (errorReason ? `\n           ${errorReason}` : '')
+    (errorReason ? `\n           ${errorReason}` : '') +
+    photoNote
   );
 }
 

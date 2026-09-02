@@ -14,7 +14,8 @@
  *   이미 비식별 처리됐다는 전제(결정 6번)를 믿기만 하면 안 되기 때문이다.
  */
 
-import { extractText, getDocumentProxy } from 'unpdf';
+import { extractImages, extractText, getDocumentProxy } from 'unpdf';
+import sharp from 'sharp';
 
 export interface ExtractResult {
   text: string;
@@ -82,6 +83,45 @@ export function detectPii(text: string): PiiFinding[] {
     if (!hits.length) continue;
     out.push({ kind, sample: mask(hits[0]), count: hits.length });
     for (const h of hits) remaining = remaining.replace(h, ' ');
+  }
+  return out;
+}
+
+export interface ExtractedPhoto {
+  pageNumber: number;
+  jpeg: Buffer;
+  width: number;
+  height: number;
+}
+
+/**
+ * 가로·세로 둘 다 이 값 이상인 삽입 이미지만 사진으로 본다.
+ *
+ * 실물 5건으로 재 봤다(2026-09-02). 작은 서식·직인 이미지는 여러 건에서
+ * 정확히 같은 크기(247×248)로 반복돼 사고 증거가 아님을 알 수 있었고,
+ * 실제 사고 사진은 300~1000px 대였다. 완벽히 가르지는 못하므로(예: 247×248도
+ * 통과할 수 있다) 애매한 것은 걸러내지 않고 비전 LLM에게 판단(`is_relevant_photo`)을
+ * 맡긴다 — 놓치는 쪽보다 더 보내는 쪽이 안전하다.
+ */
+const MIN_PHOTO_DIMENSION = 200;
+
+/** 사고보고서 PDF에서 삽입 사진을 뽑아 JPEG로 인코딩한다. 페이지 렌더링이 아니라
+ *  PDF 안에 실제로 들어있는 이미지 오브젝트만 가져온다 — 표·텍스트는 안 섞인다 */
+export async function extractPhotos(bytes: Uint8Array): Promise<ExtractedPhoto[]> {
+  const doc = await getDocumentProxy(bytes);
+  const out: ExtractedPhoto[] = [];
+
+  for (let page = 1; page <= doc.numPages; page++) {
+    const images = await extractImages(doc, page);
+    for (const img of images) {
+      if (img.width < MIN_PHOTO_DIMENSION || img.height < MIN_PHOTO_DIMENSION) continue;
+      const jpeg = await sharp(img.data, {
+        raw: { width: img.width, height: img.height, channels: img.channels },
+      })
+        .jpeg({ quality: 85 })
+        .toBuffer();
+      out.push({ pageNumber: page, jpeg, width: img.width, height: img.height });
+    }
   }
   return out;
 }

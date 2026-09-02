@@ -27,6 +27,7 @@ import { tagCase, toTagRows } from '../src/lib/llm/tagging';
 import { buildCaseSearchText, type SearchTextVariant } from '../src/lib/search/search-text';
 import { openaiConfig, tuning } from '../src/lib/env';
 import { resolveProductScope } from '../src/lib/cases/resolve-scope';
+import { extractItemName } from '../src/lib/cases/item-name';
 
 function argValue(name: string): string | null {
   const i = process.argv.indexOf(name);
@@ -39,23 +40,6 @@ interface CaseRow {
   narrative: string;
   item_name: string | null;
   extracted_text: string | null;
-}
-
-/**
- * 사고보고서에서 품목명을 뽑는다.
- *
- * 서식이 통일돼 있어 "품목명 가습기" 처럼 라벨 뒤에 온다(실물 5건 모두 동일).
- * 서식이 다른 보고서가 들어오면 여기서 못 찾고 품목 미확정으로 남는데,
- * 그것이 조용히 틀린 품목을 고르는 것보다 낫다.
- */
-function extractItemName(text: string | null): string | null {
-  if (!text) return null;
-  const m = /품\s*목\s*명\s*[:：]?\s*([^\n\r]{1,30})/.exec(text);
-  if (!m) return null;
-  return m[1]
-    .replace(/담당기관.*$/, '')
-    .replace(/[_/]/g, ' ')
-    .trim() || null;
 }
 
 async function main() {

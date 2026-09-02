@@ -115,6 +115,14 @@ export function openaiConfig() {
     rerankEffort: optional('OPENAI_RERANK_EFFORT', 'low'),
 
     /**
+     * 사고조사보고서 첨부 사진 분석(비전). 연간 50건 안팎이라 비용보다 품질이
+     * 우선이지만, 가장 비싼 최상위 모델까지는 필요 없다는 것이 담당자 판단이라
+     * escalate 와 같은 급(terra)을 기본값으로 둔다.
+     */
+    visionModel: optional('OPENAI_VISION_MODEL', 'gpt-5.6-terra'),
+    visionEffort: optional('OPENAI_VISION_EFFORT', 'medium'),
+
+    /**
      * text-embedding-3-large 를 1536차원으로 자른다(Matryoshka).
      *
      * 실측: "유아용 의자는 측방·후방으로 전도되지 않아야 한다"(기준 문체)와
@@ -131,13 +139,25 @@ export function openaiConfig() {
 export function recallConfig() {
   loadEnv();
   return {
-    hub: {
-      baseUrl: optional('RECALL_HUB_API_BASE_URL', 'https://recall-hub-admin-dev.vercel.app'),
-      apiKey: process.env.RECALL_HUB_API_KEY?.trim() ?? '',
-    },
     domestic: {
       baseUrl: process.env.DOMESTIC_RECALL_API_BASE_URL?.trim() ?? '',
       apiKey: process.env.DOMESTIC_RECALL_API_KEY?.trim() ?? '',
     },
+  };
+}
+
+/**
+ * GPC(GS1 국제 품목분류) 조회 — 우리 것이 아니라 협회의 별도 Supabase
+ * 프로젝트(fczencruxulddednkint)에 이미 있는 벡터 색인(oecd_gpc_202405 표,
+ * match_documents_202405 RPC)을 PostgREST로 직접 부른다(PDR 부록 F가 "1단계
+ * HF/DT 완료 후 검토"라 미뤄 둔 항목, 2026-09-02 착수). anon 키로 이미 실행이
+ * 되는 것을 확인했다 — 우리 쪽엔 GPC Brick 참조표·임베딩이 없고 만들 필요도
+ * 없다(src/lib/gpc/lookup.ts 상단 주석 참고).
+ */
+export function gpcConfig() {
+  loadEnv();
+  return {
+    dbUrl: optional('GPC_LOOKUP_URL', 'https://fczencruxulddednkint.supabase.co'),
+    anonKey: required('GPC_LOOKUP_ANON_KEY'),
   };
 }
