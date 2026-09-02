@@ -3,10 +3,13 @@
  *
  *   npm run standards:gpc -- --limit 5
  *
- * case_event 쪽 GPC 연동(scripts/load-cases.ts processPhotos, src/lib/gpc/lookup.ts)과
- * 같은 패턴을 그대로 쓴다 — findGpcCandidates() 를 불러 후보를 받는다. 다만
- * case_event 와 달리 여기서는 임베딩 top-1 을 그대로 확정하지 않고
- * verifyGpcMatch() 로 LLM 검증을 한 번 더 거친다.
+ * 조회+검증 오케스트레이션(후보 조회 → 없으면 NONE → 있으면 LLM 검증)은
+ * case_event 쪽(scripts/load-cases.ts processPhotos)과 이제 findAndVerifyGpc()
+ * (src/lib/gpc/assign.ts)로 완전히 공유한다(라운드 12 — 담당자가 "사고조사
+ * GPC 부여에도 이 로직을 쓰냐"고 물어서 확인해 보니 아니었고, "최대한
+ * 공유"하도록 리팩터링했다). 두 파이프라인이 다른 건 조회 입력을 무엇으로
+ * 조합하는가뿐이다 — 여기는 아래 buildProductContext()가 기준 문서 필드를
+ * 모으고, case_event 쪽은 사고사진 비전 분석 서술을 쓴다.
  *
  * 조회 입력 — "제공 정보는 그대로 두고" 나서 "최대한 제공"으로 방향이 바뀐 경위
  *   라운드 9: item_name + display_name(행정 분류명) → 5건 중 3건 오답.
@@ -55,11 +58,10 @@
  */
 
 import { getDb, closeDb } from '../src/lib/db';
-import { findGpcCandidates } from '../src/lib/gpc/lookup';
-import { verifyGpcMatch } from '../src/lib/gpc/verify';
+import { findAndVerifyGpc, DEFAULT_GPC_CANDIDATE_COUNT } from '../src/lib/gpc/assign';
 
-/** 좁게 뽑으면(5개) 정답이 후보 밖으로 밀려날 수 있다(라운드 10 실측) */
-const CANDIDATE_COUNT = 15;
+/** 좁게 뽑으면(5개) 정답이 후보 밖으로 밀려날 수 있다(라운드 10 실측) — lookup.ts 공유 기본값 */
+const CANDIDATE_COUNT = DEFAULT_GPC_CANDIDATE_COUNT;
 
 function argValue(name: string): string | null {
   const i = process.argv.indexOf(name);
@@ -123,42 +125,28 @@ async function main() {
   for (const s of rows) {
     try {
       const context = buildProductContext(s);
-      const candidates = await findGpcCandidates(s.item_name, context, CANDIDATE_COUNT);
-      const top = candidates[0];
-
-      if (!top) {
-        console.log(`${s.display_name} (${s.item_name}) → 후보 없음`);
-        await db`
-          update public.standard
-          set gpc_candidates     = ${db.json([] as never)},
-              gpc_verified_level = 'NONE',
-              gpc_verification   = ${db.json({ candidateCount: 0, note: '후보 없음' } as never)}
-          where id = ${s.id}
-        `;
-        continue;
-      }
-
-      const verification = await verifyGpcMatch(context, candidates);
+      const { candidates, verification } = await findAndVerifyGpc(s.item_name, context, CANDIDATE_COUNT);
+      const top = candidates[0] ?? null;
 
       await db`
         update public.standard
-        set gpc_brick_code            = ${top.brickCode},
+        set gpc_brick_code            = ${top?.brickCode ?? null},
             gpc_candidates            = ${db.json(candidates as never)},
-            gpc_verified_level        = ${verification?.level ?? 'NONE'},
-            gpc_verified_segment_code  = ${verification?.segmentCode ?? null},
-            gpc_verified_segment_title = ${verification?.segmentTitle ?? null},
-            gpc_verified_family_code  = ${verification?.familyCode ?? null},
-            gpc_verified_family_title  = ${verification?.familyTitle ?? null},
-            gpc_verified_class_code   = ${verification?.classCode ?? null},
-            gpc_verified_class_title   = ${verification?.classTitle ?? null},
-            gpc_verified_brick_code   = ${verification?.brickCode ?? null},
-            gpc_verified_brick_title   = ${verification?.brickTitle ?? null},
-            gpc_verification          = ${db.json((verification ?? null) as never)}
+            gpc_verified_level        = ${verification.level},
+            gpc_verified_segment_code  = ${verification.segmentCode},
+            gpc_verified_segment_title = ${verification.segmentTitle},
+            gpc_verified_family_code  = ${verification.familyCode},
+            gpc_verified_family_title  = ${verification.familyTitle},
+            gpc_verified_class_code   = ${verification.classCode},
+            gpc_verified_class_title   = ${verification.classTitle},
+            gpc_verified_brick_code   = ${verification.brickCode},
+            gpc_verified_brick_title   = ${verification.brickTitle},
+            gpc_verification          = ${db.json(verification as never)}
         where id = ${s.id}
       `;
 
       const label =
-        verification?.level === 'NONE' || !verification
+        verification.level === 'NONE'
           ? 'NONE(맞는 후보 없음)'
           : `${verification.level} ${
               { BRICK: verification.brickCode, CLASS: verification.classCode, FAMILY: verification.familyCode, SEGMENT: verification.segmentCode }[
@@ -169,10 +157,11 @@ async function main() {
                 verification.level
               ]
             }`;
+      const embeddingLine = top ? `  임베딩 1위 : ${top.brickCode} ${top.brickTitle}\n` : '  임베딩 후보 없음\n';
       console.log(
         `${s.display_name} (${s.item_name})\n` +
-          `  임베딩 1위 : ${top.brickCode} ${top.brickTitle}\n` +
-          `  LLM 검증   : ${label} (확신 ${verification?.confidenceScore ?? '-'}) — ${verification?.reasoning ?? ''}`,
+          embeddingLine +
+          `  LLM 검증   : ${label} (확신 ${verification.confidenceScore}) — ${verification.reasoning}`,
       );
     } catch (e) {
       console.warn(`실패 ${s.display_name}: ${e instanceof Error ? e.message : e}`);

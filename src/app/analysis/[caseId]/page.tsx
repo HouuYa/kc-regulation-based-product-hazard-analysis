@@ -2,6 +2,8 @@ import Link from 'next/link';
 import { getDb } from '@/lib/db';
 import { standardsForCase } from '@/lib/cases/resolve-scope';
 import { EvidenceStrip, type EvidenceLevel, type MatchPath } from '@/components/EvidenceStrip';
+import type { GpcCandidate } from '@/lib/gpc/lookup';
+import type { GpcMatchLevel } from '@/lib/gpc/verify';
 import { recordReview } from './actions';
 import { REJECT_REASONS } from './review-options';
 
@@ -23,20 +25,6 @@ export const dynamic = 'force-dynamic';
  */
 
 const SHORTLIST = 5;
-
-/** src/lib/gpc/lookup.ts 의 GpcCandidate 를 그대로 저장한 것 (case_event.raw_fields.gpc_candidates) */
-interface GpcCandidate {
-  rank: number;
-  brickCode: string;
-  brickTitle: string;
-  classCode: string;
-  classTitle: string;
-  familyCode: string;
-  familyTitle: string;
-  segmentCode: string;
-  segmentTitle: string;
-  similarity: number;
-}
 
 interface ResultRow {
   id: number;
@@ -61,6 +49,35 @@ interface ResultRow {
   reject_reason: string | null;
 }
 
+interface CaseEventRow {
+  id: number; title: string | null; narrative: string; item_name: string | null;
+  source_type: string; occurred_on: string | null;
+  product_scope_id: number | null; scope_evidence: string | null; basis_date: string | null;
+  scope_name: string | null;
+  gpc_brick_code: string | null; gpc_candidates: GpcCandidate[] | null;
+  gpc_verified_level: GpcMatchLevel | null;
+  gpc_verified_segment_code: string | null; gpc_verified_segment_title: string | null;
+  gpc_verified_family_code: string | null; gpc_verified_family_title: string | null;
+  gpc_verified_class_code: string | null; gpc_verified_class_title: string | null;
+  gpc_verified_brick_code: string | null; gpc_verified_brick_title: string | null;
+  gpc_verification: { confidenceScore: number; reasoning: string } | null;
+}
+
+const GPC_LEVEL_LABEL: Record<Exclude<GpcMatchLevel, 'NONE'>, string> = {
+  BRICK: 'Brick', CLASS: 'Class', FAMILY: 'Family', SEGMENT: 'Segment',
+};
+
+/** gpc_verified_level 이 가리키는 계층의 코드·제목을 뽑는다 — 계층 아래는 항상 NULL 이다(verify.ts 참고) */
+function gpcVerifiedCodeTitle(ev: CaseEventRow): { code: string; title: string | null } | null {
+  switch (ev.gpc_verified_level) {
+    case 'BRICK': return ev.gpc_verified_brick_code ? { code: ev.gpc_verified_brick_code, title: ev.gpc_verified_brick_title } : null;
+    case 'CLASS': return ev.gpc_verified_class_code ? { code: ev.gpc_verified_class_code, title: ev.gpc_verified_class_title } : null;
+    case 'FAMILY': return ev.gpc_verified_family_code ? { code: ev.gpc_verified_family_code, title: ev.gpc_verified_family_title } : null;
+    case 'SEGMENT': return ev.gpc_verified_segment_code ? { code: ev.gpc_verified_segment_code, title: ev.gpc_verified_segment_title } : null;
+    default: return null;
+  }
+}
+
 function evidenceLevelOf(p: MatchPath, reviewed: boolean): EvidenceLevel {
   if (p === 'FALLBACK') return 'C';
   if ((p === 'CODE' || p === 'CODE-PARTIAL') && reviewed) return 'A';
@@ -70,17 +87,17 @@ function evidenceLevelOf(p: MatchPath, reviewed: boolean): EvidenceLevel {
 async function load(caseId: number) {
   const db = getDb();
 
-  const [ev] = await db<{
-    id: number; title: string | null; narrative: string; item_name: string | null;
-    source_type: string; occurred_on: string | null;
-    product_scope_id: number | null; scope_evidence: string | null; basis_date: string | null;
-    scope_name: string | null;
-    gpc_brick_code: string | null; gpc_candidates: GpcCandidate[] | null;
-  }[]>`
+  const [ev] = await db<CaseEventRow[]>`
     select e.id, e.title, e.narrative, e.item_name, e.source_type, e.occurred_on::text,
            e.product_scope_id, e.scope_evidence, e.basis_date::text,
            ps.name as scope_name,
-           e.gpc_brick_code, e.raw_fields->'gpc_candidates' as gpc_candidates
+           e.gpc_brick_code, e.gpc_candidates,
+           e.gpc_verified_level,
+           e.gpc_verified_segment_code, e.gpc_verified_segment_title,
+           e.gpc_verified_family_code, e.gpc_verified_family_title,
+           e.gpc_verified_class_code, e.gpc_verified_class_title,
+           e.gpc_verified_brick_code, e.gpc_verified_brick_title,
+           e.gpc_verification
     from public.case_event e
     left join public.product_scope ps on ps.id = e.product_scope_id
     where e.id = ${caseId}
@@ -411,39 +428,88 @@ export default async function AnalysisPage({
       </section>
 
       {/* GPC(GS1 국제 품목분류) 후보 — 사고사진 비전 분석에서 뽑은 제품 서술로 조회한 것.
-          절대 유사도가 낮아(src/lib/gpc/lookup.ts 참고) 1위를 확정으로 보여주지 않고
-          순위 목록으로만 제시한다 — 이 화면의 "판정하지 않는다" 원칙과 같다. */}
-      {ev.gpc_candidates && ev.gpc_candidates.length > 0 && (
-        <section className="mt-4 border-t border-rule pt-5">
-          <div className="grid gap-4 sm:grid-cols-[10rem_1fr]">
-            <span className="label">GPC 품목분류 후보</span>
-            <div className="text-[13px] leading-relaxed">
-              <p className="text-[12px] text-ink-3">
-                사고사진 분석에서 뽑은 제품 서술로 조회한 순위입니다. 절대 유사도가 낮아
-                1위가 항상 맞는 것은 아니니 순위 전체를 참고해 사람이 확인하세요.
-              </p>
-              <ul className="mt-2 space-y-1">
-                {ev.gpc_candidates.map((c) => (
-                  <li
-                    key={c.rank}
-                    className={`flex flex-wrap items-baseline gap-x-2 gap-y-0.5 px-2 py-1 text-[12px] ${
-                      c.brickCode === ev.gpc_brick_code ? 'border border-measure text-measure' : 'text-ink-2'
-                    }`}
-                  >
-                    <span className="addr tnum text-ink-3">{c.rank}위</span>
-                    <span className="addr">{c.brickCode}</span>
-                    <span className="font-medium">{c.brickTitle}</span>
-                    <span className="text-ink-3">
-                      {c.segmentTitle} &gt; {c.familyTitle} &gt; {c.classTitle}
-                    </span>
-                    <span className="addr tnum ml-auto text-ink-3">{c.similarity.toFixed(3)}</span>
-                  </li>
-                ))}
-              </ul>
+          라운드 12부터 standard 와 같은 방식(findAndVerifyGpc)으로 LLM 1차 검증을 거친다.
+          검증됐어도 확정으로 단정하지 않는다 — 이 화면의 "판정하지 않는다" 원칙은 그대로다. */}
+      {ev.gpc_candidates && ev.gpc_candidates.length > 0 && (() => {
+        const verified = gpcVerifiedCodeTitle(ev);
+        return (
+          <section className="mt-4 border-t border-rule pt-5">
+            <div className="grid gap-4 sm:grid-cols-[10rem_1fr]">
+              <span className="label">GPC 품목분류 후보</span>
+              <div className="text-[13px] leading-relaxed">
+                {ev.gpc_verified_level == null ? (
+                  <p className="text-[12px] text-caution">
+                    LLM 검증 전 데이터입니다(임베딩 순위만 있음) — 순위 전체를 참고해 사람이
+                    확인하세요.
+                  </p>
+                ) : ev.gpc_verified_level === 'NONE' ? (
+                  <div className="border border-caution bg-caution-soft px-3 py-2 text-[12px] leading-relaxed text-caution">
+                    <strong className="font-semibold">LLM 검증: 맞는 후보 없음</strong>
+                    <p className="mt-1">
+                      후보 안에 확실히 일치하는 코드가 없다고 판단했습니다. 담당자 확인이 필요합니다.
+                    </p>
+                    {ev.gpc_verification?.reasoning && (
+                      <p className="mt-1 text-ink-2">{ev.gpc_verification.reasoning}</p>
+                    )}
+                  </div>
+                ) : (
+                  <div className="border border-measure bg-measure-soft/40 px-3 py-2 text-[12px] leading-relaxed">
+                    <strong className="font-semibold text-measure">
+                      LLM 검증({GPC_LEVEL_LABEL[ev.gpc_verified_level]})
+                    </strong>{' '}
+                    <span className="addr">{verified?.code}</span> {verified?.title}
+                    {ev.gpc_verification && ` · 확신 ${ev.gpc_verification.confidenceScore}`}
+                    {ev.gpc_verified_level !== 'BRICK' && (
+                      <span className="ml-1 text-ink-3">
+                        (정확한 Brick은 후보에 없어 상위 계층까지만 확인됨)
+                      </span>
+                    )}
+                    {ev.gpc_verification?.reasoning && (
+                      <p className="mt-1 text-ink-2">{ev.gpc_verification.reasoning}</p>
+                    )}
+                  </div>
+                )}
+                <p className="mt-2 text-[12px] text-ink-3">
+                  아래 순위는 LLM이 1차 검증한 결과를 포함합니다. 최종 판단은 담당자가 합니다.
+                </p>
+                <ul className="mt-2 space-y-1">
+                  {ev.gpc_candidates.map((c) => {
+                    const isVerifiedBrick =
+                      ev.gpc_verified_level === 'BRICK' && c.brickCode === ev.gpc_verified_brick_code;
+                    const isEmbeddingTop1 = c.brickCode === ev.gpc_brick_code;
+                    return (
+                      <li
+                        key={c.rank}
+                        className={`flex flex-wrap items-baseline gap-x-2 gap-y-0.5 px-2 py-1 text-[12px] ${
+                          isVerifiedBrick
+                            ? 'border border-measure text-measure'
+                            : isEmbeddingTop1
+                              ? 'border border-rule text-ink-2'
+                              : 'text-ink-2'
+                        }`}
+                      >
+                        <span className="addr tnum text-ink-3">{c.rank}위</span>
+                        <span className="addr">{c.brickCode}</span>
+                        <span className="font-medium">{c.brickTitle}</span>
+                        {isVerifiedBrick && (
+                          <span className="text-[10px] font-medium text-measure">검증 확정</span>
+                        )}
+                        {isEmbeddingTop1 && !isVerifiedBrick && (
+                          <span className="text-[10px] text-ink-3">임베딩 1위</span>
+                        )}
+                        <span className="text-ink-3">
+                          {c.segmentTitle} &gt; {c.familyTitle} &gt; {c.classTitle}
+                        </span>
+                        <span className="addr tnum ml-auto text-ink-3">{c.similarity.toFixed(3)}</span>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
             </div>
-          </div>
-        </section>
-      )}
+          </section>
+        );
+      })()}
 
       {/* 트랙 B — 해외 리콜에만 있는 것들 */}
       {recall && (

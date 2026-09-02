@@ -27,7 +27,7 @@ import { getDb, closeDb } from '../src/lib/db';
 import { extractPdf, extractPhotos, type ExtractedPhoto } from '../src/lib/cases/extract-pdf';
 import { putOriginal } from '../src/lib/supabase/server';
 import { analyzePhotos } from '../src/lib/llm/vision';
-import { findGpcCandidates } from '../src/lib/gpc/lookup';
+import { findAndVerifyGpc, DEFAULT_GPC_CANDIDATE_COUNT } from '../src/lib/gpc/assign';
 import { extractItemName } from '../src/lib/cases/item-name';
 
 const CASES_DIR = join(import.meta.dirname, '..', '사고조사보고서');
@@ -91,19 +91,50 @@ async function processPhotos(
   let gpcNote = '';
   if (vision?.productDescription) {
     try {
-      // 후보 5개까지 받는다(담당자가 우선순위로 검토, 비법정관리 품목일 수 있어
-      // 1개로 단정하지 않는다). 1위만 case_event.gpc_brick_code 에 승격한다
-      const candidates = await findGpcCandidates(itemName ?? title, vision.productDescription, 5);
-      const top = candidates[0];
-      if (top) {
-        await db`
-          update public.case_event
-          set gpc_brick_code = ${top.brickCode},
-              raw_fields = raw_fields || ${db.json({ gpc_candidates: candidates } as never)}
-          where source_file_id = ${sourceFileId}
-        `;
-        gpcNote = ` · GPC 후보 ${candidates.length}개, 1위 ${top.brickCode}(${top.brickTitle})`;
-      }
+      // 조회+검증은 standard(scripts/tag-standards-gpc.ts)와 findAndVerifyGpc() 를
+      // 공유한다(라운드 12) — 예전엔 후보 5개 중 1위를 검증 없이 확정했는데, 이제는
+      // KC기준 쪽과 같은 Brick→Class→Family→Segment 단계적 검증을 거친다.
+      const context = [
+        `품목명: ${itemName ?? title}`,
+        `사고 제목: ${title}`,
+        `제품 설명(사고사진 분석): ${vision.productDescription}`,
+      ].join('\n');
+      const { candidates, verification } = await findAndVerifyGpc(
+        itemName ?? title,
+        context,
+        DEFAULT_GPC_CANDIDATE_COUNT,
+      );
+      const top = candidates[0] ?? null;
+
+      await db`
+        update public.case_event
+        set gpc_brick_code            = ${top?.brickCode ?? null},
+            gpc_candidates            = ${db.json(candidates as never)},
+            gpc_verified_level        = ${verification.level},
+            gpc_verified_segment_code  = ${verification.segmentCode},
+            gpc_verified_segment_title = ${verification.segmentTitle},
+            gpc_verified_family_code  = ${verification.familyCode},
+            gpc_verified_family_title  = ${verification.familyTitle},
+            gpc_verified_class_code   = ${verification.classCode},
+            gpc_verified_class_title   = ${verification.classTitle},
+            gpc_verified_brick_code   = ${verification.brickCode},
+            gpc_verified_brick_title   = ${verification.brickTitle},
+            gpc_verification          = ${db.json(verification as never)}
+        where source_file_id = ${sourceFileId}
+      `;
+
+      gpcNote =
+        verification.level === 'NONE'
+          ? ` · GPC 후보 ${candidates.length}개, 검증 결과 NONE(맞는 후보 없음)`
+          : ` · GPC 후보 ${candidates.length}개, 검증 ${verification.level} ${
+              { BRICK: verification.brickCode, CLASS: verification.classCode, FAMILY: verification.familyCode, SEGMENT: verification.segmentCode }[
+                verification.level
+              ]
+            }(${
+              { BRICK: verification.brickTitle, CLASS: verification.classTitle, FAMILY: verification.familyTitle, SEGMENT: verification.segmentTitle }[
+                verification.level
+              ]
+            }) 확신 ${verification.confidenceScore}`;
     } catch (e) {
       console.warn(`  경고: GPC 조회 실패: ${e instanceof Error ? e.message : e}`);
     }

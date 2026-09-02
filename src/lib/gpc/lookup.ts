@@ -32,6 +32,18 @@ import { gpcConfig, required } from '../env';
 
 const EMBEDDING_MODEL = 'text-embedding-3-small';
 
+/**
+ * 후보를 몇 개까지 받을 것인가의 공통 기본값(standard·case_event 공유).
+ *
+ * 처음엔 5개였다. 라운드 10(KC기준) 실측에서 좁게 뽑으면 정답이 후보 밖으로
+ * 밀려나는 사례가 나왔다(절대 유사도 자체가 낮은 인덱스라 순위가 잘 흔들린다) —
+ * top-20까지 넓혀서야 정답이 잡히는 경우가 있었다. 그래서 15로 늘렸고,
+ * 라운드 11에서 사고사진 GPC(case_event)에도 같은 기본값을 맞췄다
+ * (findAndVerifyGpc()가 LLM 검증을 한 번만 거치므로 후보를 늘려도 LLM
+ * 비용은 늘지 않는다 — 늘어나는 건 임베딩 RPC 호출뿐이다).
+ */
+export const DEFAULT_GPC_CANDIDATE_COUNT = 15;
+
 export interface GpcCandidate {
   rank: number;
   brickCode: string;
