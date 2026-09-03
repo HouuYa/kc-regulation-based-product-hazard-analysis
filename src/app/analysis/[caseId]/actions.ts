@@ -1,7 +1,6 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
-import { redirect } from 'next/navigation';
 import { getDb } from '@/lib/db';
 import { runAnalysis } from '@/lib/search/run';
 import type { Decision } from './review-options';
@@ -49,18 +48,24 @@ export async function recordReview(formData: FormData): Promise<void> {
  *   된다. 사건 1건 분석은 SQL 검색 한 번 + 재채점 LLM 호출 한 번이라 몇 초로 끝난다.
  *   오래 걸리는 것은 전량 코드 부여(요건 조항 5,902건)이고 그건 이 버튼이 하는 일이 아니다.
  *
- * 결과를 반드시 말해 준다
- *   실측에서 드러난 문제다. 품목에 맞는 기준을 못 찾으면(SCOPE_UNRESOLVED) 설계상
- *   분석을 만들지 않는데, 그러면 화면이 눌리기 전과 똑같아 보인다. 담당자는 버튼이
- *   고장 난 줄 안다. 그래서 어떤 경우든 무슨 일이 있었는지 문장으로 돌려보낸다.
+ * 결과를 누른 자리에서 말해 준다
+ *   처음에는 결과를 주소줄에 실어 화면 맨 위에 띠로 그렸다. 그런데 목록을 한참
+ *   내려간 상태에서 누르면 그 띠가 보이지 않았고, 특히 "적용할 기준을 못 찾아
+ *   분석하지 않았습니다"처럼 아무 변화가 없는 경우에는 버튼이 죽은 것처럼 보였다
+ *   (담당자 지적: "분석 실행이 안먹히네요").
+ *
+ *   그래서 주소를 바꾸지 않고 문장만 돌려준다. 버튼 옆에 바로 붙고, 화면은
+ *   깜빡이지 않으며, 스크롤 위치도 그대로다(components/ActionForm.tsx).
  *
  * 로직은 src/lib/search/run.ts 에 있다
  *   명령줄과 화면이 같은 함수를 쓴다. 복사해 두면 한쪽만 고치게 된다(CLAUDE.md §9).
  */
-export async function runAnalysisAction(formData: FormData): Promise<void> {
+export async function runAnalysisAction(
+  _prev: string | null,
+  formData: FormData,
+): Promise<string> {
   const caseId = Number(formData.get('caseId'));
-  const returnTo = String(formData.get('returnTo') ?? `/analysis/${caseId}`);
-  if (!caseId) return;
+  if (!caseId) return '사건을 찾지 못했습니다.';
 
   let message: string;
   try {
@@ -72,7 +77,7 @@ export async function runAnalysisAction(formData: FormData): Promise<void> {
       // 주지 않으면 담당자는 버튼이 고장 난 줄 안다.
       message =
         '이 제품에 어떤 안전기준을 적용할지 정하지 못해 분석하지 않았습니다. ' +
-        '품목을 먼저 확정해야 합니다 — 전 기준을 뒤지면 다른 제품의 시험이 섞입니다.';
+        '품목을 먼저 확정해야 합니다 — 모든 기준을 뒤지면 다른 제품의 시험이 섞입니다.';
     } else if (out.candidates.length === 0) {
       message =
         `관련될 수 있는 조항을 찾지 못했습니다(사유: ${out.emptyReason}). ` +
@@ -85,8 +90,9 @@ export async function runAnalysisAction(formData: FormData): Promise<void> {
     message = `분석에 실패했습니다 — ${e instanceof Error ? e.message : e}`;
   }
 
+  // 화면은 ActionForm 이 router.refresh() 로 새로 읽는다. 주소는 바꾸지 않는다.
   revalidatePath(`/analysis/${caseId}`);
-  revalidatePath(returnTo);
-  // redirect() 는 try 밖에서 부른다 — 안에서 부르면 catch 가 그 신호를 삼킨다
-  redirect(`${returnTo}?done=${encodeURIComponent(message)}`);
+  revalidatePath('/accidents');
+  revalidatePath('/recalls');
+  return message;
 }

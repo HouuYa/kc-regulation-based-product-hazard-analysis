@@ -47,7 +47,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body>
         <div className="flex min-h-screen flex-col lg:flex-row">
-          <nav className="shrink-0 border-b border-rule bg-surface lg:w-60 lg:border-r lg:border-b-0">
+          {/*
+            넓은 화면에서는 레일을 화면에 붙여 둔다 (담당자 지적:
+            "좌측메뉴가 페이지 스크롤 다운하면 올라가 버리네요")
+
+            목록이 수천 건이라 한참 내려가면 메뉴가 화면 밖으로 사라져,
+            다른 화면으로 가려면 맨 위까지 되올라와야 했다.
+
+            self-start 가 필요한 이유: 부모가 flex 라 기본값(stretch)으로 늘어나면
+            sticky 가 붙을 여백이 없어 아무 효과가 없다. 높이를 내용만큼만 잡아야
+            비로소 붙는다. 레일이 화면보다 길어질 때를 대비해 안쪽 스크롤도 준다.
+          */}
+          <nav className="shrink-0 border-b border-rule bg-surface lg:sticky lg:top-0 lg:h-screen lg:w-60 lg:self-start lg:overflow-y-auto lg:border-r lg:border-b-0">
             <div className="border-b border-rule-soft px-5 py-5">
               <Link href="/" className="block">
                 <div className="label">국가기술표준원</div>

@@ -1,5 +1,7 @@
 import { getDb } from '@/lib/db';
 import { PageHead, ConnectionError, TermsNote } from '@/components/Panel';
+import { ActionForm } from '@/components/ActionForm';
+import { AutoRefresh } from '@/components/AutoRefresh';
 import {
   runEmbedTick, retryParked, sendTestAlert,
   sendCustomMessage, runJobNow, toggleAutoTagging,
@@ -229,12 +231,7 @@ function describeRun(r: RunRow): string {
   }
 }
 
-export default async function OpsPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ done?: string }>;
-}) {
-  const { done } = await searchParams;
+export default async function OpsPage() {
   const { data, error } = await load();
 
   const authUser = process.env.SITE_AUTH_USERNAME?.trim() ?? '';
@@ -257,12 +254,6 @@ export default async function OpsPage({
         title="시스템이 지금 제대로 돌고 있는가"
         lead="자동으로 도는 일들의 상태, 최근에 무엇이 처리됐는지, 사람이 봐야 할 문제, 알림과 접속 관리를 한자리에 모았습니다. 평소에는 볼 일이 없어야 정상입니다."
       />
-
-      {done && (
-        <div className="mt-6 border-l-2 border-measure bg-measure-soft px-4 py-3 text-[13px] text-ink-2">
-          {done}
-        </div>
-      )}
 
       {error && <ConnectionError error={error} />}
 
@@ -333,6 +324,15 @@ export default async function OpsPage({
               />
             </div>
           </Section>
+
+          {/* 진행 중인 일이 있으면 화면이 스스로 따라간다 */}
+          <div className="mt-4">
+            <AutoRefresh
+              active={data.ops.in_flight > 0 || data.embed.some((e) => e.pending > 0)}
+              seconds={20}
+              label="의미 검색 준비가 진행 중입니다 — 숫자가 저절로 갱신됩니다"
+            />
+          </div>
 
           {/* ── 2. 최근에 무엇이 돌았나 (담당자 요청) ──────────────── */}
           <Section
@@ -430,41 +430,33 @@ export default async function OpsPage({
             lead="아래 버튼들은 여러 번 눌러도 안전합니다. 자동으로 일어날 일을 앞당길 뿐입니다."
           >
             <div className="flex flex-wrap gap-3">
-              <form action={runEmbedTick}>
-                <button
-                  type="submit"
-                  className="border border-rule bg-surface px-4 py-2 text-[13px] hover:bg-measure-soft"
-                >
-                  의미 검색 준비 지금 실행
-                </button>
-              </form>
-              <form action={runJobNow}>
-                <input type="hidden" name="job" value="recalls-fetch" />
-                <button
-                  type="submit"
-                  className="border border-rule bg-surface px-4 py-2 text-[13px] hover:bg-measure-soft"
-                >
-                  리콜 지금 가져오기
-                </button>
-              </form>
-              <form action={runJobNow}>
-                <input type="hidden" name="job" value="standards-sync" />
-                <button
-                  type="submit"
-                  className="border border-rule bg-surface px-4 py-2 text-[13px] hover:bg-measure-soft"
-                >
-                  안전기준 폴더 확인
-                </button>
-              </form>
+              <ActionForm
+                action={async () => { 'use server'; return runEmbedTick(); }}
+                label="의미 검색 준비 지금 실행"
+                pendingLabel="실행하는 중…"
+                className="border border-rule bg-surface px-4 py-2 text-[13px] hover:bg-measure-soft"
+              />
+              <ActionForm
+                action={runJobNow}
+                hidden={{ job: 'recalls-fetch' }}
+                label="리콜 지금 가져오기"
+                pendingLabel="요청하는 중…"
+                className="border border-rule bg-surface px-4 py-2 text-[13px] hover:bg-measure-soft"
+              />
+              <ActionForm
+                action={runJobNow}
+                hidden={{ job: 'standards-sync' }}
+                label="안전기준 폴더 확인"
+                pendingLabel="요청하는 중…"
+                className="border border-rule bg-surface px-4 py-2 text-[13px] hover:bg-measure-soft"
+              />
               {data.ops.parked > 0 && (
-                <form action={retryParked}>
-                  <button
-                    type="submit"
-                    className="border border-halt bg-surface px-4 py-2 text-[13px] text-halt hover:bg-halt-soft"
-                  >
-                    보류 {data.ops.parked}건 다시 시도
-                  </button>
-                </form>
+                <ActionForm
+                  action={async () => { 'use server'; return retryParked(); }}
+                  label={`보류 ${data.ops.parked}건 다시 시도`}
+                  pendingLabel="되돌리는 중…"
+                  className="border border-halt bg-surface px-4 py-2 text-[13px] text-halt hover:bg-halt-soft"
+                />
               )}
             </div>
 
@@ -497,25 +489,29 @@ export default async function OpsPage({
 
                   {data.autoTagging ? (
                     <>
-                      <div className="mt-3 flex items-baseline gap-2">
-                        <span aria-hidden className="inline-block size-1.5 shrink-0 animate-pulse rounded-full bg-measure" />
+                      <div className="mt-3 flex flex-wrap items-baseline gap-2">
                         <span className="text-[13px] font-medium text-measure">
                           자동 실행 중 — 1분마다 스스로 이어서 하고 있습니다
                         </span>
+                        <AutoRefresh
+                          active
+                          seconds={20}
+                          label="남은 건수가 저절로 갱신됩니다"
+                        />
                       </div>
                       <p className="mt-1 text-[11px] leading-relaxed text-ink-3">
                         이 화면을 닫아도 계속 돕니다. 다 끝나면 저절로 꺼지면서 텔레그램으로
                         알려 드립니다. 진행 상황은 위 남은 건수로 확인하세요.
                       </p>
-                      <form action={toggleAutoTagging} className="mt-3">
-                        <input type="hidden" name="on" value="false" />
-                        <button
-                          type="submit"
+                      <div className="mt-3">
+                        <ActionForm
+                          action={toggleAutoTagging}
+                          hidden={{ on: 'false' }}
+                          label="멈추기"
+                          pendingLabel="멈추는 중…"
                           className="border border-rule bg-surface px-4 py-2 text-[13px] hover:bg-rule-soft"
-                        >
-                          멈추기
-                        </button>
-                      </form>
+                        />
+                      </div>
                     </>
                   ) : (
                     <>
@@ -524,15 +520,15 @@ export default async function OpsPage({
                         저절로 꺼집니다. 퇴근 전에 켜 두면 아침에 끝나 있습니다.
                         언제든 멈출 수 있고, 멈춰도 그때까지 한 것은 그대로 남습니다.
                       </p>
-                      <form action={toggleAutoTagging} className="mt-3">
-                        <input type="hidden" name="on" value="true" />
-                        <button
-                          type="submit"
+                      <div className="mt-3">
+                        <ActionForm
+                          action={toggleAutoTagging}
+                          hidden={{ on: 'true' }}
+                          label={`자동 실행 켜기 (약 ${tagCost})`}
+                          pendingLabel="켜는 중…"
                           className="border border-caution bg-caution px-4 py-2 text-[13px] font-medium text-white hover:opacity-85"
-                        >
-                          자동 실행 켜기 (약 ${tagCost})
-                        </button>
-                      </form>
+                        />
+                      </div>
                     </>
                   )}
                 </>
@@ -637,37 +633,29 @@ export default async function OpsPage({
             ) : (
               <>
                 {/* 담당자 요청: 알림을 더 폭넓게 쓸 수 있도록 */}
-                <form action={sendCustomMessage} className="border border-rule bg-surface px-4 py-4">
-                  <label htmlFor="message" className="block text-[13px] font-medium">
-                    직접 보내기
-                  </label>
-                  <p className="mt-1 text-[11px] leading-relaxed text-ink-3">
+                <div className="border border-rule bg-surface px-4 py-4">
+                  <div className="text-[13px] font-medium">직접 보내기</div>
+                  <p className="mt-1 mb-3 text-[11px] leading-relaxed text-ink-3">
                     쓴 내용을 그대로 텔레그램으로 보냅니다. 메모를 남기거나 알림이 잘 오는지
                     확인할 때 씁니다.
                   </p>
-                  <div className="mt-3 flex flex-wrap gap-2">
-                    <input
-                      id="message" name="message" type="text" required
-                      placeholder="보낼 내용"
-                      className="min-w-0 flex-1 border border-rule px-3 py-2 text-[13px]"
-                    />
-                    <button
-                      type="submit"
-                      className="border border-measure bg-measure px-4 py-2 text-[13px] font-medium text-white hover:opacity-85"
-                    >
-                      보내기
-                    </button>
-                  </div>
-                </form>
+                  <ActionForm
+                    action={sendCustomMessage}
+                    textInput={{ name: 'message', placeholder: '보낼 내용' }}
+                    label="보내기"
+                    pendingLabel="보내는 중…"
+                    className="border border-measure bg-measure px-4 py-2 text-[13px] font-medium text-white hover:opacity-85"
+                  />
+                </div>
 
-                <form action={sendTestAlert} className="mt-3">
-                  <button
-                    type="submit"
+                <div className="mt-3">
+                  <ActionForm
+                    action={async () => { 'use server'; return sendTestAlert(); }}
+                    label="시험 알림 보내기"
+                    pendingLabel="보내는 중…"
                     className="border border-rule bg-surface px-4 py-2 text-[13px] hover:bg-measure-soft"
-                  >
-                    시험 알림 보내기
-                  </button>
-                </form>
+                  />
+                </div>
               </>
             )}
 

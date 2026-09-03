@@ -7,7 +7,8 @@ import {
 } from '@/components/Board';
 import { FILE_STATUS_LABEL } from '@/lib/terms';
 import { uploadAccidentPdfs, confirmCase } from './actions';
-import { SubmitButton } from '@/components/SubmitButton';
+import { ActionForm } from '@/components/ActionForm';
+import { AutoRefresh } from '@/components/AutoRefresh';
 import { runAnalysisAction } from '@/app/analysis/[caseId]/actions';
 
 export const dynamic = 'force-dynamic';
@@ -223,6 +224,15 @@ export default async function AccidentsPage({
             </form>
           </details>
 
+          {/* 준비가 밀려 있으면 숫자가 계속 바뀐다 — 새로고침을 사람이 누르지 않게 한다 */}
+          <div className="mt-4">
+            <AutoRefresh
+              active={data.summary.embedded < data.summary.cases}
+              seconds={20}
+              label="의미 검색 준비가 진행 중입니다 — 숫자가 저절로 갱신됩니다"
+            />
+          </div>
+
           <BoardToolbar
             basePath="/accidents"
             params={params}
@@ -301,16 +311,13 @@ export default async function AccidentsPage({
                           >
                             분석 상세보기
                           </Link>
-                          <form action={runAnalysisAction}>
-                            <input type="hidden" name="caseId" value={r.case_id} />
-                            <input type="hidden" name="returnTo" value="/accidents" />
-                            <SubmitButton
-                              pendingLabel="분석하는 중…"
-                              className="border border-rule px-3 py-1.5 text-[12px] hover:bg-measure-soft"
-                            >
-                              {r.run_count > 0 ? '분석 다시 실행' : '분석 실행'}
-                            </SubmitButton>
-                          </form>
+                          <ActionForm
+                            action={runAnalysisAction}
+                            hidden={{ caseId: r.case_id }}
+                            label={r.run_count > 0 ? '분석 다시 실행' : '분석 실행'}
+                            pendingLabel="분석하는 중…"
+                            className="border border-rule px-3 py-1.5 text-[12px] hover:bg-measure-soft"
+                          />
                           <span className="addr tnum text-[11px] text-ink-3">
                             {r.run_count > 0
                               ? `관련 조항 후보 ${r.last_results ?? 0}건${r.adopted > 0 ? ` · 채택 ${r.adopted}` : ''}`
@@ -319,15 +326,13 @@ export default async function AccidentsPage({
                         </>
                       ) : (
                         <>
-                          <form action={confirmCase}>
-                            <input type="hidden" name="caseId" value={r.case_id} />
-                            <SubmitButton
-                              pendingLabel="처리하는 중…"
-                              className="border border-rule px-3 py-1.5 text-[12px] hover:bg-rule-soft"
-                            >
-                              원문을 확인했습니다 — 분석 대상으로
-                            </SubmitButton>
-                          </form>
+                          <ActionForm
+                            action={confirmCase}
+                            hidden={{ caseId: r.case_id }}
+                            label="원문을 확인했습니다 — 분석 대상으로"
+                            pendingLabel="처리하는 중…"
+                            className="border border-rule px-3 py-1.5 text-[12px] hover:bg-rule-soft"
+                          />
                           <span className="text-[11px] text-ink-3">
                             위 「뽑아낸 원문 확인」을 펼쳐 표가 뭉개지지 않았는지 보고 눌러 주세요
                           </span>

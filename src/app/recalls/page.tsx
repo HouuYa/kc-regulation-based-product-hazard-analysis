@@ -5,7 +5,8 @@ import { StatusBar } from '@/components/StatusBar';
 import {
   BoardToolbar, BoardPager, BoardTabs, SortHeader, parseBoard, type BoardParams,
 } from '@/components/Board';
-import { SubmitButton } from '@/components/SubmitButton';
+import { ActionForm } from '@/components/ActionForm';
+import { AutoRefresh } from '@/components/AutoRefresh';
 import { runAnalysisAction } from '@/app/analysis/[caseId]/actions';
 
 export const dynamic = 'force-dynamic';
@@ -197,6 +198,15 @@ export default async function RecallsPage({
             ]}
           />
 
+          {/* 준비가 밀려 있으면 숫자가 계속 바뀐다 — 새로고침을 사람이 누르지 않게 한다 */}
+          <div className="mt-4">
+            <AutoRefresh
+              active={data.summary.embedded < data.summary.cases}
+              seconds={20}
+              label="의미 검색 준비가 진행 중입니다 — 숫자가 저절로 갱신됩니다"
+            />
+          </div>
+
           <BoardToolbar
             basePath="/recalls"
             params={params}
@@ -281,16 +291,13 @@ export default async function RecallsPage({
                         >
                           분석 상세보기
                         </Link>
-                        <form action={runAnalysisAction}>
-                          <input type="hidden" name="caseId" value={r.case_id} />
-                          <input type="hidden" name="returnTo" value="/recalls" />
-                          <SubmitButton
-                            pendingLabel="분석하는 중…"
-                            className="border border-rule px-3 py-1.5 text-[12px] hover:bg-measure-soft"
-                          >
-                            {r.run_count > 0 ? '분석 다시 실행' : '분석 실행'}
-                          </SubmitButton>
-                        </form>
+                        <ActionForm
+                          action={runAnalysisAction}
+                          hidden={{ caseId: r.case_id }}
+                          label={r.run_count > 0 ? '분석 다시 실행' : '분석 실행'}
+                          pendingLabel="분석하는 중…"
+                          className="border border-rule px-3 py-1.5 text-[12px] hover:bg-measure-soft"
+                        />
                         <span className="addr tnum text-[11px] text-ink-3">
                           {r.run_count > 0 ? `관련 조항 후보 ${r.last_results ?? 0}건` : '아직 분석하지 않음'}
                         </span>

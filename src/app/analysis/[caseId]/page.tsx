@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { DoneBanner } from '@/components/Panel';
-import { SubmitButton } from '@/components/SubmitButton';
+import { ActionForm } from '@/components/ActionForm';
 import { getDb } from '@/lib/db';
 import { standardsForCase } from '@/lib/cases/resolve-scope';
 import { EvidenceStrip, type EvidenceLevel, type MatchPath } from '@/components/EvidenceStrip';
@@ -622,15 +622,16 @@ export default async function AnalysisPage({
             이 사건에 붙은 위해요인 코드와 사고 내용으로 관련될 만한 안전기준 조항을 찾습니다.
             몇 초 걸립니다.
           </p>
-          <form action={runAnalysisAction} className="mt-3">
-            <input type="hidden" name="caseId" value={ev.id} />
-            <SubmitButton
+          <div className="mt-3">
+            <ActionForm
+              action={runAnalysisAction}
+              hidden={{ caseId: ev.id }}
+              label="분석 실행"
               pendingLabel="분석하는 중…"
               className="border border-measure bg-measure px-4 py-2 text-[13px] font-medium text-white hover:opacity-85"
-            >
-              분석 실행
-            </SubmitButton>
-          </form>
+              messageClassName="text-[12px] leading-relaxed text-ink-2"
+            />
+          </div>
         </section>
       ) : (
         <>

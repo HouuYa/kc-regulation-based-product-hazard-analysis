@@ -95,12 +95,26 @@ export async function uploadAccidentPdfs(formData: FormData): Promise<void> {
   revalidatePath('/accidents');
 }
 
-/** 담당자 확정 — 이 시점부터 분석 대상이 된다 (§8.1) */
-export async function confirmCase(formData: FormData): Promise<void> {
+/**
+ * 담당자 확정 — 이 시점부터 분석 대상이 된다 (§8.1)
+ *
+ * 결과를 문장으로 돌려준다 — 주소를 바꾸면 화면이 통째로 다시 그려져 깜빡이고,
+ * 목록을 내려간 상태에서는 맨 위의 안내가 보이지도 않는다(ActionForm 주석 참고).
+ */
+export async function confirmCase(
+  _prev: string | null,
+  formData: FormData,
+): Promise<string> {
   const caseId = Number(formData.get('caseId'));
-  if (!caseId) return;
-  await getDb()`
-    update public.case_event set is_confirmed = true, confirmed_at = now() where id = ${caseId}
-  `;
+  if (!caseId) return '사건을 찾지 못했습니다.';
+  try {
+    await getDb()`
+      update public.case_event set is_confirmed = true, confirmed_at = now() where id = ${caseId}
+    `;
+  } catch (e) {
+    console.error(`원문 확인 처리 실패 (사건 ${caseId}):`, e);
+    return `처리에 실패했습니다 — ${e instanceof Error ? e.message : e}`;
+  }
   revalidatePath('/accidents');
+  return '확인했습니다. 이제 분석할 수 있습니다.';
 }
