@@ -40,10 +40,14 @@ const JOBS: JobName[] = ['recalls-fetch', 'standards-sync', 'tag-chunk'];
 /**
  * 코드 부여 한 번에 쓸 시간.
  *
- * 배포 환경에서 standards-sync 가 29초를 쓰고도 성공한 것을 확인해 25초로 잡았다.
- * 주기가 1분이므로 겹치지도 않는다. 동시 처리와 합쳐 한 번에 10건 안팎을 한다.
+ * 처음에 25초로 잡았다가 배포 환경에서 504 Inactivity Timeout 을 맞았다.
+ * 함수를 띄우고 코드북을 읽는 준비 시간이 앞뒤로 붙어 전체 요청이 30초를 넘긴
+ * 탓이다. 18초로 낮춰 전체가 25초 안에 끝나게 한다.
+ *
+ * 대신 처리량은 병렬 요청으로 되찾는다 — 한 tick 에 서로 다른 구간을 맡은 요청을
+ * 여러 개 띄운다(027). 준비 시간도 함께 병렬이 되므로 이쪽이 훨씬 효율적이다.
  */
-const TAG_TIME_BUDGET_MS = 25_000;
+const TAG_TIME_BUDGET_MS = 18_000;
 
 /**
  * 자동 실행일 때만 동시 처리를 올린다.
@@ -118,8 +122,17 @@ export async function POST(req: Request, ctx: { params: Promise<{ job: string }>
 
     // tag-chunk — 1분마다 이어서 하는 작업(026)과 화면 버튼이 함께 부른다.
     // 주기는 걸려 있지만 기본이 꺼짐이라, 담당자가 켜야 돈다(비용이 들기 때문).
+    // 병렬로 도는 다른 요청과 겹치지 않도록 맡은 구간을 받는다(027)
+    const offset = Number(new URL(req.url).searchParams.get('offset') ?? '0') || 0;
+
     const before = await countTaggable();
-    const r = await runTagging({ timeBudgetMs: TAG_TIME_BUDGET_MS, concurrency: TAG_CONCURRENCY });
+    const r = await runTagging({
+      timeBudgetMs: TAG_TIME_BUDGET_MS,
+      concurrency: TAG_CONCURRENCY,
+      offset,
+      // 구간 안에서만 고르면 되므로 목록 전체를 읽어 올 이유가 없다
+      limit: 40,
+    });
     const after = await countTaggable();
 
     if (after === 0 && before > 0) {
@@ -128,7 +141,7 @@ export async function POST(req: Request, ctx: { params: Promise<{ job: string }>
 
     return NextResponse.json({
       job, ok: true, elapsedMs: Date.now() - started,
-      done: r.ok, failed: r.fail, remaining: after, stoppedEarly: r.stoppedEarly,
+      offset, done: r.ok, failed: r.fail, remaining: after, stoppedEarly: r.stoppedEarly,
       escalated: r.escalated, errors: r.errors.slice(0, 5),
     });
   } catch (e) {

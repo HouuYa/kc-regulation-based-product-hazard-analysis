@@ -12,11 +12,10 @@
  *   적용범위·정의·표·그림은 직접 후보가 아니므로 태깅 비용을 쓰지 않는다.
  *
  * 시간 예산(timeBudgetMs)이 있는 이유 — 이 파일이 생긴 이유이기도 하다
- *   담당자 요청으로 운영 화면에 「코드 부여 실행」 버튼이 생겼다. 그런데 남은
- *   13,003건은 건당 3~4회 LLM 호출을 순서대로 하므로 한 번에 다 돌 수가 없다
- *   (실측 근거: 조항 1건당 약 $0.0022, 전체 약 $29 · 약 41,000회 호출).
- *   웹 요청은 수십 초 안에 끝나야 하므로, 개수가 아니라 "시간"으로 끊는다.
- *   모델 응답이 느려지면 적게, 빠르면 많이 처리하고 남은 것은 다음 눌림에 넘긴다.
+ *   운영 화면에서 코드 부여를 시작할 수 있게 하면서 생겼다. 남은 요건 조항
+ *   5,884건은 건당 AI 를 3~4번 부르므로(1건당 약 $0.0022, 전체 약 $13) 웹 요청
+ *   하나로 다 돌 수가 없다. 그래서 개수가 아니라 "시간"으로 끊는다 — 모델이
+ *   느려지면 적게, 빠르면 많이 처리하고 남은 것은 다음 차례에 넘긴다.
  *   한 건을 처리하는 도중에 끊지는 않는다 — 그러면 조항이 반쯤 처리된 채 남는다.
  */
 
@@ -57,6 +56,14 @@ export interface TagRunOptions {
   timeBudgetMs?: number | null;
   /** 동시에 처리할 조항 수. 기본은 tuning().taggingConcurrency */
   concurrency?: number;
+  /**
+   * 대상 목록의 앞에서 이만큼 건너뛰고 시작한다.
+   *
+   * 여러 요청이 동시에 돌 때 서로 다른 구간을 맡게 하려는 것이다. 같은 조항을
+   * 두 번 처리하면 돈이 두 배로 나가므로, 한 요청이 실제로 처리하는 건수보다
+   * 훨씬 큰 간격을 두고 나눈다(027 참고).
+   */
+  offset?: number;
   onProgress?: (done: number, total: number, ok: number, fail: number) => void;
 }
 
@@ -95,7 +102,10 @@ export async function countTaggable(standardFilter?: string | null, retag = fals
 }
 
 export async function runTagging(opts: TagRunOptions = {}): Promise<TagRunResult> {
-  const { standardFilter = null, limit = null, retag = false, timeBudgetMs = null, onProgress } = opts;
+  const {
+    standardFilter = null, limit = null, retag = false,
+    timeBudgetMs = null, offset = 0, onProgress,
+  } = opts;
   const db = getDb();
   const variant = tuning().searchTextVariant as SearchTextVariant;
   const started = Date.now();
@@ -121,6 +131,7 @@ export async function runTagging(opts: TagRunOptions = {}): Promise<TagRunResult
         : db`and not exists (select 1 from public.clause_tag t where t.clause_id = c.id)`}
     order by c.standard_id, c.order_index
     ${limit ? db`limit ${limit}` : db``}
+    ${offset ? db`offset ${offset}` : db``}
   `;
 
   const cfg = openaiConfig();
