@@ -90,6 +90,37 @@ body {
 
 a { color: inherit; }
 
+.page-toc {
+  position: relative;
+  margin-top: 2.5rem;
+}
+
+.page-toc-mobile {
+  border-top: 1px solid var(--color-rule);
+  border-bottom: 1px solid var(--color-rule);
+  padding: 0.75rem 0;
+}
+
+.page-toc-mobile summary {
+  cursor: pointer;
+  color: var(--color-ink-2);
+  font-size: 0.75rem;
+}
+
+.page-toc-desktop { display: none; }
+
+@media (min-width: 1280px) {
+  .page-toc {
+    position: sticky;
+    top: 2rem;
+    align-self: start;
+    margin-top: 0;
+  }
+
+  .page-toc-mobile { display: none; }
+  .page-toc-desktop { display: block; }
+}
+
 :focus-visible {
   outline: 2px solid var(--color-measure);
   outline-offset: 2px;

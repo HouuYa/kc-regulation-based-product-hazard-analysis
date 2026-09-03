@@ -1,8 +1,14 @@
 import { getDb } from '@/lib/db';
 import { PageHead, ConnectionError, EmptyState, Row, TermsNote } from '@/components/Panel';
 import { StatusBar } from '@/components/StatusBar';
+import { PageToc, type TocItem } from '@/components/PageToc';
 
 export const dynamic = 'force-dynamic';
+
+const STANDARDS_TOC: TocItem[] = [
+  { id: 'standards-status', label: '준비 상태' },
+  { id: 'standards-list', label: '안전기준 목록' },
+];
 
 /**
  * 안전기준 적재 현황
@@ -106,7 +112,9 @@ export default async function StandardsPage() {
   }
 
   return (
-    <div className="mx-auto max-w-5xl px-6 py-10 lg:px-10 lg:py-14">
+    <div className="mx-auto max-w-6xl px-6 py-10 lg:px-10 lg:py-14">
+      <div className="grid gap-10 xl:grid-cols-[minmax(0,1fr)_10rem]">
+      <div>
       <PageHead
         label="1 · 안전기준"
         title="들여온 기준과 준비 상태"
@@ -116,6 +124,7 @@ export default async function StandardsPage() {
       {error && <ConnectionError error={error} />}
 
       {summary && (
+        <div id="standards-status" className="scroll-mt-8">
         <StatusBar
           items={[
             { label: '기준 문서', value: summary.standards, note: '지금 쓰고 있는 안전기준' },
@@ -142,6 +151,7 @@ export default async function StandardsPage() {
             },
           ]}
         />
+        </div>
       )}
 
       {!error && rows.length === 0 && (
@@ -156,7 +166,7 @@ export default async function StandardsPage() {
       )}
 
       {rows.length > 0 && (
-        <section className="mt-10">
+        <section id="standards-list" className="mt-10 scroll-mt-8">
           {/*
             머리글을 고정한다 (담당자 요청).
             76건을 아래로 훑다 보면 어느 숫자가 무슨 칸인지 잊는다. 화면 위에 붙여 둔다.
@@ -216,6 +226,9 @@ export default async function StandardsPage() {
       )}
 
       <TermsNote />
+      </div>
+      <PageToc items={STANDARDS_TOC} />
+      </div>
     </div>
   );
 }

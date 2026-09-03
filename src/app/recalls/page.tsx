@@ -7,9 +7,15 @@ import {
 } from '@/components/Board';
 import { ActionForm } from '@/components/ActionForm';
 import { AutoRefresh } from '@/components/AutoRefresh';
+import { PageToc, type TocItem } from '@/components/PageToc';
 import { runAnalysisAction } from '@/app/analysis/[caseId]/actions';
 
 export const dynamic = 'force-dynamic';
+
+const RECALLS_TOC: TocItem[] = [
+  { id: 'recalls-status', label: '처리 현황' },
+  { id: 'recalls-list', label: '리콜 목록' },
+];
 
 /**
  * 리콜 — 수집·현황·분석 (사고보고서와 분리)
@@ -160,7 +166,9 @@ export default async function RecallsPage({
   }
 
   return (
-    <div className="mx-auto max-w-5xl px-6 py-10 lg:px-10 lg:py-14">
+    <div className="mx-auto max-w-6xl px-6 py-10 lg:px-10 lg:py-14">
+      <div className="grid gap-10 xl:grid-cols-[minmax(0,1fr)_10rem]">
+      <div>
       <PageHead
         label="3 · 리콜"
         title="리콜과 안전기준 연계 분석"
@@ -173,6 +181,7 @@ export default async function RecallsPage({
 
       {data && (
         <>
+          <div id="recalls-status" className="scroll-mt-8">
           <StatusBar
             items={[
               { label: '해외 리콜', value: data.summary.overseas, note: '협회 담당자가 승인한 것만 가져옵니다' },
@@ -197,6 +206,7 @@ export default async function RecallsPage({
               },
             ]}
           />
+          </div>
 
           {/* 준비가 밀려 있으면 숫자가 계속 바뀐다 — 새로고침을 사람이 누르지 않게 한다 */}
           <div className="mt-4">
@@ -245,7 +255,7 @@ export default async function RecallsPage({
               }
             />
           ) : (
-            <section className="mt-6">
+            <section id="recalls-list" className="mt-6 scroll-mt-8">
               <div className="label grid grid-cols-[1fr_auto_auto_auto] gap-3 border-b border-rule pb-2">
                 <SortHeader basePath="/recalls" params={params} field="title" label="리콜" />
                 <SortHeader basePath="/recalls" params={params} field="domestic_check" label="국내 유통" />
@@ -327,6 +337,9 @@ export default async function RecallsPage({
       )}
 
       <TermsNote />
+      </div>
+      <PageToc items={RECALLS_TOC} />
+      </div>
     </div>
   );
 }

@@ -4,6 +4,7 @@ import { ActionForm } from '@/components/ActionForm';
 import { getDb } from '@/lib/db';
 import { standardsForCase } from '@/lib/cases/resolve-scope';
 import { EvidenceStrip, type EvidenceLevel, type MatchPath } from '@/components/EvidenceStrip';
+import { PageToc, type TocItem } from '@/components/PageToc';
 import type { GpcCandidate } from '@/lib/gpc/lookup';
 import type { GpcMatchLevel } from '@/lib/gpc/verify';
 import { recordReview, runAnalysisAction } from './actions';
@@ -68,6 +69,14 @@ interface CaseEventRow {
 const GPC_LEVEL_LABEL: Record<Exclude<GpcMatchLevel, 'NONE'>, string> = {
   BRICK: 'Brick', CLASS: 'Class', FAMILY: 'Family', SEGMENT: 'Segment',
 };
+
+const ANALYSIS_TOC: TocItem[] = [
+  { id: 'analysis-case', label: '사건 요약' },
+  { id: 'analysis-scope', label: '품목·적용기준' },
+  { id: 'analysis-gpc', label: 'GPC 품목분류' },
+  { id: 'analysis-recall', label: '해외 리콜 근거' },
+  { id: 'analysis-results', label: '관련될 수 있는 조항' },
+];
 
 /** gpc_verified_level 이 가리키는 계층의 코드·제목을 뽑는다 — 계층 아래는 항상 NULL 이다(verify.ts 참고) */
 function gpcVerifiedCodeTitle(ev: CaseEventRow): { code: string; title: string | null } | null {
@@ -384,9 +393,11 @@ export default async function AnalysisPage({
     && causeUnresolved(tags.filter((t) => t.axis === 'HF').map((t) => t.code));
 
   return (
-    <div className="mx-auto max-w-4xl px-6 py-10 lg:px-10 lg:py-14">
+    <div className="mx-auto max-w-6xl px-6 py-10 lg:px-10 lg:py-14">
+      <div className="grid gap-10 xl:grid-cols-[minmax(0,1fr)_10rem]">
+      <div>
       <DoneBanner message={done} />
-      <header className="mt-6">
+      <header id="analysis-case" className="mt-6 scroll-mt-8">
         {/* 사건번호는 뺐다(담당자 요청) — 내부 식별자일 뿐 담당자가 쓸 일이 없다 */}
         <div className="label">
           {ev.source_type === 'ACCIDENT' ? '사고보고서' : '리콜'}
@@ -435,7 +446,7 @@ export default async function AnalysisPage({
       </header>
 
       {/* 품목·적용기준 — 검색보다 먼저 결정되는 것이므로 후보 목록보다 위에 둔다 */}
-      <section className="mt-6 border-t border-rule pt-5">
+      <section id="analysis-scope" className="mt-6 scroll-mt-8 border-t border-rule pt-5">
         <div className="grid gap-4 sm:grid-cols-[10rem_1fr]">
           <span className="label">품목·적용기준</span>
           <div className="text-[13px] leading-relaxed">
@@ -480,7 +491,7 @@ export default async function AnalysisPage({
       {ev.gpc_candidates && ev.gpc_candidates.length > 0 && (() => {
         const verified = gpcVerifiedCodeTitle(ev);
         return (
-          <section className="mt-4 border-t border-rule pt-5">
+          <section id="analysis-gpc" className="mt-4 scroll-mt-8 border-t border-rule pt-5">
             <div className="grid gap-4 sm:grid-cols-[10rem_1fr]">
               <span className="label">GPC 품목분류 후보</span>
               <div className="text-[13px] leading-relaxed">
@@ -560,7 +571,7 @@ export default async function AnalysisPage({
 
       {/* 트랙 B — 해외 리콜에만 있는 것들 */}
       {recall && (
-        <section className="mt-4 border-t border-rule pt-5">
+        <section id="analysis-recall" className="mt-4 scroll-mt-8 border-t border-rule pt-5">
           <div className="grid gap-4 sm:grid-cols-[10rem_1fr]">
             <span className="label">해외 리콜</span>
             <div className="text-[13px] leading-relaxed">
@@ -616,7 +627,7 @@ export default async function AnalysisPage({
       )}
 
       {!run ? (
-        <section className="mt-10 border-t border-rule pt-6">
+        <section id="analysis-results" className="mt-10 scroll-mt-8 border-t border-rule pt-6">
           <p className="text-[13px] text-ink-2">아직 분석하지 않았습니다.</p>
           <p className="mt-1.5 max-w-2xl text-[12px] leading-relaxed text-ink-3">
             이 사건에 붙은 위해요인 코드와 사고 내용으로 관련될 만한 안전기준 조항을 찾습니다.
@@ -635,7 +646,7 @@ export default async function AnalysisPage({
         </section>
       ) : (
         <>
-          <section className="mt-10 flex flex-wrap items-baseline justify-between gap-2 border-t border-rule pt-5">
+          <section id="analysis-results" className="mt-10 flex scroll-mt-8 flex-wrap items-baseline justify-between gap-2 border-t border-rule pt-5">
             <h2 className="text-[15px] font-semibold">
               관련될 수 있는 조항 {results.length}건 — 확인해 보시기를 권합니다
             </h2>
@@ -702,6 +713,9 @@ export default async function AnalysisPage({
           )}
         </>
       )}
+      </div>
+      <PageToc items={ANALYSIS_TOC} />
+      </div>
     </div>
   );
 }

@@ -9,9 +9,16 @@ import { FILE_STATUS_LABEL } from '@/lib/terms';
 import { uploadAccidentPdfs, confirmCase } from './actions';
 import { ActionForm } from '@/components/ActionForm';
 import { AutoRefresh } from '@/components/AutoRefresh';
+import { PageToc, type TocItem } from '@/components/PageToc';
 import { runAnalysisAction } from '@/app/analysis/[caseId]/actions';
 
 export const dynamic = 'force-dynamic';
+
+const ACCIDENTS_TOC: TocItem[] = [
+  { id: 'accidents-status', label: '처리 현황' },
+  { id: 'accidents-upload', label: '사고보고서 올리기' },
+  { id: 'accidents-list', label: '사고보고서 목록' },
+];
 
 /**
  * 사고보고서 — 등록부터 분석까지 한 화면
@@ -156,7 +163,9 @@ export default async function AccidentsPage({
   }
 
   return (
-    <div className="mx-auto max-w-5xl px-6 py-10 lg:px-10 lg:py-14">
+    <div className="mx-auto max-w-6xl px-6 py-10 lg:px-10 lg:py-14">
+      <div className="grid gap-10 xl:grid-cols-[minmax(0,1fr)_10rem]">
+      <div>
       <PageHead
         label="2 · 사고보고서"
         title="사고보고서와 안전기준 연계 분석"
@@ -169,6 +178,7 @@ export default async function AccidentsPage({
 
       {data && (
         <>
+          <div id="accidents-status" className="scroll-mt-8">
           <StatusBar
             items={[
               { label: '올린 문서', value: data.summary.files, note: '사고조사보고서 PDF' },
@@ -198,8 +208,9 @@ export default async function AccidentsPage({
               },
             ]}
           />
+          </div>
 
-          <details className="mt-10 border border-rule bg-surface px-5 py-4">
+          <details id="accidents-upload" className="mt-10 scroll-mt-8 border border-rule bg-surface px-5 py-4">
             <summary className="cursor-pointer text-[13px] font-medium">
               사고보고서 올리기
             </summary>
@@ -253,7 +264,7 @@ export default async function AccidentsPage({
               }
             />
           ) : (
-            <section className="mt-6">
+            <section id="accidents-list" className="mt-6 scroll-mt-8">
               <div className="label grid grid-cols-[1fr_auto_auto] gap-3 border-b border-rule pb-2">
                 <SortHeader basePath="/accidents" params={params} field="filename" label="사고보고서" />
                 <SortHeader basePath="/accidents" params={params} field="status" label="진행" />
@@ -353,6 +364,9 @@ export default async function AccidentsPage({
       )}
 
       <TermsNote />
+      </div>
+      <PageToc items={ACCIDENTS_TOC} />
+      </div>
     </div>
   );
 }

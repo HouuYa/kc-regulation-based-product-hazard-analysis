@@ -1,7 +1,14 @@
 import { getDb } from '@/lib/db';
 import { PageHead, ConnectionError, EmptyState, TermsNote } from '@/components/Panel';
+import { PageToc, type TocItem } from '@/components/PageToc';
 
 export const dynamic = 'force-dynamic';
+
+const CODEBOOK_TOC: TocItem[] = [
+  { id: 'codebook-current', label: '현재 코드북 판' },
+  { id: 'codebook-hf', label: '위해요인 HF' },
+  { id: 'codebook-dt', label: '피해유형 DT' },
+];
 
 /**
  * 위해요인 코드북 — 참고 문서 (조회 전용)
@@ -116,7 +123,9 @@ export default async function CodebookPage() {
   const dt = codes.filter((c) => c.axis === 'DT');
 
   return (
-    <div className="mx-auto max-w-5xl px-6 py-10 lg:px-10 lg:py-14">
+    <div className="mx-auto max-w-6xl px-6 py-10 lg:px-10 lg:py-14">
+      <div className="grid gap-10 xl:grid-cols-[minmax(0,1fr)_10rem]">
+      <div>
       <PageHead
         label="참고 · 위해요인 코드"
         title={version ? `코드북 ${version.version}` : '위해요인 코드북'}
@@ -136,7 +145,7 @@ export default async function CodebookPage() {
       )}
 
       {version && (
-        <section className="mt-9 border-t border-rule pt-5">
+        <section id="codebook-current" className="mt-9 scroll-mt-8 border-t border-rule pt-5">
           <div className="label">지금 쓰는 판</div>
           <div className="mt-2 flex flex-wrap items-baseline gap-x-4 gap-y-1">
             <span className="addr text-[20px] font-medium">{version.version}</span>
@@ -249,7 +258,11 @@ export default async function CodebookPage() {
       ].map(
         (group) =>
           group.rows.length > 0 && (
-            <section key={group.title} className="mt-10">
+            <section
+              key={group.title}
+              id={group.title.includes('(HF)') ? 'codebook-hf' : 'codebook-dt'}
+              className="mt-10 scroll-mt-8"
+            >
               <h2 className="text-[15px] font-semibold">
                 {group.title}
                 <span className="addr ml-2 text-[12px] font-normal text-ink-3">
@@ -284,6 +297,9 @@ export default async function CodebookPage() {
       )}
 
       <TermsNote />
+      </div>
+      <PageToc items={CODEBOOK_TOC} />
+      </div>
     </div>
   );
 }

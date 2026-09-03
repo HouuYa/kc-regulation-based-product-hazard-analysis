@@ -2,6 +2,7 @@ import { getDb } from '@/lib/db';
 import { PageHead, ConnectionError, TermsNote } from '@/components/Panel';
 import { ActionForm } from '@/components/ActionForm';
 import { AutoRefresh } from '@/components/AutoRefresh';
+import { PageToc, type TocItem } from '@/components/PageToc';
 import {
   runEmbedTick, retryParked, sendTestAlert,
   sendCustomMessage, runJobNow, toggleAutoTagging,
@@ -102,6 +103,16 @@ const RUN_LABEL: Record<string, string> = {
   'tag-chunk': '위해요인 코드 부여',
 };
 
+const OPS_TOC: TocItem[] = [
+  { id: 'ops-status', label: '지금 상태' },
+  { id: 'ops-recent', label: '최근 처리' },
+  { id: 'ops-attention', label: '확인이 필요한 것' },
+  { id: 'ops-actions', label: '지금 하기' },
+  { id: 'ops-details', label: '자동으로 도는 일' },
+  { id: 'ops-alerts', label: '알림' },
+  { id: 'ops-access', label: '접속 관리' },
+];
+
 async function load(): Promise<{ data: Data | null; error: string | null }> {
   try {
     const db = getDb();
@@ -197,10 +208,10 @@ function Signal({
 }
 
 function Section({
-  title, lead, children,
-}: { title: string; lead?: string; children: React.ReactNode }) {
+  id, title, lead, children,
+}: { id: string; title: string; lead?: string; children: React.ReactNode }) {
   return (
-    <section className="mt-12">
+    <section id={id} className="mt-12 scroll-mt-8">
       <h2 className="text-[15px] font-semibold">{title}</h2>
       {lead && <p className="mt-1.5 max-w-2xl text-[12px] leading-relaxed text-ink-2">{lead}</p>}
       <div className="mt-4">{children}</div>
@@ -248,7 +259,9 @@ export default async function OpsPage() {
   const tagHours = data ? Math.max(1, Math.round((data.taggable * 4.75 * 60) / 25 / 3600)) : 0;
 
   return (
-    <div className="mx-auto max-w-4xl px-6 py-10 lg:px-10 lg:py-14">
+    <div className="mx-auto max-w-6xl px-6 py-10 lg:px-10 lg:py-14">
+      <div className="grid gap-10 xl:grid-cols-[minmax(0,1fr)_10rem]">
+      <div>
       <PageHead
         label="운영"
         title="시스템이 지금 제대로 돌고 있는가"
@@ -260,7 +273,7 @@ export default async function OpsPage() {
       {data && (
         <>
           {/* ── 1. 한눈에 ─────────────────────────────────────────── */}
-          <Section title="지금 상태" lead="다섯 가지가 모두 초록이면 손댈 것이 없습니다.">
+          <Section id="ops-status" title="지금 상태" lead="다섯 가지가 모두 초록이면 손댈 것이 없습니다.">
             <div className="grid gap-x-8 sm:grid-cols-2">
               <Signal
                 label="의미 검색 준비"
@@ -336,6 +349,7 @@ export default async function OpsPage() {
 
           {/* ── 2. 최근에 무엇이 돌았나 (담당자 요청) ──────────────── */}
           <Section
+            id="ops-recent"
             title="최근 처리"
             lead="자동으로 돈 일과 그 결과입니다. 무엇이 언제 얼마나 처리됐는지 여기서 봅니다."
           >
@@ -372,6 +386,7 @@ export default async function OpsPage() {
           {/* ── 3. 사람이 봐야 할 것 ──────────────────────────────── */}
           {(data.parkedRows.length > 0 || data.cronFailures.length > 0) && (
             <Section
+              id="ops-attention"
               title="확인이 필요한 것"
               lead="자동으로 풀리지 않아 사람의 판단이 필요한 항목입니다."
             >
@@ -426,6 +441,7 @@ export default async function OpsPage() {
 
           {/* ── 4. 조작 ───────────────────────────────────────────── */}
           <Section
+            id="ops-actions"
             title="지금 하기"
             lead="아래 버튼들은 여러 번 눌러도 안전합니다. 자동으로 일어날 일을 앞당길 뿐입니다."
           >
@@ -538,6 +554,7 @@ export default async function OpsPage() {
 
           {/* ── 5. 자동 작업 상세 ─────────────────────────────────── */}
           <Section
+            id="ops-details"
             title="자동으로 도는 일"
             lead="데이터베이스 안에서 스스로 돕니다. 웹사이트가 꺼져 있어도 돌아갑니다."
           >
@@ -608,6 +625,7 @@ export default async function OpsPage() {
 
           {/* ── 6. 알림 ───────────────────────────────────────────── */}
           <Section
+            id="ops-alerts"
             title="알림 (텔레그램)"
             lead="문제가 생기면 다섯 가지를 알립니다 — 의미 검색 준비 보류, 자동 작업 실패, 의미 검색 기준 혼재, 정기 작업 실패, 원문 확인이 오래 밀린 사고보고서. 알림이 시끄러우면 아무도 읽지 않기 때문에 일부러 좁게 뒀습니다. 좋은 소식(새 리콜 도착, 코드 부여 완료)도 함께 옵니다."
           >
@@ -688,6 +706,7 @@ export default async function OpsPage() {
 
           {/* ── 7. 접속 관리 ──────────────────────────────────────── */}
           <Section
+            id="ops-access"
             title="사이트 접속 관리 (ID · 비밀번호)"
             lead="이 사이트는 주소만 알면 누구나 들어올 수 있는 곳에 있습니다. 그래서 앞단에 ID/비밀번호를 두고 외부 접근을 막습니다."
           >
@@ -720,6 +739,9 @@ export default async function OpsPage() {
           <TermsNote />
         </>
       )}
+      </div>
+      <PageToc items={OPS_TOC} />
+      </div>
     </div>
   );
 }
