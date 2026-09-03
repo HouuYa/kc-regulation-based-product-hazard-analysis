@@ -102,28 +102,28 @@ export default async function OverviewPage() {
           <StatusBar
             items={[
               { label: '안전기준', value: status.standards, href: '/standards', note: '적재된 기준 문서' },
-              { label: '조항', value: status.clauses, href: '/standards', note: '검색의 최소 단위' },
+              { label: '조항', value: status.clauses, href: '/standards', note: '검색이 걸리는 가장 작은 덩어리' },
               {
                 label: '위해요인 코드', value: status.clausesTagged, of: status.clausesTaggable,
                 href: '/standards',
-                note: '분모는 코드를 붙이는 대상인 요건 조항입니다. 정의·적용범위·시험방법은 대상이 아닙니다',
+                note: '오른쪽 수는 코드를 붙이는 요건 조항만 센 것입니다. 정의·적용범위·시험방법에는 코드를 붙이지 않습니다',
               },
               {
                 label: '의미 검색 준비', value: status.clausesEmbedded, of: status.clausesEmbeddable,
                 href: '/ops',
-                note: '분모는 준비할 재료(검색용 문장)가 있는 조항입니다. 새 자료는 1분 안에 자동으로 준비됩니다',
+                note: '뜻으로 찾으려면 검색용 문장이 먼저 있어야 합니다. 오른쪽 수는 그 문장이 있는 조항입니다. 새 자료는 1분 안에 저절로 준비됩니다',
               },
               {
                 label: '시험방법 연결', value: status.testMethodLinks, href: '/standards',
-                note: '이 요건은 몇 조 시험으로 확인하는가. 없으면 조항을 찾아도 시험으로 잇지 못합니다',
+                note: '이 요건을 어느 시험으로 확인하는지 이어 둔 것입니다. 없으면 조항을 찾아도 시험까지 이어지지 않습니다',
               },
               {
                 label: '시험 항목·허용치', value: status.testConditions, href: '/standards',
-                note: '기준 표에서 뽑은 수치',
+                note: '기준 표에서 뽑아낸 수치',
               },
               {
                 label: '다른 기준 참조', value: status.unresolvedLinks, href: '/standards',
-                note: '가리키는 대상이 이 문서 밖에 있는 참조',
+                note: '가리키는 조항이 이 문서가 아니라 다른 기준에 있습니다',
               },
               {
                 label: '위해요인 코드북', value: status.codebookCodes, href: '/codebook',
@@ -134,15 +134,15 @@ export default async function OverviewPage() {
 
           <StatusBar
             items={[
-              { label: '사고보고서', value: status.accidents, href: '/accidents', note: '올려서 원문 확인까지 마친 사건' },
+              { label: '사고보고서', value: status.accidents, href: '/accidents', note: '올려서 글자 확인까지 마친 사고' },
               { label: '리콜', value: status.recalls, href: '/recalls', note: '해외·국내 리콜' },
               {
                 label: '분석한 사건', value: status.analyzed,
-                note: '관련 조항을 찾아 순위를 매긴 사건',
+                note: '관련될 수 있는 조항을 찾아 순위까지 매긴 사건',
               },
               {
                 label: '담당자 판단', value: status.reviews,
-                note: '채택·반려 기록. 정확도가 여기서 계산됩니다',
+                note: '채택하거나 반려한 기록입니다. 이 기록으로 정확도를 잽니다',
               },
             ]}
           />

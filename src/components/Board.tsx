@@ -124,6 +124,49 @@ function sort0(params: BoardParams) {
 }
 
 /**
+ * 갈래 나눠 보기 — 목록 위에 붙는 단추 묶음
+ *
+ * 담당자 요청: "해외리콜, 국내 리콜 구분하여 보이도록 토글화"
+ *
+ * 위 찾기 줄의 드롭다운으로도 되지만, 자주 쓰는 구분은 한 번에 눌러 바꿀 수 있어야
+ * 한다. 드롭다운은 열고 고르고 「찾기」까지 세 번을 누르게 한다.
+ * 지금 무엇을 보고 있는지도 펼치지 않고 바로 보인다.
+ */
+export function BoardTabs({
+  basePath, params, name, options,
+}: {
+  basePath: string;
+  params: BoardParams;
+  /** 주소줄에 실릴 이름. 예: 'origin' */
+  name: string;
+  /** 값이 빈 문자열이면 "전체" */
+  options: { value: string; label: string }[];
+}) {
+  const current = params[name] ?? '';
+  return (
+    <div className="mt-5 flex flex-wrap gap-1">
+      {options.map((o) => {
+        const active = current === o.value;
+        return (
+          <Link
+            key={o.value || 'all'}
+            href={href(basePath, params, { [name]: o.value || undefined, page: undefined })}
+            aria-current={active ? 'true' : undefined}
+            className={`border px-3 py-1.5 text-[12px] ${
+              active
+                ? 'border-measure bg-measure text-white'
+                : 'border-rule bg-surface text-ink-2 hover:bg-measure-soft'
+            }`}
+          >
+            {o.label}
+          </Link>
+        );
+      })}
+    </div>
+  );
+}
+
+/**
  * 정렬 가능한 열 제목.
  *
  * 지금 정렬 중인 열을 누르면 오름차순↔내림차순이 바뀐다. 그 사실을 화살표로 보인다 —

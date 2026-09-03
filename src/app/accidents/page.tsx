@@ -7,6 +7,7 @@ import {
 } from '@/components/Board';
 import { FILE_STATUS_LABEL } from '@/lib/terms';
 import { uploadAccidentPdfs, confirmCase } from './actions';
+import { SubmitButton } from '@/components/SubmitButton';
 import { runAnalysisAction } from '@/app/analysis/[caseId]/actions';
 
 export const dynamic = 'force-dynamic';
@@ -48,6 +49,7 @@ interface FileRow {
   case_id: number | null;
   is_confirmed: boolean | null;
   embedded: boolean | null;
+  embedding_pending: boolean | null;
   tag_count: number;
   run_count: number;
   last_results: number | null;
@@ -107,6 +109,8 @@ async function load(params: BoardParams) {
       left(f.extracted_text, 420) as preview,
       e.id as case_id, e.is_confirmed,
       (e.embedding is not null) as embedded,
+      exists (select 1 from public.embed_queue q
+              where q.target_table = 'case_event' and q.row_id = e.id and q.status = 'sent') as embedding_pending,
       coalesce((select count(*)::int from public.case_tag t where t.case_id = e.id), 0) as tag_count,
       coalesce((select count(*)::int from public.match_run r where r.case_id = e.id), 0) as run_count,
       (select r.result_count from public.match_run r
@@ -125,9 +129,12 @@ async function load(params: BoardParams) {
   return { summary, rows, total, page, per };
 }
 
+/** 26.09.01. 처럼 붙여 쓴다. ko-KR 기본값은 "26. 09. 01." 로 공백이 들어간다 */
 function when(iso: string | null): string {
   if (!iso) return '—';
-  return new Date(iso).toLocaleDateString('ko-KR', { year: '2-digit', month: '2-digit', day: '2-digit' });
+  return new Date(iso)
+    .toLocaleDateString('ko-KR', { year: '2-digit', month: '2-digit', day: '2-digit' })
+    .replace(/\s/g, '');
 }
 
 export default async function AccidentsPage({
@@ -152,7 +159,7 @@ export default async function AccidentsPage({
       <PageHead
         label="2 · 사고보고서"
         title="사고보고서와 안전기준 연계 분석"
-        lead="개인정보를 지운 PDF 를 올리면 글자를 뽑아 냅니다. 담당자가 원문을 확인하면 분석 대상이 되고, 사고에 붙은 위해요인 코드로 관련될 수 있는 안전기준 조항을 찾습니다."
+        lead="개인정보를 지운 PDF 를 올리면 안에 있는 글자를 뽑아냅니다. 담당자가 그 글자를 확인해 주면 분석할 수 있게 되고, 사고에 붙은 위해요인 코드로 관련될 만한 안전기준 조항을 찾아 드립니다."
       />
 
       <DoneBanner message={done} />
@@ -166,27 +173,27 @@ export default async function AccidentsPage({
               { label: '올린 문서', value: data.summary.files, note: '사고조사보고서 PDF' },
               {
                 label: '추출 오류', value: data.summary.fileErrors, wantsZero: true,
-                note: '스캔본이거나 개인정보가 발견된 문서. 분석으로 넘어가지 않습니다',
+                note: '글자가 없는 스캔본이거나 개인정보가 들어 있는 문서입니다. 분석까지 가지 않습니다',
               },
               {
                 label: '원문 확인함', value: data.summary.confirmed, of: data.summary.cases,
-                note: '담당자가 추출 결과를 눈으로 확인한 건. 확인해야 분석 대상이 됩니다',
+                note: '뽑아낸 글자를 담당자가 직접 확인한 문서입니다. 확인해야 분석할 수 있습니다',
               },
               {
                 label: '위해요인 코드', value: data.summary.coded, of: data.summary.cases,
-                note: '원인(HF)·피해유형(DT) 코드가 붙은 건',
+                note: '원인(HF)과 피해유형(DT) 코드가 붙은 사고',
               },
               {
                 label: '의미 검색 준비', value: data.summary.embedded, of: data.summary.cases,
-                note: '단어가 달라도 뜻이 비슷한 조항을 찾을 수 있는 상태. 자동으로 준비됩니다',
+                note: '단어가 달라도 뜻이 비슷한 조항까지 찾아냅니다. 새로 들어온 자료는 저절로 준비됩니다',
               },
               {
                 label: '분석 실행됨', value: data.summary.analyzed, of: data.summary.cases,
-                note: '관련 조항을 찾아 순위를 매긴 건',
+                note: '관련될 수 있는 조항을 찾아 순위까지 매긴 사고',
               },
               {
                 label: '채택된 조항', value: data.summary.adopted,
-                note: '담당자가 "관련 있다"고 확인한 조항. 정확도 측정의 재료입니다',
+                note: '담당자가 "관련 있다"고 확인한 조항입니다. 이 기록으로 정확도를 잽니다',
               },
             ]}
           />
@@ -259,7 +266,11 @@ export default async function AccidentsPage({
                     {r.page_count ?? '—'}쪽 · 뽑아낸 글자 {(r.extracted_chars ?? 0).toLocaleString()}자
                     {r.storage_path ? ' · 원본 보관됨' : ' · 원본 미보관'}
                     {r.tag_count > 0 && ` · 위해요인 코드 ${r.tag_count}`}
-                    {r.embedded && ' · 의미 검색 준비됨'}
+                    {r.embedded
+                      ? ' · 의미 검색 준비됨'
+                      : r.embedding_pending
+                        ? ' · 의미 검색 준비 중…'
+                        : ''}
                   </div>
 
                   {r.error_reason && (
@@ -288,17 +299,17 @@ export default async function AccidentsPage({
                             href={`/analysis/${r.case_id}`}
                             className="text-[12px] text-measure underline underline-offset-2"
                           >
-                            이 사건 분석 보기
+                            분석 상세보기
                           </Link>
                           <form action={runAnalysisAction}>
                             <input type="hidden" name="caseId" value={r.case_id} />
                             <input type="hidden" name="returnTo" value="/accidents" />
-                            <button
-                              type="submit"
+                            <SubmitButton
+                              pendingLabel="분석하는 중…"
                               className="border border-rule px-3 py-1.5 text-[12px] hover:bg-measure-soft"
                             >
                               {r.run_count > 0 ? '분석 다시 실행' : '분석 실행'}
-                            </button>
+                            </SubmitButton>
                           </form>
                           <span className="addr tnum text-[11px] text-ink-3">
                             {r.run_count > 0
@@ -310,12 +321,12 @@ export default async function AccidentsPage({
                         <>
                           <form action={confirmCase}>
                             <input type="hidden" name="caseId" value={r.case_id} />
-                            <button
-                              type="submit"
+                            <SubmitButton
+                              pendingLabel="처리하는 중…"
                               className="border border-rule px-3 py-1.5 text-[12px] hover:bg-rule-soft"
                             >
                               원문을 확인했습니다 — 분석 대상으로
-                            </button>
+                            </SubmitButton>
                           </form>
                           <span className="text-[11px] text-ink-3">
                             위 「뽑아낸 원문 확인」을 펼쳐 표가 뭉개지지 않았는지 보고 눌러 주세요

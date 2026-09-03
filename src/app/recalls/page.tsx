@@ -3,8 +3,9 @@ import { getDb } from '@/lib/db';
 import { PageHead, ConnectionError, EmptyState, TermsNote, DoneBanner } from '@/components/Panel';
 import { StatusBar } from '@/components/StatusBar';
 import {
-  BoardToolbar, BoardPager, SortHeader, parseBoard, type BoardParams,
+  BoardToolbar, BoardPager, BoardTabs, SortHeader, parseBoard, type BoardParams,
 } from '@/components/Board';
+import { SubmitButton } from '@/components/SubmitButton';
 import { runAnalysisAction } from '@/app/analysis/[caseId]/actions';
 
 export const dynamic = 'force-dynamic';
@@ -51,6 +52,7 @@ interface RecallRow {
   case_id: number | null;
   tag_count: number;
   embedded: boolean | null;
+  embedding_pending: boolean | null;
   run_count: number;
   last_results: number | null;
 }
@@ -116,6 +118,8 @@ async function load(params: BoardParams) {
       rc.case_id,
       coalesce((select count(*)::int from public.case_tag t where t.case_id = rc.case_id), 0) as tag_count,
       (e.embedding is not null) as embedded,
+      exists (select 1 from public.embed_queue q
+              where q.target_table = 'case_event' and q.row_id = e.id and q.status = 'sent') as embedding_pending,
       coalesce((select count(*)::int from public.match_run r where r.case_id = rc.case_id), 0) as run_count,
       (select r.result_count from public.match_run r
         where r.case_id = rc.case_id order by r.started_at desc limit 1) as last_results
@@ -129,9 +133,12 @@ async function load(params: BoardParams) {
   return { summary, rows, total, page, per };
 }
 
+/** 26.09.01. 처럼 붙여 쓴다. ko-KR 기본값은 "26. 09. 01." 로 공백이 들어간다 */
 function when(iso: string | null): string {
   if (!iso) return '—';
-  return new Date(iso).toLocaleDateString('ko-KR', { year: '2-digit', month: '2-digit', day: '2-digit' });
+  return new Date(iso)
+    .toLocaleDateString('ko-KR', { year: '2-digit', month: '2-digit', day: '2-digit' })
+    .replace(/\s/g, '');
 }
 
 export default async function RecallsPage({
@@ -156,7 +163,7 @@ export default async function RecallsPage({
       <PageHead
         label="3 · 리콜"
         title="리콜과 안전기준 연계 분석"
-        lead="해외·국내에서 리콜된 제품이 우리 안전기준의 어떤 조항과 관련될 수 있는지 찾습니다. 리콜 자료는 협회 원본 표에서 자동으로 들어오며 위해요인 코드도 붙어 옵니다."
+        lead="해외·국내에서 리콜된 제품이 우리 안전기준의 어느 조항과 맞닿는지 찾아 드립니다. 리콜 자료는 협회 원본 표에서 저절로 들어오고 위해요인 코드도 붙어서 옵니다."
       />
 
       <DoneBanner message={done} />
@@ -167,23 +174,25 @@ export default async function RecallsPage({
         <>
           <StatusBar
             items={[
-              { label: '해외 리콜', value: data.summary.overseas, note: '원본 표에서 승인된 건만 가져옵니다' },
-              { label: '국내 리콜', value: data.summary.domestic, note: '국내 리콜 공고' },
+              { label: '해외 리콜', value: data.summary.overseas, note: '협회 담당자가 승인한 것만 가져옵니다' },
+              { label: '국내 리콜', value: data.summary.domestic, note: '국내에서 공고된 리콜' },
               {
                 label: '국내 유통 확인 대기', value: data.summary.uncheckedDistribution, wantsZero: true,
-                note: '해외 리콜 제품이 국내에도 유통됐는지는 담당자가 확인해야 합니다. 보고의무 판단의 전제입니다',
-              },
-              {
-                label: '위해요인 코드', value: data.summary.coded, of: data.summary.cases,
-                note: '원인(HF)·피해유형(DT) 코드가 붙은 건',
+                note: '해외에서 리콜된 제품이 국내에도 풀렸는지는 담당자가 직접 확인해야 합니다. 이걸 알아야 보고 의무가 있는지 따질 수 있습니다',
               },
               {
                 label: '의미 검색 준비', value: data.summary.embedded, of: data.summary.cases,
-                note: '단어가 달라도 뜻이 비슷한 조항을 찾을 수 있는 상태. 자동으로 준비됩니다',
+                note: '단어가 달라도 뜻이 비슷한 조항까지 찾아냅니다. 새로 들어온 자료는 저절로 준비됩니다',
               },
               {
                 label: '분석 실행됨', value: data.summary.analyzed, of: data.summary.cases,
-                note: '관련 조항을 찾아 순위를 매긴 건',
+                note: '관련될 수 있는 조항을 찾아 순위까지 매긴 리콜',
+              },
+              {
+                // 담당자 요청으로 맨 뒤로 옮겼다 — 앞줄 끝에 혼자 남아 아랫줄이
+                // 비어 보이던 자리를 메운다
+                label: '위해요인 코드', value: data.summary.coded, of: data.summary.cases,
+                note: '원인(HF)과 피해유형(DT) 코드가 붙은 리콜',
               },
             ]}
           />
@@ -194,16 +203,21 @@ export default async function RecallsPage({
             placeholder="제품명·브랜드·위해유형·국가로 찾기"
             filters={[
               {
-                name: 'origin', label: '출처',
-                options: [
-                  { value: 'OVERSEAS', label: '해외' },
-                  { value: 'DOMESTIC', label: '국내' },
-                ],
-              },
-              {
                 name: 'check', label: '국내 유통',
                 options: Object.entries(DISTRIBUTION_LABEL).map(([value, label]) => ({ value, label })),
               },
+            ]}
+          />
+
+          {/* 해외·국내는 자주 바꿔 보는 구분이라 드롭다운 대신 단추로 뒀다(담당자 요청) */}
+          <BoardTabs
+            basePath="/recalls"
+            params={params}
+            name="origin"
+            options={[
+              { value: '', label: `전체 ${(data.summary.overseas + data.summary.domestic).toLocaleString()}` },
+              { value: 'OVERSEAS', label: `해외 리콜 ${data.summary.overseas.toLocaleString()}` },
+              { value: 'DOMESTIC', label: `국내 리콜 ${data.summary.domestic.toLocaleString()}` },
             ]}
           />
 
@@ -217,7 +231,7 @@ export default async function RecallsPage({
               commands={
                 params.q || params.origin || params.check
                   ? undefined
-                  : [{ cmd: 'npm run recalls:fetch', note: '원본 표에서 승인된 리콜을 가져옵니다 (매일 새벽 자동으로도 실행됩니다)' }]
+                  : [{ cmd: 'npm run recalls:fetch', note: '협회가 승인한 리콜을 가져옵니다. 매일 새벽에 저절로도 돕니다' }]
               }
             />
           ) : (
@@ -252,7 +266,11 @@ export default async function RecallsPage({
                       {r.brand && ` · ${r.brand}`}
                       {r.hazard_type && ` · ${r.hazard_type}`}
                       {r.tag_count > 0 && ` · 위해요인 코드 ${r.tag_count}`}
-                      {r.embedded && ' · 의미 검색 준비됨'}
+                      {r.embedded
+                        ? ' · 의미 검색 준비됨'
+                        : r.embedding_pending
+                          ? ' · 의미 검색 준비 중…'
+                          : ''}
                     </div>
 
                     {r.case_id && (
@@ -261,17 +279,17 @@ export default async function RecallsPage({
                           href={`/analysis/${r.case_id}`}
                           className="text-[12px] text-measure underline underline-offset-2"
                         >
-                          이 리콜 분석 보기
+                          분석 상세보기
                         </Link>
                         <form action={runAnalysisAction}>
                           <input type="hidden" name="caseId" value={r.case_id} />
                           <input type="hidden" name="returnTo" value="/recalls" />
-                          <button
-                            type="submit"
+                          <SubmitButton
+                            pendingLabel="분석하는 중…"
                             className="border border-rule px-3 py-1.5 text-[12px] hover:bg-measure-soft"
                           >
                             {r.run_count > 0 ? '분석 다시 실행' : '분석 실행'}
-                          </button>
+                          </SubmitButton>
                         </form>
                         <span className="addr tnum text-[11px] text-ink-3">
                           {r.run_count > 0 ? `관련 조항 후보 ${r.last_results ?? 0}건` : '아직 분석하지 않음'}

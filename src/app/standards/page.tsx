@@ -109,8 +109,8 @@ export default async function StandardsPage() {
     <div className="mx-auto max-w-5xl px-6 py-10 lg:px-10 lg:py-14">
       <PageHead
         label="1 · 안전기준"
-        title="적재된 기준과 그 준비 상태"
-        lead="조항 수만으로는 분석할 수 있는지 알 수 없습니다. 위해요인 코드가 있어야 코드로 찾는 방식이 작동하고, 시험방법 연결이 있어야 찾아낸 조항에서 실제 시험으로 이어집니다."
+        title="들여온 기준과 준비 상태"
+        lead="조항 수만 봐서는 분석할 수 있는지 알 수 없습니다. 위해요인 코드가 있어야 코드로 찾을 수 있고, 시험방법이 이어져 있어야 찾아낸 조항에서 실제 시험까지 갈 수 있습니다."
       />
 
       {error && <ConnectionError error={error} />}
@@ -118,27 +118,27 @@ export default async function StandardsPage() {
       {summary && (
         <StatusBar
           items={[
-            { label: '기준 문서', value: summary.standards, note: '현재 유효한 안전기준' },
-            { label: '조항', value: summary.clauses, note: '검색의 최소 단위. 조항 하나가 한 조각' },
+            { label: '기준 문서', value: summary.standards, note: '지금 쓰고 있는 안전기준' },
+            { label: '조항', value: summary.clauses, note: '검색이 걸리는 가장 작은 덩어리입니다. 조항 하나가 한 덩어리' },
             {
               label: '위해요인 코드', value: summary.tagged, of: summary.taggable,
-              note: `분모는 전체 조항이 아니라 코드를 붙이는 대상인 요건 조항입니다. 정의·적용범위·시험방법 ${(summary.clauses - summary.taggable).toLocaleString()}건은 애초에 대상이 아닙니다`,
+              note: `오른쪽 수는 코드를 붙이는 요건 조항만 센 것입니다. 정의·적용범위·시험방법 ${(summary.clauses - summary.taggable).toLocaleString()}건에는 코드를 붙이지 않습니다`,
             },
             {
               label: '의미 검색 준비', value: summary.embedded, of: summary.embeddable,
-              note: '분모는 전체 조항이 아니라 준비할 재료가 있는 조항입니다. 코드 부여 전 조항은 재료가 없습니다',
+              note: '뜻으로 찾으려면 검색용 문장이 먼저 있어야 합니다. 오른쪽 수는 그 문장이 있는 조항입니다',
             },
             {
               label: '시험방법 연결', value: summary.testLinks,
-              note: '"이 요건은 몇 조 시험으로 확인한다"는 조항 사이 연결',
+              note: '이 요건을 어느 시험으로 확인하는지 조항끼리 이어 둔 것',
             },
             {
               label: '시험 항목·허용치', value: summary.conditions,
-              note: '기준 표에서 뽑은 수치. 예: 납 90 mg/kg 이하',
+              note: '기준 표에서 뽑아낸 수치. 예: 납 90 mg/kg 이하',
             },
             {
               label: '다른 기준 참조', value: summary.unresolved,
-              note: '가리키는 대상이 이 문서 밖에 있는 참조. KC 60335 계열이 제1부를 가리킵니다',
+              note: '가리키는 조항이 다른 기준에 있습니다. KC 60335 계열이 제1부를 가리키는 경우입니다',
             },
           ]}
         />
@@ -146,11 +146,11 @@ export default async function StandardsPage() {
 
       {!error && rows.length === 0 && (
         <EmptyState
-          message="적재된 기준이 없습니다."
+          message="아직 들여온 기준이 없습니다."
           commands={[
-            { cmd: 'npm run standards:inspect', note: '적재 전에 읽어들인 결과를 먼저 봅니다' },
-            { cmd: 'npm run standards:load -- --only "부속서 8"', note: '한 기준만 적재합니다' },
-            { cmd: 'npm run standards:load', note: 'KC안전기준/ 폴더 전체를 적재합니다' },
+            { cmd: 'npm run standards:inspect', note: '넣기 전에 읽어들인 결과를 먼저 봅니다' },
+            { cmd: 'npm run standards:load -- --only "부속서 8"', note: '기준 하나만 넣습니다' },
+            { cmd: 'npm run standards:load', note: 'KC안전기준/ 폴더에 있는 것을 모두 넣습니다' },
           ]}
         />
       )}

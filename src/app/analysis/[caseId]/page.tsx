@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { DoneBanner } from '@/components/Panel';
+import { SubmitButton } from '@/components/SubmitButton';
 import { getDb } from '@/lib/db';
 import { standardsForCase } from '@/lib/cases/resolve-scope';
 import { EvidenceStrip, type EvidenceLevel, type MatchPath } from '@/components/EvidenceStrip';
@@ -386,8 +387,9 @@ export default async function AnalysisPage({
     <div className="mx-auto max-w-4xl px-6 py-10 lg:px-10 lg:py-14">
       <DoneBanner message={done} />
       <header className="mt-6">
+        {/* 사건번호는 뺐다(담당자 요청) — 내부 식별자일 뿐 담당자가 쓸 일이 없다 */}
         <div className="label">
-          사건 {ev.id} · {ev.source_type === 'ACCIDENT' ? '사고보고서' : '리콜'}
+          {ev.source_type === 'ACCIDENT' ? '사고보고서' : '리콜'}
           {ev.occurred_on && ` · ${ev.occurred_on}`}
         </div>
         <h1 className="mt-2 max-w-2xl text-[24px] leading-snug font-semibold tracking-tight">
@@ -417,7 +419,7 @@ export default async function AnalysisPage({
         </details>
 
         <div className="mt-4 flex flex-wrap items-center gap-1.5">
-          <span className="label mr-1">부여 코드</span>
+          <span className="label mr-1">붙은 코드</span>
           {tags.length === 0 && <span className="text-[12px] text-caution">코드화되지 않음</span>}
           {tags.map((t) => (
             <span
@@ -576,11 +578,11 @@ export default async function AnalysisPage({
               {recall.hazard_type && <p className="mt-1">{recall.hazard_type}</p>}
 
               <div className="mt-3">
-                <span className="label">상대국 근거</span>
+                <span className="label">리콜한 나라가 든 근거</span>
                 {recall.cited_standards.length === 0 ? (
                   <p className="mt-1 text-[12px] text-ink-2">
-                    공고에 위반 표준이 명시되지 않았습니다. 해외 리콜의 72%가 여기 해당하며,
-                    이 경우 국가 간 기준 수준 비교는 할 수 없습니다.
+                    공고에 어떤 표준을 위반했는지 적혀 있지 않습니다. 해외 리콜 열에 일곱은
+                    이렇습니다. 그래서 우리 기준과 견줘 볼 수가 없습니다.
                   </p>
                 ) : (
                   <div className="mt-1 flex flex-wrap gap-1.5">
@@ -590,22 +592,22 @@ export default async function AnalysisPage({
                     <span className="text-[11px] text-ink-3">
                       {recall.matched_standard_ids.length > 0
                         ? `· 우리 기준 ${recall.matched_standard_ids.length}건과 번호가 같습니다`
-                        : '· 우리 기준과 번호 체계가 달라 사람이 판단해야 합니다'}
+                        : '· 우리 기준과 번호 매기는 방식이 달라 사람이 봐야 합니다'}
                     </span>
                   </div>
                 )}
               </div>
 
               <div className="mt-3">
-                <span className="label">국내 유통 동일성</span>
+                <span className="label">국내에도 풀렸는가</span>
                 <p className="mt-1 text-[12px] leading-relaxed text-ink-2">
-                  {recall.domestic_check === 'DISTRIBUTED' ? '유통 확인됨'
-                    : recall.domestic_check === 'NOT_DISTRIBUTED' ? '유통되지 않음'
-                    : recall.domestic_check === 'UNKNOWN' ? '확인 불가'
-                    : '미확인 — 담당자 확인이 필요합니다.'}
-                  {' '}동일 제품의 국내 유통이 확인되면 제품안전기본법 제13조 제3항의 사업자
-                  즉시 보고 의무 대상인지 검토 대상이 됩니다. 이 체계는 유통 여부를 추정하지
-                  않습니다.
+                  {recall.domestic_check === 'DISTRIBUTED' ? '국내에도 풀린 것으로 확인됐습니다.'
+                    : recall.domestic_check === 'NOT_DISTRIBUTED' ? '국내에는 풀리지 않았습니다.'
+                    : recall.domestic_check === 'UNKNOWN' ? '확인했지만 알아내지 못했습니다.'
+                    : '아직 확인하지 않았습니다. 담당자가 직접 확인해 주셔야 합니다.'}
+                  {' '}같은 제품이 국내에도 풀린 것으로 확인되면, 「제품안전기본법」 제13조
+                  제3항에 따라 사업자가 곧바로 보고해야 하는지 따져 봐야 합니다.
+                  이 시스템은 국내에 풀렸는지를 스스로 짐작하지 않습니다.
                 </p>
               </div>
             </div>
@@ -617,24 +619,24 @@ export default async function AnalysisPage({
         <section className="mt-10 border-t border-rule pt-6">
           <p className="text-[13px] text-ink-2">아직 분석하지 않았습니다.</p>
           <p className="mt-1.5 max-w-2xl text-[12px] leading-relaxed text-ink-3">
-            이 사건에 붙은 위해요인 코드와 서술문으로 관련될 수 있는 안전기준 조항을 찾습니다.
+            이 사건에 붙은 위해요인 코드와 사고 내용으로 관련될 만한 안전기준 조항을 찾습니다.
             몇 초 걸립니다.
           </p>
           <form action={runAnalysisAction} className="mt-3">
             <input type="hidden" name="caseId" value={ev.id} />
-            <button
-              type="submit"
+            <SubmitButton
+              pendingLabel="분석하는 중…"
               className="border border-measure bg-measure px-4 py-2 text-[13px] font-medium text-white hover:opacity-85"
             >
               분석 실행
-            </button>
+            </SubmitButton>
           </form>
         </section>
       ) : (
         <>
           <section className="mt-10 flex flex-wrap items-baseline justify-between gap-2 border-t border-rule pt-5">
             <h2 className="text-[15px] font-semibold">
-              관련될 수 있는 조항 {results.length}건 — 확인을 권고합니다
+              관련될 수 있는 조항 {results.length}건 — 확인해 보시기를 권합니다
             </h2>
             <div className="addr text-[11px] text-ink-3">
               {[
@@ -650,8 +652,8 @@ export default async function AnalysisPage({
 
           {run.use_rerank && run.rerank_model && (
             <p className="mt-2 text-[11px] leading-relaxed text-ink-3">
-              재채점에 언어모델을 썼습니다({run.rerank_model}). 저장된 결과는 다시 열어도 같지만,
-              같은 조건으로 다시 계산하면 순서가 달라질 수 있습니다.
+              순서를 다시 매길 때 AI 를 썼습니다({run.rerank_model}). 저장된 결과는 다시 열어도 그대로지만,
+              같은 조건으로 다시 돌리면 순서가 달라질 수 있습니다.
             </p>
           )}
 

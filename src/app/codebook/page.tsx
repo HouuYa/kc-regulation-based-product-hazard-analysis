@@ -120,7 +120,7 @@ export default async function CodebookPage() {
       <PageHead
         label="참고 · 위해요인 코드"
         title={version ? `코드북 ${version.version}` : '위해요인 코드북'}
-        lead="원인(HF)과 결과(DT)를 나눠 붙이는 두 축의 코드입니다. 안전기준 조항과 사고보고서가 같은 코드를 쓰기 때문에 서로 맞춰 볼 수 있습니다. 이 화면은 조회 전용입니다."
+        lead="원인(HF)과 결과(DT)를 나눠 붙이는 두 갈래 코드입니다. 안전기준 조항과 사고보고서가 같은 코드를 쓰기 때문에 서로 맞춰 볼 수 있습니다. 여기서는 보기만 하고 고치지 않습니다."
       />
 
       {error && <ConnectionError error={error} />}
@@ -129,8 +129,8 @@ export default async function CodebookPage() {
         <EmptyState
           message="유효한 코드북 판이 없습니다."
           commands={[
-            { cmd: 'npm run codebook:inspect', note: '적재 전에 읽어들인 결과를 확인합니다' },
-            { cmd: 'npm run codebook:load -- --activate', note: '적재하고 유효 판으로 지정합니다' },
+            { cmd: 'npm run codebook:inspect', note: '넣기 전에 읽어들인 결과를 확인합니다' },
+            { cmd: 'npm run codebook:load -- --activate', note: '새 판을 넣고 지금 쓰는 판으로 바꿉니다' },
           ]}
         />
       )}
