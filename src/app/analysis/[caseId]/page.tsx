@@ -246,14 +246,33 @@ function Candidate({ r, caseId }: { r: ResultRow; caseId: number }) {
       ) : null}
 
       {r.test_methods?.length ? (
+        /*
+          시험방법도 접는다 (담당자 요청).
+
+          다만 조항번호는 항상 보인다 — 담당자가 이 화면에서 얻어야 하는 결론이
+          "몇 조 시험을 의뢰할 것인가"이기 때문이다. 그 답은 번호이고, 본문은
+          번호를 확인하고 싶을 때만 필요하다.
+        */
         <div className="mt-3 border-l-2 border-measure bg-measure-soft/40 px-3 py-2">
           <div className="label text-measure">시험방법</div>
           {r.test_methods.map((tm, i) => (
             <div key={i} className="mt-1 text-[12px] leading-snug">
-              <span className="addr font-medium">{tm.marker}</span>
-              <span className="ml-2 text-ink-2">
-                {tm.body ? tm.body.slice(0, 120) : '이 기준에 없습니다 — 다른 기준을 참조합니다'}
-              </span>
+              {tm.body ? (
+                <details>
+                  <summary className="cursor-pointer">
+                    <span className="addr font-medium">{tm.marker}</span>
+                    <span className="ml-2 text-ink-3 hover:text-ink">내용 보기</span>
+                  </summary>
+                  <p className="mt-1 leading-relaxed text-ink-2">{tm.body}</p>
+                </details>
+              ) : (
+                <>
+                  <span className="addr font-medium">{tm.marker}</span>
+                  <span className="ml-2 text-ink-2">
+                    이 기준에 없습니다 — 다른 기준을 참조합니다
+                  </span>
+                </>
+              )}
             </div>
           ))}
         </div>
@@ -374,7 +393,28 @@ export default async function AnalysisPage({
         <h1 className="mt-2 max-w-2xl text-[24px] leading-snug font-semibold tracking-tight">
           {ev.title ?? ev.narrative.slice(0, 60)}
         </h1>
-        <p className="mt-3 max-w-2xl text-[13px] leading-relaxed text-ink-2">{ev.narrative}</p>
+        {/*
+          원문을 접어 둔다 (담당자 요청: "사고보고서 분석 페이지가 너무 길어요")
+
+          사고조사보고서는 PDF 에서 뽑은 글자를 통째로 담고 있어 한 건이 수천 자다.
+          그것을 펼쳐 두면 정작 봐야 할 「관련될 수 있는 조항」이 화면 한참 아래로
+          밀린다. 첫 두 줄만 보이고 필요할 때 펼치게 한다 —
+          원문 확인은 등록 단계에서 이미 한 번 하는 일이다.
+        */}
+        <details className="mt-3 max-w-2xl">
+          <summary className="cursor-pointer list-none">
+            <span className="block text-[13px] leading-relaxed text-ink-2">
+              {ev.narrative.slice(0, 160)}
+              {ev.narrative.length > 160 && '…'}
+            </span>
+            <span className="mt-1 inline-block text-[11px] text-ink-3 hover:text-ink">
+              사고보고서 원문 전체 보기 ({ev.narrative.length.toLocaleString()}자)
+            </span>
+          </summary>
+          <p className="mt-2 border-l-2 border-rule pl-3 text-[12px] leading-relaxed whitespace-pre-line text-ink-2">
+            {ev.narrative}
+          </p>
+        </details>
 
         <div className="mt-4 flex flex-wrap items-center gap-1.5">
           <span className="label mr-1">부여 코드</span>

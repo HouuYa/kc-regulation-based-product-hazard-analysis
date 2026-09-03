@@ -78,6 +78,16 @@ export function tuning() {
      * 행정 근거로 쓰는 자료라 이 정도가 안전하고, 비용도 감당된다.
      */
     escalateBelowAgreement: optionalNumber('TAGGING_ESCALATE_BELOW_AGREEMENT', 1.0),
+    /**
+     * 조항 코드 부여를 몇 건씩 동시에 할 것인가.
+     *
+     * 실측: 한 건에 약 17.8초(AI 3~4회 순차 호출). 순서대로만 하면 남은 5,896건에
+     * 약 29시간이 걸려 "화면에서 눌러 두면 끝나는" 것이 불가능했다. 조항끼리는
+     * 서로를 참조하지 않고 저장도 건별 트랜잭션이라 동시에 해도 안전하다.
+     * 4면 약 7시간. 올릴수록 빨라지지만 OpenAI 요청 한도에 걸리면 실패가 늘어
+     * 오히려 느려지므로, 한도를 아는 사람만 올리도록 기본값은 보수적으로 둔다.
+     */
+    taggingConcurrency: optionalNumber('TAGGING_CONCURRENCY', 4),
     /** 검색용 텍스트 조립 규칙 변형(결정항목 9) */
     searchTextVariant: optional('SEARCH_TEXT_VARIANT', 'A'),
     /** RRF 완충값. 관행적으로 60 (§5.4) */

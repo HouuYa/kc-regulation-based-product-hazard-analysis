@@ -2,7 +2,7 @@ import { getDb } from '@/lib/db';
 import { PageHead, ConnectionError, TermsNote } from '@/components/Panel';
 import {
   runEmbedTick, retryParked, sendTestAlert,
-  sendCustomMessage, runTagChunk, runJobNow,
+  sendCustomMessage, runJobNow, toggleAutoTagging,
 } from './actions';
 
 export const dynamic = 'force-dynamic';
@@ -72,6 +72,7 @@ interface Data {
   cronFailures: { jobname: string; end_time: string; message: string | null }[];
   alerts: { kind: string; body: string; status_code: number | null; sent_at: string }[];
   taggable: number;
+  autoTagging: boolean;
   embeddedToday: number;
   jobsConfigured: boolean;
 }
@@ -90,6 +91,7 @@ const JOB_PURPOSE: Record<string, string> = {
   'cron-log-prune': '30일 지난 실행 기록을 지운다',
   'job-recalls-fetch': '새 리콜을 가져온다',
   'job-standards-sync': '안전기준 폴더에 새 문서가 있는지 본다',
+  'job-tag-chunk': '위해요인 코드를 이어서 부여한다 (켜 뒀을 때만)',
 };
 
 const RUN_LABEL: Record<string, string> = {
@@ -155,6 +157,8 @@ async function load(): Promise<{ data: Data | null; error: string | null }> {
       select count(*)::int as n from public.clause where embedded_at > now() - interval '24 hours'
     `;
 
+    const [at] = await db<{ on: boolean }[]>`select public.auto_tagging_on() as on`;
+
     const [j] = await db<{ ok: boolean }[]>`
       select (exists (select 1 from vault.decrypted_secrets where name = 'jobs_token')
               and exists (select 1 from vault.decrypted_secrets where name = 'site_base_url')) as ok
@@ -163,7 +167,7 @@ async function load(): Promise<{ data: Data | null; error: string | null }> {
     return {
       data: {
         ops, embed, jobs, runs, parkedRows, cronFailures, alerts,
-        taggable: t.n, embeddedToday: e.n, jobsConfigured: j.ok,
+        taggable: t.n, autoTagging: at.on, embeddedToday: e.n, jobsConfigured: j.ok,
       },
       error: null,
     };
@@ -238,6 +242,13 @@ export default async function OpsPage({
 
   // 실측 단가 — 조항 1건당 약 $0.0022 (라운드 9)
   const tagCost = data ? (data.taggable * 0.0022).toFixed(2) : '0';
+  // 예상 시간은 넉넉하게 잡는다.
+  //
+  // 실측은 동시 4건에서 1건당 4.75초였다(12건 57초). 자동 실행은 동시 8건이라 더
+  // 빠를 것으로 보이지만 그 수치는 재 보지 않았고, 요청 한도에 걸리면 오히려
+  // 느려질 수도 있다. 재 본 값으로만 계산해 "생각보다 오래 걸린다"는 실망이
+  // 생기지 않게 한다. 1분 주기 중 25초만 쓰므로 실제 경과 시간은 그만큼 늘어난다.
+  const tagHours = data ? Math.max(1, Math.round((data.taggable * 4.75 * 60) / 25 / 3600)) : 0;
 
   return (
     <div className="mx-auto max-w-4xl px-6 py-10 lg:px-10 lg:py-14">
@@ -457,14 +468,21 @@ export default async function OpsPage({
               )}
             </div>
 
-            {/* 돈이 드는 유일한 버튼 — 누르기 전에 얼마인지 보여 준다 */}
+            {/*
+              돈이 드는 유일한 조작 — 켜기 전에 얼마인지 보여 준다.
+
+              한 번 눌러 두면 끝까지 도는 구조다(026). 전에는 18초어치씩만 하고
+              멈춰서, 남은 수천 건을 끝내려면 수천 번을 눌러야 했다 — 자동이 아니라
+              수동을 잘게 쪼갠 것이었다.
+            */}
             <div className="mt-5 border border-caution bg-caution-soft px-4 py-3">
               <div className="text-[13px] font-semibold text-caution">
                 위해요인 코드 부여 — 비용이 드는 작업
               </div>
+
               {data.taggable === 0 ? (
                 <p className="mt-1.5 text-[12px] text-ink-2">
-                  코드를 부여할 요건 조항이 남아 있지 않습니다.
+                  코드를 부여할 요건 조항이 남아 있지 않습니다. 모두 끝났습니다.
                 </p>
               ) : (
                 <>
@@ -472,23 +490,51 @@ export default async function OpsPage({
                     아직 코드가 없는 요건 조항이{' '}
                     <span className="addr tnum text-ink">{data.taggable.toLocaleString()}건</span>{' '}
                     남았습니다. 전부 처리하면 약{' '}
-                    <span className="addr text-ink">${tagCost}</span> 가 듭니다
-                    (조항 1건당 약 $0.0022, 실측치). 코드가 있어야 사고·리콜과 조항을 코드로
-                    맞춰 볼 수 있습니다.
+                    <span className="addr text-ink">${tagCost}</span> 가 들고, 실측 속도로{' '}
+                    <span className="text-ink">약 {tagHours}시간</span> 걸립니다. 코드가 있어야
+                    사고·리콜과 조항을 코드로 맞춰 볼 수 있습니다.
                   </p>
-                  <p className="mt-2 text-[11px] leading-relaxed text-ink-3">
-                    아래 버튼은 약 18초 동안 처리할 수 있는 만큼만 하고 멈춥니다. 남은 것은
-                    다시 누르면 이어서 합니다. 한 번에 끝내려면 터미널에서{' '}
-                    <code className="addr">npm run tag</code> 가 훨씬 빠릅니다.
-                  </p>
-                  <form action={runTagChunk} className="mt-3">
-                    <button
-                      type="submit"
-                      className="border border-caution bg-surface px-4 py-2 text-[13px] text-caution hover:bg-caution-soft"
-                    >
-                      조금 실행하기 (약 18초)
-                    </button>
-                  </form>
+
+                  {data.autoTagging ? (
+                    <>
+                      <div className="mt-3 flex items-baseline gap-2">
+                        <span aria-hidden className="inline-block size-1.5 shrink-0 animate-pulse rounded-full bg-measure" />
+                        <span className="text-[13px] font-medium text-measure">
+                          자동 실행 중 — 1분마다 스스로 이어서 하고 있습니다
+                        </span>
+                      </div>
+                      <p className="mt-1 text-[11px] leading-relaxed text-ink-3">
+                        이 화면을 닫아도 계속 돕니다. 다 끝나면 저절로 꺼지면서 텔레그램으로
+                        알려 드립니다. 진행 상황은 위 남은 건수로 확인하세요.
+                      </p>
+                      <form action={toggleAutoTagging} className="mt-3">
+                        <input type="hidden" name="on" value="false" />
+                        <button
+                          type="submit"
+                          className="border border-rule bg-surface px-4 py-2 text-[13px] hover:bg-rule-soft"
+                        >
+                          멈추기
+                        </button>
+                      </form>
+                    </>
+                  ) : (
+                    <>
+                      <p className="mt-2 text-[11px] leading-relaxed text-ink-3">
+                        켜 두면 1분마다 스스로 이어서 합니다. 화면을 닫아도 계속 돌고, 다 끝나면
+                        저절로 꺼집니다. 퇴근 전에 켜 두면 아침에 끝나 있습니다.
+                        언제든 멈출 수 있고, 멈춰도 그때까지 한 것은 그대로 남습니다.
+                      </p>
+                      <form action={toggleAutoTagging} className="mt-3">
+                        <input type="hidden" name="on" value="true" />
+                        <button
+                          type="submit"
+                          className="border border-caution bg-caution px-4 py-2 text-[13px] font-medium text-white hover:opacity-85"
+                        >
+                          자동 실행 켜기 (약 ${tagCost})
+                        </button>
+                      </form>
+                    </>
+                  )}
                 </>
               )}
             </div>

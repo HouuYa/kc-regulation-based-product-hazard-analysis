@@ -37,8 +37,21 @@ type JobName = 'recalls-fetch' | 'standards-sync' | 'tag-chunk';
 
 const JOBS: JobName[] = ['recalls-fetch', 'standards-sync', 'tag-chunk'];
 
-/** 태깅 한 번에 쓸 시간. 서버리스 실행 제한(보통 26초) 안에 넉넉히 들어오게 잡는다 */
-const TAG_TIME_BUDGET_MS = 18_000;
+/**
+ * 코드 부여 한 번에 쓸 시간.
+ *
+ * 배포 환경에서 standards-sync 가 29초를 쓰고도 성공한 것을 확인해 25초로 잡았다.
+ * 주기가 1분이므로 겹치지도 않는다. 동시 처리와 합쳐 한 번에 10건 안팎을 한다.
+ */
+const TAG_TIME_BUDGET_MS = 25_000;
+
+/**
+ * 자동 실행일 때만 동시 처리를 올린다.
+ *
+ * 화면 버튼은 담당자가 결과를 기다리므로 응답이 빨라야 하고, 자동 실행은
+ * 아무도 안 기다리므로 처리량이 중요하다. 같은 함수를 다르게 쓴다.
+ */
+const TAG_CONCURRENCY = 8;
 
 function authorized(req: Request): boolean {
   const token = process.env.JOBS_TOKEN?.trim();
@@ -103,9 +116,10 @@ export async function POST(req: Request, ctx: { params: Promise<{ job: string }>
       });
     }
 
-    // tag-chunk — 돈이 드는 작업이라 자동 주기에 걸지 않는다. 화면 버튼이 부른다.
+    // tag-chunk — 1분마다 이어서 하는 작업(026)과 화면 버튼이 함께 부른다.
+    // 주기는 걸려 있지만 기본이 꺼짐이라, 담당자가 켜야 돈다(비용이 들기 때문).
     const before = await countTaggable();
-    const r = await runTagging({ timeBudgetMs: TAG_TIME_BUDGET_MS });
+    const r = await runTagging({ timeBudgetMs: TAG_TIME_BUDGET_MS, concurrency: TAG_CONCURRENCY });
     const after = await countTaggable();
 
     if (after === 0 && before > 0) {

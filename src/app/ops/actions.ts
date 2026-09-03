@@ -146,3 +146,28 @@ export async function runJobNow(formData: FormData): Promise<void> {
   }
   back(message); // redirect() 는 try 밖에서 — 위 runTagChunk 주석 참고
 }
+
+/**
+ * 코드 부여 자동 실행 켜고 끄기 (담당자 요청)
+ *
+ * "npm run tag 도 웹페이지에서 클릭하면 자동으로 돌리게 해줘"
+ *
+ * 켜면 1분마다 25초어치씩 스스로 이어서 하고, 다 끝나면 저절로 꺼지면서
+ * 텔레그램으로 알린다. 담당자는 켜 두고 잊으면 된다.
+ *
+ * 상태를 따로 저장하지 않고 cron 작업 자체를 켜고 끈다 — 상태가 한 군데에만
+ * 있어야 "화면은 켜졌다는데 실제로는 안 도는" 어긋남이 생기지 않는다.
+ */
+export async function toggleAutoTagging(formData: FormData): Promise<void> {
+  const on = String(formData.get('on')) === 'true';
+  let message: string;
+  try {
+    await getDb()`select public.set_auto_tagging(${on})`;
+    message = on
+      ? '자동 실행을 켰습니다. 1분마다 스스로 이어서 하고, 다 끝나면 저절로 꺼지면서 텔레그램으로 알려 드립니다. 이 화면을 닫아도 계속 돕니다.'
+      : '자동 실행을 껐습니다. 지금까지 처리된 것은 그대로 남습니다.';
+  } catch (e) {
+    message = `설정에 실패했습니다 — ${e instanceof Error ? e.message : e}`;
+  }
+  back(message); // redirect() 는 try 밖에서 — 위 runTagChunk 주석 참고
+}

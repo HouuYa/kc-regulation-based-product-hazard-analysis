@@ -55,6 +55,8 @@ export interface TagRunOptions {
   retag?: boolean;
   /** 이 시간을 넘기면 남은 건을 두고 멈춘다(화면 버튼용). null 이면 끝까지 */
   timeBudgetMs?: number | null;
+  /** 동시에 처리할 조항 수. 기본은 tuning().taggingConcurrency */
+  concurrency?: number;
   onProgress?: (done: number, total: number, ok: number, fail: number) => void;
 }
 
@@ -145,14 +147,36 @@ export async function runTagging(opts: TagRunOptions = {}): Promise<TagRunResult
     returning id
   `;
 
-  for (const [i, c] of rows.entries()) {
-    // 시간 예산 확인은 건 처리를 시작하기 전에만 한다 — 도중에 끊으면
-    // 조항이 반쯤 처리된 채 남는다
-    if (timeBudgetMs != null && Date.now() - started > timeBudgetMs) {
-      result.stoppedEarly = true;
-      break;
-    }
+  // 여러 건을 동시에 처리한다
+  //
+  //   실측: 한 건에 약 17.8초(AI 를 3~4번 순서대로 부른다). 순서대로만 하면
+  //   남은 5,896건에 약 29시간이 걸려 "눌러 두면 알아서 끝나는" 것이 불가능했다.
+  //   조항끼리는 서로를 참조하지 않고 저장도 건별 트랜잭션이라 동시에 해도 안전하다.
+  //   동시 4건이면 같은 일이 약 7시간으로 줄어 밤새 두면 끝난다.
+  //
+  //   너무 올리면 OpenAI 요청 한도에 걸려 오히려 실패가 늘므로 기본값을 낮게 두고
+  //   환경변수로 조절한다(TAGGING_CONCURRENCY).
+  const lanes = Math.max(1, opts.concurrency ?? t.taggingConcurrency);
+  let cursor = 0;
+  let doneCount = 0;
 
+  async function worker() {
+    for (;;) {
+      // 시간 예산 확인은 건 처리를 시작하기 전에만 한다 — 도중에 끊으면
+      // 조항이 반쯤 처리된 채 남는다
+      if (timeBudgetMs != null && Date.now() - started > timeBudgetMs) {
+        result.stoppedEarly = true;
+        return;
+      }
+      const i = cursor++;
+      if (i >= rows.length) return;
+      await processOne(rows[i]);
+      doneCount++;
+      onProgress?.(doneCount, rows.length, result.ok, result.fail);
+    }
+  }
+
+  async function processOne(c: ClauseRow) {
     const header = buildContextHeader({
       itemName: c.item_name,
       standardLabel: c.display_name,
@@ -180,9 +204,10 @@ export async function runTagging(opts: TagRunOptions = {}): Promise<TagRunResult
       // enum 을 통과했어도 한 번 더 검증한다 (§5.2.2)
       const check = await validateCodes(hf, dt, snapshot.version);
       if (!check.ok) {
+        // 반복문이 아니라 함수가 됐으므로 continue 가 아니라 return 이다
         result.errors.push(`거부 ${c.marker}: ${check.errors.join(' / ')}`);
         result.fail++;
-        continue;
+        return;
       }
 
       // 태깅 결과를 재료로 검색용 텍스트를 조립한다.
@@ -243,12 +268,13 @@ export async function runTagging(opts: TagRunOptions = {}): Promise<TagRunResult
       });
 
       result.ok++;
-      onProgress?.(i + 1, rows.length, result.ok, result.fail);
     } catch (e) {
       result.fail++;
       result.errors.push(`실패 ${c.marker}: ${e instanceof Error ? e.message : e}`);
     }
   }
+
+  await Promise.all(Array.from({ length: lanes }, () => worker()));
 
   await db`
     update public.tagging_run
