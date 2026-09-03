@@ -40,14 +40,17 @@ const JOBS: JobName[] = ['recalls-fetch', 'standards-sync', 'tag-chunk'];
 /**
  * 코드 부여 한 번에 쓸 시간.
  *
- * 처음에 25초로 잡았다가 배포 환경에서 504 Inactivity Timeout 을 맞았다.
- * 함수를 띄우고 코드북을 읽는 준비 시간이 앞뒤로 붙어 전체 요청이 30초를 넘긴
- * 탓이다. 18초로 낮춰 전체가 25초 안에 끝나게 한다.
+ * 배포 환경의 요청 시간 제한은 30초다(실측: 31초에 504 Inactivity Timeout).
  *
- * 대신 처리량은 병렬 요청으로 되찾는다 — 한 tick 에 서로 다른 구간을 맡은 요청을
- * 여러 개 띄운다(027). 준비 시간도 함께 병렬이 되므로 이쪽이 훨씬 효율적이다.
+ * 예산은 "새 조항을 시작할지"만 정한다. 이미 시작한 건은 끝까지 기다리므로
+ * 전체 요청 시간은 예산 + 조항 1건 시간 + 기동 시간이다. 조항 1건이 약 7초,
+ * 기동이 약 5초이므로 12초로 잡으면 전체가 24초 안팎에서 끝난다.
+ *
+ * 처음에는 25초로 잡았다가 504 를 맞았다. 그때는 조항 1건이 18초여서
+ * 예산을 낮춰도 소용이 없었는데, 반복 호출을 동시에 보내도록 고쳐(tagging.ts)
+ * 1건이 7초가 되면서 비로소 여유가 생겼다.
  */
-const TAG_TIME_BUDGET_MS = 18_000;
+const TAG_TIME_BUDGET_MS = 12_000;
 
 /**
  * 자동 실행일 때만 동시 처리를 올린다.
@@ -55,7 +58,7 @@ const TAG_TIME_BUDGET_MS = 18_000;
  * 화면 버튼은 담당자가 결과를 기다리므로 응답이 빨라야 하고, 자동 실행은
  * 아무도 안 기다리므로 처리량이 중요하다. 같은 함수를 다르게 쓴다.
  */
-const TAG_CONCURRENCY = 8;
+const TAG_CONCURRENCY = 6;
 
 function authorized(req: Request): boolean {
   const token = process.env.JOBS_TOKEN?.trim();

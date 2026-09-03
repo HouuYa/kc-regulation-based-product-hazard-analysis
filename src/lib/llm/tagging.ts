@@ -300,9 +300,25 @@ async function runTagging(
 
   // 1차 — 싼 모델을 반복해 일치도를 얻는다.
   // temperature 를 못 쓰지만 GPT-5.6 은 기본이 비결정적이라 반복만으로 흔들린다.
-  for (let i = 0; i < Math.max(1, t.bulkRepeat); i++) {
-    attempts.push(await call(cfg.bulkModel, cfg.bulkEffort));
-  }
+  //
+  // 반복을 동시에 보낸다 (2026-09-03)
+  //   이 세 번은 "같은 입력을 여러 번 물어 답이 흔들리는지 본다"는 뜻이고,
+  //   서로의 결과를 재료로 쓰지 않는다. 순서를 지킬 이유가 없었는데 순서대로
+  //   기다리고 있었다.
+  //
+  //   실측으로 이것이 병목이었다. 조항 1건이 약 18초였는데 그중 대부분이
+  //   이 세 번을 차례로 기다리는 시간이었다. 배포 환경의 요청 시간 제한(30초)에
+  //   막혀 자동 실행이 한 번에 한두 건밖에 처리하지 못한 원인이 여기 있었다.
+  //   동시에 보내면 한 번 걸리는 시간으로 셋이 끝난다.
+  //
+  //   호출 수도 비용도 그대로다 — 기다리는 방식만 바뀐다.
+  attempts.push(
+    ...(await Promise.all(
+      Array.from({ length: Math.max(1, t.bulkRepeat) }, () =>
+        call(cfg.bulkModel, cfg.bulkEffort),
+      ),
+    )),
+  );
 
   const bulkAgreement = agreementOf(attempts);
   const bulkMajority = majority(attempts);
