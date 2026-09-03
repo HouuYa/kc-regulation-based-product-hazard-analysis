@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { getDb } from '@/lib/db';
+import { ConnectionError } from '@/components/Panel';
 
 export const dynamic = 'force-dynamic';
 
@@ -20,6 +21,7 @@ interface Status {
   clauses: number;
   clausesTagged: number;
   clausesEmbedded: number;
+  clausesEmbeddable: number;
   testConditions: number;
   testMethodLinks: number;
   unresolvedLinks: number;
@@ -39,6 +41,8 @@ async function loadStatus(): Promise<{ status: Status | null; error: string | nu
         (select count(*)::int from public.clause)                                as clauses,
         (select count(distinct clause_id)::int from public.clause_tag)           as "clausesTagged",
         (select count(*)::int from public.clause where embedding is not null)    as "clausesEmbedded",
+        (select count(*)::int from public.clause
+          where search_text is not null and length(btrim(search_text)) > 0)      as "clausesEmbeddable",
         (select count(*)::int from public.test_condition)                        as "testConditions",
         (select count(*)::int from public.clause_link
           where link_type = 'TEST_METHOD' and to_clause_id is not null)          as "testMethodLinks",
@@ -52,6 +56,8 @@ async function loadStatus(): Promise<{ status: Status | null; error: string | nu
     `;
     return { status: row, error: null };
   } catch (e) {
+    // 화면에는 원인을 뿌리지 않으므로(ConnectionError) 서버 기록에는 반드시 남긴다
+    console.error('개요 화면 데이터 조회 실패:', e);
     return { status: null, error: e instanceof Error ? e.message : String(e) };
   }
 }
@@ -96,18 +102,7 @@ export default async function OverviewPage() {
         </p>
       </header>
 
-      {error && (
-        <section className="mt-8 border border-halt bg-halt-soft px-5 py-4">
-          <div className="text-[13px] font-semibold text-halt">데이터베이스에 연결하지 못했습니다</div>
-          <p className="mt-1.5 text-[12px] leading-relaxed text-ink-2">
-            <code className="addr">.env.local</code> 의 <code className="addr">DATABASE_URL</code> 을 채우세요.
-            Supabase 대시보드의 <span className="text-ink">Connect → Session pooler</span> 연결 문자열입니다.
-          </p>
-          <pre className="addr mt-3 overflow-x-auto border border-rule bg-surface px-3 py-2 text-[11px] text-ink-2">
-            {error}
-          </pre>
-        </section>
-      )}
+      {error && <ConnectionError error={error} />}
 
       {status && (
         <>
@@ -125,8 +120,9 @@ export default async function OverviewPage() {
               note="HF/DT 코드가 붙은 조항. 코드 갈래는 여기까지만 찾습니다"
             />
             <Metric
-              label="임베딩" value={status.clausesEmbedded} of={status.clauses}
-              note="의미 갈래 대상. 검색용 텍스트가 바뀌면 다시 만듭니다"
+              label="임베딩" value={status.clausesEmbedded} of={status.clausesEmbeddable}
+              note="의미 갈래 대상. 분모는 전체 조항이 아니라 검색용 텍스트가 있는 조항입니다 — 태깅 전 조항은 임베딩할 재료가 없습니다. 새 자료는 1분 안에 자동으로 채워집니다"
+              href="/ops"
             />
             <Metric
               label="시험방법 연결" value={status.testMethodLinks}

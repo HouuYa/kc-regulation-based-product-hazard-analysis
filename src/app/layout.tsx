@@ -46,24 +46,57 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               </Link>
             </div>
 
-            <ol className="px-2 py-3 lg:py-4">
-              {STAGES.map((s) => (
-                <li key={s.href}>
-                  <Link
-                    href={s.href}
-                    className="group flex items-baseline gap-3 rounded-sm px-3 py-2.5 transition-colors hover:bg-measure-soft"
-                  >
-                    <span className="addr text-[11px] text-ink-3 group-hover:text-measure">
-                      {s.no}
-                    </span>
-                    <span className="min-w-0">
-                      <span className="block text-[13px] font-medium">{s.label}</span>
-                      <span className="block text-[11px] text-ink-3">{s.sub}</span>
-                    </span>
-                  </Link>
-                </li>
-              ))}
-            </ol>
+            {/*
+              좁은 화면에서는 가로로 눕힌다.
+              세로로 쌓으면 단계 4개 + 운영이 화면 위쪽 250px 가량을 먹어, 정작 봐야 할
+              본문이 스크롤 아래로 밀린다. 텔레그램 알림을 받고 휴대전화로 운영 화면을
+              여는 경로가 실제로 생겼으므로(023) 이 낭비를 두고 볼 이유가 없다.
+              넓은 화면에서는 원래대로 세로 레일이다.
+            */}
+            <div className="flex items-stretch overflow-x-auto px-2 py-3 lg:block lg:py-4">
+              <ol className="flex lg:block">
+                {STAGES.map((s) => (
+                  <li key={s.href} className="shrink-0">
+                    <Link
+                      href={s.href}
+                      className="group flex items-baseline gap-3 rounded-sm px-3 py-2.5 transition-colors hover:bg-measure-soft"
+                    >
+                      <span className="addr text-[11px] text-ink-3 group-hover:text-measure">
+                        {s.no}
+                      </span>
+                      <span className="min-w-0">
+                        <span className="block text-[13px] font-medium whitespace-nowrap">
+                          {s.label}
+                        </span>
+                        <span className="block text-[11px] whitespace-nowrap text-ink-3">
+                          {s.sub}
+                        </span>
+                      </span>
+                    </Link>
+                  </li>
+                ))}
+              </ol>
+
+              {/*
+                운영은 파이프라인 위에 있지 않다 — 자료가 흐르는 순서(1~4)가 아니라
+                "그 흐름이 지금 돌고 있는가"를 보는 자리다. 그래서 번호를 주지 않고
+                선 하나를 사이에 둔다. 번호가 의미를 담고 있으므로 아무 데나 5를 붙이면
+                그 의미가 깨진다.
+              */}
+              <div className="ml-2 shrink-0 border-l border-rule-soft pl-2 lg:mt-3 lg:ml-0 lg:border-l-0 lg:border-t lg:pt-3 lg:pl-0">
+                <Link
+                  href="/ops"
+                  className="group block rounded-sm px-3 py-2.5 transition-colors hover:bg-measure-soft"
+                >
+                  <span className="block text-[13px] font-medium whitespace-nowrap group-hover:text-measure">
+                    운영
+                  </span>
+                  <span className="block text-[11px] whitespace-nowrap text-ink-3">
+                    상태·알림·접속 관리
+                  </span>
+                </Link>
+              </div>
+            </div>
 
             {/* 이 도구의 성격을 화면에 상주시킨다. 담당자가 결과를 판정으로 읽지 않도록. */}
             <p className="mx-5 mb-5 hidden border-t border-rule-soft pt-4 text-[11px] leading-relaxed text-ink-3 lg:block">

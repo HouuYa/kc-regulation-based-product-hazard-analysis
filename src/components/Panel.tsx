@@ -16,19 +16,43 @@ export function PageHead({
 /**
  * 연결 실패 — 시스템이 잘못된 유일한 경우이므로 여기서만 적색을 쓴다.
  * 무엇이 잘못됐고 어떻게 고치는지 말한다. 사과하지 않는다.
+ *
+ * 원본 오류를 배포 환경에서는 감춘다
+ *   postgres 연결 오류 문자열에는 접속 호스트·사용자·포트가 그대로 들어 있다.
+ *   로컬에서는 그것이 곧 해결 단서지만, 배포된 사이트는 ID/PW 한 겹 뒤에 있을
+ *   뿐이라 화면에 뿌릴 값이 아니다. 개발 중에만 보여 주고, 배포에서는 서버
+ *   로그로만 남긴다.
+ *
+ * 안내 문구도 환경에 따라 다르다
+ *   배포 사이트에는 .env.local 이 없다. 거기서 "그 파일을 채우세요"라고 하면
+ *   담당자를 없는 파일로 보내게 된다.
  */
 export function ConnectionError({ error }: { error: string }) {
+  const isDev = process.env.NODE_ENV !== 'production';
+
   return (
     <section className="mt-8 border border-halt bg-halt-soft px-5 py-4">
       <div className="text-[13px] font-semibold text-halt">데이터베이스에 연결하지 못했습니다</div>
-      <p className="mt-1.5 text-[12px] leading-relaxed text-ink-2">
-        <code className="addr">.env.local</code> 의 <code className="addr">DATABASE_URL</code> 을
-        채우세요. Supabase 대시보드의 <span className="text-ink">Connect → Session pooler</span>{' '}
-        연결 문자열입니다.
-      </p>
-      <pre className="addr mt-3 overflow-x-auto border border-rule bg-surface px-3 py-2 text-[11px] text-ink-2">
-        {error}
-      </pre>
+
+      {isDev ? (
+        <p className="mt-1.5 text-[12px] leading-relaxed text-ink-2">
+          <code className="addr">.env.local</code> 의 <code className="addr">DATABASE_URL</code> 을
+          채우세요. Supabase 대시보드의 <span className="text-ink">Connect → Session pooler</span>{' '}
+          연결 문자열입니다.
+        </p>
+      ) : (
+        <p className="mt-1.5 text-[12px] leading-relaxed text-ink-2">
+          화면에 보이는 숫자는 지금 믿을 수 없습니다. 잠시 뒤 새로고침해 보시고, 계속
+          같으면 Netlify 환경변수의 <code className="addr">DATABASE_URL</code> 과 Supabase
+          프로젝트가 켜져 있는지 확인해야 합니다. 자세한 원인은 서버 기록에 남았습니다.
+        </p>
+      )}
+
+      {isDev && (
+        <pre className="addr mt-3 overflow-x-auto border border-rule bg-surface px-3 py-2 text-[11px] text-ink-2">
+          {error}
+        </pre>
+      )}
     </section>
   );
 }

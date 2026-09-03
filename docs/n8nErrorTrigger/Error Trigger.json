@@ -1,0 +1,67 @@
+{
+  "name": "Error Trigger",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        -496,
+        0
+      ],
+      "id": "d2ec0bde-9619-4c6f-8e2c-e5eaaa8c7807",
+      "name": "Error Trigger"
+    },
+    {
+      "parameters": {
+        "chatId": "5185533472",
+        "text": "=workflow ID : {{ $json.workflow.id }}\nworkflow name : {{ $json.workflow.name }}\n{{ $json.execution.error.message }}\n\ndate&Time : {{ $now.format('yyyy-MM-dd HH:mm') }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "parse_mode": "HTML"
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -160,
+        0
+      ],
+      "id": "e63a280c-1e40-4d6f-bc26-2b55c828a494",
+      "name": "Telegram(n8n-private)",
+      "webhookId": "2a959f26-ab9d-45f4-af50-c38a2d3f6821",
+      "credentials": {
+        "telegramApi": {
+          "id": "M8CmovVpeqTgPxbf",
+          "name": "Telegram account - private하게 나와 연결"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Error Trigger": {
+      "main": [
+        [
+          {
+            "node": "Telegram(n8n-private)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "57858118-463f-471e-8574-1bf7b86b8f27",
+  "meta": {
+    "instanceId": "68267bb544272e81cf428a801701ee0bdcf27c6e517d9bb7e6ce35161f67ea0e"
+  },
+  "nodeGroups": [],
+  "id": "yWqH3FhwalnEkpK9",
+  "tags": []
+}
