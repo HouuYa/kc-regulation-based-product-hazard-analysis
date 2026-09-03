@@ -75,7 +75,7 @@ function dedupeValid(codes: (string | null | undefined)[], valid: Set<string>): 
 }
 
 export async function loadRecalls(
-  opts: { source?: string; limit?: number } = {},
+  opts: { source?: string; limit?: number; offset?: number } = {},
 ): Promise<LoadRecallsResult> {
   const db = getDb();
   const result: LoadRecallsResult = {
@@ -83,7 +83,7 @@ export async function loadRecalls(
     withStd: 0, droppedCodes: 0, llmReclassified: [], unclassified: [], warnings: [],
   };
 
-  const rows = await fetchApprovedRecalls({ source: opts.source, limit: opts.limit });
+  const rows = await fetchApprovedRecalls({ source: opts.source, limit: opts.limit, offset: opts.offset });
   result.received = rows.length;
   if (rows.length === 0) return result;
 

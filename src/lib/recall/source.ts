@@ -72,15 +72,18 @@ export interface FetchOptions {
   source?: string;
   /** 최대 몇 건까지 받을 것인가 */
   limit?: number;
+  /** 정렬된 승인 목록에서 건너뛸 건수 */
+  offset?: number;
 }
 
 /** approval_status='approved' AND korea_relevance=true 인 건만 페이지를 넘겨 가며 모은다 */
 export async function fetchApprovedRecalls(opts: FetchOptions = {}): Promise<SourceRecall[]> {
   const sb = getClient();
   const cap = opts.limit ?? Number.MAX_SAFE_INTEGER;
+  const start = opts.offset ?? 0;
   const out: SourceRecall[] = [];
 
-  for (let from = 0; out.length < cap; from += PAGE) {
+  for (let from = start; out.length < cap; from += PAGE) {
     const take = Math.min(PAGE, cap - out.length);
     let q = sb
       .from('recalls')

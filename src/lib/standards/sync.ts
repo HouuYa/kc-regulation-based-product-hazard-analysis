@@ -44,6 +44,10 @@ export interface SyncOptions {
   dir?: string;
   /** 파일명에 포함된 문자열로만 좁혀 돈다 (부분 동기화) */
   only?: string;
+  /** 정렬된 파일 목록에서 건너뛸 건수 */
+  offset?: number;
+  /** 이번 호출에서 처리할 최대 파일 수 */
+  limit?: number;
 }
 
 /**
@@ -72,7 +76,8 @@ export async function syncStandardsFolder(options: SyncOptions = {}): Promise<Sy
   const files = readdirSync(dir)
     .filter((f) => f.toLowerCase().endsWith('.json'))
     .filter((f) => (options.only ? f.includes(options.only) : true))
-    .sort();
+    .sort()
+    .slice(options.offset ?? 0, (options.offset ?? 0) + (options.limit ?? Number.MAX_SAFE_INTEGER));
 
   const results: SyncFileResult[] = [];
 

@@ -89,7 +89,10 @@ export async function POST(req: Request, ctx: { params: Promise<{ job: string }>
 
   try {
     if (job === 'recalls-fetch') {
-      const r = await loadRecalls({});
+      const params = new URL(req.url).searchParams;
+      const limit = Number(params.get('limit') ?? '20') || 20;
+      const offset = Number(params.get('offset') ?? '0') || 0;
+      const r = await loadRecalls({ limit, offset });
       if (r.newCase > 0) {
         await notify(
           '리콜 수집',
@@ -99,6 +102,7 @@ export async function POST(req: Request, ctx: { params: Promise<{ job: string }>
       }
       return NextResponse.json({
         job, ok: true, elapsedMs: Date.now() - started,
+        offset, limit,
         received: r.received, newCase: r.newCase, existingCase: r.existingCase,
         tagged: r.tagged, resolved: r.resolved,
         llmReclassified: r.llmReclassified.length, unclassified: r.unclassified.length,
@@ -106,7 +110,10 @@ export async function POST(req: Request, ctx: { params: Promise<{ job: string }>
     }
 
     if (job === 'standards-sync') {
-      const results = await syncStandardsFolder({});
+      const params = new URL(req.url).searchParams;
+      const limit = Number(params.get('limit') ?? '20') || 20;
+      const offset = Number(params.get('offset') ?? '0') || 0;
+      const results = await syncStandardsFolder({ offset, limit });
       const added = results.filter((r) => r.status === 'new').length;
       const updated = results.filter((r) => r.status === 'updated').length;
       const failed = results.filter((r) => r.status === 'error').length;
@@ -119,6 +126,7 @@ export async function POST(req: Request, ctx: { params: Promise<{ job: string }>
       }
       return NextResponse.json({
         job, ok: true, elapsedMs: Date.now() - started,
+        offset, limit,
         added, updated, failed, total: results.length,
       });
     }
