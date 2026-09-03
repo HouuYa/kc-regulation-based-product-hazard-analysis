@@ -1,10 +1,11 @@
 import Link from 'next/link';
+import { DoneBanner } from '@/components/Panel';
 import { getDb } from '@/lib/db';
 import { standardsForCase } from '@/lib/cases/resolve-scope';
 import { EvidenceStrip, type EvidenceLevel, type MatchPath } from '@/components/EvidenceStrip';
 import type { GpcCandidate } from '@/lib/gpc/lookup';
 import type { GpcMatchLevel } from '@/lib/gpc/verify';
-import { recordReview } from './actions';
+import { recordReview, runAnalysisAction } from './actions';
 import { REJECT_REASONS } from './review-options';
 
 export const dynamic = 'force-dynamic';
@@ -15,9 +16,9 @@ export const dynamic = 'force-dynamic';
  * "판정하지 않는다"의 UI 번역이 이 화면의 전부다.
  *
  *   위반 판정 금지  →  문구를 "관련될 수 있음 / 확인 권고"로 고정, 적색 아이콘 미사용
- *   근거 제시      →  조항 원문·시험조건·매칭 경로·재채점 이유를 펼쳐 보기로 제공
+ *   근거 제시      →  조항 원문·시험 항목·찾은 경로·재채점 이유를 펼쳐 보기로 제공
  *   HITL 확정      →  채택/반려가 기본 동작, 아무것도 안 하면 미확정으로 남는다
- *   폴백 명시      →  미태깅 품목 결과는 별도 배지로 구분
+ *   폴백 명시      →  코드 없이 찾은 결과는 별도 배지로 구분
  *   누락 방지      →  상위 5건 우선 표시, 나머지는 '더 보기'로 항상 열어 둔다
  *
  * 마지막 항목이 특히 중요하다. 사고조사에서 시험 항목 누락은 되돌릴 수 없는 손실이므로
@@ -258,14 +259,14 @@ function Candidate({ r, caseId }: { r: ResultRow; caseId: number }) {
         </div>
       ) : (
         <div className="mt-3 text-[12px] text-caution">
-          시험방법 연결이 없습니다. 조항은 찾았으나 어떤 시험을 의뢰할지는 직접 확인해야 합니다.
+          시험방법 연결이 없습니다. 관련 조항은 찾았지만 어떤 시험을 의뢰해야 하는지까지는 알려 드리지 못합니다.
         </div>
       )}
 
       {r.test_conditions?.length ? (
         <details className="mt-2.5">
           <summary className="cursor-pointer text-[12px] text-ink-3 hover:text-ink">
-            시험조건 {r.test_conditions.length}건 보기
+            시험 항목·허용치 {r.test_conditions.length}건 보기
           </summary>
           <ul className="addr tnum mt-1.5 space-y-0.5 text-[11px] text-ink-2">
             {r.test_conditions.map((t, i) => <li key={i}>{t}</li>)}
@@ -318,10 +319,13 @@ function Candidate({ r, caseId }: { r: ResultRow; caseId: number }) {
 
 export default async function AnalysisPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ caseId: string }>;
+  searchParams: Promise<{ done?: string }>;
 }) {
   const { caseId: raw } = await params;
+  const { done } = await searchParams;
   const caseId = Number(raw);
 
   let data: Awaited<ReturnType<typeof load>> = null;
@@ -361,7 +365,8 @@ export default async function AnalysisPage({
 
   return (
     <div className="mx-auto max-w-4xl px-6 py-10 lg:px-10 lg:py-14">
-      <header>
+      <DoneBanner message={done} />
+      <header className="mt-6">
         <div className="label">
           사건 {ev.id} · {ev.source_type === 'ACCIDENT' ? '사고보고서' : '리콜'}
           {ev.occurred_on && ` · ${ev.occurred_on}`}
@@ -439,7 +444,7 @@ export default async function AnalysisPage({
               <div className="text-[13px] leading-relaxed">
                 {ev.gpc_verified_level == null ? (
                   <p className="text-[12px] text-caution">
-                    LLM 검증 전 데이터입니다(임베딩 순위만 있음) — 순위 전체를 참고해 사람이
+                    AI 검증 전 자료입니다(뜻이 비슷한 순서만 있음) — 순위 전체를 참고해 사람이
                     확인하세요.
                   </p>
                 ) : ev.gpc_verified_level === 'NONE' ? (
@@ -495,7 +500,7 @@ export default async function AnalysisPage({
                           <span className="text-[10px] font-medium text-measure">검증 확정</span>
                         )}
                         {isEmbeddingTop1 && !isVerifiedBrick && (
-                          <span className="text-[10px] text-ink-3">임베딩 1위</span>
+                          <span className="text-[10px] text-ink-3">유사도 1위</span>
                         )}
                         <span className="text-ink-3">
                           {c.segmentTitle} &gt; {c.familyTitle} &gt; {c.classTitle}
@@ -571,9 +576,19 @@ export default async function AnalysisPage({
       {!run ? (
         <section className="mt-10 border-t border-rule pt-6">
           <p className="text-[13px] text-ink-2">아직 분석하지 않았습니다.</p>
-          <code className="addr mt-2 block text-[12px] text-ink">
-            npm run search -- --case {ev.id}
-          </code>
+          <p className="mt-1.5 max-w-2xl text-[12px] leading-relaxed text-ink-3">
+            이 사건에 붙은 위해요인 코드와 서술문으로 관련될 수 있는 안전기준 조항을 찾습니다.
+            몇 초 걸립니다.
+          </p>
+          <form action={runAnalysisAction} className="mt-3">
+            <input type="hidden" name="caseId" value={ev.id} />
+            <button
+              type="submit"
+              className="border border-measure bg-measure px-4 py-2 text-[13px] font-medium text-white hover:opacity-85"
+            >
+              분석 실행
+            </button>
+          </form>
         </section>
       ) : (
         <>
@@ -606,7 +621,7 @@ export default async function AnalysisPage({
                 후보가 없습니다. 이것이 곧 &ldquo;기준에 조항이 없다&rdquo;는 뜻은 아닙니다.
               </p>
               <p className="mt-2 max-w-2xl text-[12px] leading-relaxed text-ink-3">
-                품목·기준이 확정되지 않았거나, 조항이 아직 태깅되지 않았거나, 시험방법 연결이
+                품목·기준이 확정되지 않았거나, 조항에 아직 위해요인 코드가 붙지 않았거나, 시험방법 연결이
                 없어서일 수 있습니다. 개요 화면에서 준비 상태를 먼저 확인하세요.
               </p>
             </section>

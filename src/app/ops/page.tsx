@@ -1,26 +1,28 @@
 import { getDb } from '@/lib/db';
-import { PageHead, ConnectionError } from '@/components/Panel';
-import { runEmbedTick, retryParked, sendTestAlert } from './actions';
+import { PageHead, ConnectionError, TermsNote } from '@/components/Panel';
+import {
+  runEmbedTick, retryParked, sendTestAlert,
+  sendCustomMessage, runTagChunk, runJobNow,
+} from './actions';
 
 export const dynamic = 'force-dynamic';
 
 /**
  * 운영 — 담당자가 시스템을 관리하는 자리
  *
- * 왼쪽 레일의 1~4 는 자료가 흐르는 순서(적재 → 코드 → 사건 → 분석)다. 이 화면은
- * 그 흐름 위에 있지 않다. "흐름이 지금 제대로 돌고 있는가"를 보는 자리라서
- * 번호를 붙이지 않고 레일 아래쪽에 따로 뒀다.
+ * 왼쪽 레일의 1~3 은 자료가 흐르는 순서다. 이 화면은 그 흐름 위에 있지 않다.
+ * "흐름이 지금 제대로 돌고 있는가"를 보는 자리다.
  *
- * 이 화면이 답해야 하는 질문은 넷이다.
+ * 이 화면이 답해야 하는 질문
  *   1. 자동으로 도는 것들이 지금 돌고 있는가
- *   2. 사람이 봐야 할 문제가 있는가
- *   3. 문제가 생기면 어떻게 연락이 오는가
- *   4. 이 사이트에 누가 들어올 수 있는가 (ID/PW)
+ *   2. 최근에 무엇이 언제 돌아 무엇을 했는가
+ *   3. 사람이 봐야 할 문제가 있는가
+ *   4. 문제가 생기면 어떻게 연락이 오는가
+ *   5. 이 사이트에 누가 들어올 수 있는가
  *
- * 왜 한 화면에 모으는가
- *   이 정보들은 그동안 서로 다른 곳에 흩어져 있었다 — 임베딩 상태는 터미널
- *   명령(npm run embed:status), 접속 비밀번호는 Netlify 대시보드, 오류는 아무 데도.
- *   담당자가 코드를 읽지 않는 사람이라면 그중 어느 것도 볼 수 없다. 그래서 모은다.
+ * 말을 담당자의 말로 바꿨다 (2026-09-03)
+ *   "임베딩" → 의미 검색 준비 / "배치" → 자동 작업 / "임베딩 좌표계" → 의미 검색 기준
+ *   "DB 금고" → 비밀값 보관함. 뜻이 달라진 것은 없고 부르는 이름만 바꿨다.
  */
 
 interface OpsStatus {
@@ -54,29 +56,47 @@ interface JobRow {
   last_message: string | null;
 }
 
-interface ParkedRow {
-  target_table: string;
-  row_id: number;
-  attempts: number;
-  last_error: string | null;
-  settled_at: string | null;
-}
-
-interface AlertRow {
-  kind: string;
-  body: string;
+interface RunRow {
+  job: string;
+  started_at: string;
   status_code: number | null;
-  sent_at: string;
+  response: string | null;
 }
 
 interface Data {
   ops: OpsStatus;
   embed: EmbedRow[];
   jobs: JobRow[];
-  parkedRows: ParkedRow[];
+  runs: RunRow[];
+  parkedRows: { target_table: string; row_id: number; attempts: number; last_error: string | null }[];
   cronFailures: { jobname: string; end_time: string; message: string | null }[];
-  alerts: AlertRow[];
+  alerts: { kind: string; body: string; status_code: number | null; sent_at: string }[];
+  taggable: number;
+  embeddedToday: number;
+  jobsConfigured: boolean;
 }
+
+/** 자료 종류 이름 — 담당자 지적으로 "사건"을 사고보고서·리콜로 나눴다 */
+const TARGET_LABEL: Record<string, string> = {
+  clause: '안전기준 조항',
+  accident: '사고보고서',
+  recall: '리콜',
+};
+
+/** 자동 작업이 하는 일을 한 줄로 */
+const JOB_PURPOSE: Record<string, string> = {
+  'embed-tick': '의미 검색 준비가 안 된 자료를 찾아 준비한다',
+  'ops-watch': '문제를 찾아 알림을 보낸다',
+  'cron-log-prune': '30일 지난 실행 기록을 지운다',
+  'job-recalls-fetch': '새 리콜을 가져온다',
+  'job-standards-sync': '안전기준 폴더에 새 문서가 있는지 본다',
+};
+
+const RUN_LABEL: Record<string, string> = {
+  'recalls-fetch': '리콜 수집',
+  'standards-sync': '안전기준 동기화',
+  'tag-chunk': '위해요인 코드 부여',
+};
 
 async function load(): Promise<{ data: Data | null; error: string | null }> {
   try {
@@ -98,44 +118,66 @@ async function load(): Promise<{ data: Data | null; error: string | null }> {
       order by j.jobname
     `;
 
-    const parkedRows = await db<ParkedRow[]>`
-      select target_table, row_id, attempts, last_error, settled_at::text
+    const runs = await db<RunRow[]>`
+      select job, started_at::text, status_code, response
+      from public.job_run order by started_at desc limit 8
+    `;
+
+    const parkedRows = await db<Data['parkedRows']>`
+      select target_table, row_id, attempts, last_error
       from public.embed_queue
       where status = 'failed' and attempts >= 5
       order by target_table, row_id limit 20
     `;
 
-    const cronFailures = await db<{ jobname: string; end_time: string; message: string | null }[]>`
+    const cronFailures = await db<Data['cronFailures']>`
       select j.jobname, d.end_time::text, d.return_message as message
       from cron.job_run_details d join cron.job j on j.jobid = d.jobid
       where d.status = 'failed' and d.end_time > now() - interval '24 hours'
       order by d.end_time desc limit 10
     `;
 
-    const alerts = await db<AlertRow[]>`
+    const alerts = await db<Data['alerts']>`
       select kind, body, status_code, sent_at::text
       from public.ops_alert order by sent_at desc limit 8
     `;
 
-    return { data: { ops, embed, jobs, parkedRows, cronFailures, alerts }, error: null };
+    // 코드를 붙일 수 있는데 아직 안 붙은 요건 조항 — 화면이 남은 일과 비용을 보여 준다
+    const [t] = await db<{ n: number }[]>`
+      select count(*)::int as n
+      from public.clause c join public.standard s on s.id = c.standard_id
+      where s.is_current and c.clause_role = 'REQUIREMENT'
+        and length(btrim(c.body)) >= 15
+        and not exists (select 1 from public.clause_tag ct where ct.clause_id = c.id)
+    `;
+
+    const [e] = await db<{ n: number }[]>`
+      select count(*)::int as n from public.clause where embedded_at > now() - interval '24 hours'
+    `;
+
+    const [j] = await db<{ ok: boolean }[]>`
+      select (exists (select 1 from vault.decrypted_secrets where name = 'jobs_token')
+              and exists (select 1 from vault.decrypted_secrets where name = 'site_base_url')) as ok
+    `;
+
+    return {
+      data: {
+        ops, embed, jobs, runs, parkedRows, cronFailures, alerts,
+        taggable: t.n, embeddedToday: e.n, jobsConfigured: j.ok,
+      },
+      error: null,
+    };
   } catch (e) {
+    console.error('운영 화면 조회 실패:', e);
     return { data: null, error: e instanceof Error ? e.message : String(e) };
   }
 }
 
-/** 상태 한 줄. 색은 계측의 색을 따르되, 시스템 실패에만 적색을 쓴다(globals.css) */
 function Signal({
   label, value, level, note,
-}: {
-  label: string;
-  value: string;
-  level: 'ok' | 'caution' | 'halt';
-  note?: string;
-}) {
-  const tone =
-    level === 'halt' ? 'text-halt' : level === 'caution' ? 'text-caution' : 'text-measure';
-  const dot =
-    level === 'halt' ? 'bg-halt' : level === 'caution' ? 'bg-caution' : 'bg-measure';
+}: { label: string; value: string; level: 'ok' | 'caution' | 'halt'; note?: string }) {
+  const tone = level === 'halt' ? 'text-halt' : level === 'caution' ? 'text-caution' : 'text-measure';
+  const dot = level === 'halt' ? 'bg-halt' : level === 'caution' ? 'bg-caution' : 'bg-measure';
   return (
     <div className="border-t border-rule py-3">
       <div className="flex items-baseline gap-2">
@@ -160,18 +202,27 @@ function Section({
   );
 }
 
-function Cmd({ children, note }: { children: string; note?: string }) {
-  return (
-    <li className="border-t border-rule py-2.5 text-[13px]">
-      <code className="addr text-ink">{children}</code>
-      {note && <div className="mt-0.5 text-[11px] leading-snug text-ink-3">{note}</div>}
-    </li>
-  );
-}
-
 function when(iso: string | null): string {
   if (!iso) return '기록 없음';
   return new Date(iso).toLocaleString('ko-KR', { dateStyle: 'short', timeStyle: 'short' });
+}
+
+/** 라우트가 돌려준 JSON 요약을 사람이 읽을 문장으로 */
+function describeRun(r: RunRow): string {
+  if (r.status_code == null) return '결과를 기다리는 중';
+  if (r.status_code !== 200) return `실패 (HTTP ${r.status_code}) ${(r.response ?? '').slice(0, 120)}`;
+  try {
+    const j = JSON.parse(r.response ?? '{}');
+    if (r.job === 'recalls-fetch') {
+      return `조회 ${j.received ?? 0}건 · 새로 들어옴 ${j.newCase ?? 0}건 · 코드 부여 ${j.tagged ?? 0}건`;
+    }
+    if (r.job === 'standards-sync') {
+      return `새 기준 ${j.added ?? 0}건 · 개정 ${j.updated ?? 0}건 (전체 ${j.total ?? 0}건 확인)`;
+    }
+    return `코드 부여 ${j.done ?? 0}건 · 남은 조항 ${j.remaining ?? 0}건`;
+  } catch {
+    return (r.response ?? '').slice(0, 120);
+  }
 }
 
 export default async function OpsPage({
@@ -182,16 +233,18 @@ export default async function OpsPage({
   const { done } = await searchParams;
   const { data, error } = await load();
 
-  // 미들웨어가 읽는 값과 같은 환경변수를 본다. 값 자체는 절대 화면에 내지 않는다.
   const authUser = process.env.SITE_AUTH_USERNAME?.trim() ?? '';
   const authPassSet = Boolean(process.env.SITE_AUTH_PASSWORD?.trim());
+
+  // 실측 단가 — 조항 1건당 약 $0.0022 (라운드 9)
+  const tagCost = data ? (data.taggable * 0.0022).toFixed(2) : '0';
 
   return (
     <div className="mx-auto max-w-4xl px-6 py-10 lg:px-10 lg:py-14">
       <PageHead
         label="운영"
         title="시스템이 지금 제대로 돌고 있는가"
-        lead="자동으로 도는 작업들의 상태, 사람이 봐야 할 문제, 알림과 접속 관리를 한자리에 모았습니다. 평소에는 볼 일이 없어야 정상입니다."
+        lead="자동으로 도는 일들의 상태, 최근에 무엇이 처리됐는지, 사람이 봐야 할 문제, 알림과 접속 관리를 한자리에 모았습니다. 평소에는 볼 일이 없어야 정상입니다."
       />
 
       {done && (
@@ -205,16 +258,11 @@ export default async function OpsPage({
       {data && (
         <>
           {/* ── 1. 한눈에 ─────────────────────────────────────────── */}
-          <Section
-            title="지금 상태"
-            lead="네 가지가 모두 초록이면 손댈 것이 없습니다."
-          >
+          <Section title="지금 상태" lead="다섯 가지가 모두 초록이면 손댈 것이 없습니다.">
             <div className="grid gap-x-8 sm:grid-cols-2">
               <Signal
-                label="임베딩 자동 배치"
-                level={
-                  data.ops.parked > 0 ? 'halt' : data.ops.in_flight > 0 ? 'caution' : 'ok'
-                }
+                label="의미 검색 준비"
+                level={data.ops.parked > 0 ? 'halt' : data.ops.in_flight > 0 ? 'caution' : 'ok'}
                 value={
                   data.ops.parked > 0
                     ? `보류 ${data.ops.parked}건 — 확인 필요`
@@ -222,27 +270,27 @@ export default async function OpsPage({
                       ? `처리 중 ${data.ops.in_flight}건`
                       : '정상 — 밀린 것 없음'
                 }
-                note="1분마다 임베딩이 빈 자료를 찾아 채웁니다"
+                note="새 자료가 들어오면 1분 안에 뜻으로 찾을 수 있게 준비합니다"
               />
               <Signal
-                label="배치 실행"
+                label="자동 작업"
                 level={data.ops.cron_failed_24h > 0 ? 'halt' : 'ok'}
                 value={
                   data.ops.cron_failed_24h > 0
                     ? `최근 24시간 ${data.ops.cron_failed_24h}회 실패`
                     : '정상 — 최근 24시간 실패 없음'
                 }
-                note="배치 자체가 죽으면 아무것도 갱신되지 않습니다"
+                note="이것이 멈추면 아무것도 자동으로 갱신되지 않습니다"
               />
               <Signal
-                label="임베딩 좌표계"
+                label="의미 검색 기준"
                 level={data.ops.embedding_models > 1 ? 'halt' : 'ok'}
                 value={
                   data.ops.embedding_models > 1
-                    ? `모델 ${data.ops.embedding_models}종 혼재 — 검색을 믿을 수 없음`
-                    : '정상 — 단일 모델'
+                    ? `기준 ${data.ops.embedding_models}종 섞임 — 검색을 믿을 수 없음`
+                    : '정상 — 하나로 통일됨'
                 }
-                note="모델이 섞이면 오류 없이 검색 품질만 조용히 떨어집니다"
+                note="기준이 섞이면 오류 없이 검색 품질만 조용히 나빠집니다"
               />
               <Signal
                 label="문제 알림"
@@ -258,10 +306,59 @@ export default async function OpsPage({
                     : '아직 보낸 알림이 없습니다'
                 }
               />
+              <Signal
+                label="정기 실행"
+                level={data.jobsConfigured ? 'ok' : 'caution'}
+                value={
+                  data.jobsConfigured
+                    ? '설정됨 — 리콜 수집·기준 동기화가 매일 돕니다'
+                    : '설정 안 됨 — 자동으로 돌지 않습니다'
+                }
+                note={
+                  data.jobsConfigured
+                    ? '새벽 3시 40분·50분(한국 시각)'
+                    : 'JOBS_TOKEN 을 .env.local 과 Netlify 에 넣고 npm run ops:secret 을 실행하세요'
+                }
+              />
             </div>
           </Section>
 
-          {/* ── 2. 사람이 봐야 할 것 ──────────────────────────────── */}
+          {/* ── 2. 최근에 무엇이 돌았나 (담당자 요청) ──────────────── */}
+          <Section
+            title="최근 처리"
+            lead="자동으로 돈 일과 그 결과입니다. 무엇이 언제 얼마나 처리됐는지 여기서 봅니다."
+          >
+            <div className="border-t border-rule py-2.5 text-[12px]">
+              <span className="text-ink">오늘 의미 검색 준비</span>
+              <span className="addr tnum ml-2 text-ink-2">{data.embeddedToday.toLocaleString()}건</span>
+              <span className="ml-2 text-ink-3">최근 24시간 안에 준비된 조항</span>
+            </div>
+
+            {data.runs.length === 0 ? (
+              <p className="border-t border-rule py-2.5 text-[12px] text-ink-3">
+                정기 실행 기록이 아직 없습니다. 아래 「지금 하기」에서 눌러 보거나, 새벽에
+                자동으로 도는 것을 기다리면 됩니다.
+              </p>
+            ) : (
+              data.runs.map((r, i) => (
+                <div key={i} className="border-t border-rule py-2.5">
+                  <div className="flex flex-wrap items-baseline justify-between gap-x-4">
+                    <span className="text-[13px] font-medium">{RUN_LABEL[r.job] ?? r.job}</span>
+                    <span className="addr tnum text-[11px] text-ink-3">{when(r.started_at)}</span>
+                  </div>
+                  <div
+                    className={`mt-0.5 text-[11px] leading-snug ${
+                      r.status_code != null && r.status_code !== 200 ? 'text-halt' : 'text-ink-2'
+                    }`}
+                  >
+                    {describeRun(r)}
+                  </div>
+                </div>
+              ))
+            )}
+          </Section>
+
+          {/* ── 3. 사람이 봐야 할 것 ──────────────────────────────── */}
           {(data.parkedRows.length > 0 || data.cronFailures.length > 0) && (
             <Section
               title="확인이 필요한 것"
@@ -270,12 +367,11 @@ export default async function OpsPage({
               {data.parkedRows.length > 0 && (
                 <div className="border border-halt bg-halt-soft px-4 py-3">
                   <div className="text-[13px] font-semibold text-halt">
-                    임베딩 보류 {data.parkedRows.length}건
+                    의미 검색 준비 보류 {data.parkedRows.length}건
                   </div>
                   <p className="mt-1 text-[12px] leading-relaxed text-ink-2">
-                    5회 시도해도 임베딩이 만들어지지 않았습니다. 원인을 고친 뒤 아래
-                    「보류 건 다시 시도」를 누르세요. 그때까지 이 자료는 의미검색에 잡히지
-                    않습니다.
+                    다섯 번 시도해도 준비되지 않았습니다. 원인을 고친 뒤 아래 「보류 건 다시
+                    시도」를 누르세요. 그때까지 이 자료는 뜻으로 찾는 검색에 잡히지 않습니다.
                   </p>
                   <ul className="mt-3">
                     {data.parkedRows.map((p) => (
@@ -284,7 +380,7 @@ export default async function OpsPage({
                         className="border-t border-halt/20 py-2 text-[12px]"
                       >
                         <span className="addr text-ink">
-                          {p.target_table} #{p.row_id}
+                          {TARGET_LABEL[p.target_table] ?? p.target_table} #{p.row_id}
                         </span>
                         <span className="ml-2 text-ink-3">{p.attempts}회 시도</span>
                         {p.last_error && (
@@ -299,7 +395,7 @@ export default async function OpsPage({
               {data.cronFailures.length > 0 && (
                 <div className="mt-4 border border-halt bg-halt-soft px-4 py-3">
                   <div className="text-[13px] font-semibold text-halt">
-                    배치 실행 실패 {data.cronFailures.length}건 (최근 24시간)
+                    자동 작업 실패 {data.cronFailures.length}건 (최근 24시간)
                   </div>
                   <ul className="mt-2">
                     {data.cronFailures.map((f, i) => (
@@ -317,10 +413,10 @@ export default async function OpsPage({
             </Section>
           )}
 
-          {/* ── 3. 조작 ───────────────────────────────────────────── */}
+          {/* ── 4. 조작 ───────────────────────────────────────────── */}
           <Section
             title="지금 하기"
-            lead="셋 다 여러 번 눌러도 안전합니다. 자동으로 일어날 일을 앞당길 뿐입니다."
+            lead="아래 버튼들은 여러 번 눌러도 안전합니다. 자동으로 일어날 일을 앞당길 뿐입니다."
           >
             <div className="flex flex-wrap gap-3">
               <form action={runEmbedTick}>
@@ -328,15 +424,25 @@ export default async function OpsPage({
                   type="submit"
                   className="border border-rule bg-surface px-4 py-2 text-[13px] hover:bg-measure-soft"
                 >
-                  임베딩 배치 지금 실행
+                  의미 검색 준비 지금 실행
                 </button>
               </form>
-              <form action={sendTestAlert}>
+              <form action={runJobNow}>
+                <input type="hidden" name="job" value="recalls-fetch" />
                 <button
                   type="submit"
                   className="border border-rule bg-surface px-4 py-2 text-[13px] hover:bg-measure-soft"
                 >
-                  시험 알림 보내기
+                  리콜 지금 가져오기
+                </button>
+              </form>
+              <form action={runJobNow}>
+                <input type="hidden" name="job" value="standards-sync" />
+                <button
+                  type="submit"
+                  className="border border-rule bg-surface px-4 py-2 text-[13px] hover:bg-measure-soft"
+                >
+                  안전기준 폴더 확인
                 </button>
               </form>
               {data.ops.parked > 0 && (
@@ -350,43 +456,70 @@ export default async function OpsPage({
                 </form>
               )}
             </div>
+
+            {/* 돈이 드는 유일한 버튼 — 누르기 전에 얼마인지 보여 준다 */}
+            <div className="mt-5 border border-caution bg-caution-soft px-4 py-3">
+              <div className="text-[13px] font-semibold text-caution">
+                위해요인 코드 부여 — 비용이 드는 작업
+              </div>
+              {data.taggable === 0 ? (
+                <p className="mt-1.5 text-[12px] text-ink-2">
+                  코드를 부여할 요건 조항이 남아 있지 않습니다.
+                </p>
+              ) : (
+                <>
+                  <p className="mt-1.5 text-[12px] leading-relaxed text-ink-2">
+                    아직 코드가 없는 요건 조항이{' '}
+                    <span className="addr tnum text-ink">{data.taggable.toLocaleString()}건</span>{' '}
+                    남았습니다. 전부 처리하면 약{' '}
+                    <span className="addr text-ink">${tagCost}</span> 가 듭니다
+                    (조항 1건당 약 $0.0022, 실측치). 코드가 있어야 사고·리콜과 조항을 코드로
+                    맞춰 볼 수 있습니다.
+                  </p>
+                  <p className="mt-2 text-[11px] leading-relaxed text-ink-3">
+                    아래 버튼은 약 18초 동안 처리할 수 있는 만큼만 하고 멈춥니다. 남은 것은
+                    다시 누르면 이어서 합니다. 한 번에 끝내려면 터미널에서{' '}
+                    <code className="addr">npm run tag</code> 가 훨씬 빠릅니다.
+                  </p>
+                  <form action={runTagChunk} className="mt-3">
+                    <button
+                      type="submit"
+                      className="border border-caution bg-surface px-4 py-2 text-[13px] text-caution hover:bg-caution-soft"
+                    >
+                      조금 실행하기 (약 18초)
+                    </button>
+                  </form>
+                </>
+              )}
+            </div>
           </Section>
 
-          {/* ── 4. 자동 배치 상세 ─────────────────────────────────── */}
+          {/* ── 5. 자동 작업 상세 ─────────────────────────────────── */}
           <Section
-            title="자동으로 도는 작업"
-            lead="DB 안에서 스스로 돕니다. 사이트가 꺼져 있어도 돌아갑니다."
+            title="자동으로 도는 일"
+            lead="데이터베이스 안에서 스스로 돕니다. 웹사이트가 꺼져 있어도 돌아갑니다."
           >
-            <div className="label grid grid-cols-[1fr_auto_auto_1fr] gap-3 pb-2">
-              <span>작업</span>
+            <div className="label grid grid-cols-[1fr_auto_auto] gap-3 pb-2">
+              <span>하는 일</span>
               <span>주기</span>
-              <span className="text-right">마지막</span>
-              <span className="text-right">결과</span>
+              <span className="text-right">마지막 실행</span>
             </div>
             {data.jobs.map((j) => (
               <div
                 key={j.jobname}
-                className="grid grid-cols-[1fr_auto_auto_1fr] items-baseline gap-3 border-t border-rule py-2.5"
+                className="grid grid-cols-[1fr_auto_auto] items-baseline gap-3 border-t border-rule py-2.5"
               >
                 <div className="min-w-0">
-                  <div className="addr truncate text-[12px]">{j.jobname}</div>
-                  <div className="text-[11px] text-ink-3">
-                    {j.jobname === 'embed-tick' && '임베딩이 빈 자료를 채운다'}
-                    {j.jobname === 'ops-watch' && '문제를 찾아 알림을 보낸다'}
-                    {j.jobname === 'cron-log-prune' && '30일 지난 실행 기록을 지운다'}
+                  <div className="text-[12px]">{JOB_PURPOSE[j.jobname] ?? j.jobname}</div>
+                  <div className="addr text-[11px] text-ink-3">
+                    {j.jobname}
+                    {!j.active && <span className="text-halt"> · 꺼짐</span>}
+                    {j.last_status === 'failed' && <span className="text-halt"> · 실패</span>}
                   </div>
                 </div>
                 <span className="addr text-[11px] text-ink-3">{j.schedule}</span>
                 <span className="addr tnum text-right text-[11px] text-ink-3">
                   {when(j.last_at)}
-                </span>
-                <span
-                  className={`truncate text-right text-[11px] ${
-                    j.last_status === 'failed' ? 'text-halt' : 'text-ink-2'
-                  }`}
-                >
-                  {!j.active && <span className="text-halt">비활성 </span>}
-                  {j.last_message ?? j.last_status ?? '—'}
                 </span>
               </div>
             ))}
@@ -394,7 +527,7 @@ export default async function OpsPage({
             <div className="label mt-8 grid grid-cols-[1fr_repeat(4,minmax(48px,auto))] gap-3 pb-2">
               <span>자료</span>
               <span className="text-right">전체</span>
-              <span className="text-right">완료</span>
+              <span className="text-right">준비됨</span>
               <span className="text-right">대기</span>
               <span className="text-right">보류</span>
             </div>
@@ -405,20 +538,18 @@ export default async function OpsPage({
               >
                 <div className="min-w-0">
                   <div className="text-[13px] font-medium">
-                    {e.target_table === 'clause' ? '안전기준 조항' : '사건 (사고·리콜)'}
+                    {TARGET_LABEL[e.target_table] ?? e.target_table}
                   </div>
                   <div className="text-[11px] text-ink-3">
                     {e.total - e.embedded > 0 && e.pending === 0
-                      ? `${(e.total - e.embedded).toLocaleString()}건은 아직 코드화 전이라 임베딩 대상이 아닙니다`
-                      : '임베딩 대상 전부 처리됨'}
+                      ? `${(e.total - e.embedded).toLocaleString()}건은 아직 준비할 재료(검색용 문장)가 없습니다`
+                      : '준비할 수 있는 것은 모두 준비됨'}
                   </div>
                 </div>
                 <span className="addr tnum text-right text-[13px] text-ink-2">
                   {e.total.toLocaleString()}
                 </span>
-                <span className="addr tnum text-right text-[13px]">
-                  {e.embedded.toLocaleString()}
-                </span>
+                <span className="addr tnum text-right text-[13px]">{e.embedded.toLocaleString()}</span>
                 <span
                   className={`addr tnum text-right text-[13px] ${e.pending ? 'text-caution' : 'text-ink-3'}`}
                 >
@@ -433,45 +564,65 @@ export default async function OpsPage({
             ))}
           </Section>
 
-          {/* ── 5. 알림 ───────────────────────────────────────────── */}
+          {/* ── 6. 알림 ───────────────────────────────────────────── */}
           <Section
-            title="문제 알림 (텔레그램)"
-            lead="세 가지만 알립니다 — 임베딩 보류, 배치 실행 실패, 임베딩 모델 혼재. 알림이 시끄러우면 아무도 읽지 않기 때문에 일부러 짧게 뒀습니다."
+            title="알림 (텔레그램)"
+            lead="문제가 생기면 다섯 가지를 알립니다 — 의미 검색 준비 보류, 자동 작업 실패, 의미 검색 기준 혼재, 정기 작업 실패, 원문 확인이 오래 밀린 사고보고서. 알림이 시끄러우면 아무도 읽지 않기 때문에 일부러 좁게 뒀습니다. 좋은 소식(새 리콜 도착, 코드 부여 완료)도 함께 옵니다."
           >
             {!data.ops.telegram_configured ? (
               <div className="border border-caution bg-caution-soft px-4 py-3">
-                <div className="text-[13px] font-semibold text-caution">
-                  아직 설정되지 않았습니다
-                </div>
+                <div className="text-[13px] font-semibold text-caution">아직 설정되지 않았습니다</div>
                 <p className="mt-1.5 text-[12px] leading-relaxed text-ink-2">
                   지금은 문제가 생겨도 연락이 가지 않습니다. 화면을 열어야만 알 수 있습니다.
-                  설정하려면 두 단계가 필요합니다.
                 </p>
                 <ol className="mt-3 space-y-2 text-[12px] text-ink-2">
                   <li>
-                    <span className="text-ink">1.</span> 텔레그램 <span className="addr">@BotFather</span>{' '}
-                    에서 봇을 만들고 토큰을 받습니다. 이미 n8n 에서 쓰는 봇이 있다면 그
-                    자격증명의 토큰과 같은 값입니다.
+                    <span className="text-ink">1.</span> 텔레그램{' '}
+                    <span className="addr">@BotFather</span> 에서 봇을 만들고 토큰을 받습니다.
                   </li>
                   <li>
-                    <span className="text-ink">2.</span> <code className="addr text-ink">.env.local</code>{' '}
-                    에 <code className="addr text-ink">TELEGRAM_BOT_TOKEN</code> 을 넣고{' '}
-                    <code className="addr text-ink">npm run ops:secret</code> 을 한 번 실행합니다.
+                    <span className="text-ink">2.</span>{' '}
+                    <code className="addr text-ink">.env.local</code> 에{' '}
+                    <code className="addr text-ink">TELEGRAM_BOT_TOKEN</code> 을 넣고{' '}
+                    <code className="addr text-ink">npm run ops:secret</code> 을 실행합니다.
                   </li>
                 </ol>
-                <p className="mt-3 text-[11px] leading-relaxed text-ink-3">
-                  토큰은 저장소에 올라가지 않습니다. DB 안의 금고(Supabase Vault)에 넣어
-                  두고, 알림을 보내는 순간에만 꺼내 씁니다. 알림을 DB 에서 보내는 이유는
-                  문제가 DB 안에서 생기기 때문입니다 — 사이트를 아무도 안 보고 있어도
-                  연락이 가야 합니다.
-                </p>
               </div>
             ) : (
-              <p className="text-[12px] text-ink-2">
-                설정되어 있습니다. 대화 번호와 토큰은 DB 금고에 있고 화면에는 표시하지
-                않습니다. 바꾸려면 <code className="addr text-ink">.env.local</code> 을 고치고{' '}
-                <code className="addr text-ink">npm run ops:secret</code> 을 다시 실행하세요.
-              </p>
+              <>
+                {/* 담당자 요청: 알림을 더 폭넓게 쓸 수 있도록 */}
+                <form action={sendCustomMessage} className="border border-rule bg-surface px-4 py-4">
+                  <label htmlFor="message" className="block text-[13px] font-medium">
+                    직접 보내기
+                  </label>
+                  <p className="mt-1 text-[11px] leading-relaxed text-ink-3">
+                    쓴 내용을 그대로 텔레그램으로 보냅니다. 메모를 남기거나 알림이 잘 오는지
+                    확인할 때 씁니다.
+                  </p>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    <input
+                      id="message" name="message" type="text" required
+                      placeholder="보낼 내용"
+                      className="min-w-0 flex-1 border border-rule px-3 py-2 text-[13px]"
+                    />
+                    <button
+                      type="submit"
+                      className="border border-measure bg-measure px-4 py-2 text-[13px] font-medium text-white hover:opacity-85"
+                    >
+                      보내기
+                    </button>
+                  </div>
+                </form>
+
+                <form action={sendTestAlert} className="mt-3">
+                  <button
+                    type="submit"
+                    className="border border-rule bg-surface px-4 py-2 text-[13px] hover:bg-measure-soft"
+                  >
+                    시험 알림 보내기
+                  </button>
+                </form>
+              </>
             )}
 
             {data.alerts.length > 0 && (
@@ -501,7 +652,7 @@ export default async function OpsPage({
             )}
           </Section>
 
-          {/* ── 6. 접속 관리 ──────────────────────────────────────── */}
+          {/* ── 7. 접속 관리 ──────────────────────────────────────── */}
           <Section
             title="사이트 접속 관리 (ID · 비밀번호)"
             lead="이 사이트는 주소만 알면 누구나 들어올 수 있는 곳에 있습니다. 그래서 앞단에 ID/비밀번호를 두고 외부 접근을 막습니다."
@@ -511,90 +662,28 @@ export default async function OpsPage({
                 label="현재 잠금 상태"
                 level={authPassSet ? 'ok' : 'halt'}
                 value={authPassSet ? '잠겨 있음' : '열려 있음 — 누구나 접근 가능'}
-                note={
-                  authPassSet
-                    ? '비밀번호가 설정되어 있어 로그인 창이 뜹니다'
-                    : 'SITE_AUTH_PASSWORD 가 비어 있으면 미들웨어가 그냥 통과시킵니다'
-                }
+                note={authPassSet ? '로그인 창이 뜹니다' : '비밀번호가 설정되지 않았습니다'}
               />
               <Signal
                 label="사용자이름 검사"
                 level={authUser ? 'ok' : 'caution'}
                 value={authUser ? `"${authUser}" 만 허용` : '검사하지 않음 — 아무 값이나 통과'}
-                note="SITE_AUTH_USERNAME 을 비워 두면 비밀번호만 맞으면 들어옵니다"
+                note="비워 두면 비밀번호만 맞으면 들어옵니다"
               />
             </div>
 
             <div className="mt-6 border-t border-rule pt-5">
-              <div className="label">바꾸는 방법</div>
-              <ol className="mt-3 space-y-3 text-[12px] leading-relaxed text-ink-2">
-                <li>
-                  <span className="text-ink">1.</span> Netlify 대시보드 →{' '}
-                  <span className="text-ink">Site configuration → Environment variables</span>{' '}
-                  에서 <code className="addr text-ink">SITE_AUTH_PASSWORD</code> (필요하면{' '}
-                  <code className="addr text-ink">SITE_AUTH_USERNAME</code> 도) 값을 고칩니다.
-                </li>
-                <li>
-                  <span className="text-ink">2.</span> 저장한 뒤{' '}
-                  <span className="text-ink">반드시 재배포</span>합니다. 환경변수만 바꾸면
-                  반영되지 않습니다.
-                </li>
-              </ol>
+              <div className="label">바꾸는 곳</div>
+              <p className="mt-2 text-[12px] leading-relaxed text-ink-2">
+                Netlify 대시보드 →{' '}
+                <span className="text-ink">Site configuration → Environment variables</span> 에서{' '}
+                <code className="addr text-ink">SITE_AUTH_PASSWORD</code> (필요하면{' '}
+                <code className="addr text-ink">SITE_AUTH_USERNAME</code> 도) 값을 고칩니다.
+              </p>
             </div>
-
-            <div className="mt-5 border border-caution bg-caution-soft px-4 py-3">
-              <div className="label text-caution">실제로 겪은 함정 두 가지</div>
-              <ul className="mt-2 space-y-2 text-[12px] leading-relaxed text-ink-2">
-                <li>
-                  <span className="text-ink">「secret」로 표시해 등록하지 마세요.</span> 그렇게
-                  등록한 값이 저장됐다는 응답만 오고 실제로는 저장되지 않은 적이 있습니다.
-                  그 결과 로그인 창이 아예 안 뜨고 사이트가 열린 채로 있었습니다. 일반
-                  변수로 등록하면 정상 저장됩니다.
-                </li>
-                <li>
-                  <span className="text-ink">환경변수만 바꾸면 반영되지 않습니다.</span> 값은
-                  배포 시점에 고정되어 이미 떠 있는 함수에는 적용되지 않습니다. 코드 변경이
-                  없더라도 빈 커밋(<code className="addr">git commit --allow-empty</code>)으로
-                  재배포를 한 번 일으켜야 합니다.
-                </li>
-              </ul>
-            </div>
-
-            <p className="mt-4 text-[11px] leading-relaxed text-ink-3">
-              이 화면은 비밀번호 값 자체를 표시하지 않습니다. 설정되어 있는지 여부만
-              확인합니다. 로컬 개발에서는{' '}
-              <code className="addr">SITE_AUTH_PASSWORD</code> 를 비워 두면 로그인 없이
-              열립니다.
-            </p>
           </Section>
 
-          {/* ── 7. 명령어 ─────────────────────────────────────────── */}
-          <Section
-            title="자주 쓰는 명령어"
-            lead="터미널에서 실행합니다. 화면으로 되는 일은 위에 버튼으로 뒀으니, 여기 있는 것들은 자료를 새로 넣거나 크게 바꿀 때만 씁니다."
-          >
-            <ul>
-              <Cmd note="자동 배치 상태를 터미널에서 확인합니다 (이 화면과 같은 내용)">
-                npm run embed:status
-              </Cmd>
-              <Cmd note="텔레그램 봇 토큰을 DB 금고에 넣습니다. .env.local 을 고친 뒤 실행">
-                npm run ops:secret
-              </Cmd>
-              <Cmd note="OpenAI 키를 바꿨을 때 DB 금고에 다시 넣습니다">
-                npm run embed:secret
-              </Cmd>
-              <Cmd note="텔레그램으로 시험 알림을 보냅니다 (위 버튼과 같은 일)">
-                npm run ops:test
-              </Cmd>
-              <Cmd note="대량으로 임베딩을 만듭니다. 자동 배치보다 훨씬 빠릅니다">
-                npm run embed
-              </Cmd>
-              <Cmd note="조항에 위해요인 코드를 붙입니다. LLM 비용이 드는 작업입니다">
-                npm run tag
-              </Cmd>
-              <Cmd note="새 마이그레이션을 DB 에 적용합니다">npm run db:push</Cmd>
-            </ul>
-          </Section>
+          <TermsNote />
         </>
       )}
     </div>

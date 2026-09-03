@@ -4,86 +4,31 @@
  *   npm run search -- --case 1
  *   npm run search -- --case 1 --no-rerank
  *   npm run search -- --case 1 --only code,keyword     갈래 선택 (§5.8 비교용)
- *   npm run search -- --text "의자가 옆으로 넘어졌다" --item "유아용 의자"
  *
  * 화면 D 가 보여 줄 것을 그대로 콘솔에 찍는다.
  * "판정하지 않는다"의 원칙(§8.4)에 따라 위반 여부를 말하지 않고
  * 관련 가능성과 근거만 제시한다.
+ *
+ * 실행 자체는 src/lib/search/run.ts 가 한다
+ *   화면에도 「분석 실행」 버튼이 생기면서 같은 로직을 두 곳이 쓰게 됐다.
+ *   여기서는 인자만 해석하고 결과를 그리기만 한다(CLAUDE.md §9).
+ *   갈래 선택(--only)·재채점 끄기(--no-rerank)는 비교 실험용이라 명령줄에만 있다.
  */
 
-import { getDb, closeDb } from '../src/lib/db';
-import { standardsForCase } from '../src/lib/cases/resolve-scope';
-import {
-  searchCandidates, diagnoseEmpty, persistRun, isCauseUnresolved,
-  type MatchConfig, type MatchInput, type Candidate,
-} from '../src/lib/search/match';
-import { rerankCandidates } from '../src/lib/llm/rerank';
-import { openaiConfig, tuning } from '../src/lib/env';
+import { closeDb } from '../src/lib/db';
+import { runAnalysis, defaultMatchConfig, SHORTLIST } from '../src/lib/search/run';
+import type { Candidate } from '../src/lib/search/match';
 
 function argValue(name: string): string | null {
   const i = process.argv.indexOf(name);
   return i >= 0 ? (process.argv[i + 1] ?? null) : null;
 }
 
-/** 상위 몇 건을 기본 표시할 것인가. 나머지는 감추지 않고 접어 둔다(결정항목 17) */
-const SHORTLIST = 5;
-
-async function loadCase(caseId: number): Promise<MatchInput> {
-  const db = getDb();
-
-  const [ev] = await db<{
-    id: number; item_name: string | null; narrative: string;
-    keywords: string[]; embedding: string | null;
-  }[]>`
-    select id, item_name, narrative, keywords, embedding::text
-    from public.case_event where id = ${caseId}
-  `;
-  if (!ev) throw new Error(`사건 ${caseId} 이 없습니다.`);
-
-  const tags = await db<{ axis: string; code: string }[]>`
-    select axis, code from public.case_tag
-    where case_id = ${caseId} and review_status <> 'rejected'
-  `;
-
-  // 품목으로 적용 기준을 좁힌다 (v0.7 §3.2 — 범위를 먼저 확정한 뒤 검색).
-  // 등록된 품목이면 부속서+공통안전기준 세트를, 전기용품이면 적용범위 원문 검색 결과를 쓴다.
-  const standardIds = await standardsForCase(caseId);
-
-  return {
-    caseId: ev.id,
-    itemName: ev.item_name,
-    narrative: ev.narrative,
-    hfCodes: tags.filter((t) => t.axis === 'HF').map((t) => t.code),
-    dtCodes: tags.filter((t) => t.axis === 'DT').map((t) => t.code),
-    keywords: ev.keywords ?? [],
-    embedding: ev.embedding ? JSON.parse(ev.embedding) : null,
-    standardIds: standardIds.length ? standardIds : null,
-  };
-}
-
-function buildConfig(): MatchConfig {
-  const t = tuning();
-  const only = argValue('--only');
-  const branches = only ? only.split(',').map((s) => s.trim()) : null;
-
-  return {
-    useCode:    branches ? branches.includes('code')    : true,
-    useKeyword: branches ? branches.includes('keyword') : true,
-    useVector:  branches ? branches.includes('vector')  : true,
-    // 리랭킹은 0A·0B 의 필수 구성요소가 아니다 (v0.7 §7.6)
-    useRerank:  !process.argv.includes('--no-rerank'),
-    candidateCount: Number(argValue('--candidates') ?? '20'),
-    rrfK: t.rrfK,
-    wCode: t.weightCode,
-    wCodePartial: t.weightCodePartial,
-  };
-}
-
 function render(c: Candidate, rank: number) {
   const badge =
     c.matchPath === 'CODE'         ? '코드 일치' :
     c.matchPath === 'CODE-PARTIAL' ? '상위계위 일치' :
-    c.matchPath === 'FALLBACK'     ? '폴백(미태깅)' :
+    c.matchPath === 'FALLBACK'     ? '코드 없이 찾음' :
                                      '코드 근거 없음';
 
   console.log(`\n[${rank}] ${c.marker}  ·  ${badge}  ·  증거수준 ${c.evidenceLevel}  ·  점수 ${c.score.toFixed(4)}`);
@@ -93,7 +38,7 @@ function render(c: Candidate, rank: number) {
     console.log(`    재채점 ${c.rerankScore.toFixed(2)} — ${c.rerankReason}`);
   }
   if (c.testConditions.length) {
-    console.log(`    시험조건: ${c.testConditions.slice(0, 3).join(' / ')}`);
+    console.log(`    시험 항목·허용치: ${c.testConditions.slice(0, 3).join(' / ')}`);
   }
   for (const tm of c.testMethods) {
     console.log(`    → 시험방법 ${tm.marker}${tm.body ? `: ${tm.body.slice(0, 70)}` : ' (다른 기준에 있음)'}`);
@@ -106,61 +51,39 @@ async function main() {
     throw new Error('분석할 사건을 지정하세요:  npm run search -- --case 1');
   }
 
-  const config = buildConfig();
-  const input = await loadCase(caseId);
+  const only = argValue('--only');
+  const branches = only ? only.split(',').map((s) => s.trim()) : null;
+  const config = defaultMatchConfig({
+    useCode:    branches ? branches.includes('code')    : true,
+    useKeyword: branches ? branches.includes('keyword') : true,
+    useVector:  branches ? branches.includes('vector')  : true,
+    useRerank:  !process.argv.includes('--no-rerank'),
+    candidateCount: Number(argValue('--candidates') ?? '20'),
+  });
+
+  const out = await runAnalysis(caseId, config);
+  const { input, candidates } = out;
 
   console.log(`사건 ${caseId}: ${input.narrative.slice(0, 70)}`);
   console.log(`품목      : ${input.itemName ?? '(미확정)'}`);
   console.log(`코드      : HF [${input.hfCodes.join(', ')}] / DT [${input.dtCodes.join(', ')}]`);
   console.log(`적용 기준 : ${input.standardIds?.length ?? 0}건`);
-  console.log(`갈래      : 코드=${config.useCode} 키워드=${config.useKeyword} 의미=${config.useVector} 리랭킹=${config.useRerank}`);
+  console.log(`갈래      : 코드=${config.useCode} 키워드=${config.useKeyword} 의미=${config.useVector} 재채점=${config.useRerank}`);
 
-  const causeUnresolved = isCauseUnresolved(input.hfCodes);
-
-  // v0.7 §3.2: 품목이 불명확하면 전 품목 검색을 자동 실행하지 않는다
-  if (!input.standardIds?.length) {
+  if (out.scopeUnresolved) {
     console.log('');
     console.log('SCOPE_UNRESOLVED — 품목에 대응하는 적용 기준을 찾지 못했습니다.');
     console.log('전 기준 검색을 자동으로 실행하지 않습니다. 다른 품목의 시험이 섞이기 때문입니다.');
     return;
   }
 
-  let candidates = await searchCandidates(input, config);
-
-  const cfg = config.useRerank ? openaiConfig() : null;
-  if (config.useRerank && candidates.length > 1 && cfg) {
-    const scores = await rerankCandidates(
-      { itemName: input.itemName, narrative: input.narrative, hfCodes: input.hfCodes, dtCodes: input.dtCodes },
-      candidates.map((c) => ({
-        clauseId: c.clauseId, marker: c.marker,
-        contextHeader: c.contextHeader, body: c.body, testConditions: c.testConditions,
-      })),
-      cfg.rerankModel,
-    );
-    const byId = new Map(scores.map((s) => [s.clause_id, s]));
-    candidates = candidates
-      .map((c) => {
-        const s = byId.get(c.clauseId);
-        return s ? { ...c, rerankScore: s.relevance, rerankReason: s.reason } : c;
-      })
-      // 리랭커는 순서만 바꾼다. 후보를 늘리지도 지우지도 않는다(§5.6.3)
-      .sort((a, b) => (b.rerankScore ?? -1) - (a.rerankScore ?? -1) || b.score - a.score);
-  }
-
-  const runId = await persistRun(input, config, candidates, {
-    embeddingModel: input.embedding ? openaiConfig().embeddingModel : null,
-    rerankModel: config.useRerank ? cfg?.rerankModel ?? null : null,
-    shortlist: SHORTLIST,
-  });
-
   console.log('');
   if (candidates.length === 0) {
-    const reason = await diagnoseEmpty(input);
-    console.log(`후보 0건 — 사유: ${reason}`);
+    console.log(`후보 0건 — 사유: ${out.emptyReason}`);
     console.log('검색 0건 자체를 기준 사각지대로 집계하지 않습니다(v0.7 §7.8).');
     console.log('전문가가 조항 부재 신호로 확인한 건만 정책 신호에 포함합니다.');
   } else {
-    if (causeUnresolved) {
+    if (out.causeUnresolved) {
       // v0.7 §7.3 — 결과(DT)만으로 특정 시험을 단정하지 않는다
       console.log('※ 이 사건은 원인(HF)이 확정되지 않았습니다.');
       console.log('  조사에서 결함이 확인되지 않았거나 원인 서술이 없는 경우입니다.');
@@ -175,7 +98,7 @@ async function main() {
     }
   }
   console.log('');
-  console.log(`match_run = ${runId}. 채택·반려 기록이 §5.8 재현율·오탐률의 재료가 됩니다.`);
+  console.log(`match_run = ${out.runId}. 채택·반려 기록이 §5.8 재현율·오탐률의 재료가 됩니다.`);
 }
 
 main()

@@ -3,6 +3,7 @@
 import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
 import { getDb } from '@/lib/db';
+import { runTagging, countTaggable } from '@/lib/standards/tag-run';
 
 /**
  * 운영 화면의 조작 — 셋 다 "기다리지 않고 지금 하기"에 해당한다
@@ -61,4 +62,87 @@ export async function sendTestAlert(): Promise<void> {
       ? '시험 알림을 보냈습니다. 텔레그램을 확인하세요 — 몇 초 뒤 아래 발송 기록에 전달 결과가 남습니다.'
       : '보내지 못했습니다. 텔레그램 봇 토큰이 금고에 없습니다 — 아래 「알림 설정」을 보세요.',
   );
+}
+
+/**
+ * 알림 보내기를 넓게 쓴다 (담당자 요청)
+ *
+ * 전에는 정해진 시험 문구만 보낼 수 있었다. 담당자가 직접 쓴 말을 보낼 수 있으면
+ * 쓰임이 늘어난다 — 동료에게 메모를 남기거나, 알림 경로가 살아 있는지 확인하거나,
+ * 자리를 비우기 전에 상태를 스스로에게 보내 두거나.
+ *
+ * 쿨다운을 두지 않는다
+ *   자동 알림은 같은 말을 반복하지 않도록 6시간 쿨다운이 있지만, 사람이 직접
+ *   누른 것은 그 사람이 보내려고 누른 것이다. 막을 이유가 없다.
+ */
+export async function sendCustomMessage(formData: FormData): Promise<void> {
+  const text = String(formData.get('message') ?? '').trim();
+  if (!text) back('보낼 내용을 입력해 주세요.');
+
+  const [row] = await getDb()<{ sent: boolean }[]>`
+    select public.ops_notify('담당자 메모', ${text}, interval '0') as sent
+  `;
+  back(
+    row.sent
+      ? '보냈습니다. 아래 발송 기록에서 전달 결과를 확인할 수 있습니다.'
+      : '보내지 못했습니다. 텔레그램 봇 토큰이 비밀값 보관함에 없습니다.',
+  );
+}
+
+/**
+ * 위해요인 코드 부여를 조금 실행한다
+ *
+ * 왜 "조금"인가
+ *   남은 요건 조항은 5,902건이고, 한 건마다 AI 를 3~4번 순서대로 부른다.
+ *   웹 요청은 수십 초 안에 끝나야 하므로 한 번에 다 돌 수가 없다.
+ *   그래서 시간으로 끊고, 남은 것은 다음에 누를 때 이어서 한다.
+ *   급하면 터미널에서 `npm run tag` 로 한 번에 돌리는 편이 훨씬 빠르다.
+ *
+ * 돈이 드는 유일한 버튼이다
+ *   화면이 누르기 전에 남은 건수와 예상 비용을 보여 준다. 자동 주기로 걸지 않은
+ *   것도 같은 이유다 — 돈 쓰는 결정은 사람이 해야 한다.
+ */
+export async function runTagChunk(): Promise<void> {
+  // back() 을 try 안에서 부르면 안 된다.
+  //
+  // redirect() 는 정상 흐름을 끊기 위해 특별한 오류를 던지는 방식으로 동작한다.
+  // 그것을 catch 가 잡아 버리면 "성공했는데 실패했다"고 말하게 되고, 최악의 경우
+  // 화면이 아무 반응도 하지 않는다. 그래서 결과 문장만 만들어 두고 밖에서 보낸다.
+  let message: string;
+  try {
+    const r = await runTagging({ timeBudgetMs: 18_000 });
+    const after = await countTaggable();
+
+    message =
+      r.target === 0
+        ? '코드를 부여할 요건 조항이 남아 있지 않습니다.'
+        : `코드 부여 ${r.ok}건 완료${r.fail ? ` (실패 ${r.fail}건)` : ''}. ` +
+          `남은 조항 ${after.toLocaleString()}건` +
+          `${after > 0 ? ' — 이어서 하려면 다시 누르세요.' : ' — 모두 끝났습니다.'}`;
+  } catch (e) {
+    message = `코드 부여에 실패했습니다 — ${e instanceof Error ? e.message : e}`;
+  }
+  back(message);
+}
+
+/**
+ * 정기 작업을 기다리지 않고 지금 부른다
+ *
+ * 리콜 수집과 기준 동기화는 하루 1회 새벽에 자동으로 돈다. 새 자료가 들어온 것을
+ * 알고 있는데 내일까지 기다릴 이유는 없으므로 버튼도 함께 둔다.
+ * 둘 다 여러 번 눌러도 안전하다(같은 자료를 다시 넣지 않는다).
+ */
+export async function runJobNow(formData: FormData): Promise<void> {
+  const job = String(formData.get('job') ?? '');
+  if (!job) return;
+
+  const label = job === 'recalls-fetch' ? '리콜 수집' : '안전기준 폴더 동기화';
+  let message: string;
+  try {
+    await getDb()`select public.run_job(${job})`;
+    message = `${label}을(를) 요청했습니다. 결과는 몇 분 안에 아래 「최근 처리」에 나타납니다.`;
+  } catch (e) {
+    message = `${label} 요청에 실패했습니다 — ${e instanceof Error ? e.message : e}`;
+  }
+  back(message); // redirect() 는 try 밖에서 — 위 runTagChunk 주석 참고
 }

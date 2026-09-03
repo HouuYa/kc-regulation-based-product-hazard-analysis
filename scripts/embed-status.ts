@@ -29,15 +29,21 @@ async function main() {
   const db = getDb();
 
   const rows = await db<StatusRow[]>`select * from public.embed_status order by target_table`;
-  console.log('=== 임베딩 현황 ===');
+  const LABEL: Record<string, string> = {
+    clause: 'KC기준 조항',
+    accident: '사고보고서',
+    recall: '리콜',
+  };
+
+  console.log('=== 의미 검색 준비 현황 ===');
   for (const r of rows) {
     console.log(
-      `${r.target_table.padEnd(11)} 전체 ${String(r.total).padStart(6)} / 완료 ${String(r.embedded).padStart(6)}` +
+      `${(LABEL[r.target_table] ?? r.target_table).padEnd(12)} 전체 ${String(r.total).padStart(6)} / 완료 ${String(r.embedded).padStart(6)}` +
         ` / 대기 ${String(r.pending).padStart(5)} / 발송중 ${String(r.in_flight).padStart(4)}` +
         ` / 실패 ${String(r.failed).padStart(4)} / 보류 ${String(r.parked).padStart(4)}`,
     );
     if (r.models > 1) {
-      console.warn(`  경고: ${r.target_table} 에 임베딩 모델이 ${r.models}종 섞여 있습니다. 검색 결과를 신뢰할 수 없습니다.`);
+      console.warn(`  경고: ${LABEL[r.target_table] ?? r.target_table} 에 의미 검색 기준(모델)이 ${r.models}종 섞여 있습니다. 검색 결과를 신뢰할 수 없습니다.`);
     }
   }
 

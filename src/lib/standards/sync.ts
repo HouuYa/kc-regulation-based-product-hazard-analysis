@@ -46,9 +46,23 @@ export interface SyncOptions {
   only?: string;
 }
 
+/**
+ * KC안전기준/ 폴더 위치
+ *
+ * 두 방식이 필요한 이유 (실측으로 확인, 2026-09-03)
+ *   명령줄에서는 이 파일의 위치를 기준으로 거슬러 올라가면 된다.
+ *   그런데 웹 서버(Next.js) 안에서는 이 파일이 번들로 묶여 import.meta.dirname 이
+ *   undefined 가 되고, join() 이 "path argument must be of type string" 으로 터진다.
+ *   src/lib/env.ts 가 같은 이유로 이미 조심하고 있던 자리다.
+ *
+ *   자동 실행(/api/jobs/standards-sync)이 이 함수를 부르게 되면서 실제로 걸렸다.
+ *   번들 환경에서는 프로세스의 작업 디렉터리(= 저장소 루트)를 기준으로 삼는다.
+ */
 function defaultDir(): string {
+  const here = import.meta.dirname;
   // src/lib/standards/sync.ts → ../../../KC안전기준
-  return join(import.meta.dirname, '..', '..', '..', 'KC안전기준');
+  if (here) return join(here, '..', '..', '..', 'KC안전기준');
+  return join(process.cwd(), 'KC안전기준');
 }
 
 export async function syncStandardsFolder(options: SyncOptions = {}): Promise<SyncFileResult[]> {

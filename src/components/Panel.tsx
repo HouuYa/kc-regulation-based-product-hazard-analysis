@@ -1,4 +1,52 @@
 import Link from 'next/link';
+import { GLOSSARY } from '@/lib/terms';
+
+/**
+ * 용어 풀이 — 화면 아래에 접어 둔다
+ *
+ * 담당자 지적: "전체적으로 이상한 표현 또는 이해가 어려운 단어/표현이 보입니다"
+ *
+ * 말 자체는 src/lib/terms.ts 에서 이미 담당자의 말로 바꿨다. 그래도 남는 것이
+ * 있다 — "위해요인 코드"나 "재채점"처럼 이 업무에만 있는 개념은 아무리 쉽게 써도
+ * 한 번은 설명이 필요하다. 그것을 본문에 늘어놓으면 화면이 설명서가 되므로,
+ * 접어 두고 필요할 때 펼치게 한다.
+ */
+/**
+ * 방금 누른 버튼이 무엇을 했는지 알려 주는 띠
+ *
+ * 클라이언트 자바스크립트 없이 간다 — 서버 액션이 결과 문장을 주소줄(?done=)에
+ * 실어 되돌려 보내고 화면이 그것을 그린다. 이 프로젝트의 다른 화면들과 같은 방식이다.
+ *
+ * 이것이 없으면 생기는 일을 실제로 겪었다: 「분석 실행」을 눌렀는데 품목이
+ * 확정되지 않아 분석이 만들어지지 않았고, 화면은 눌리기 전과 똑같아 보였다.
+ * 아무 일도 일어나지 않은 것과 "일어났지만 결과가 없는 것"은 다르다.
+ */
+export function DoneBanner({ message }: { message?: string }) {
+  if (!message) return null;
+  return (
+    <div className="mt-6 border-l-2 border-measure bg-measure-soft px-4 py-3 text-[13px] leading-relaxed text-ink-2">
+      {message}
+    </div>
+  );
+}
+
+export function TermsNote() {
+  return (
+    <details className="mt-12 border-t border-rule pt-4">
+      <summary className="cursor-pointer text-[12px] text-ink-3 hover:text-ink">
+        이 화면에 나오는 말 풀이
+      </summary>
+      <dl className="mt-3 space-y-3">
+        {GLOSSARY.map((t) => (
+          <div key={t.word} className="border-t border-rule-soft pt-2.5">
+            <dt className="text-[12px] font-medium">{t.word}</dt>
+            <dd className="mt-0.5 text-[12px] leading-relaxed text-ink-2">{t.meaning}</dd>
+          </div>
+        ))}
+      </dl>
+    </details>
+  );
+}
 
 /** 화면 머리 — 라벨·제목·한 줄 설명. 화면마다 같은 자리에 같은 형태로 둔다 */
 export function PageHead({

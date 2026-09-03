@@ -92,7 +92,7 @@ export async function uploadAccidentPdfs(formData: FormData): Promise<void> {
     }
   }
 
-  revalidatePath('/cases');
+  revalidatePath('/accidents');
 }
 
 /** 담당자 확정 — 이 시점부터 분석 대상이 된다 (§8.1) */
@@ -102,5 +102,5 @@ export async function confirmCase(formData: FormData): Promise<void> {
   await getDb()`
     update public.case_event set is_confirmed = true, confirmed_at = now() where id = ${caseId}
   `;
-  revalidatePath('/cases');
+  revalidatePath('/accidents');
 }

@@ -8,17 +8,30 @@ export const metadata: Metadata = {
 };
 
 /**
- * 좌측 레일은 장식이 아니라 파이프라인 그 자체다.
+ * 좌측 레일은 장식이 아니라 업무 그 자체다.
  *
- * 이 시스템에서 데이터는 한 방향으로 흐른다 — 적재 → 태깅 → 분석 → 검토.
- * 담당자가 "지금 어디까지 준비됐는가"를 늘 알아야 하므로 그 순서를 화면에 고정한다.
- * 순서가 정보를 담고 있으니 번호를 붙일 자격이 있다(임의로 붙인 01/02/03 이 아니다).
+ * 무엇이 바뀌었나 (담당자 요청)
+ *   전에는 「1 안전기준 / 2 위해요인 코드 / 3 사건 / 4 분석」이었다. 두 가지를 고쳤다.
+ *
+ *   위해요인 코드를 아래로 내렸다 — 그것은 업무 단계가 아니라 참고 문서다.
+ *   코드북은 조회만 하는 대상이고 담당자가 그 화면에서 할 일이 없다.
+ *
+ *   사건·분석을 사고보고서와 리콜로 나눴다 — 둘은 들어오는 경로도 봐야 할 숫자도
+ *   다르다. 사고보고서는 사람이 PDF 를 올리고 원문을 확인해야 하고, 리콜은 외부 표에서
+ *   자동으로 들어오며 코드까지 붙어 온다. 한 통에 담으면 어느 쪽이 밀렸는지 알 수 없다.
+ *   등록과 분석을 따로 두지 않고 한 화면에 합친 것은, 담당자가 "사고보고서 + KC안전기준
+ *   연계 분석"을 하나의 일로 인식하기 때문이다.
  */
 const STAGES = [
-  { no: '1', href: '/standards', label: '안전기준', sub: '조항·시험조건 적재' },
-  { no: '2', href: '/codebook',  label: '위해요인 코드', sub: '코드북 스냅샷' },
-  { no: '3', href: '/cases',     label: '사건',       sub: '사고보고서·리콜' },
-  { no: '4', href: '/analysis',  label: '분석',       sub: '시험 후보군' },
+  { no: '1', href: '/standards', label: '안전기준',   sub: '조항·시험 적재' },
+  { no: '2', href: '/accidents', label: '사고보고서', sub: '등록·현황·분석' },
+  { no: '3', href: '/recalls',   label: '리콜',       sub: '수집·현황·분석' },
+];
+
+/** 업무 흐름 위에 있지 않은 것들 — 번호를 주지 않고 선 아래에 둔다 */
+const ASIDE = [
+  { href: '/ops',      label: '운영',         sub: '상태·알림·접속 관리' },
+  { href: '/codebook', label: '위해요인 코드', sub: '참고 문서' },
 ];
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -78,24 +91,28 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               </ol>
 
               {/*
-                운영은 파이프라인 위에 있지 않다 — 자료가 흐르는 순서(1~4)가 아니라
-                "그 흐름이 지금 돌고 있는가"를 보는 자리다. 그래서 번호를 주지 않고
-                선 하나를 사이에 둔다. 번호가 의미를 담고 있으므로 아무 데나 5를 붙이면
-                그 의미가 깨진다.
+                운영과 참고 문서는 업무 흐름 위에 있지 않다 — 자료가 흐르는 순서(1~3)가
+                아니라 "그 흐름이 지금 돌고 있는가"와 "무엇을 기준으로 삼는가"를 보는
+                자리다. 그래서 번호를 주지 않고 선 하나를 사이에 둔다. 번호가 의미를
+                담고 있으므로 아무 데나 4를 붙이면 그 의미가 깨진다.
               */}
-              <div className="ml-2 shrink-0 border-l border-rule-soft pl-2 lg:mt-3 lg:ml-0 lg:border-l-0 lg:border-t lg:pt-3 lg:pl-0">
-                <Link
-                  href="/ops"
-                  className="group block rounded-sm px-3 py-2.5 transition-colors hover:bg-measure-soft"
-                >
-                  <span className="block text-[13px] font-medium whitespace-nowrap group-hover:text-measure">
-                    운영
-                  </span>
-                  <span className="block text-[11px] whitespace-nowrap text-ink-3">
-                    상태·알림·접속 관리
-                  </span>
-                </Link>
-              </div>
+              <ul className="ml-2 flex shrink-0 border-l border-rule-soft pl-2 lg:mt-3 lg:ml-0 lg:block lg:border-t lg:border-l-0 lg:pt-3 lg:pl-0">
+                {ASIDE.map((a) => (
+                  <li key={a.href} className="shrink-0">
+                    <Link
+                      href={a.href}
+                      className="group block rounded-sm px-3 py-2.5 transition-colors hover:bg-measure-soft"
+                    >
+                      <span className="block text-[13px] font-medium whitespace-nowrap group-hover:text-measure">
+                        {a.label}
+                      </span>
+                      <span className="block text-[11px] whitespace-nowrap text-ink-3">
+                        {a.sub}
+                      </span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
             </div>
 
             {/* 이 도구의 성격을 화면에 상주시킨다. 담당자가 결과를 판정으로 읽지 않도록. */}

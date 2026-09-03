@@ -70,6 +70,32 @@ async function setTelegram() {
   await put('telegram_chat_id', optional('TELEGRAM_CHAT_ID', '5185533472'));
 }
 
+/**
+ * 정기 실행이 우리 사이트를 부를 때 쓰는 값
+ *
+ * 왜 세 곳에 같은 토큰이 필요한가
+ *   .env.local   이 스크립트가 읽어 금고에 넣기 위해
+ *   금고(Vault)  데이터베이스가 사이트를 부를 때 헤더에 실어 보내려고
+ *   Netlify      사이트가 그 헤더를 검사하려고
+ *   같은 값이어야 서로 맞는다. 하나라도 다르면 401 로 막힌다.
+ */
+async function setJobs() {
+  loadEnv();
+  console.log('정기 실행');
+
+  const token = process.env.JOBS_TOKEN?.trim();
+  if (!token) {
+    throw new Error(
+      '.env.local 에 JOBS_TOKEN 이 없습니다.\n' +
+        '  아무 긴 문자열이면 됩니다. 만들어 쓰려면:\n' +
+        '    node -e "console.log(require(\'crypto\').randomBytes(24).toString(\'hex\'))"\n' +
+        '  같은 값을 Netlify 환경변수에도 JOBS_TOKEN 으로 넣어야 합니다.',
+    );
+  }
+  await put('jobs_token', token);
+  await put('site_base_url', optional('SITE_BASE_URL', 'https://kc-regulation-product-hazard-analysis.netlify.app'));
+}
+
 /** 시험 알림 — 토큰이 실제로 동작하는지 텔레그램 응답으로 확인한다 */
 async function testAlert() {
   const db = getDb();
@@ -116,7 +142,8 @@ async function main() {
   if (arg === 'test') return testAlert();
 
   if (arg === 'all' || arg === 'openai') await setOpenai();
-  if (arg === 'all' || arg === 'telegram') await setTelegram();
+  if (arg === 'all' || arg === 'ops' || arg === 'telegram') await setTelegram();
+  if (arg === 'all' || arg === 'ops' || arg === 'jobs') await setJobs();
 
   console.log('');
   console.log('금고에 넣었습니다. 값 자체는 저장소에 올라가지 않습니다.');

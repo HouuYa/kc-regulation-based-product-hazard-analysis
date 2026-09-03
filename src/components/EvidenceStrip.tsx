@@ -33,13 +33,13 @@ const PATH_LABEL: Record<MatchPath, string> = {
   'CODE': '코드 일치',
   'CODE-PARTIAL': '상위계위 일치',
   'HYBRID': '코드 근거 없음',
-  'FALLBACK': '폴백 · 미태깅 품목',
+  'FALLBACK': '코드 없이 찾은 결과',
 };
 
 const LEVEL_NOTE: Record<EvidenceLevel, string> = {
   A: '구조화 근거 강함 — 검수된 태그가 일치합니다',
   B: '담당자 확인 필요 — 자동 태그이거나 어휘·의미 일치입니다',
-  C: '탐색 후보 — 미태깅 상태에서 의미 검색으로만 나왔습니다',
+  C: '탐색 후보 — 위해요인 코드 없이 뜻이 비슷한 문장으로만 나왔습니다',
   X: '분석 보류 — 품목·기준이 확정되지 않았습니다',
 };
 

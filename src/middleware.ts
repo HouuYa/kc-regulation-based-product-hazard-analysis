@@ -7,6 +7,13 @@ import { NextRequest, NextResponse } from 'next/server';
  * 이 프로젝트의 optional() 환경변수 관례와 같다.
  */
 export function middleware(request: NextRequest) {
+  // 자동 실행 경로는 사람이 아니라 데이터베이스가 부른다. 사람의 ID/PW 를 쓸 수
+  // 없으므로 여기서는 통과시키고, 그 라우트가 자체 토큰(JOBS_TOKEN)으로 지킨다.
+  // 토큰이 없으면 그 라우트는 아무도 못 부르게 막는다 — 열린 채로 두지 않는다.
+  if (request.nextUrl.pathname.startsWith('/api/jobs/')) {
+    return NextResponse.next();
+  }
+
   const expectedUser = process.env.SITE_AUTH_USERNAME;
   const expectedPass = process.env.SITE_AUTH_PASSWORD;
 
