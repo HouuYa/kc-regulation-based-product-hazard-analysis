@@ -158,19 +158,71 @@ export async function loadRecalls(
       let dtPrimary = r.damage_type_primary;
       let dtExtra: string[] = r.damage_type_codes ?? [];
       let llmFix: Awaited<ReturnType<typeof tagCase>> | null = null;
+      // 지난 주기에 이미 보정해 둔 축. 다시 넣지 않는다 — 이미 DB 에 있다
+      const reusedAxes: Array<'HF' | 'DT'> = [];
 
       if (!hfPrimaryOk || !dtPrimaryOk) {
-        try {
-          llmFix = await tagCase(
-            { itemName: r.product_name, title: r.product_name, narrative: narrativeOf(r) },
-            snapshot,
-          );
-          if (!hfPrimaryOk) { hfPrimary = llmFix.output.hf_primary; hfExtra = llmFix.output.hf_secondary; }
-          if (!dtPrimaryOk) { dtPrimary = llmFix.output.dt_primary; dtExtra = llmFix.output.dt_secondary; }
-        } catch (e) {
-          result.warnings.push(
-            `LLM 재분류 실패 ${externalRef}: ${e instanceof Error ? e.message : e}`,
-          );
+        /*
+          이미 보정해 둔 것이 있으면 AI 를 다시 부르지 않는다
+
+          무엇이 잘못돼 있었나 (실측으로 드러난 것, 2026-09-04)
+            판단 근거가 원본의 hazard_factor_code 하나뿐이었다. 그 값은 우리가
+            고칠 수 있는 것이 아니므로(협회 관리자 시스템의 값이다) 다음 주기에도
+            그대로 무효다. 그래서 같은 사건을 볼 때마다 AI 를 다시 불렀다.
+
+            실물: 코드북 v0.9.7 에 없는 HF.S.STD 를 가진 리콜이 40건인데,
+            그 40건 전부가 이미 `ADMIN-recall_hub-v0.9.7+LLMFIX` 태그를 갖고 있었다.
+            보정은 끝나 있는데 26.7시간마다 40번씩 다시 부르고 있었던 것이다.
+
+            돈만 새는 것이 아니었다. AI 호출 한 번이 약 6초라, 그 건이 섞인 구간은
+            30초 제한 가까이 갔다. 실제로 034 이후 성공한 74건 중 25초를 넘긴 2건이
+            모두 llmReclassified=1 이었고, 504 로 죽은 1건도 같은 이유다.
+
+          코드북 판이 올라가면 저장된 보정도 낡은 것이 되므로, 판번호가 지금과
+          같을 때만 재사용한다. 판이 바뀌면 자연히 다시 부른다.
+        */
+        const prior = await db<{ axis: 'HF' | 'DT'; code: string; is_primary: boolean }[]>`
+          select t.axis, t.code, t.is_primary
+          from public.case_tag t
+          join public.case_event e on e.id = t.case_id
+          where e.source_type = 'RECALL_OVERSEAS'
+            and e.external_ref = ${externalRef}
+            and t.tagging_version = ${`${taggingVersion}+LLMFIX`}
+            and t.codebook_version = ${snapshot.version}
+        `;
+
+        const priorHf = prior.filter((t) => t.axis === 'HF');
+        const priorDt = prior.filter((t) => t.axis === 'DT');
+        const canReuseHf = !hfPrimaryOk && priorHf.length > 0;
+        const canReuseDt = !dtPrimaryOk && priorDt.length > 0;
+
+        if (canReuseHf) {
+          hfPrimary = (priorHf.find((t) => t.is_primary) ?? priorHf[0]).code;
+          hfExtra = priorHf.filter((t) => t.code !== hfPrimary).map((t) => t.code);
+          reusedAxes.push('HF');
+        }
+        if (canReuseDt) {
+          dtPrimary = (priorDt.find((t) => t.is_primary) ?? priorDt[0]).code;
+          dtExtra = priorDt.filter((t) => t.code !== dtPrimary).map((t) => t.code);
+          reusedAxes.push('DT');
+        }
+
+        // 아직 보정되지 않은 축이 남아 있을 때만 AI 를 부른다
+        const needHf = !hfPrimaryOk && !canReuseHf;
+        const needDt = !dtPrimaryOk && !canReuseDt;
+        if (needHf || needDt) {
+          try {
+            llmFix = await tagCase(
+              { itemName: r.product_name, title: r.product_name, narrative: narrativeOf(r) },
+              snapshot,
+            );
+            if (needHf) { hfPrimary = llmFix.output.hf_primary; hfExtra = llmFix.output.hf_secondary; }
+            if (needDt) { dtPrimary = llmFix.output.dt_primary; dtExtra = llmFix.output.dt_secondary; }
+          } catch (e) {
+            result.warnings.push(
+              `LLM 재분류 실패 ${externalRef}: ${e instanceof Error ? e.message : e}`,
+            );
+          }
         }
       }
 
@@ -179,15 +231,25 @@ export async function loadRecalls(
       const hfOk = !!hfPrimary && validHf.has(hfPrimary);
       const dtOk = !!dtPrimary && validDt.has(dtPrimary);
 
-      // 태그 행은 사건 번호만 빼고 미리 만들어 둔다. 번호는 트랜잭션 안에서 붙인다
+      /*
+        태그 행은 사건 번호만 빼고 미리 만들어 둔다. 번호는 트랜잭션 안에서 붙인다.
+
+        지난 주기에 보정해 둔 축(reusedAxes)은 여기서 뺀다. 그 행들은 이미
+        `…+LLMFIX` 판번호로 DB 에 있고, 여기서 다시 만들면 llmFix 가 null 이라
+        관리자 승인 행(review_status='approved', 판번호 LLMFIX 없음)으로 들어간다.
+        AI 가 고른 코드가 사람이 승인한 것처럼 기록되는 셈이라 그대로 두면 안 된다.
+      */
       const adminEvidence = (r.hazard_description ?? r.recall_cause ?? '').slice(0, 2000);
       const tagSpecs =
         hfOk && dtOk
           ? [
               ...hfAll.map((code) => ({ axis: 'HF' as const, code, is_primary: code === hfPrimary, fromLlm: !hfPrimaryOk })),
               ...dtAll.map((code) => ({ axis: 'DT' as const, code, is_primary: code === dtPrimary, fromLlm: !dtPrimaryOk })),
-            ]
+            ].filter((t) => !reusedAxes.includes(t.axis))
           : [];
+
+      // 코드가 갖춰졌는가. 이번에 넣은 행이 없어도(전부 재사용) 참일 수 있다
+      const hasCodes = hfOk && dtOk;
 
       const codeLabels = [...hfAll, ...dtAll].map((c) => labels.get(c) ?? c);
       const searchText = buildCaseSearchText(
@@ -331,14 +393,20 @@ export async function loadRecalls(
             )}
             on conflict (case_id, axis, code, tagging_version) do nothing
           `;
+        }
 
+        if (hasCodes) {
           /*
             검색용 문장이 실제로 바뀌었을 때만 의미 검색 준비를 다시 시킨다
 
-            전에는 무조건 embedding = null 이었다. 리콜 수집은 5분마다 구간을 돌며
-            전체를 약 42시간 주기로 다시 훑으므로, 바뀐 것이 없어도 모든 리콜의
-            임베딩이 주기마다 통째로 날아가고 다시 만들어졌다. 2,252건이 이유 없이
-            반복 과금되고 있었다는 뜻이다.
+            전에는 무조건 embedding = null 이었다. 리콜 수집은 구간을 돌며 전체를
+            주기적으로 다시 훑으므로, 바뀐 것이 없어도 모든 리콜의 임베딩이 주기마다
+            통째로 날아가고 다시 만들어졌다. 2,259건이 이유 없이 반복 과금되고
+            있었다는 뜻이다.
+
+            태그를 새로 넣지 않는 경우에도 이 갱신은 한다 — 원본의 제목·서술이
+            바뀌면 검색용 문장도 따라 바뀌어야 하기 때문이다. 바뀐 것이 없으면
+            아래 비교가 참이 되지 않아 임베딩은 그대로 남는다.
 
             update 문에서 등호 왼쪽이 아닌 자리의 컬럼 이름은 갱신 전 값을 가리킨다.
             그래서 한 문장 안에서 옛 문장과 새 문장을 비교할 수 있다.
@@ -366,7 +434,9 @@ export async function loadRecalls(
       else result.existingCase++;
       if (scope) result.resolved++;
 
-      if (tagSpecs.length > 0) {
+      // 이번에 넣은 행이 없어도 코드가 붙어 있으면 "코드 있음"이다 —
+      // 재사용한 축만 있는 경우가 그렇다
+      if (hasCodes) {
         result.tagged++;
         if (llmFix) {
           result.llmReclassified.push({
