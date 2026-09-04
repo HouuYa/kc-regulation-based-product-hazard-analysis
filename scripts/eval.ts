@@ -237,6 +237,8 @@ async function main() {
     useCode: true, useKeyword: true, useVector: true, useRerank: false,
     candidateCount: Number(argValue('--candidates') ?? '20'),
     rrfK: t.rrfK, wCode: t.weightCode, wCodePartial: t.weightCodePartial,
+    // 기존 동작 그대로. --approved-only 로 검수 확정 태그만 쓰는 구성과 비교한다(030)
+    requireApprovedTags: process.argv.includes('--approved-only'),
   };
 
   if (!existsSync(ANSWER_KEY)) {

@@ -41,22 +41,52 @@ export async function uploadAccidentPdfs(formData: FormData): Promise<void> {
       const bytes = new Uint8Array(await file.arrayBuffer());
       const sha256 = createHash('sha256').update(bytes).digest('hex');
 
-      const [dup] = await db<{ id: number }[]>`
-        select id from public.source_file
+      const [dup] = await db<{ id: number; storage_path: string | null }[]>`
+        select id, storage_path from public.source_file
         where kind = 'ACCIDENT_PDF' and sha256 = ${sha256}
       `;
-      if (dup) continue;
+      // 보관에 실패해 남아 있는 기록이면 같은 파일을 다시 올려 보관만 다시 시도한다.
+      // 이 갈래가 없으면 중복으로 걸러져, 버킷을 고친 뒤에도 되살릴 방법이 없다.
+      if (dup && dup.storage_path) continue;
 
       const extracted = await extractPdf(bytes);
 
-      // 원본은 불변층에 보관한다(§7.1). 버킷이 없으면 보관만 건너뛰고 진행한다 —
-      // 추출 결과까지 버리면 담당자가 다시 올려야 하기 때문이다.
+      /*
+        원본은 불변층에 보관한다(§7.1). 보관에 실패하면 여기서 멈춘다.
+
+        전에는 보관만 건너뛰고 진행했다 — "추출 결과까지 버리면 담당자가 다시
+        올려야 하기 때문"이었다. 그런데 그렇게 하면 사건이 만들어지고 분석까지
+        이어지는데 원본 PDF 는 어디에도 없다. 사고보고서는 개인정보 때문에
+        저장소에 두지 않으므로 Storage 가 유일한 보관처다. 즉 조항 결과에서
+        원본 페이지로 되짚을 길이 영영 사라진다 — 이 체계가 지키기로 한 것이
+        바로 그 되짚기다(02 설계서 §3.3).
+
+        다시 올려야 하는 부담은 그대로 두되, 추출 결과는 버리지 않는다. 아래에서
+        status='error' 로 기록을 남기므로 담당자는 무엇이 왜 막혔는지 볼 수 있고,
+        버킷을 고친 뒤 같은 파일을 다시 올리면 위 갈래가 이어받는다.
+      */
       let storagePath: string | null = null;
+      let storageError: string | null = null;
       try {
         storagePath = await putOriginal('accident', sha256, file.name, bytes, 'application/pdf');
       } catch (e) {
-        console.warn(`원본 보관 실패 (${file.name}): ${e instanceof Error ? e.message : e}`);
-        storagePath = null;
+        storageError = e instanceof Error ? e.message : String(e);
+        console.error(`원본 보관 실패 (${file.name}): ${storageError}`);
+      }
+
+      if (storageError) {
+        await db`
+          insert into public.source_file
+            (kind, filename, sha256, storage_path, byte_size, page_count,
+             extracted_chars, extracted_text, status, error_reason)
+          values ('ACCIDENT_PDF', ${file.name}, ${sha256}, null, ${bytes.byteLength},
+                  ${extracted.pageCount}, ${extracted.charCount},
+                  ${extracted.text.slice(0, 200000)}, 'error',
+                  ${`원본 보관에 실패해 분석 대상으로 넘기지 않았습니다: ${storageError}`})
+          on conflict (kind, sha256) do update
+            set error_reason = excluded.error_reason, status = 'error'
+        `;
+        continue;
       }
 
       const blocked = extracted.piiFindings.length > 0;
@@ -67,6 +97,8 @@ export async function uploadAccidentPdfs(formData: FormData): Promise<void> {
           ? '텍스트 레이어가 없는 스캔본으로 보입니다. OCR 이 필요합니다.'
           : null;
 
+      // on conflict 가 필요한 이유: 보관에 실패해 남은 기록을 되살리는 경로가
+      // 생겼다(위 dup 갈래). 그때는 새 행이 아니라 그 행을 채워 넣는 것이다.
       const [sf] = await db<{ id: number }[]>`
         insert into public.source_file
           (kind, filename, sha256, storage_path, byte_size, page_count,
@@ -74,16 +106,29 @@ export async function uploadAccidentPdfs(formData: FormData): Promise<void> {
         values ('ACCIDENT_PDF', ${file.name}, ${sha256}, ${storagePath}, ${bytes.byteLength},
                 ${extracted.pageCount}, ${extracted.charCount},
                 ${extracted.text.slice(0, 200000)}, ${status}, ${errorReason})
+        on conflict (kind, sha256) do update
+          set storage_path    = excluded.storage_path,
+              page_count      = excluded.page_count,
+              extracted_chars = excluded.extracted_chars,
+              extracted_text  = excluded.extracted_text,
+              status          = excluded.status,
+              error_reason    = excluded.error_reason
         returning id
       `;
 
       // 개인정보가 걸렸거나 스캔본이면 사건을 만들지 않는다.
       // 사건이 만들어지면 코드화 대상이 되고, 그러면 외부 LLM 으로 나간다.
+      //
+      // 이미 사건이 있으면 새로 만들지 않는다 — 되살리기 경로로 같은 파일이 다시
+      // 들어올 수 있고, 그때 사건을 또 만들면 담당자의 확인·검토 기록이 갈린다.
       if (status === 'extracted') {
         await db`
           insert into public.case_event (source_file_id, source_type, title, narrative)
-          values (${sf.id}, 'ACCIDENT', ${file.name.replace(/\.pdf$/i, '')},
-                  ${extracted.text.slice(0, 20000)})
+          select ${sf.id}, 'ACCIDENT', ${file.name.replace(/\.pdf$/i, '')},
+                 ${extracted.text.slice(0, 20000)}
+          where not exists (
+            select 1 from public.case_event where source_file_id = ${sf.id}
+          )
         `;
       }
     } catch {

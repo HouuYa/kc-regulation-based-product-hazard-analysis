@@ -92,6 +92,8 @@ export function defaultMatchConfig(overrides: Partial<MatchConfig> = {}): MatchC
     rrfK: t.rrfK,
     wCode: t.weightCode,
     wCodePartial: t.weightCodePartial,
+    // 기본은 끔 — 기존 동작 그대로다(030). 미검수 태그의 비중을 먼저 재고 정한다
+    requireApprovedTags: false,
     ...overrides,
   };
 }
@@ -119,30 +121,51 @@ export async function runAnalysis(
 
   let candidates = await searchCandidates(input, config);
 
+  /*
+    리랭킹의 결과를 세 갈래로 구분해 남긴다 (031)
+
+    전에는 리랭커가 죽어도 rerank_score 가 전부 null 인 채로 저장됐다. 그런데
+    그것은 "리랭커가 후보를 다 낮게 봤다"와 화면에서 구별되지 않는다. 담당자는
+    낮은 점수를 판단의 근거로 읽으므로, 사실은 아무도 채점하지 않은 결과를
+    "관련성이 낮다"로 오해할 수 있다.
+  */
+  let rerankStatus: 'skipped' | 'ok' | 'failed' = 'skipped';
+
   const cfg = config.useRerank ? openaiConfig() : null;
   if (config.useRerank && candidates.length > 1 && cfg) {
-    const scores = await rerankCandidates(
-      { itemName: input.itemName, narrative: input.narrative, hfCodes: input.hfCodes, dtCodes: input.dtCodes },
-      candidates.map((c) => ({
-        clauseId: c.clauseId, marker: c.marker,
-        contextHeader: c.contextHeader, body: c.body, testConditions: c.testConditions,
-      })),
-      cfg.rerankModel,
-    );
-    const byId = new Map(scores.map((s) => [s.clause_id, s]));
-    candidates = candidates
-      .map((c) => {
-        const s = byId.get(c.clauseId);
-        return s ? { ...c, rerankScore: s.relevance, rerankReason: s.reason } : c;
-      })
-      // 리랭커는 순서만 바꾼다. 후보를 늘리지도 지우지도 않는다(§5.6.3)
-      .sort((a, b) => (b.rerankScore ?? -1) - (a.rerankScore ?? -1) || b.score - a.score);
+    try {
+      const scores = await rerankCandidates(
+        { itemName: input.itemName, narrative: input.narrative, hfCodes: input.hfCodes, dtCodes: input.dtCodes },
+        candidates.map((c) => ({
+          clauseId: c.clauseId, marker: c.marker,
+          contextHeader: c.contextHeader, body: c.body, testConditions: c.testConditions,
+        })),
+        cfg.rerankModel,
+      );
+      const byId = new Map(scores.map((s) => [s.clause_id, s]));
+      candidates = candidates
+        .map((c) => {
+          const s = byId.get(c.clauseId);
+          return s ? { ...c, rerankScore: s.relevance, rerankReason: s.reason } : c;
+        })
+        // 리랭커는 순서만 바꾼다. 후보를 늘리지도 지우지도 않는다(§5.6.3)
+        .sort((a, b) => (b.rerankScore ?? -1) - (a.rerankScore ?? -1) || b.score - a.score);
+      rerankStatus = 'ok';
+    } catch (e) {
+      // 검색 결과까지 버리지는 않는다 — 리랭킹은 순서를 다듬는 단계이지
+      // 후보를 만드는 단계가 아니다. 다만 채점이 없었다는 사실은 남긴다
+      console.error(`재채점 실패 (사건 ${caseId}):`, e);
+      rerankStatus = 'failed';
+    }
   }
 
   const runId = await persistRun(input, config, candidates, {
     embeddingModel: input.embedding ? openaiConfig().embeddingModel : null,
-    rerankModel: config.useRerank ? cfg?.rerankModel ?? null : null,
+    rerankModel: rerankStatus === 'ok' ? cfg?.rerankModel ?? null : null,
     shortlist: SHORTLIST,
+    rerankStatus,
+    // 리랭커 모델·프롬프트 묶음의 판번호. 태깅의 tagging_version 과 같은 구실이다
+    promptVersion: cfg ? `RERANK-${cfg.rerankModel}-${cfg.rerankEffort}` : null,
   });
 
   // 0건도 1급 산출물이다 — 왜 0건인지를 남긴다(2.3 결정 A, v0.7 §7.8)

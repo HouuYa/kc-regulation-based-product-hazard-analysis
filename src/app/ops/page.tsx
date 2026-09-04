@@ -5,7 +5,7 @@ import { AutoRefresh } from '@/components/AutoRefresh';
 import { PageToc, type TocItem } from '@/components/PageToc';
 import {
   runEmbedTick, retryParked, sendTestAlert,
-  sendCustomMessage, runJobNow, toggleAutoTagging,
+  sendCustomMessage, runJobNow, toggleAutoTagging, resetTagFailures,
 } from './actions';
 
 export const dynamic = 'force-dynamic';
@@ -75,6 +75,8 @@ interface Data {
   cronFailures: { jobname: string; end_time: string; message: string | null }[];
   alerts: { kind: string; body: string; status_code: number | null; sent_at: string }[];
   taggable: number;
+  /** 세 번 연속 실패해 자동 대상에서 빠진 조항. 남은 건수와 절대 합치지 않는다(029) */
+  stalledTagging: number;
   autoTagging: boolean;
   embeddedToday: number;
   jobsConfigured: boolean;
@@ -157,9 +159,16 @@ async function load(): Promise<{ data: Data | null; error: string | null }> {
       from public.ops_alert order by sent_at desc limit 8
     `;
 
-    // 코드를 붙일 수 있는데 아직 안 붙은 요건 조항 — 화면이 남은 일과 비용을 보여 준다
-    const [t] = await db<{ n: number }[]>`
-      select count(*)::int as n
+    // 코드를 붙일 수 있는데 아직 안 붙은 요건 조항 — 화면이 남은 일과 비용을 보여 준다.
+    //
+    // 세 번 연속 실패한 조항은 자동 대상이 아니므로 여기서 뺀다(029). 조건이
+    // tag-run.ts 의 taggableWhere() 및 run_tag_chunk() 와 같아야 한다 — 어긋나면
+    // "화면에는 남았다는데 처리할 것은 없는" 상태가 되고 자동 실행이 영원히 돈다.
+    // 포기한 건수는 아래에서 따로 센다. 끝난 것과 포기한 것은 다른 상태다.
+    const [t] = await db<{ n: number; stalled: number }[]>`
+      select
+        count(*) filter (where c.tag_fail_count <  3)::int as n,
+        count(*) filter (where c.tag_fail_count >= 3)::int as stalled
       from public.clause c join public.standard s on s.id = c.standard_id
       where s.is_current and c.clause_role = 'REQUIREMENT'
         and length(btrim(c.body)) >= 15
@@ -180,7 +189,8 @@ async function load(): Promise<{ data: Data | null; error: string | null }> {
     return {
       data: {
         ops, embed, jobs, runs, parkedRows, cronFailures, alerts,
-        taggable: t.n, autoTagging: at.on, embeddedToday: e.n, jobsConfigured: j.ok,
+        taggable: t.n, stalledTagging: t.stalled,
+        autoTagging: at.on, embeddedToday: e.n, jobsConfigured: j.ok,
       },
       error: null,
     };
@@ -496,7 +506,10 @@ export default async function OpsPage() {
 
               {data.taggable === 0 ? (
                 <p className="mt-1.5 text-[12px] text-ink-2">
-                  코드를 부여할 요건 조항이 남아 있지 않습니다. 모두 끝났습니다.
+                  코드를 부여할 요건 조항이 남아 있지 않습니다.
+                  {data.stalledTagging === 0
+                    ? ' 모두 끝났습니다.'
+                    : ' 다만 아래 넘긴 조항은 확인이 필요합니다.'}
                 </p>
               ) : (
                 <>
@@ -554,6 +567,39 @@ export default async function OpsPage() {
                     </>
                   )}
                 </>
+              )}
+
+              {/*
+                넘긴 조항 — 끝난 것과 포기한 것을 같은 숫자로 보여 주면 안 된다(029)
+
+                전에는 실패한 조항이 대기줄 맨 앞에 그대로 남아, 자동 실행이 매 분
+                같은 조항만 다시 부르고 남은 건수가 0 이 되지 않았다. 이제 세 번
+                연속 실패하면 대상에서 빼는데, 그러면 "0건 남음"이 "다 됐다"는 뜻이
+                아니게 된다. 그래서 여기에 따로 적는다.
+              */}
+              {data.stalledTagging > 0 && (
+                <div className="mt-4 border-t border-caution/40 pt-3">
+                  <p className="text-[12px] leading-relaxed text-ink-2">
+                    <span className="addr tnum text-ink">
+                      {data.stalledTagging.toLocaleString()}건
+                    </span>
+                    은 세 번 연속 실패해 넘겼습니다. 계속 다시 부르면 돈만 나가므로
+                    자동 실행에서 뺐습니다. 조항 자체나 코드북의 문제일 수 있어 사람이
+                    봐야 합니다.
+                  </p>
+                  <p className="mt-1 text-[11px] leading-relaxed text-ink-3">
+                    원인이 일시적인 것(모델 장애, 요청 한도)이었다면 되돌려서 다시
+                    시도할 수 있습니다.
+                  </p>
+                  <div className="mt-3">
+                    <ActionForm
+                      action={resetTagFailures}
+                      label="다시 시도 대상에 넣기"
+                      pendingLabel="되돌리는 중…"
+                      className="border border-rule bg-surface px-4 py-2 text-[13px] hover:bg-rule-soft"
+                    />
+                  </div>
+                </div>
               )}
             </div>
           </Section>

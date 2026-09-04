@@ -35,6 +35,46 @@ import { openaiConfig, tuning } from '../env';
  */
 export const TAGGABLE_ROLE = 'REQUIREMENT';
 
+/**
+ * 연속 실패가 이만큼 쌓이면 자동 대상에서 뺀다 (029)
+ *
+ * 실패한 조항은 clause_tag 에 아무것도 남기지 않으므로, 조건이 "태그가 없는 조항"인
+ * 한 대기줄 맨 앞에 영원히 남는다. 순서가 (standard_id, order_index) 로 고정이라
+ * 자리가 밀리지도 않는다 — offset=0 요청이 매 분 같은 조항부터 다시 부른다.
+ * 그러면 자동 실행이 스스로 꺼지지도 않고(남은 건수가 0 이 안 되므로) 돈만 나간다.
+ *
+ * 3인 이유: 태깅은 조항 하나에 AI 를 3~4회 부른다. 일시적인 요청 한도 초과라면
+ * 다음 차례에 성공한다. 세 번 연속 실패하면 조항이나 프롬프트의 문제일 가능성이
+ * 높으므로 사람이 봐야 한다.
+ */
+export const MAX_TAG_FAILURES = 3;
+
+/**
+ * 태깅 대상의 조건. 남은 건수를 세는 곳과 실제로 가져오는 곳이 함께 쓴다.
+ *
+ * 두 곳에 각자 적어 두면 한쪽만 고치게 되고, 그러면 "화면에는 남았다는데 실제로
+ * 처리할 것은 없는" 상태가 된다. 그 상태에서는 자동 실행이 영원히 돈다.
+ * 029 의 run_tag_chunk() 도 같은 조건을 쓴다 — 세 곳이 반드시 같아야 한다.
+ */
+function taggableWhere(
+  db: ReturnType<typeof getDb>,
+  standardFilter: string | null,
+  retag: boolean,
+) {
+  return db`
+    s.is_current
+      and length(btrim(c.body)) >= 15
+      and c.clause_role = ${TAGGABLE_ROLE}
+      and c.tag_fail_count < ${MAX_TAG_FAILURES}
+      ${standardFilter ? db`and s.display_name ilike ${'%' + standardFilter + '%'}` : db``}
+      ${retag
+        ? db`and not exists (
+              select 1 from public.clause_tag t
+              where t.clause_id = c.id and t.review_status = 'approved')`
+        : db`and not exists (select 1 from public.clause_tag t where t.clause_id = c.id)`}
+  `;
+}
+
 interface ClauseRow {
   id: number;
   marker: string;
@@ -88,15 +128,29 @@ export async function countTaggable(standardFilter?: string | null, retag = fals
     select count(*)::int as n
     from public.clause c
     join public.standard s on s.id = c.standard_id
+    where ${taggableWhere(db, standardFilter ?? null, retag)}
+  `;
+  return row.n;
+}
+
+/**
+ * 세 번 연속 실패해 자동 대상에서 빠진 조항이 몇 건인가
+ *
+ * 남은 건수와 반드시 따로 보여 준다. "0건 남음"만 보고 담당자가 손을 떼면
+ * 실패분이 묻힌다 — 끝난 것과 포기한 것은 다른 상태다.
+ */
+export async function countStalledTagging(standardFilter?: string | null): Promise<number> {
+  const db = getDb();
+  const [row] = await db<{ n: number }[]>`
+    select count(*)::int as n
+    from public.clause c
+    join public.standard s on s.id = c.standard_id
     where s.is_current
       and length(btrim(c.body)) >= 15
       and c.clause_role = ${TAGGABLE_ROLE}
+      and c.tag_fail_count >= ${MAX_TAG_FAILURES}
       ${standardFilter ? db`and s.display_name ilike ${'%' + standardFilter + '%'}` : db``}
-      ${retag
-        ? db`and not exists (
-              select 1 from public.clause_tag t
-              where t.clause_id = c.id and t.review_status = 'approved')`
-        : db`and not exists (select 1 from public.clause_tag t where t.clause_id = c.id)`}
+      and not exists (select 1 from public.clause_tag t where t.clause_id = c.id)
   `;
   return row.n;
 }
@@ -120,15 +174,7 @@ export async function runTagging(opts: TagRunOptions = {}): Promise<TagRunResult
        from public.test_condition tc where tc.clause_id = c.id) as test_conditions
     from public.clause c
     join public.standard s on s.id = c.standard_id
-    where s.is_current
-      and length(btrim(c.body)) >= 15
-      and c.clause_role = ${TAGGABLE_ROLE}
-      ${standardFilter ? db`and s.display_name ilike ${'%' + standardFilter + '%'}` : db``}
-      ${retag
-        ? db`and not exists (
-              select 1 from public.clause_tag t
-              where t.clause_id = c.id and t.review_status = 'approved')`
-        : db`and not exists (select 1 from public.clause_tag t where t.clause_id = c.id)`}
+    where ${taggableWhere(db, standardFilter, retag)}
     order by c.standard_id, c.order_index
     ${limit ? db`limit ${limit}` : db``}
     ${offset ? db`offset ${offset}` : db``}
@@ -187,6 +233,27 @@ export async function runTagging(opts: TagRunOptions = {}): Promise<TagRunResult
     }
   }
 
+  /**
+   * 실패를 조항에 적는다 (029)
+   *
+   * 기록 자체가 실패해도 태깅 결과는 그대로 둔다 — 실패를 적다가 또 실패했다고
+   * 배치를 세울 이유는 없다. 다만 조용히 넘기면 같은 조항이 계속 돌게 되므로
+   * 로그에는 남긴다.
+   */
+  async function recordFailure(clauseId: number, reason: string) {
+    try {
+      await db`
+        update public.clause
+        set tag_fail_count = tag_fail_count + 1,
+            tag_last_error = ${reason.slice(0, 2000)},
+            tag_failed_at  = now()
+        where id = ${clauseId}
+      `;
+    } catch (e) {
+      console.error(`실패 기록 실패 (조항 ${clauseId}):`, e);
+    }
+  }
+
   async function processOne(c: ClauseRow) {
     const header = buildContextHeader({
       itemName: c.item_name,
@@ -216,8 +283,11 @@ export async function runTagging(opts: TagRunOptions = {}): Promise<TagRunResult
       const check = await validateCodes(hf, dt, snapshot.version);
       if (!check.ok) {
         // 반복문이 아니라 함수가 됐으므로 continue 가 아니라 return 이다
+        const reason = `코드북에 없는 코드: ${check.errors.join(' / ')}`;
         result.errors.push(`거부 ${c.marker}: ${check.errors.join(' / ')}`);
         result.fail++;
+        // 이 실패는 다시 불러도 같은 결과가 나올 가능성이 높다. 반드시 세어 둔다
+        await recordFailure(c.id, reason);
         return;
       }
 
@@ -273,15 +343,22 @@ export async function runTagging(opts: TagRunOptions = {}): Promise<TagRunResult
               -- 검색용 텍스트가 바뀌었으므로 임베딩은 무효다. 다시 만들어야 한다(§3.4)
               embedding           = null,
               embedding_model     = null,
-              embedded_at         = null
+              embedded_at         = null,
+              -- 성공했으므로 실패 이력을 지운다. 어쩌다 한 번 실패한 조항이
+              -- 이력을 계속 지고 다니지 않게 한다 — "연속" 실패 횟수다(029)
+              tag_fail_count      = 0,
+              tag_last_error      = null,
+              tag_failed_at       = null
           where id = ${c.id}
         `;
       });
 
       result.ok++;
     } catch (e) {
+      const reason = e instanceof Error ? e.message : String(e);
       result.fail++;
-      result.errors.push(`실패 ${c.marker}: ${e instanceof Error ? e.message : e}`);
+      result.errors.push(`실패 ${c.marker}: ${reason}`);
+      await recordFailure(c.id, reason);
     }
   }
 

@@ -2,7 +2,8 @@ import { NextResponse } from 'next/server';
 import { getDb } from '@/lib/db';
 import { loadRecalls } from '@/lib/recall/load';
 import { syncStandardsFolder } from '@/lib/standards/sync';
-import { runTagging, countTaggable } from '@/lib/standards/tag-run';
+import { runTagging, countTaggable, countStalledTagging } from '@/lib/standards/tag-run';
+import { boundedInt } from '@/lib/env';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 60;
@@ -53,6 +54,20 @@ const JOBS: JobName[] = ['recalls-fetch', 'standards-sync', 'tag-chunk'];
 const TAG_TIME_BUDGET_MS = 12_000;
 
 /**
+ * 리콜 수집 한 번에 쓸 시간 (033)
+ *
+ * 배포 환경 실측: 고정비 약 4,100ms + 건당 2,875~4,617ms(구간에 따라 흩어진다).
+ * 제한은 약 30초다. 건수는 034 가 3으로 낮췄지만, 건당 비용은 앞으로 바뀔 수 있다 —
+ * 코드북에 없는 코드가 늘면 AI 재분류가 붙어 건당 5~7초가 더 든다.
+ *
+ * 그래서 건수와 시간 양쪽으로 끊는다. 15초를 넘기면 새 건을 시작하지 않는다.
+ * 최악 구간의 건당 비용이 약 4.6초이므로 마지막 한 건이 끝나는 시각이 대략
+ * 15 + 4.6 = 19.6초, 기동 약 4초를 더해도 24초로 제한 안쪽이다.
+ * 남긴 건은 다음 차례가 같은 구간을 다시 훑을 때 처리된다.
+ */
+const RECALL_TIME_BUDGET_MS = 15_000;
+
+/**
  * 자동 실행일 때만 동시 처리를 올린다.
  *
  * 화면 버튼은 담당자가 결과를 기다리므로 응답이 빨라야 하고, 자동 실행은
@@ -89,10 +104,14 @@ export async function POST(req: Request, ctx: { params: Promise<{ job: string }>
 
   try {
     if (job === 'recalls-fetch') {
+      // 주소줄로 오는 값이라 범위를 강제한다. 전에는 Number(x) || 기본값 이라
+      // limit=-1 이 그대로 통과했다(§4.5). 자른 경우 응답에 그 사실을 적는다
       const params = new URL(req.url).searchParams;
-      const limit = Number(params.get('limit') ?? '20') || 20;
-      const offset = Number(params.get('offset') ?? '0') || 0;
-      const r = await loadRecalls({ limit, offset });
+      const lim = boundedInt(params.get('limit'), 20, { min: 1, max: 200 });
+      const off = boundedInt(params.get('offset'), 0, { min: 0, max: 1_000_000 });
+      const limit = lim.value;
+      const offset = off.value;
+      const r = await loadRecalls({ limit, offset, timeBudgetMs: RECALL_TIME_BUDGET_MS });
       if (r.newCase > 0) {
         await notify(
           '리콜 수집',
@@ -102,7 +121,8 @@ export async function POST(req: Request, ctx: { params: Promise<{ job: string }>
       }
       return NextResponse.json({
         job, ok: true, elapsedMs: Date.now() - started,
-        offset, limit,
+        offset, limit, clamped: lim.clamped || off.clamped,
+        stoppedEarly: r.stoppedEarly,
         received: r.received, newCase: r.newCase, existingCase: r.existingCase,
         tagged: r.tagged, resolved: r.resolved,
         llmReclassified: r.llmReclassified.length, unclassified: r.unclassified.length,
@@ -111,8 +131,10 @@ export async function POST(req: Request, ctx: { params: Promise<{ job: string }>
 
     if (job === 'standards-sync') {
       const params = new URL(req.url).searchParams;
-      const limit = Number(params.get('limit') ?? '20') || 20;
-      const offset = Number(params.get('offset') ?? '0') || 0;
+      const lim = boundedInt(params.get('limit'), 20, { min: 1, max: 200 });
+      const off = boundedInt(params.get('offset'), 0, { min: 0, max: 1_000_000 });
+      const limit = lim.value;
+      const offset = off.value;
       const results = await syncStandardsFolder({ offset, limit });
       const added = results.filter((r) => r.status === 'new').length;
       const updated = results.filter((r) => r.status === 'updated').length;
@@ -126,7 +148,7 @@ export async function POST(req: Request, ctx: { params: Promise<{ job: string }>
       }
       return NextResponse.json({
         job, ok: true, elapsedMs: Date.now() - started,
-        offset, limit,
+        offset, limit, clamped: lim.clamped || off.clamped,
         added, updated, failed, total: results.length,
       });
     }
@@ -134,7 +156,8 @@ export async function POST(req: Request, ctx: { params: Promise<{ job: string }>
     // tag-chunk — 1분마다 이어서 하는 작업(026)과 화면 버튼이 함께 부른다.
     // 주기는 걸려 있지만 기본이 꺼짐이라, 담당자가 켜야 돈다(비용이 들기 때문).
     // 병렬로 도는 다른 요청과 겹치지 않도록 맡은 구간을 받는다(027)
-    const offset = Number(new URL(req.url).searchParams.get('offset') ?? '0') || 0;
+    const off = boundedInt(new URL(req.url).searchParams.get('offset'), 0, { min: 0, max: 100_000 });
+    const offset = off.value;
 
     const before = await countTaggable();
     const r = await runTagging({
@@ -146,13 +169,23 @@ export async function POST(req: Request, ctx: { params: Promise<{ job: string }>
     });
     const after = await countTaggable();
 
+    // 남은 건수가 0 이라고 다 끝난 것이 아니다 — 세 번 연속 실패해 넘긴 조항이
+    // 있을 수 있다(029). 알림에도 응답에도 따로 적는다
+    const stalled = await countStalledTagging();
+
     if (after === 0 && before > 0) {
-      await notify('코드 부여 완료', '모든 요건 조항에 위해요인 코드가 부여됐습니다.');
+      await notify(
+        '코드 부여 완료',
+        stalled === 0
+          ? '모든 요건 조항에 위해요인 코드가 부여됐습니다.'
+          : `남은 요건 조항을 모두 처리했습니다. 다만 ${stalled}건은 세 번 연속 실패해 넘겼습니다 — 운영 화면에서 사유를 확인해 주세요.`,
+      );
     }
 
     return NextResponse.json({
       job, ok: true, elapsedMs: Date.now() - started,
-      offset, done: r.ok, failed: r.fail, remaining: after, stoppedEarly: r.stoppedEarly,
+      offset, clamped: off.clamped,
+      done: r.ok, failed: r.fail, remaining: after, stalled, stoppedEarly: r.stoppedEarly,
       escalated: r.escalated, errors: r.errors.slice(0, 5),
     });
   } catch (e) {

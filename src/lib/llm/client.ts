@@ -11,7 +11,7 @@
  */
 
 import OpenAI from 'openai';
-import { openaiConfig } from '../env';
+import { openaiConfig, assertEmbeddingDim } from '../env';
 
 let client: OpenAI | null = null;
 
@@ -134,6 +134,8 @@ export async function structuredVisionCall<T>(args: {
  */
 export async function embedBatch(texts: string[]): Promise<number[][]> {
   if (texts.length === 0) return [];
+  // 차원을 환경변수로 바꾸려 한 배포를 시작하는 자리에서 잡는다(§4.5)
+  assertEmbeddingDim();
   const cfg = openaiConfig();
 
   const res = await getOpenAI().embeddings.create({
@@ -151,7 +153,8 @@ export async function embedBatch(texts: string[]): Promise<number[][]> {
     throw new Error(
       `임베딩 차원이 맞지 않습니다: 모델 ${cfg.embeddingModel} 이 ${dim}차원을 반환했으나 ` +
         `스키마는 vector(${cfg.embeddingDim}) 입니다.\n` +
-        `모델을 바꾸려면 OPENAI_EMBEDDING_DIM 과 DB 컬럼 타입을 함께 바꾸고 전량 재생성해야 합니다(§2.2).`,
+        '차원은 코드 상수로 고정돼 있습니다. 모델을 바꾸려면 DB 컬럼 타입·검색 함수 인자·' +
+        '전량 재생성을 담은 마이그레이션을 함께 만들어야 합니다(§2.2).',
     );
   }
   return vectors;

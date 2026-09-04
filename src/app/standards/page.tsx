@@ -62,11 +62,25 @@ export default async function StandardsPage() {
   try {
     const db = getDb();
 
-    [summary] = await db<Summary[]>`
+    /*
+      상단 숫자와 아래 목록의 분모를 맞춘다 (02_1차 보완 및 구현 설계서 §4.5)
+
+      목록은 is_current 인 기준만 보여 주는데, 상단 집계는 조항·태그·임베딩·시험
+      연결·허용치를 표 전체에서 세고 있었다. 지금은 개정판이 없어서 두 숫자가 같지만,
+      같은 기준의 새 판이 하나라도 들어오면 상단 합계가 목록 합계보다 커진다.
+      담당자는 그것을 "목록에 안 보이는 자료가 있다"로 읽게 된다.
+
+      그래서 전부 현재 판 조인을 거치게 했다. 유일한 예외는 standards 자체로,
+      그것은 원래부터 is_current 를 세고 있었다.
+    */
+    const summaryQuery = db<Summary[]>`
       select
         (select count(*)::int from public.standard where is_current)                          as standards,
-        (select count(*)::int from public.clause)                                             as clauses,
-        (select count(distinct clause_id)::int from public.clause_tag)                        as tagged,
+        (select count(*)::int from public.clause c
+          join public.standard s on s.id = c.standard_id where s.is_current)                  as clauses,
+        (select count(distinct t.clause_id)::int from public.clause_tag t
+          join public.clause c on c.id = t.clause_id
+          join public.standard s on s.id = c.standard_id where s.is_current)                  as tagged,
         -- 코드를 붙이는 대상은 "요건" 조항뿐이다(v0.7 §5.3). 정의·적용범위·시험방법에
         -- 코드를 붙이면 아무것도 요구하지 않는 문장이 진짜 요건과 같은 자격으로
         -- 검색에 걸린다. 본문이 거의 없는 조각도 제외한다.
@@ -74,16 +88,27 @@ export default async function StandardsPage() {
           join public.standard s2 on s2.id = c2.standard_id
           where s2.is_current and c2.clause_role = 'REQUIREMENT'
             and length(btrim(c2.body)) >= 15)                                                as taggable,
-        (select count(*)::int from public.clause where embedding is not null)                 as embedded,
-        (select count(*)::int from public.clause
-          where search_text is not null and length(btrim(search_text)) > 0)                   as embeddable,
-        (select count(*)::int from public.clause_link
-          where link_type = 'TEST_METHOD' and to_clause_id is not null)                       as "testLinks",
-        (select count(*)::int from public.test_condition)                                     as conditions,
-        (select count(*)::int from public.clause_link where to_clause_id is null)             as unresolved
+        (select count(*)::int from public.clause c
+          join public.standard s on s.id = c.standard_id
+          where s.is_current and c.embedding is not null)                                     as embedded,
+        (select count(*)::int from public.clause c
+          join public.standard s on s.id = c.standard_id
+          where s.is_current and c.search_text is not null
+            and length(btrim(c.search_text)) > 0)                                             as embeddable,
+        (select count(*)::int from public.clause_link l
+          join public.clause c on c.id = l.from_clause_id
+          join public.standard s on s.id = c.standard_id
+          where s.is_current and l.link_type = 'TEST_METHOD' and l.to_clause_id is not null)   as "testLinks",
+        (select count(*)::int from public.test_condition tc
+          join public.clause c on c.id = tc.clause_id
+          join public.standard s on s.id = c.standard_id where s.is_current)                  as conditions,
+        (select count(*)::int from public.clause_link l
+          join public.clause c on c.id = l.from_clause_id
+          join public.standard s on s.id = c.standard_id
+          where s.is_current and l.to_clause_id is null)                                      as unresolved
     `;
 
-    rows = await db<StandardRow[]>`
+    const rowsQuery = db<StandardRow[]>`
       select
         s.id, s.display_name, s.title_ko, s.cert_scheme, s.item_name, s.total_pages,
         count(c.id)::int as clauses,
@@ -106,6 +131,11 @@ export default async function StandardsPage() {
       group by s.id
       order by count(c.id) desc
     `;
+
+    // 두 조회는 서로의 결과를 쓰지 않는다. 함께 보내면 느린 쪽만큼만 기다린다(§4.1)
+    const [[sum], list] = await Promise.all([summaryQuery, rowsQuery]);
+    summary = sum;
+    rows = list;
   } catch (e) {
     console.error('안전기준 화면 조회 실패:', e);
     error = e instanceof Error ? e.message : String(e);

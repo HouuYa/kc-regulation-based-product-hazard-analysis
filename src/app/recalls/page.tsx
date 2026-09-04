@@ -86,7 +86,7 @@ async function load(params: BoardParams) {
   const origin = params.origin ?? '';
   const check = params.check ?? '';
 
-  const [summary] = await db<Summary[]>`
+  const summaryQuery = db<Summary[]>`
     select
       (select count(*)::int from public.case_event where source_type = 'RECALL_OVERSEAS') as overseas,
       (select count(*)::int from public.case_event where source_type = 'RECALL_DOMESTIC') as domestic,
@@ -114,11 +114,11 @@ async function load(params: BoardParams) {
       ${check ? db`and coalesce(rc.domestic_check, 'UNCHECKED') = ${check}` : db``}
   `;
 
-  const [{ total }] = await db<{ total: number }[]>`
+  const totalQuery = db<{ total: number }[]>`
     select count(*)::int as total from public.recall_cache rc ${where}
   `;
 
-  const rows = await db<RecallRow[]>`
+  const rowsQuery = db<RecallRow[]>`
     select
       rc.id, rc.origin, rc.title, rc.brand, rc.recall_country, rc.hazard_type,
       rc.published_on::text, rc.fetched_at::text, rc.domestic_check, rc.detail_url,
@@ -136,6 +136,21 @@ async function load(params: BoardParams) {
     order by ${db.unsafe(orderBy)} ${db.unsafe(dir)} nulls last, rc.id desc
     limit ${per} offset ${offset}
   `;
+
+  /*
+    세 조회를 동시에 보낸다 (02_1차 보완 및 구현 설계서 §4.1)
+
+    요약 집계·전체 건수·목록은 서로의 결과를 쓰지 않는다. 그런데 차례로 await
+    하면 세 왕복이 앞뒤로 붙어 화면이 뜨는 시각이 셋의 합이 된다. 한꺼번에
+    보내면 가장 느린 하나만큼만 기다린다.
+
+    커넥션 풀이 셋을 동시에 감당한다(postgres.js 기본 10). 하나가 실패하면
+    Promise.all 이 그 오류를 그대로 올리므로, 바깥의 try/catch 가 지금처럼
+    연결 실패 화면을 그린다 — 동작이 달라지지 않는다.
+  */
+  const [[summary], [{ total }], rows] = await Promise.all([
+    summaryQuery, totalQuery, rowsQuery,
+  ]);
 
   return { summary, rows, total, page, per };
 }

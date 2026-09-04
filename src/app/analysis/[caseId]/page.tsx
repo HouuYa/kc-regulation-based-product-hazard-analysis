@@ -153,9 +153,10 @@ async function load(caseId: number) {
     id: number; started_at: string; use_code: boolean; use_keyword: boolean;
     use_vector: boolean; use_rerank: boolean; result_count: number;
     rerank_model: string | null; embedding_model: string | null;
+    rerank_status: 'skipped' | 'ok' | 'failed';
   }[]>`
     select id, started_at::text, use_code, use_keyword, use_vector, use_rerank,
-           result_count, rerank_model, embedding_model
+           result_count, rerank_model, embedding_model, rerank_status
     from public.match_run where case_id = ${caseId}
     order by started_at desc limit 1
   `;
@@ -674,17 +675,34 @@ export default async function AnalysisPage({
                 run.use_code && '코드',
                 run.use_keyword && '어휘',
                 run.use_vector && '의미',
-                run.use_rerank && '재채점',
+                // 재채점을 켰지만 실패한 실행은 "재채점"이라고 적지 않는다.
+                // 순서가 다시 매겨진 것처럼 보이면 담당자가 그 순서를 근거로 읽는다(031)
+                run.use_rerank && (run.rerank_status === 'ok' ? '재채점' : '재채점 안 됨'),
               ]
                 .filter(Boolean)
                 .join(' + ')}
             </div>
           </section>
 
-          {run.use_rerank && run.rerank_model && (
+          {run.rerank_status === 'ok' && run.rerank_model && (
             <p className="mt-2 text-[11px] leading-relaxed text-ink-3">
               순서를 다시 매길 때 AI 를 썼습니다({run.rerank_model}). 저장된 결과는 다시 열어도 그대로지만,
               같은 조건으로 다시 돌리면 순서가 달라질 수 있습니다.
+            </p>
+          )}
+
+          {/*
+            재채점이 실패한 실행 — 침묵하면 안 되는 자리다 (031)
+
+            전에는 리랭커가 죽어도 점수 칸이 그냥 비어 있었다. 그런데 빈 점수는
+            "AI 가 관련성을 낮게 봤다"로도 읽힌다. 담당자가 그 오해 위에서 조항을
+            반려하면, 아무도 채점하지 않은 결과가 반려 근거로 기록에 남는다.
+          */}
+          {run.rerank_status === 'failed' && (
+            <p className="mt-2 border border-caution bg-caution-soft px-3 py-2 text-[11px] leading-relaxed text-caution">
+              순서를 다시 매기는 단계가 실패했습니다. 아래 목록은 검색 점수 순서 그대로이며,
+              재채점 점수는 비어 있습니다 — 관련성이 낮아서가 아니라 채점을 하지 못한 것입니다.
+              분석을 다시 실행하면 재채점이 붙습니다.
             </p>
           )}
 

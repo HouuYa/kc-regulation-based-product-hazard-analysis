@@ -145,3 +145,25 @@ export async function toggleAutoTagging(
     return `바꾸지 못했습니다 — ${e instanceof Error ? e.message : e}`;
   }
 }
+
+/**
+ * 세 번 연속 실패해 넘긴 조항을 다시 대상에 넣는다 (029)
+ *
+ * 실패 원인이 일시적인 것(모델 장애, 요청 한도)이었다면 고친 뒤 다시 돌리면 된다.
+ * 되돌릴 길이 없으면 한 번 실패한 조항은 영영 코드가 붙지 않는다.
+ *
+ * 자동 실행이 꺼져 있을 수 있으므로 켜라는 안내를 함께 준다 — 되돌리기만 하고
+ * 아무 일도 일어나지 않으면 담당자는 버튼이 안 먹었다고 생각한다.
+ */
+export async function resetTagFailures(): Promise<string> {
+  try {
+    const [row] = await getDb()<{ n: number }[]>`
+      select public.reset_tag_failures() as n
+    `;
+    revalidatePath('/ops');
+    if (row.n === 0) return '되돌릴 조항이 없습니다.';
+    return `${row.n}건을 다시 대상에 넣었습니다. 자동 실행을 켜면 다시 시도합니다.`;
+  } catch (e) {
+    return `되돌리지 못했습니다 — ${e instanceof Error ? e.message : e}`;
+  }
+}

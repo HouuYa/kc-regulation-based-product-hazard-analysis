@@ -48,6 +48,17 @@ export interface MatchConfig {
   rrfK: number;
   wCode: number;
   wCodePartial: number;
+  /**
+   * 코드 갈래에 검수 확정 태그만 쓸 것인가 (030)
+   *
+   * 기본은 false — 기존 동작 그대로다. 지금 코드 근거의 몇 %가 미검수인지
+   * 아직 세어 보지 않았고, 그 숫자를 모르는 채 기본 동작을 바꾸면 담당자가 보던
+   * 결과가 하루아침에 달라진다. 켠 결과와 끈 결과를 비교해 보고 정한다.
+   *
+   * 근거등급(evidenceLevel)과는 다른 층이다. 등급은 이미 승인 태그가 있을 때만
+   * A 를 주지만 그것은 "표시를 달리하는 것"이고, 이 스위치는 "후보에서 빼는 것"이다.
+   */
+  requireApprovedTags: boolean;
 }
 
 export interface Candidate {
@@ -170,7 +181,8 @@ export async function searchCandidates(
         ${input.standardIds}::bigint[],
         ${config.candidateCount},
         ${config.useCode}, ${config.useKeyword}, ${config.useVector},
-        ${config.rrfK}, ${config.wCode}, ${config.wCodePartial}
+        ${config.rrfK}, ${config.wCode}, ${config.wCodePartial},
+        ${config.requireApprovedTags}
       )
     )
     select
@@ -261,7 +273,15 @@ export async function persistRun(
   input: MatchInput,
   config: MatchConfig,
   candidates: Candidate[],
-  meta: { embeddingModel: string | null; rerankModel: string | null; shortlist: number },
+  meta: {
+    embeddingModel: string | null;
+    rerankModel: string | null;
+    shortlist: number;
+    /** 재채점을 했는가·건너뛰었는가·실패했는가 (031) */
+    rerankStatus: 'skipped' | 'ok' | 'failed';
+    /** 리랭커 모델·프롬프트 묶음의 판번호 */
+    promptVersion: string | null;
+  },
 ): Promise<number> {
   const db = getDb();
 
@@ -270,11 +290,17 @@ export async function persistRun(
       (case_id, use_code, use_keyword, use_vector, use_rerank,
        rrf_k, w_code, w_code_partial, candidate_count,
        embedding_model, rerank_model, result_count,
-       queried_hf_codes, queried_dt_codes, finished_at)
+       queried_hf_codes, queried_dt_codes, require_approved_tags,
+       -- 그때 무엇을 물었는지까지 남긴다. 사건 서술은 나중에 바뀔 수 있으므로
+       -- 여기서 다시 읽어 오면 그 시점의 질문을 증명할 수 없다(031)
+       query_text, query_keywords, rerank_status, prompt_version, finished_at)
     values (${input.caseId}, ${config.useCode}, ${config.useKeyword}, ${config.useVector},
             ${config.useRerank}, ${config.rrfK}, ${config.wCode}, ${config.wCodePartial},
             ${config.candidateCount}, ${meta.embeddingModel}, ${meta.rerankModel},
-            ${candidates.length}, ${input.hfCodes}::text[], ${input.dtCodes}::text[], now())
+            ${candidates.length}, ${input.hfCodes}::text[], ${input.dtCodes}::text[],
+            ${config.requireApprovedTags},
+            ${input.narrative}, ${input.keywords}::text[],
+            ${meta.rerankStatus}, ${meta.promptVersion}, now())
     returning id
   `;
 

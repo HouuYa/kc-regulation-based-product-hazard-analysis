@@ -121,6 +121,8 @@ async function main() {
     useRerank: false,
     candidateCount: Number(argValue('--candidates') ?? '20'),
     rrfK: t.rrfK, wCode: t.weightCode, wCodePartial: t.weightCodePartial,
+    // 기존 동작 그대로. 검수 확정 태그만 쓰는 구성과의 비교는 npm run eval 에서 한다(030)
+    requireApprovedTags: false,
   };
   const input: MatchInput = {
     caseId: ev.id,
@@ -151,6 +153,9 @@ async function main() {
     embeddingModel: input.embedding ? openaiConfig().embeddingModel : null,
     rerankModel: null,
     shortlist: SHORTLIST,
+    // 이 스크립트는 재채점을 켜지 않는다(useRerank: false) — 껐다는 사실을 남긴다(031)
+    rerankStatus: 'skipped',
+    promptVersion: null,
   });
 
   if (candidates.length === 0) {
