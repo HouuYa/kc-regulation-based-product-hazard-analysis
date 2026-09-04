@@ -33,6 +33,7 @@ const ASIDE = [
   // 세 번째 산출물. 1~3 의 결과가 쌓여야 숫자가 생기므로 흐름 뒤에 둔다
   { href: '/insights',  label: 'KC안전기준 개선 요인', sub: '사각지대·국내외 대조·시험항목' },
   { href: '/ops',      label: '운영',         sub: '상태·알림·접속 관리' },
+  { href: '/terms',    label: '품목 용어 사전', sub: '품목 → 적용기준' },
   { href: '/codebook', label: '위해요인 코드', sub: '참고 문서' },
 ];
 

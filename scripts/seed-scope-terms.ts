@@ -142,7 +142,44 @@ async function main() {
     }
   }
 
+  /*
+    품목 → GPC 브릭도 함께 채운다 (044)
+
+    엑셀의 GPC 열은 전부 BRICK 계위다. 사람이 정한 것이므로 그대로 쓴다.
+    기준과 달리 브릭은 용어 하나에 하나이므로 별도 표에 넣는다.
+  */
+  const gpcPairs = new Map<string, string>();
+  for (const r of data) {
+    const item = (r[6] ?? '').trim();
+    const code = (r[8] ?? '').trim();
+    if (item && /^\d{8}$/.test(code)) gpcPairs.set(item, code);
+  }
+
+  let gpcOk = 0;
+  const gpcMissing: string[] = [];
+  for (const [item, code] of gpcPairs) {
+    const [exists] = await db<{ n: number }[]>`
+      select count(*)::int as n from public.gpc_brick where brick_code = ${code}
+    `;
+    if (exists.n === 0) { gpcMissing.push(`${item} → ${code}`); continue; }
+    if (!dry) {
+      await db`
+        insert into public.scope_term_gpc
+          (term_key, term, brick_code, source, evidence, confidence, review_status, reviewed_by)
+        values (public.scope_term_key(${item}), ${item}, ${code}, 'EXPERT',
+                ${`사고조사 건별 결함조사 항목 목록화(담당자 작성) — "${item}" → ${code}`},
+                1, 'approved', '사고조사 담당자')
+        on conflict (term_key) do update
+          set brick_code = excluded.brick_code, source = 'EXPERT',
+              review_status = 'approved', evidence = excluded.evidence,
+              confidence = 1, updated_at = now()
+      `;
+    }
+    gpcOk++;
+  }
+
   console.log(`엑셀 품목 ${pairs.size}종`);
+  console.log(`GPC 브릭 대응 ${gpcOk}건${gpcMissing.length ? ` (우리 GPC 표에 없는 코드 ${gpcMissing.length}건: ${gpcMissing.join(', ')})` : ''}`);
   console.log(`사전에 넣은 대응 ${inserted}건${dry ? ' (dry — 저장하지 않음)' : ''}`);
   console.log('');
   console.log('우리 DB 에 없어서 못 넣은 기준:');
