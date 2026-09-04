@@ -17,6 +17,7 @@
 
 import { closeDb } from '../src/lib/db';
 import { runAnalysis, defaultMatchConfig, SHORTLIST } from '../src/lib/search/run';
+import { NOT_READY_LABEL, NOT_READY_ACTION } from '../src/lib/search/readiness';
 import type { Candidate } from '../src/lib/search/match';
 
 function argValue(name: string): string | null {
@@ -69,6 +70,16 @@ async function main() {
   console.log(`코드      : HF [${input.hfCodes.join(', ')}] / DT [${input.dtCodes.join(', ')}]`);
   console.log(`적용 기준 : ${input.standardIds?.length ?? 0}건`);
   console.log(`갈래      : 코드=${config.useCode} 키워드=${config.useKeyword} 의미=${config.useVector} 재채점=${config.useRerank}`);
+
+  if (out.notReady.length > 0) {
+    console.log('');
+    console.log('분석할 수 있는 상태가 아닙니다:');
+    for (const r of out.notReady) {
+      console.log(`  ${r} — ${NOT_READY_LABEL[r]}`);
+      console.log(`    ${NOT_READY_ACTION[r]}`);
+    }
+    return;
+  }
 
   if (out.scopeUnresolved) {
     console.log('');

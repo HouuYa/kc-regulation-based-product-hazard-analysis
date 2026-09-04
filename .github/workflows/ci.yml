@@ -45,3 +45,9 @@ jobs:
       # 동적 경로(force-dynamic)라 빌드 시점에 실행되지 않기 때문이다.
       - name: 빌드
         run: npx next build
+
+      # 자격증명을 읽는 파일이 클라이언트 번들로 새지 않았는지 결과물에서 확인한다.
+      # CI 에는 비밀값이 없으므로 모양 대조만 돌지만, 그것만으로도
+      # postgresql:// · sb_secret_ · service_role 이 섞이면 잡힌다.
+      - name: 클라이언트 번들 비밀값 검사
+        run: npm run check:bundle

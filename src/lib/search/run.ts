@@ -24,6 +24,7 @@ import {
   type MatchConfig, type MatchInput, type Candidate, type EmptyReason,
 } from './match';
 import { rerankCandidates } from '../llm/rerank';
+import { checkReadiness, type NotReadyReason } from './readiness';
 import { openaiConfig, tuning } from '../env';
 
 /** 상위 몇 건을 기본 표시할 것인가. 나머지는 감추지 않고 접어 둔다(결정항목 17) */
@@ -32,6 +33,14 @@ export const SHORTLIST = 5;
 export interface RunOutcome {
   /** 품목에 대응하는 기준을 못 찾아 실행하지 않았다 */
   scopeUnresolved: boolean;
+  /**
+   * 자료 상태가 갖춰지지 않아 실행하지 않았다 (readiness.ts)
+   *
+   * 비어 있으면 통과한 것이다. scopeUnresolved 와 나눠 두는 이유는 담당자가
+   * 해야 할 일이 다르기 때문이다 — 이쪽은 자료를 갖추는 일이고,
+   * 저쪽은 품목·기준을 정하는 일이다.
+   */
+  notReady: NotReadyReason[];
   /** 원인(HF)이 확정되지 않은 사건 — 후보를 넓게 건진 것이므로 단정하면 안 된다(v0.7 §7.3) */
   causeUnresolved: boolean;
   input: MatchInput;
@@ -111,10 +120,25 @@ export async function runAnalysis(
   const input = await loadCaseInput(caseId);
   const causeUnresolved = isCauseUnresolved(input.hfCodes);
 
+  /*
+    자료가 갖춰졌는지 먼저 본다 (readiness.ts)
+
+    원문을 아직 아무도 안 본 사고보고서, 원본이 사라진 건, 코드가 없는 건은
+    분석해도 그 결과를 되짚을 수 없다. 결과가 안 나오는 것이 아니라 나온 결과의
+    출처를 말할 수 없다는 것이 문제다 — 그것이 이 체계가 지키기로 한 선이다.
+  */
+  const readiness = await checkReadiness(caseId);
+  if (!readiness.ready) {
+    return {
+      scopeUnresolved: false, notReady: readiness.reasons, causeUnresolved, input, config,
+      candidates: [], emptyReason: null, runId: null,
+    };
+  }
+
   // v0.7 §3.2: 품목이 불명확하면 전 품목 검색을 자동 실행하지 않는다
   if (!input.standardIds?.length) {
     return {
-      scopeUnresolved: true, causeUnresolved, input, config,
+      scopeUnresolved: true, notReady: [], causeUnresolved, input, config,
       candidates: [], emptyReason: null, runId: null,
     };
   }
@@ -171,5 +195,8 @@ export async function runAnalysis(
   // 0건도 1급 산출물이다 — 왜 0건인지를 남긴다(2.3 결정 A, v0.7 §7.8)
   const emptyReason = candidates.length === 0 ? await diagnoseEmpty(input) : null;
 
-  return { scopeUnresolved: false, causeUnresolved, input, config, candidates, emptyReason, runId };
+  return {
+    scopeUnresolved: false, notReady: [], causeUnresolved,
+    input, config, candidates, emptyReason, runId,
+  };
 }

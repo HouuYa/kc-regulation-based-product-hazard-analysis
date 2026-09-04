@@ -9,6 +9,7 @@
     "start": "cross-env NODE_OPTIONS=--use-system-ca next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
+    "check:bundle": "tsx scripts/check-client-bundle.ts",
     "db:push": "tsx scripts/db-push.ts",
     "codebook:load": "tsx codebook/scripts/load-codebook.ts",
     "codebook:inspect": "tsx codebook/scripts/inspect-codebook.ts",
@@ -41,6 +42,7 @@
     "postgres": "^3.4.9",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "server-only": "^0.0.1",
     "sharp": "^0.35.4",
     "unpdf": "^1.3.2",
     "zod": "^4.1.0"

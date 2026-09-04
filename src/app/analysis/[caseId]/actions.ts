@@ -3,6 +3,7 @@
 import { revalidatePath } from 'next/cache';
 import { getDb } from '@/lib/db';
 import { runAnalysis } from '@/lib/search/run';
+import { NOT_READY_LABEL, NOT_READY_ACTION } from '@/lib/search/readiness';
 import type { Decision } from './review-options';
 
 /**
@@ -71,7 +72,13 @@ export async function runAnalysisAction(
   try {
     const out = await runAnalysis(caseId);
 
-    if (out.scopeUnresolved) {
+    if (out.notReady.length > 0) {
+      // 자료가 안 갖춰져 실행하지 않았다. 무엇이 빠졌고 다음에 무엇을 하면 되는지
+      // 둘 다 말해 준다 — 사유만 말하면 담당자는 그다음을 또 물어야 한다
+      message =
+        '아직 분석할 수 있는 상태가 아닙니다. ' +
+        out.notReady.map((r) => `${NOT_READY_LABEL[r]} — ${NOT_READY_ACTION[r]}`).join(' / ');
+    } else if (out.scopeUnresolved) {
       // 실측으로 드러난 자리 — 버튼을 눌렀는데 화면이 아무 말도 안 하던 경우다.
       // 설계상 이때는 분석을 만들지 않는 것이 맞지만(v0.7 §3.2), 그 사실을 말해
       // 주지 않으면 담당자는 버튼이 고장 난 줄 안다.

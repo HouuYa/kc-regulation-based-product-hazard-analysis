@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { getDb } from '@/lib/db';
 import { PageHead, ConnectionError, EmptyState, Row, TermsNote } from '@/components/Panel';
 import { StatusBar } from '@/components/StatusBar';
@@ -49,6 +50,8 @@ interface Summary {
   testLinks: number;
   conditions: number;
   unresolved: number;
+  /** 아직 사람이 확인하지 않은 코드가 붙은 조항 수 (037) */
+  unreviewedClauses: number;
 }
 
 /** 표 머리글과 각 줄이 같은 칸 배분을 쓴다. 한 곳에서 정의해 어긋나지 않게 한다 */
@@ -105,7 +108,11 @@ export default async function StandardsPage() {
         (select count(*)::int from public.clause_link l
           join public.clause c on c.id = l.from_clause_id
           join public.standard s on s.id = c.standard_id
-          where s.is_current and l.to_clause_id is null)                                      as unresolved
+          where s.is_current and l.to_clause_id is null)                                      as unresolved,
+        (select count(distinct t.clause_id)::int from public.clause_tag t
+          join public.clause c on c.id = t.clause_id
+          join public.standard s on s.id = c.standard_id
+          where s.is_current and t.review_status = 'auto_unreviewed')                          as "unreviewedClauses"
     `;
 
     const rowsQuery = db<StandardRow[]>`
@@ -158,6 +165,38 @@ export default async function StandardsPage() {
       />
 
       {error && <ConnectionError error={error} />}
+
+      {/*
+        검수 화면으로 가는 길 (037)
+
+        코드 검수는 이 화면의 숫자와 이어져 있다 — 확정한 코드만 근거등급 A 로
+        제시되고, 검색 스위치를 켤 수 있게 된다. 그런데 검수 화면이 아무 데서도
+        보이지 않으면 담당자는 그런 화면이 있는 줄도 모른다. 실제로 그 화면이
+        없던 동안 조항 태그가 100% 미검수로 남아 있었다.
+      */}
+      {summary && summary.unreviewedClauses > 0 && (
+        <div className="mt-8 border border-caution bg-caution-soft px-4 py-3">
+          <div className="text-[13px] font-semibold text-caution">
+            사람이 확인하지 않은 코드가 있습니다
+          </div>
+          <p className="mt-1.5 text-[12px] leading-relaxed text-ink-2">
+            조항{' '}
+            <span className="addr tnum text-ink">
+              {summary.unreviewedClauses.toLocaleString()}개
+            </span>
+            의 위해요인 코드를 AI가 붙인 뒤 아직 아무도 확인하지 않았습니다. 확인해야
+            분석 결과에서 근거등급 A로 제시되고, 「검수 확정분만 사용」 설정을 켤 수 있습니다.
+          </p>
+          <div className="mt-3">
+            <Link
+              href="/standards/review"
+              className="inline-block border border-caution bg-caution px-4 py-2 text-[13px] font-medium text-white hover:opacity-85"
+            >
+              코드 검수하러 가기
+            </Link>
+          </div>
+        </div>
+      )}
 
       {summary && (
         <div id="standards-status" className="scroll-mt-8">
