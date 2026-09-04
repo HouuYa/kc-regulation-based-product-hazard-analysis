@@ -118,7 +118,13 @@ export default async function StandardsPage() {
       <PageHead
         label="1 · 안전기준"
         title="들여온 기준과 준비 상태"
-        lead="조항 수만 봐서는 분석할 수 있는지 알 수 없습니다. 위해요인 코드가 있어야 코드로 찾을 수 있고, 시험방법이 이어져 있어야 찾아낸 조항에서 실제 시험까지 갈 수 있습니다."
+        lead="기준을 확인하고, 조항과 시험방법이 분석에 쓸 수 있는 상태인지 봅니다."
+        workflow={[
+          { label: '기준 확인' },
+          { label: '조항 확인', href: '#standards-list' },
+          { label: '시험방법 확인' },
+          { label: '분석에 사용' },
+        ]}
       />
 
       {error && <ConnectionError error={error} />}

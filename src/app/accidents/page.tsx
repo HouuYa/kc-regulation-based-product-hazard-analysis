@@ -169,7 +169,13 @@ export default async function AccidentsPage({
       <PageHead
         label="2 · 사고보고서"
         title="사고보고서와 안전기준 연계 분석"
-        lead="개인정보를 지운 PDF 를 올리면 안에 있는 글자를 뽑아냅니다. 담당자가 그 글자를 확인해 주면 분석할 수 있게 되고, 사고에 붙은 위해요인 코드로 관련될 만한 안전기준 조항을 찾아 드립니다."
+        lead="PDF를 올리고 원문을 확인하면, 사고와 관련될 수 있는 안전기준 조항을 찾습니다."
+        workflow={[
+          { label: 'PDF 등록', href: '#accidents-upload' },
+          { label: '원문 확인' },
+          { label: '분석 실행' },
+          { label: '후보 검토', href: '#accidents-list' },
+        ]}
       />
 
       <DoneBanner message={done} />

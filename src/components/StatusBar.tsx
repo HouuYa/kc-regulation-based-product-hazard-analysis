@@ -42,7 +42,12 @@ function Metric({ label, value, of, note, href, wantsZero }: MetricItem) {
           <span className="addr tnum text-[13px] text-ink-3">/ {of.toLocaleString()}</span>
         )}
       </div>
-      {note && <div className="mt-1.5 text-[11px] leading-snug text-ink-3">{note}</div>}
+      {note && (
+        <details className="mt-1.5 text-[11px] leading-snug text-ink-3">
+          <summary className="cursor-pointer hover:text-ink">설명</summary>
+          <div className="mt-1">{note}</div>
+        </details>
+      )}
     </div>
   );
 
@@ -57,7 +62,7 @@ function Metric({ label, value, of, note, href, wantsZero }: MetricItem) {
 
 export function StatusBar({ items }: { items: MetricItem[] }) {
   return (
-    <section className="mt-9 grid grid-cols-2 gap-x-8 gap-y-6 md:grid-cols-4">
+    <section className="mt-8 grid grid-cols-2 gap-x-5 gap-y-4 md:mt-9 md:gap-x-8 md:gap-y-6 md:grid-cols-4">
       {items.map((m) => (
         <Metric key={m.label} {...m} />
       ))}

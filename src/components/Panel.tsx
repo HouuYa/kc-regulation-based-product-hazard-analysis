@@ -50,13 +50,36 @@ export function TermsNote() {
 
 /** 화면 머리 — 라벨·제목·한 줄 설명. 화면마다 같은 자리에 같은 형태로 둔다 */
 export function PageHead({
-  label, title, lead,
-}: { label: string; title: string; lead?: string }) {
+  label, title, lead, workflow,
+}: {
+  label: string;
+  title: string;
+  lead?: string;
+  workflow?: Array<{ label: string; href?: string }>;
+}) {
   return (
     <header>
       <div className="label">{label}</div>
       <h1 className="mt-2 text-[26px] leading-tight font-semibold tracking-tight">{title}</h1>
       {lead && <p className="mt-3 max-w-2xl text-[13px] leading-relaxed text-ink-2">{lead}</p>}
+      {workflow && workflow.length > 0 && (
+        <nav className="mt-5 border-y border-rule-soft py-3" aria-label="업무 흐름">
+          <ol className="flex flex-wrap items-center gap-y-1 text-[12px] text-ink-2">
+            {workflow.map((step, index) => (
+              <li key={step.label} className="flex items-center">
+                {index > 0 && <span className="mx-2 text-ink-3" aria-hidden="true">→</span>}
+                {step.href ? (
+                  <Link href={step.href} className="underline decoration-rule underline-offset-2 hover:text-measure">
+                    {step.label}
+                  </Link>
+                ) : (
+                  <span className="font-medium text-ink">{step.label}</span>
+                )}
+              </li>
+            ))}
+          </ol>
+        </nav>
+      )}
     </header>
   );
 }

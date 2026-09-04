@@ -265,7 +265,13 @@ export default async function OpsPage() {
       <PageHead
         label="운영"
         title="시스템이 지금 제대로 돌고 있는가"
-        lead="자동으로 도는 일들의 상태, 최근에 무엇이 처리됐는지, 사람이 봐야 할 문제, 알림과 접속 관리를 한자리에 모았습니다. 평소에는 볼 일이 없어야 정상입니다."
+        lead="자동 작업 상태와 확인할 문제를 보여 줍니다. 문제가 없으면 조치할 일이 없습니다."
+        workflow={[
+          { label: '현재 상태' },
+          { label: '확인할 문제', href: '#ops-attention' },
+          { label: '필요한 작업', href: '#ops-actions' },
+          { label: '처리 내역', href: '#ops-recent' },
+        ]}
       />
 
       {error && <ConnectionError error={error} />}

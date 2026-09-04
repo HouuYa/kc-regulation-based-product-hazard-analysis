@@ -129,7 +129,12 @@ export default async function CodebookPage() {
       <PageHead
         label="참고 · 위해요인 코드"
         title={version ? `코드북 ${version.version}` : '위해요인 코드북'}
-        lead="원인(HF)과 결과(DT)를 나눠 붙이는 두 갈래 코드입니다. 안전기준 조항과 사고보고서가 같은 코드를 쓰기 때문에 서로 맞춰 볼 수 있습니다. 여기서는 보기만 하고 고치지 않습니다."
+        lead="사고 원인과 피해 유형을 나눠 보는 코드 목록입니다. 이 화면에서는 내용을 바꾸지 않습니다."
+        workflow={[
+          { label: '현재 판 확인' },
+          { label: '코드 뜻 보기', href: '#codebook-hf' },
+          { label: '변경 확인', href: '#codebook-current' },
+        ]}
       />
 
       {error && <ConnectionError error={error} />}

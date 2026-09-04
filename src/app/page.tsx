@@ -1,5 +1,5 @@
 import { getDb } from '@/lib/db';
-import { ConnectionError, TermsNote } from '@/components/Panel';
+import { ConnectionError, PageHead, TermsNote } from '@/components/Panel';
 import { StatusBar } from '@/components/StatusBar';
 
 export const dynamic = 'force-dynamic';
@@ -83,17 +83,17 @@ export default async function OverviewPage() {
 
   return (
     <div className="mx-auto max-w-5xl px-6 py-10 lg:px-10 lg:py-14">
-      <header>
-        <div className="label">개요</div>
-        <h1 className="mt-2 text-[28px] leading-tight font-semibold tracking-tight">
-          분석을 돌릴 수 있는 상태인가
-        </h1>
-        <p className="mt-3 max-w-xl text-[13px] leading-relaxed text-ink-2">
-          조항에 위해요인 코드가 붙지 않았거나 시험방법 연결이 없으면, 검색 결과 0건은
-          <span className="text-ink"> 기준에 조항이 없다</span>는 뜻이 아니라
-          <span className="text-ink"> 아직 준비가 안 됐다</span>는 뜻입니다. 먼저 여기를 봅니다.
-        </p>
-      </header>
+      <PageHead
+        label="개요"
+        title="분석을 시작할 수 있는 상태인가"
+        lead="먼저 준비 상태를 보고, 다음에 확인할 자료와 검토 결과를 엽니다."
+        workflow={[
+          { label: '준비 상태 확인' },
+          { label: '사고·리콜 확인' },
+          { label: '분석 결과 검토' },
+          { label: '판단 기록' },
+        ]}
+      />
 
       {error && <ConnectionError error={error} />}
 

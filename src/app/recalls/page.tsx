@@ -172,7 +172,13 @@ export default async function RecallsPage({
       <PageHead
         label="3 · 리콜"
         title="리콜과 안전기준 연계 분석"
-        lead="해외·국내에서 리콜된 제품이 우리 안전기준의 어느 조항과 맞닿는지 찾아 드립니다. 리콜 자료는 협회 원본 표에서 저절로 들어오고 위해요인 코드도 붙어서 옵니다."
+        lead="리콜 자료를 확인하고 국내 유통 여부를 기록한 뒤, 관련될 수 있는 안전기준을 찾습니다."
+        workflow={[
+          { label: '리콜 수집' },
+          { label: '국내 유통 확인' },
+          { label: '분석 실행' },
+          { label: '결과 검토', href: '#recalls-list' },
+        ]}
       />
 
       <DoneBanner message={done} />

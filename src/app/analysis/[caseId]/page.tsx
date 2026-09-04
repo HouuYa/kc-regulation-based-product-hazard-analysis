@@ -406,6 +406,25 @@ export default async function AnalysisPage({
         <h1 className="mt-2 max-w-2xl text-[24px] leading-snug font-semibold tracking-tight">
           {ev.title ?? ev.narrative.slice(0, 60)}
         </h1>
+        <nav className="mt-5 border-y border-rule-soft py-3" aria-label="업무 흐름">
+          <ol className="flex flex-wrap items-center gap-y-1 text-[12px] text-ink-2">
+            {[
+              ['사건 내용 확인', '#analysis-case'],
+              ['품목·기준 확인', '#analysis-scope'],
+              ['후보 조항 확인', '#analysis-results'],
+              ['채택·반려 기록', undefined],
+            ].map(([label, href], index) => (
+              <li key={label} className="flex items-center">
+                {index > 0 && <span className="mx-2 text-ink-3" aria-hidden="true">→</span>}
+                {href ? (
+                  <a href={href} className="underline decoration-rule underline-offset-2 hover:text-measure">{label}</a>
+                ) : (
+                  <span className="font-medium text-ink">{label}</span>
+                )}
+              </li>
+            ))}
+          </ol>
+        </nav>
         {/*
           원문을 접어 둔다 (담당자 요청: "사고보고서 분석 페이지가 너무 길어요")
 
