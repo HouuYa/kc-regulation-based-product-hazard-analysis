@@ -158,25 +158,42 @@ async function loadOne(filename: string, force: boolean): Promise<string> {
 
   const extracted = await extractPdf(new Uint8Array(bytes));
 
-  // 원본은 불변층에 보관한다(§7.1). Storage 버킷이 없어도 추출 결과까지 버리지 않는다 —
-  // 보관만 건너뛰고 진행해야 담당자가 다시 올리지 않아도 된다.
+  /*
+    원본은 불변층에 보관한다(§7.1). 보관에 실패하면 여기서 멈춘다.
+
+    전에는 보관만 건너뛰고 진행했다 — "추출 결과까지 버리면 담당자가 다시 올려야
+    하기 때문"이었다. 그런데 그렇게 하면 사건이 만들어지고 분석까지 이어지는데
+    원본 PDF 는 어디에도 없다. 사고보고서는 개인정보 때문에 저장소에 두지 않으므로
+    Storage 가 유일한 보관처다. 즉 조항 결과에서 원문 페이지로 되짚을 길이 영영
+    사라진다 — 이 체계가 지키기로 한 것이 바로 그 되짚기다(02 설계서 §3.3).
+
+    화면 업로드(src/app/accidents/actions.ts)는 이미 이렇게 고쳤는데 이 스크립트는
+    옛 동작 그대로였다. 같은 일을 하는 두 입구가 다르게 굴면, 어느 쪽으로 들어온
+    자료인지에 따라 보관 여부가 달라진다(CLAUDE.md §9).
+
+    추출 결과는 버리지 않는다. status='error' 로 남기므로 담당자가 무엇이 왜
+    막혔는지 볼 수 있고, 버킷을 고친 뒤 --force 로 다시 돌리면 된다.
+  */
   let storagePath: string | null = null;
+  let storageError: string | null = null;
   try {
     storagePath = await putOriginal('accident', sha256, filename, bytes, 'application/pdf');
   } catch (e) {
-    // 조용히 넘어가되 원인은 남긴다 — 예전에 이 자리가 완전히 침묵해서
+    // 원인은 반드시 남긴다 — 예전에 이 자리가 완전히 침묵해서
     // "Invalid key"(한글 파일명) 버그를 한참 찾아야 했다.
-    console.warn(`  경고: 원본 보관 실패 (${filename}): ${e instanceof Error ? e.message : e}`);
-    storagePath = null;
+    storageError = e instanceof Error ? e.message : String(e);
+    console.error(`  원본 보관 실패 (${filename}): ${storageError}`);
   }
 
   const blocked = extracted.piiFindings.length > 0;
-  const status = blocked || extracted.looksScanned ? 'error' : 'extracted';
-  const errorReason = blocked
-    ? `개인정보로 보이는 값 발견: ${extracted.piiFindings.map((p) => `${p.kind} ${p.count}건`).join(', ')}`
-    : extracted.looksScanned
-      ? '텍스트 레이어가 없는 스캔본으로 보입니다. OCR 이 필요합니다.'
-      : null;
+  const status = storageError || blocked || extracted.looksScanned ? 'error' : 'extracted';
+  const errorReason = storageError
+    ? `원본 보관에 실패해 분석 대상으로 넘기지 않았습니다: ${storageError}`
+    : blocked
+      ? `개인정보로 보이는 값 발견: ${extracted.piiFindings.map((p) => `${p.kind} ${p.count}건`).join(', ')}`
+      : extracted.looksScanned
+        ? '텍스트 레이어가 없는 스캔본으로 보입니다. OCR 이 필요합니다.'
+        : null;
 
   if (dup && force) {
     // 원본·사건을 함께 다시 만든다. case_event 는 source_file_id 참조라 cascade 되지 않으므로 직접 정리한다.
