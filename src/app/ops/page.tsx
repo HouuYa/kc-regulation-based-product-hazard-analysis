@@ -64,6 +64,8 @@ interface RunRow {
   started_at: string;
   status_code: number | null;
   response: string | null;
+  /** 이 구간에 대한 몇 번째 시도인가. 1 이 최초, 2 이상이면 자동 재시도다(035) */
+  attempt: number;
 }
 
 interface Data {
@@ -74,6 +76,13 @@ interface Data {
   parkedRows: { target_table: string; row_id: number; attempts: number; last_error: string | null }[];
   cronFailures: { jobname: string; end_time: string; message: string | null }[];
   alerts: { kind: string; body: string; status_code: number | null; sent_at: string }[];
+  /** 자동 복구 현황 — 스스로 다시 돌린 것과 결국 포기한 것(035) */
+  recovery: {
+    retried: number;
+    gaveUp: number;
+    taggingRecovered: number;
+    embeddingRecovered: number;
+  };
   taggable: number;
   /** 세 번 연속 실패해 자동 대상에서 빠진 조항. 남은 건수와 절대 합치지 않는다(029) */
   stalledTagging: number;
@@ -136,8 +145,29 @@ async function load(): Promise<{ data: Data | null; error: string | null }> {
     `;
 
     const runs = await db<RunRow[]>`
-      select job, started_at::text, status_code, response
+      select job, started_at::text, status_code, response, attempt
       from public.job_run order by started_at desc limit 8
+    `;
+
+    /*
+      자동 복구가 무엇을 하고 있는가 (035)
+
+      담당자 지적에서 나온 화면이다 — "막힌 것을 자동으로 다시 돌려야 하는 것
+      아닌가". 이제 자동으로 돌리지만, 자동으로 도는 것일수록 무엇이 몇 번
+      되풀이되고 있는지 보여야 한다. 조용히 매일 같은 일을 다시 하고 있으면
+      그것은 고쳐진 것이 아니다.
+    */
+    const [recovery] = await db<Data['recovery'][]>`
+      select
+        (select count(*)::int from public.job_run
+          where attempt > 1 and started_at > now() - interval '24 hours')      as retried,
+        (select count(*)::int from public.job_run j
+          where j.attempt >= 3 and j.status_code >= 500
+            and j.started_at > now() - interval '24 hours')                    as gaveUp,
+        (select coalesce(sum(affected), 0)::int from public.recovery_log
+          where kind = 'tagging' and ran_at > now() - interval '7 days')       as taggingRecovered,
+        (select coalesce(sum(affected), 0)::int from public.recovery_log
+          where kind = 'embedding' and ran_at > now() - interval '7 days')     as embeddingRecovered
     `;
 
     const parkedRows = await db<Data['parkedRows']>`
@@ -189,6 +219,7 @@ async function load(): Promise<{ data: Data | null; error: string | null }> {
     return {
       data: {
         ops, embed, jobs, runs, parkedRows, cronFailures, alerts,
+        recovery,
         taggable: t.n, stalledTagging: t.stalled,
         autoTagging: at.on, embeddedToday: e.n, jobsConfigured: j.ok,
       },
@@ -236,11 +267,17 @@ function when(iso: string | null): string {
 
 /** 라우트가 돌려준 JSON 요약을 사람이 읽을 문장으로 */
 function describeRun(r: RunRow): string {
-  if (r.status_code == null) return '결과를 기다리는 중';
-  if (r.status_code !== 200) return `실패 (HTTP ${r.status_code}) ${(r.response ?? '').slice(0, 120)}`;
+  // 자동 재시도로 생긴 실행임을 먼저 밝힌다 — 같은 작업이 여러 줄 보이는 이유다
+  const retry = r.attempt > 1 ? `[자동 재시도 ${r.attempt}회차] ` : '';
+  if (r.status_code == null) return `${retry}결과를 기다리는 중`;
+  if (r.status_code !== 200) {
+    const gaveUp = r.attempt >= 3 ? ' — 재시도 한도에 이르러 더 시도하지 않습니다' : '';
+    return `${retry}실패 (HTTP ${r.status_code})${gaveUp} ${(r.response ?? '').slice(0, 100)}`;
+  }
   try {
     const j = JSON.parse(r.response ?? '{}');
     if (r.job === 'recalls-fetch') {
+      if (retry) return `${retry}조회 ${j.received ?? 0}건 · 새로 들어옴 ${j.newCase ?? 0}건`;
       return `조회 ${j.received ?? 0}건 · 새로 들어옴 ${j.newCase ?? 0}건 · 코드 부여 ${j.tagged ?? 0}건`;
     }
     if (r.job === 'standards-sync') {
@@ -406,6 +443,45 @@ export default async function OpsPage() {
               title="확인이 필요한 것"
               lead="자동으로 풀리지 않아 사람의 판단이 필요한 항목입니다."
             >
+              {/*
+                자동 복구가 한 일을 먼저 보여 준다 (035)
+
+                이 화면의 원래 뜻은 "사람이 볼 것"인데, 그 앞에 "기계가 이미 처리한 것"을
+                두는 이유가 있다. 자동 복구는 조용히 돌기 때문에, 무엇이 몇 번 되풀이되고
+                있는지 적어 두지 않으면 "문제가 없다"와 "매일 같은 문제를 덮고 있다"가
+                화면에서 똑같아 보인다. 뒤쪽이면 그건 고쳐진 것이 아니다.
+              */}
+              <div className="mb-5 border border-rule-soft px-4 py-3">
+                <div className="text-[13px] font-semibold">스스로 되돌린 것 (최근)</div>
+                <p className="mt-1.5 text-[12px] leading-relaxed text-ink-2">
+                  실패한 정기 작업 자동 재시도{' '}
+                  <span className="addr tnum text-ink">{data.recovery.retried}건</span>
+                  {' · '}재시도 한도까지 갔는데도 실패{' '}
+                  <span className={`addr tnum ${data.recovery.gaveUp > 0 ? 'text-halt' : 'text-ink'}`}>
+                    {data.recovery.gaveUp}건
+                  </span>
+                  <span className="text-ink-3"> (최근 24시간)</span>
+                </p>
+                <p className="mt-1 text-[12px] leading-relaxed text-ink-2">
+                  세워 둔 것을 다시 대상에 넣은 횟수 — 위해요인 코드{' '}
+                  <span className="addr tnum text-ink">{data.recovery.taggingRecovered}건</span>
+                  {' · '}의미 검색 준비{' '}
+                  <span className="addr tnum text-ink">{data.recovery.embeddingRecovered}건</span>
+                  <span className="text-ink-3"> (최근 7일)</span>
+                </p>
+                {data.recovery.gaveUp > 0 && (
+                  <p className="mt-2 text-[11px] leading-relaxed text-halt">
+                    세 번까지 다시 시도했는데도 실패한 작업이 있습니다. 일시적인 장애가
+                    아니라는 뜻이므로 아래 「최근 처리」에서 사유를 확인해 주세요.
+                  </p>
+                )}
+                <p className="mt-2 text-[11px] leading-relaxed text-ink-3">
+                  정기 작업은 실패하면 5분 안에 스스로 두 번까지 다시 시도합니다.
+                  세워 둔 코드 부여와 의미 검색 준비는 매일 새벽에 다시 대상에 들어갑니다.
+                  같은 건수가 며칠 내리 반복되면 자동으로 풀리지 않는 것이므로 알림을 보냅니다.
+                </p>
+              </div>
+
               {data.parkedRows.length > 0 && (
                 <div className="border border-halt bg-halt-soft px-4 py-3">
                   <div className="text-[13px] font-semibold text-halt">

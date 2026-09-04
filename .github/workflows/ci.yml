@@ -1,0 +1,47 @@
+# 푸시할 때마다 스스로 검사한다
+#
+# 왜 만들었나
+#   이 저장소에는 검사가 자동으로 도는 자리가 없었다. lint 는 설정 자체가 없어
+#   한 번도 돌아간 적이 없고, typecheck 와 build 는 사람이 기억해서 손으로 돌렸다.
+#   기억에 기대는 검사는 바쁠 때 가장 먼저 빠진다.
+#
+# 왜 배포를 막지 않는가
+#   Netlify 빌드와 분리해 두었다. lint 경고 때문에 배포가 멈추면, 급할 때
+#   사람들은 검사를 끄는 쪽을 택하게 된다. 여기서는 결과만 알려 주고,
+#   배포를 막을지는 나중에 경고가 0 이 된 뒤에 정한다.
+#
+# 왜 build 까지 하는가
+#   typecheck 만으로는 안 잡히는 것이 있다. 서버 전용 코드가 클라이언트 번들로
+#   새는 경우가 그렇고, 실제로 이 저장소가 조심하는 항목이다(src/lib/recall/source.ts).
+
+name: 검사
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: 의존성 설치
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: 타입 검사
+        run: npm run typecheck
+
+      # 빌드에는 DB·외부 연결이 필요 없다. 화면 조회는 요청이 올 때 도는
+      # 동적 경로(force-dynamic)라 빌드 시점에 실행되지 않기 때문이다.
+      - name: 빌드
+        run: npx next build

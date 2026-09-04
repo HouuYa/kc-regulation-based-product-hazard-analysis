@@ -7,7 +7,7 @@
     "dev": "cross-env NODE_OPTIONS=--use-system-ca next dev",
     "build": "cross-env NODE_OPTIONS=--use-system-ca next build",
     "start": "cross-env NODE_OPTIONS=--use-system-ca next start",
-    "lint": "next lint",
+    "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "db:push": "tsx scripts/db-push.ts",
     "codebook:load": "tsx codebook/scripts/load-codebook.ts",
@@ -46,12 +46,15 @@
     "zod": "^4.1.0"
   },
   "devDependencies": {
+    "@eslint/eslintrc": "^3.3.7",
     "@tailwindcss/postcss": "^4.1.0",
     "@types/node": "^22.10.0",
     "@types/react": "^19.1.0",
     "@types/react-dom": "^19.1.0",
     "cross-env": "^10.1.0",
     "dotenv": "^17.2.0",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "^15.5.25",
     "tailwindcss": "^4.1.0",
     "tsx": "^4.20.0",
     "typescript": "^5.9.0"
