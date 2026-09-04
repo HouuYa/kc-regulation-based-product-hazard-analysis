@@ -88,7 +88,8 @@ async function main() {
     try {
       // ── 1단계: 품목 확정 (v0.7 §3.2) ──────────────────────────────────
       const itemName = c.item_name ?? extractItemName(c.extracted_text);
-      const scope = itemName ? await resolveProductScope(itemName) : null;
+      // 사건 서술을 함께 넘긴다 — 품목 이름만으로는 신호가 짧아 의미 검색이 흔들린다
+      const scope = itemName ? await resolveProductScope(itemName, c.narrative) : null;
 
       if (scope) {
         resolved++;

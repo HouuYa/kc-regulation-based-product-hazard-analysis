@@ -17,6 +17,7 @@
  */
 
 import { getDb } from '../db';
+import { resolveScopeSemantically } from './scope-semantic';
 
 export interface ResolvedScope {
   productScopeId: number | null;
@@ -26,7 +27,7 @@ export interface ResolvedScope {
   standardCount: number;
   /** 왜 이 품목·기준으로 봤는가. 화면과 감사에 그대로 쓴다 */
   evidence: string;
-  method: '품목명 일치' | '별칭 일치' | '적용범위 검색';
+  method: '용어 사전' | '품목명 일치' | '별칭 일치' | '적용범위 검색' | '적용범위 의미 검색';
 }
 
 /** "전지_보조배터리" → ["전지", "보조배터리"] 처럼 후보를 넓힌다 */
@@ -76,9 +77,50 @@ async function withGeneralPart(standardIds: number[]): Promise<number[]> {
   return [...new Set([...standardIds.map(Number), ...parts.map((p) => Number(p.id))])];
 }
 
-export async function resolveProductScope(itemName: string): Promise<ResolvedScope | null> {
+export async function resolveProductScope(
+  itemName: string,
+  /** 사건 서술. 있으면 의미 검색의 신호가 훨씬 좋아진다 — 품목 이름만으로는 짧다 */
+  narrative?: string | null,
+): Promise<ResolvedScope | null> {
   const db = getDb();
   const cands = variants(itemName);
+
+  /*
+    ── 0) 용어 사전 (042) ────────────────────────────────────────────────
+
+    가장 먼저 본다. 담당자가 사고조사에서 정한 대응이 여기 있고, 사람이 정한 것을
+    두고 기계가 다시 고를 이유가 없다. 조회 한 번이라 공짜이고, 같은 품목에 늘
+    같은 기준이 붙는다 — 의미 검색은 모델이 흔들리면 결과도 흔들린다.
+
+    반려된 대응은 쓰지 않는다. 담당자가 아니라고 한 것을 계속 쓰면 검수가 뜻이 없다.
+  */
+  const dictHits = await db<{ id: number; display_name: string; source: string; review_status: string }[]>`
+    select s.id, s.display_name, t.source, t.review_status
+    from public.scope_term t
+    join public.standard s on s.id = t.standard_id
+    where t.term_key = public.scope_term_key(${itemName})
+      and t.review_status <> 'rejected'
+      and s.is_current
+    order by case t.source when 'EXPERT' then 1 else 2 end, s.display_name
+  `;
+
+  if (dictHits.length > 0) {
+    const ids = await withGeneralPart(dictHits.map((h) => h.id));
+    const expert = dictHits.filter((h) => h.source === 'EXPERT').length;
+    const unreviewed = dictHits.filter((h) => h.review_status === 'auto_unreviewed').length;
+    return {
+      productScopeId: null,
+      scopeName: itemName,
+      standardIds: ids,
+      standardCount: ids.length,
+      evidence:
+        `용어 사전 — "${itemName}" → ${dictHits.map((h) => h.display_name).join(', ')}` +
+        (expert > 0 ? ` (담당자 확정 ${expert}건)` : '') +
+        (unreviewed > 0 ? ` · 미검수 ${unreviewed}건 포함` : '') +
+        (ids.length > dictHits.length ? ` · 제1부 ${ids.length - dictHits.length}건 포함` : ''),
+      method: '용어 사전',
+    };
+  }
 
   // ── 1) 등록된 품목 (이름 또는 별칭) ───────────────────────────────────
   const [exact] = await db<{ id: number; name: string }[]>`
@@ -123,7 +165,61 @@ export async function resolveProductScope(itemName: string): Promise<ResolvedSco
     limit 10
   `;
 
-  if (hits.length === 0) return null;
+  /*
+    ── 3) 뜻으로 찾기 (2026-09-04 추가) ──────────────────────────────────
+
+    글자 검색이 못 잡으면 의미로 찾는다. 실측으로 드러난 간극 때문이다 —
+    기준의 적용범위는 법령 용어를, 사고보고서는 일상 용어를 쓴다.
+
+      전기요     ← KC 60335-2-17 은 "전기 담요, 패드들, 의류" 라고 쓴다
+      전기레인지  ← KC 60335-2-6 은 "거치형 조리레인지, 호브, 오븐" 이라고 쓴다
+
+    사고보고서 70건에 돌려 보니 이 두 경로로 품목이 붙은 것이 7건(10%)뿐이었다.
+    의미 검색 + 모델 확인을 붙이니 사람이 지목한 기준을 10건 중 8건 맞혔다
+    (scope-semantic.ts 주석에 실측이 있다).
+
+    여기서도 제1부를 함께 넣는다 — KC 60335-2-23 을 골랐다면 요구사항의 대부분은
+    제1부에 있고, 실제로 담당자도 두 기준을 함께 적었다(엑셀 55건 중 17건이 2종 이상).
+  */
+  if (hits.length === 0) {
+    const semantic = await resolveScopeSemantically(itemName, narrative);
+    if (!semantic) return null;
+
+    const ids = await withGeneralPart([semantic.standardId]);
+
+    /*
+      찾아낸 대응을 사전에 쌓는다. 미검수로 넣으므로 담당자가 확인하기 전까지는
+      "AI 가 이렇게 봤다"는 표시가 붙은 채로 쓰인다.
+
+      다음부터 같은 품목은 AI 를 부르지 않는다 — 한 번 정해진 대응은 지식이고,
+      지식은 저장해야 공짜가 되고 항상 같아진다. 저장에 실패해도 이번 결과는
+      그대로 쓴다. 사전은 거들 뿐이고 없어도 동작해야 한다.
+    */
+    try {
+      await db`
+        insert into public.scope_term
+          (term, term_key, standard_id, source, evidence, confidence)
+        values (${itemName}, public.scope_term_key(${itemName}), ${semantic.standardId},
+                'SEMANTIC', ${semantic.reasoning.slice(0, 1000)}, ${semantic.confidence})
+        on conflict (term_key, standard_id) do nothing
+      `;
+    } catch (e) {
+      console.warn(`용어 사전 저장 실패 ("${itemName}"):`, e instanceof Error ? e.message : e);
+    }
+
+    return {
+      // 아직 품목으로 등록하지 않는다. 담당자가 확인한 뒤 등록하는 것이 순서다.
+      productScopeId: null,
+      scopeName: itemName,
+      standardIds: ids,
+      standardCount: ids.length,
+      evidence:
+        `적용범위 의미 검색 — ${semantic.displayName} (확신 ${semantic.confidence.toFixed(2)}, ` +
+        `후보 ${semantic.candidateCount}종 중) · ${semantic.reasoning}` +
+        (ids.length > 1 ? ` · 제1부 ${ids.length - 1}건 포함` : ''),
+      method: '적용범위 의미 검색',
+    };
+  }
 
   const withParts = await withGeneralPart(hits.map((h) => h.id));
 
