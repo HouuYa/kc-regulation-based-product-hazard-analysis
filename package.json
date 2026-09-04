@@ -25,6 +25,7 @@
     "search": "cross-env NODE_OPTIONS=--use-system-ca tsx scripts/search.ts",
     "eval": "cross-env NODE_OPTIONS=--use-system-ca tsx scripts/eval.ts",
     "eval:build-key": "tsx scripts/build-answer-key.ts",
+    "eval:compare": "cross-env NODE_OPTIONS=--use-system-ca tsx scripts/compare-testitems.ts",
     "codebook:emit": "tsx codebook/scripts/emit-codebook-sql.ts",
     "standards:sync": "tsx scripts/sync-standards.ts",
     "cases:load": "cross-env NODE_OPTIONS=--use-system-ca tsx scripts/load-cases.ts",

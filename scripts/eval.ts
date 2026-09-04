@@ -108,7 +108,24 @@ async function loadCase(caseId: number): Promise<MatchInput> {
   };
 }
 
-/** 정답셋의 (기준명, 조항번호)를 실제 clause id 로 옮긴다 */
+/**
+ * 정답셋의 (기준명, 조항번호)를 실제 clause id 로 옮긴다.
+ *
+ * 하위 조항까지 정답으로 친다 — 계위가 다르기 때문이다 (2026-09-04 수정)
+ *   담당자는 사고조사에서 **절 단위**로 적는다. "KC 60335-1 절 15 내습성",
+ *   "절 16 누설전류 및 절연내력" 처럼. 그런데 우리 색인은 그 아래 조항 단위다
+ *   (15.1, 15.1.1, 15.3 …). IEC 계열에서 절 자체는 제목만 있는 껍데기다 —
+ *   실제로 재 보니 절 15 의 본문이 3자, 절 16 이 11자였다.
+ *
+ *   정확히 일치하는 것만 정답으로 치면, 시스템이 15.3 을 옳게 찾아도 오답이 된다.
+ *   껍데기 조항은 본문이 없어 코드도 임베딩도 붙지 않으므로 애초에 검색될 수 없다.
+ *   그 상태로 잰 재현율은 시스템의 성능이 아니라 계위 차이를 잰 것이다.
+ *
+ *   그래서 "절 15" 를 정답으로 적었으면 15 와 그 아래(15.1, 15.1.1 …)를 모두
+ *   정답으로 본다. 담당자가 "내습성을 보라"고 한 뜻에 맞는 해석이다.
+ *
+ *   반대로 넓히지는 않는다 — 15 를 지목했는데 14 나 16 을 찾은 것은 오답이다.
+ */
 async function resolveExpected(
   expected: Array<{ standard: string; marker: string; part?: string }>,
 ): Promise<Set<number>> {
@@ -120,7 +137,9 @@ async function resolveExpected(
       join public.standard s on s.id = c.standard_id
       where s.is_current
         and s.display_name ilike ${'%' + e.standard + '%'}
-        and c.marker = ${e.marker}
+        -- 절 자체와 그 아래 조항까지. "15" 는 15 와 15.x 를 뜻하고,
+        -- "15." 로 시작하는 것만 잡으므로 150 이나 15A 는 걸리지 않는다
+        and (c.marker = ${e.marker} or c.marker like ${e.marker + '.%'})
         ${e.part ? db`and c.part = ${e.part}` : db``}
     `;
     if (rows.length === 0) {

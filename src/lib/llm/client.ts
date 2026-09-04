@@ -132,15 +132,39 @@ export async function structuredVisionCall<T>(args: {
  *   모델을 바꿔 차원이 달라지면 삽입이 실패하는데, 그 실패가 배치 한복판에서
  *   나면 어디까지 처리됐는지 되짚기 어렵다. 첫 응답에서 바로 잡는다.
  */
+/**
+ * 임베딩 모델이 한 번에 받는 최대 길이는 8,192 토큰이다. 그 이상은 400 으로 죽는다.
+ *
+ * 실제로 겪었다 — 조항 2,994건을 임베딩하다 **한 건**(14,584자) 때문에 배치 전체가
+ * 죽어 2,994건이 통째로 밀렸다. 평균은 280자다. 만분의 일짜리 예외가 전부를 막는다.
+ *
+ * 한국어는 글자당 토큰이 1을 넘는 경우가 많아 글자 수로 넉넉히 잡는다. 6,000자면
+ * 최악의 경우에도 8,192 토큰 안쪽이고, 이 저장소에서 그보다 긴 것은 표가 통째로
+ * 들어간 조항 하나뿐이었다.
+ *
+ * 자르는 것이 옳은가 — 자르지 않으면 그 조항은 의미 검색에서 아예 빠진다.
+ * 앞부분만이라도 있는 편이 없는 것보다 낫다. 다만 조용히 자르지는 않는다.
+ */
+const MAX_EMBED_CHARS = 6000;
+
 export async function embedBatch(texts: string[]): Promise<number[][]> {
   if (texts.length === 0) return [];
   // 차원을 환경변수로 바꾸려 한 배포를 시작하는 자리에서 잡는다(§4.5)
   assertEmbeddingDim();
   const cfg = openaiConfig();
 
+  const input = texts.map((t) => {
+    if (t.length <= MAX_EMBED_CHARS) return t;
+    console.warn(
+      `임베딩 입력이 길어 잘랐습니다: ${t.length}자 → ${MAX_EMBED_CHARS}자 ` +
+      `(앞부분 "${t.slice(0, 40).replace(/\s+/g, ' ')}…")`,
+    );
+    return t.slice(0, MAX_EMBED_CHARS);
+  });
+
   const res = await getOpenAI().embeddings.create({
     model: cfg.embeddingModel,
-    input: texts,
+    input,
     dimensions: cfg.embeddingDim,
   });
 
