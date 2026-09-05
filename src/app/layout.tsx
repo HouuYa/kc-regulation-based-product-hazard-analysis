@@ -28,13 +28,19 @@ const STAGES = [
   { no: '3', href: '/recalls',   label: '리콜',       sub: '수집·현황·분석' },
 ];
 
-/** 업무 흐름 위에 있지 않은 것들 — 번호를 주지 않고 선 아래에 둔다 */
+/**
+ * 업무 흐름 위에 있지 않은 것들 — 번호를 주지 않고 선 아래에 둔다
+ *
+ * 순서는 담당자가 손대는 빈도를 따른다(담당자 요청, 2026-09-05).
+ * 산출물이 먼저, 찾아보는 참고 자료가 다음, 평소 할 일이 없는 운영이 마지막이다.
+ * 운영은 상태가 이상할 때만 여는 화면이라 눈길이 가는 자리에 둘 이유가 없다.
+ */
 const ASIDE = [
   // 세 번째 산출물. 1~3 의 결과가 쌓여야 숫자가 생기므로 흐름 뒤에 둔다
-  { href: '/insights',  label: 'KC안전기준 개선 요인', sub: '사각지대·국내외 대조·시험항목' },
-  { href: '/ops',      label: '운영',         sub: '상태·알림·접속 관리' },
-  { href: '/terms',    label: '품목 용어 사전', sub: '품목 → 적용기준' },
-  { href: '/codebook', label: '위해요인 코드', sub: '참고 문서' },
+  { href: '/insights', label: 'KC안전기준 개선 요인', sub: '사각지대·국내외 대조·시험항목' },
+  { href: '/terms',    label: '품목 용어 사전',       sub: '품목 → 적용기준' },
+  { href: '/codebook', label: '위해요인 코드',        sub: '참고 문서' },
+  { href: '/ops',      label: '운영',                sub: '상태·알림·접속 관리' },
 ];
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

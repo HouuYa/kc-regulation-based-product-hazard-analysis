@@ -6,8 +6,8 @@ import { PageToc, type TocItem } from '@/components/PageToc';
 export const dynamic = 'force-dynamic';
 
 const CODEBOOK_TOC: TocItem[] = [
-  { id: 'codebook-current', label: '현재 코드북 판' },
-  { id: 'codebook-bridge', label: '결과 → 원인 다리' },
+  { id: 'codebook-current', label: '현재 버전' },
+  { id: 'codebook-bridge', label: '위해원인 추정' },
   { id: 'codebook-hf', label: '위해요인 HF' },
   { id: 'codebook-dt', label: '피해유형 DT' },
 ];
@@ -31,7 +31,7 @@ const ROUTE_LABEL: Record<CauseRoute, { name: string; hint: string }> = {
  * 지금 무엇이 유효한지와 버전이 바뀌면 무엇이 영향을 받는지만 보여 준다.
  *
  * 버전이 바뀔 때를 다루는 방법 (담당자 요청으로 추가)
- *   코드북이 개정되면 이미 붙여 놓은 코드가 옛 판 기준이 된다. 그런데 그 사실이
+ *   코드북이 개정되면 이미 붙여 놓은 코드가 이전 버전 기준이 된다. 그런데 그 사실이
  *   지금까지 어디에도 보이지 않았다. DB 에는 이미 재료가 다 있었다 —
  *   태깅마다 codebook_version 이 기록돼 있고(003·004), 두 판의 차이를 계산하는
  *   diff_versions() 함수도 있다(codebook/sql/002). 화면으로 꺼내기만 하면 됐다.
@@ -71,10 +71,52 @@ const CHANGE_LABEL: Record<string, string> = {
   CHANGED: '이름·정의 바뀜',
 };
 
+/** 코드의 두 번째 마디가 대분류다. HF.H.ELEC.INS → H(하드웨어) */
+const HF_GROUPS: Record<string, string> = {
+  H: '하드웨어 — 제품 자체의 결함',
+  E: '환경 — 쓰이는 조건',
+  M: '관리 — 설계·품질·인증 관리',
+  S: '절차·기준',
+  L0: '사용자',
+  L1: '관련자 — 제조·유통·판매',
+  UNKNOWN: '미확인',
+};
+
+const DT_GROUPS: Record<string, string> = {
+  THERMAL: '열 — 화재·화상',
+  ELECTRIC: '전기 — 감전',
+  MECHANICAL: '기계 — 상해·추락',
+  CHEMICAL: '화학 — 중독·환경',
+  ASPHYX: '질식 — 삼킴·목조임·익사',
+  BODY: '신체 — 사망·감각',
+  'NON-PHYS': '비신체 — 재산·심리',
+  OTHER: '기타',
+};
+
+/**
+ * 코드를 대분류로 묶는다. 목록이 길어 한 줄씩 늘어놓으면 갈래가 안 보인다.
+ *
+ * 대분류에 없는 코드가 나와도 버리지 않고 「그 밖」으로 모은다 — 코드북이 개정돼
+ * 새 갈래가 생겼을 때 화면에서 조용히 사라지면 안 된다.
+ */
+function groupCodes(rows: CodeRow[], labels: Record<string, string>): Array<[string, CodeRow[]]> {
+  const byKey = new Map<string, CodeRow[]>();
+  for (const c of rows) {
+    const key = c.code.split('.')[1] ?? 'UNKNOWN';
+    (byKey.get(key) ?? byKey.set(key, []).get(key)!).push(c);
+  }
+  const order = Object.keys(labels);
+  return [...byKey.entries()]
+    .sort((a, b) => {
+      const ia = order.indexOf(a[0]); const ib = order.indexOf(b[0]);
+      return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib);
+    })
+    .map(([key, list]) => [labels[key] ?? `그 밖 (${key})`, list]);
+}
+
 export default async function CodebookPage() {
   let version: { version: string; effective_date: string | null } | null = null;
   let codes: CodeRow[] = [];
-  let constraints: { subject_prefix: string; requires_any_of: string[]; reason: string }[] = [];
   let usage: UsageRow[] = [];
   let diffs: DiffRow[] = [];
   let staleVersion: string | null = null;
@@ -91,14 +133,7 @@ export default async function CodebookPage() {
         select axis, code, name_ko, definition, depth, is_recall_common
         from public.get_codes(${version.version}, null, true)
       `;
-      constraints = await db<typeof constraints>`
-        select c.subject_prefix, c.requires_any_of, c.reason
-        from codebook.code_constraint c
-        join codebook.version v on v.id = c.version_id
-        where v.version = ${version.version} and c.rule_type = 'REQUIRES_ANY_OF'
-      `;
-
-      // 어느 판으로 붙인 코드가 몇 건인가 — 개정 시 영향 범위의 근거
+      // 어느 버전으로 붙인 코드가 몇 건인가 — 개정 시 영향 범위의 근거
       usage = await db<UsageRow[]>`
         select codebook_version,
                count(*) filter (where src = 'clause')::int as clause_tags,
@@ -144,7 +179,7 @@ export default async function CodebookPage() {
         title={version ? `코드북 ${version.version}` : '위해요인 코드북'}
         lead="사고 원인과 피해 유형을 나눠 보는 코드 목록입니다. 이 화면에서는 내용을 바꾸지 않습니다."
         workflow={[
-          { label: '현재 판 확인' },
+          { label: '현재 버전 확인' },
           { label: '코드 뜻 보기', href: '#codebook-hf' },
           { label: '변경 확인', href: '#codebook-current' },
         ]}
@@ -154,17 +189,17 @@ export default async function CodebookPage() {
 
       {!error && !version && (
         <EmptyState
-          message="유효한 코드북 판이 없습니다."
+          message="유효한 코드북 버전이 없습니다."
           commands={[
             { cmd: 'npm run codebook:inspect', note: '넣기 전에 읽어들인 결과를 확인합니다' },
-            { cmd: 'npm run codebook:load -- --activate', note: '새 판을 넣고 지금 쓰는 판으로 바꿉니다' },
+            { cmd: 'npm run codebook:load -- --activate', note: '새 버전을 넣고 현재 버전으로 바꿉니다' },
           ]}
         />
       )}
 
       {version && (
         <section id="codebook-current" className="mt-9 scroll-mt-8 border-t border-rule pt-5">
-          <div className="label">지금 쓰는 판</div>
+          <div className="label">현재 버전</div>
           <div className="mt-2 flex flex-wrap items-baseline gap-x-4 gap-y-1">
             <span className="addr text-[20px] font-medium">{version.version}</span>
             {version.effective_date && (
@@ -177,7 +212,7 @@ export default async function CodebookPage() {
 
           {usage.length > 0 && (
             <div className="mt-4">
-              <div className="label pb-1">판별로 붙어 있는 코드</div>
+              <div className="label pb-1">버전별로 붙어 있는 코드</div>
               {usage.map((u) => {
                 const isCurrent = u.codebook_version === version!.version;
                 return (
@@ -191,7 +226,7 @@ export default async function CodebookPage() {
                     <span className="text-ink-3">
                       조항 {u.clause_tags.toLocaleString()}건 · 사건 {u.case_tags.toLocaleString()}건
                     </span>
-                    {!isCurrent && <span className="text-caution">옛 판 기준입니다</span>}
+                    {!isCurrent && <span className="text-caution">이전 버전 기준입니다</span>}
                   </div>
                 );
               })}
@@ -201,7 +236,7 @@ export default async function CodebookPage() {
           {staleVersion && (
             <div className="mt-5 border border-caution bg-caution-soft px-4 py-3">
               <div className="text-[13px] font-semibold text-caution">
-                옛 판({staleVersion})으로 붙은 코드가 남아 있습니다
+                이전 버전({staleVersion})으로 붙은 코드가 남아 있습니다
               </div>
               <p className="mt-1.5 text-[12px] leading-relaxed text-ink-2">
                 아래는 {staleVersion} 에서 {version.version} 로 오면서 달라진 코드입니다.
@@ -221,7 +256,7 @@ export default async function CodebookPage() {
                   </div>
                 ))}
                 {diffs.length === 0 && (
-                  <p className="text-[12px] text-ink-2">두 판 사이에 코드 목록 변화는 없습니다.</p>
+                  <p className="text-[12px] text-ink-2">두 버전 사이에 코드 목록 변화는 없습니다.</p>
                 )}
               </div>
             </div>
@@ -229,7 +264,7 @@ export default async function CodebookPage() {
 
           <details className="mt-5">
             <summary className="cursor-pointer text-[12px] text-ink-3 hover:text-ink">
-              새 판이 나왔을 때 하는 일
+              새 버전을 적용하는 절차
             </summary>
             <ol className="mt-3 space-y-2 text-[12px] leading-relaxed text-ink-2">
               <li>
@@ -240,38 +275,25 @@ export default async function CodebookPage() {
               <li>
                 <span className="text-ink">2.</span>{' '}
                 <code className="addr text-ink">npm run codebook:load -- --activate</code> —
-                새 판을 넣고 유효 판으로 지정합니다. 옛 판은 지워지지 않고 남습니다.
+                새 버전을 넣고 현재 버전으로 지정합니다. 이전 버전은 지워지지 않고 남습니다.
               </li>
               <li>
-                <span className="text-ink">3.</span> 이 화면으로 돌아와 위의 「옛 판으로 붙은 코드」
+                <span className="text-ink">3.</span> 이 화면으로 돌아와 위의 「이전 버전으로 붙은 코드」
                 를 확인합니다. 없어진 코드가 있으면 그 범위만 다시 코드 부여를 합니다 —
                 운영 화면의 「위해요인 코드 부여」 또는{' '}
                 <code className="addr text-ink">npm run tag -- --retag</code>.
               </li>
             </ol>
             <p className="mt-3 text-[11px] leading-relaxed text-ink-3">
-              담당자가 검수해 확정한 코드는 다시 부여해도 덮어쓰지 않습니다(§3.3). 판을 바꿔도
-              사람이 내린 판단은 그대로 남습니다.
+              담당자가 검수해 확정한 코드는 다시 부여해도 덮어쓰지 않습니다(§3.3). 버전을 바꿔도
+              사람이 내린 판단은 그대로 남습니다. 버전을 바꿔도 마찬가지입니다.
             </p>
           </details>
         </section>
       )}
 
-      {constraints.length > 0 && (
-        <section className="mt-9 border border-caution bg-caution-soft px-4 py-3">
-          <div className="label text-caution">단독 사용 금지</div>
-          {constraints.map((c) => (
-            <p key={c.subject_prefix} className="mt-1.5 text-[12px] leading-relaxed text-ink-2">
-              <span className="addr text-ink">{c.subject_prefix}.*</span> 는{' '}
-              <span className="addr text-ink">{c.requires_any_of.join(' 또는 ')}</span> 와 함께
-              기록해야 합니다. {c.reason}
-            </p>
-          ))}
-        </section>
-      )}
-
       {/*
-        결과 → 원인 다리
+        피해유형(DT)에 따른 위해원인(HF) 추정
 
         HF 목록과 DT 목록은 있었지만 둘을 잇는 줄이 없었다. 사고보고서 77%가 원인
         미상이라 담당자는 피해에서 원인을 짐작해야 하는데, 그 짐작을 도울 근거가
@@ -283,7 +305,7 @@ export default async function CodebookPage() {
       {bridge.length > 0 && (
         <section id="codebook-bridge" className="mt-10 scroll-mt-8">
           <h2 className="text-[15px] font-semibold">
-            결과 → 원인 다리
+            피해유형(DT)에 따른 위해원인(HF) 추정
             <span className="addr ml-2 text-[12px] font-normal text-ink-3">{bridge.length}</span>
           </h2>
           <p className="mt-2 max-w-3xl text-[12px] leading-relaxed text-ink-3">
@@ -392,43 +414,57 @@ export default async function CodebookPage() {
         </section>
       )}
 
+      {/*
+        코드 목록은 참고 자료다 (담당자 확인, 2026-09-05)
+
+        전에는 64개(HF)·16개(DT)가 한 줄씩 죽 늘어서 있어 어디까지가 한 갈래인지
+        보이지 않았다. 코드 체계 자체가 대분류를 갖고 있으므로 그대로 묶어 준다 —
+        HF 는 M-SHELL 대분류(하드웨어·환경·관리·절차·사람), DT 는 피해 갈래다.
+        대분류는 코드의 두 번째 마디에 들어 있어 따로 조회할 필요가 없다.
+      */}
       {[
-        { title: '위해요인 (HF) — 왜 위험했는가', rows: hf },
-        { title: '피해유형 (DT) — 어떤 피해가 났는가', rows: dt },
+        { id: 'codebook-hf', title: '위해요인 (HF) — 왜 위험했는가', rows: hf, groups: HF_GROUPS },
+        { id: 'codebook-dt', title: '피해유형 (DT) — 어떤 피해가 났는가', rows: dt, groups: DT_GROUPS },
       ].map(
-        (group) =>
-          group.rows.length > 0 && (
-            <section
-              key={group.title}
-              id={group.title.includes('(HF)') ? 'codebook-hf' : 'codebook-dt'}
-              className="mt-10 scroll-mt-8"
-            >
+        (axis) =>
+          axis.rows.length > 0 && (
+            <section key={axis.id} id={axis.id} className="mt-10 scroll-mt-8">
               <h2 className="text-[15px] font-semibold">
-                {group.title}
+                {axis.title}
                 <span className="addr ml-2 text-[12px] font-normal text-ink-3">
-                  {group.rows.length}
+                  {axis.rows.length}
                 </span>
               </h2>
-              <div className="mt-3">
-                {group.rows.map((c) => (
-                  <div key={c.code} className="border-t border-rule py-2.5">
-                    <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                      <span
-                        className="addr text-[12px]"
-                        style={{ paddingLeft: `${(c.depth - 2) * 14}px` }}
-                      >
-                        {c.code}
-                      </span>
-                      <span className="text-[13px] font-medium">{c.name_ko}</span>
-                      {!c.is_recall_common && (
-                        <span className="border border-caution px-1.5 text-[10px] text-caution">
-                          병기 필요
-                        </span>
-                      )}
+              <p className="mt-1.5 text-[12px] text-ink-3">
+                참고용 목록입니다. 이 화면에서는 내용을 바꾸지 않습니다.
+              </p>
+
+              <div className="mt-4 grid gap-x-8 gap-y-6 lg:grid-cols-2">
+                {groupCodes(axis.rows, axis.groups).map(([label, rows]) => (
+                  <div key={label} className="break-inside-avoid">
+                    <div className="label border-b border-rule pb-1">
+                      {label}
+                      <span className="addr ml-2 font-normal text-ink-3">{rows.length}</span>
                     </div>
-                    {c.definition && (
-                      <p className="mt-0.5 text-[12px] leading-snug text-ink-3">{c.definition}</p>
-                    )}
+                    {rows.map((c) => (
+                      <div key={c.code} className="border-b border-rule-soft py-1.5">
+                        <div
+                          className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5"
+                          style={{ paddingLeft: `${Math.max(0, c.depth - 2) * 12}px` }}
+                        >
+                          <span className="text-[13px] font-medium">{c.name_ko}</span>
+                          <span className="addr text-[10px] text-ink-3">{c.code}</span>
+                          {!c.is_recall_common && (
+                            <span className="border border-caution px-1 text-[10px] text-caution">
+                              병기 필요
+                            </span>
+                          )}
+                        </div>
+                        {c.definition && (
+                          <p className="mt-0.5 text-[11px] leading-snug text-ink-3">{c.definition}</p>
+                        )}
+                      </div>
+                    ))}
                   </div>
                 ))}
               </div>
