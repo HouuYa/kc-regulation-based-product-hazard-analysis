@@ -93,6 +93,15 @@ export async function resolveProductScope(
     같은 기준이 붙는다 — 의미 검색은 모델이 흔들리면 결과도 흔들린다.
 
     반려된 대응은 쓰지 않는다. 담당자가 아니라고 한 것을 계속 쓰면 검수가 뜻이 없다.
+
+    LLM 제안만 확정 전에는 쓰지 않는다 (2026-09-05)
+      의미 검색(SEMANTIC)은 미검수라도 쓴다. 근거가 기준 **자신의 적용범위 원문**과의
+      유사도이기 때문이다 — 기준이 스스로 무엇을 다루는지 적어 놓은 것에 기댄다.
+
+      LLM 제안은 다르다. 애초에 적용범위 원문이 비어 있어서 물어본 것이라(등기구 3종이
+      그랬다) 조항 제목과 모델의 일반 지식으로 미룬 것이다. 근거가 한 겹 얕다.
+      품목이 틀리면 엉뚱한 기준의 시험이 나오고, 그것은 조용히 틀리는 종류의 고장이라
+      사람이 한 번은 봐야 한다.
   */
   const dictHits = await db<{ id: number; display_name: string; source: string; review_status: string }[]>`
     select s.id, s.display_name, t.source, t.review_status
@@ -100,6 +109,7 @@ export async function resolveProductScope(
     join public.standard s on s.id = t.standard_id
     where t.term_key = public.scope_term_key(${itemName})
       and t.review_status <> 'rejected'
+      and (t.source <> 'LLM' or t.review_status = 'approved')
       and s.is_current
     order by case t.source when 'EXPERT' then 1 else 2 end, s.display_name
   `;
