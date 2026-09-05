@@ -54,6 +54,37 @@ interface ResultRow {
   test_methods: Array<{ marker: string; body: string | null }> | null;
   decision: string | null;
   reject_reason: string | null;
+  /** 이 조항이 속한 절의 제목. 절 껍데기 조항에서 끌어온다 */
+  section_title: string | null;
+}
+
+/**
+ * 결과를 절로 묶는다 (04 §7.2)
+ *
+ * 검색은 이미 절 단위로 돈다(run.ts). 표시만 평평한 채로 남아 있어서, 담당자가
+ * "절 15 를 보라"고 읽는 방식과 화면이 어긋나 있었다.
+ *
+ * 하위 조항을 감추지 않는다 — 실측에서 담당자가 적는 계위가 계열마다 달랐다.
+ * 전기용품은 절 단위 64%, 생활·어린이는 조항 단위 94%다. 절을 머리에 두고 그 아래
+ * 조항을 펼쳐 두면 한 화면이 둘 다 감당한다.
+ */
+function groupResults(rows: ResultRow[]): Array<{
+  key: string; section: string; title: string | null; standard: string | null; rows: ResultRow[];
+}> {
+  const out: Array<{ key: string; section: string; title: string | null; standard: string | null; rows: ResultRow[] }> = [];
+  const index = new Map<string, number>();
+  for (const r of rows) {
+    const section = r.marker.includes('.') ? r.marker.slice(0, r.marker.indexOf('.')) : r.marker;
+    const key = `${r.standard_name ?? ''}::${section}`;
+    const at = index.get(key);
+    if (at === undefined) {
+      index.set(key, out.length);
+      out.push({ key, section, title: r.section_title, standard: r.standard_name, rows: [r] });
+    } else {
+      out[at].rows.push(r);
+    }
+  }
+  return out;
 }
 
 interface CaseEventRow {
@@ -186,7 +217,27 @@ async function load(caseId: number) {
           (select rl.decision from public.review_log rl
            where rl.match_result_id = r.id order by rl.created_at desc limit 1) as decision,
           (select rl.reject_reason from public.review_log rl
-           where rl.match_result_id = r.id order by rl.created_at desc limit 1) as reject_reason
+           where rl.match_result_id = r.id order by rl.created_at desc limit 1) as reject_reason,
+          /*
+            이 조항이 속한 절의 제목 (2026-09-05)
+
+            담당자는 "절 15 를 보라"고 말하는데 화면은 "15.1"만 보여 줬다. 절 번호만으로는
+            무슨 시험인지 알 수 없어 조항을 하나씩 열어 봐야 했다. 절 껍데기 조항이
+            제목을 갖고 있으므로(IEC 계열에서 절은 제목만 있는 껍데기다) 그것을 끌어온다.
+
+            같은 부(part)의 절을 골라야 한다 — 실측으로 걸러 낸 함정이다.
+            KC 60335-1 에는 marker='11' 인 조항이 본문·부속서 B·E·H·P·S 로 여섯 개 있고,
+            본문에서는 "온도 상승"이지만 부속서 E 에서는 "시험 결과의 평가"다. 부를 맞추지
+            않고 본문 길이로 골랐더니 온도 상승 조항에 엉뚱한 제목이 붙었다.
+          */
+          (select coalesce(nullif(trim(sec.title_raw), ''), nullif(trim(sec.body), ''))
+             from public.clause sec
+            where sec.standard_id = c.standard_id
+              and sec.marker = split_part(c.marker, '.', 1)
+              and sec.part is not distinct from c.part
+            -- 제목이 있는 것을 먼저, 그다음 본문이 짧은 것(껍데기가 곧 제목이다)
+            order by (sec.title_raw is null), length(coalesce(sec.body, ''))
+            limit 1) as section_title
         from public.match_result r
         join public.clause c   on c.id = r.clause_id
         join public.standard s on s.id = c.standard_id
@@ -439,6 +490,33 @@ function CauseResult({ c }: { c: SearchCandidate }) {
         </p>
       )}
     </article>
+  );
+}
+
+/** 절 하나와 그 아래 걸린 조항들 */
+function SectionBlock({
+  group, caseId,
+}: {
+  group: { section: string; title: string | null; standard: string | null; rows: ResultRow[] };
+  caseId: number;
+}) {
+  // 절 제목이 본문에서 온 경우 문장 전체가 올 수 있어 앞머리만 쓴다
+  const title = group.title?.replace(/\s+/g, ' ').trim().slice(0, 60) ?? null;
+
+  return (
+    <section className="mt-4 border-t-2 border-rule pt-3">
+      <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+        <h3 className="text-[14px] font-semibold">
+          절 <span className="addr">{group.section}</span>
+          {title && <span className="ml-2 font-medium">{title}</span>}
+        </h3>
+        <span className="text-[11px] text-ink-3">{group.standard}</span>
+        <span className="ml-auto text-[11px] text-ink-3">조항 {group.rows.length}건</span>
+      </div>
+      <div className="pl-3">
+        {group.rows.map((r) => <Candidate key={r.id} r={r} caseId={caseId} />)}
+      </div>
+    </section>
   );
 }
 
@@ -920,7 +998,9 @@ export default async function AnalysisPage({
               )}
 
               <div className="mt-2">
-                {shortlist.map((r) => <Candidate key={r.id} r={r} caseId={ev.id} />)}
+                {groupResults(shortlist).map((g) => (
+                  <SectionBlock key={g.key} group={g} caseId={ev.id} />
+                ))}
               </div>
 
               {rest.length > 0 && (
@@ -932,7 +1012,9 @@ export default async function AnalysisPage({
                     </span>
                   </summary>
                   <div className="mt-1">
-                    {rest.map((r) => <Candidate key={r.id} r={r} caseId={ev.id} />)}
+                    {groupResults(rest).map((g) => (
+                      <SectionBlock key={g.key} group={g} caseId={ev.id} />
+                    ))}
                   </div>
                 </details>
               )}
