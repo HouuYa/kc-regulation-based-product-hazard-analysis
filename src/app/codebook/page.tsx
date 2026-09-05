@@ -322,7 +322,8 @@ export default async function CodebookPage() {
                   <span className="text-[13px] font-medium">{rows[0].dtName ?? dtCode}</span>
                   <span className="addr ml-2 text-[11px] text-ink-3">{dtCode}</span>
                   <span className="ml-3 text-[11px] text-ink-3">
-                    사건 {rows[0].sampleSize.toLocaleString()}건에서 원인 후보 {rows.length}개
+                    해외 리콜에서 이 피해가 난 사건 {rows[0].sampleSize.toLocaleString()}건 ·
+                    원인 후보 {rows.length}개
                   </span>
                 </summary>
                 <div className="mt-2 overflow-x-auto">
@@ -331,9 +332,9 @@ export default async function CodebookPage() {
                       <tr className="text-ink-3">
                         <th className="py-1 pr-3 text-left font-normal">원인</th>
                         <th className="py-1 pr-3 text-left font-normal">확인 경로</th>
-                        <th className="py-1 pr-3 text-right font-normal">근거</th>
+                        <th className="py-1 pr-3 text-right font-normal">함께 적힌 건수</th>
                         <th className="py-1 pr-3 text-right font-normal">비율</th>
-                        <th className="py-1 text-right font-normal">특이도</th>
+                        <th className="py-1 text-right font-normal">향상도</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -365,11 +366,29 @@ export default async function CodebookPage() {
             ))}
           </div>
 
-          <p className="mt-3 max-w-3xl text-[11px] leading-relaxed text-ink-3">
-            비율은 그 피해가 난 사건 중 이 원인이 함께 적힌 비율입니다. 특이도는 그 원인이
-            이 피해에 유난히 몰리는 정도이고, 1에 가까우면 어느 사고에나 붙는 흔한 원인이라
-            후보에서 뺍니다 — 설계결함이 그런 경우입니다.
-          </p>
+          {/*
+            숫자의 뜻을 표 밑에 적어 둔다 (담당자 지적, 2026-09-05)
+
+            "59%" 만 보이면 "이 사건이 그 원인일 확률" 로 읽힌다. 아니다 — 해외 리콜이라는
+            다른 자료에서 관찰된 비율이다. 게다가 한 사건에 원인이 여럿 붙어 합이 100%를 넘는다.
+
+            향상도를 처음에 "특이도"라고 적었는데 통계에서 특이도(specificity)는 전혀 다른
+            지표다. 아는 사람이 볼수록 더 헷갈리는 표기여서 바로잡았다.
+          */}
+          <dl className="mt-3 max-w-3xl border-t border-rule pt-3 text-[11px] leading-relaxed text-ink-3">
+            <dt className="font-semibold text-ink-2">함께 적힌 건수 · 비율</dt>
+            <dd className="mb-2">
+              해외 리콜에서 그 피해가 난 사건 중 이 원인이 함께 적힌 건수와 비율입니다.
+              사고 한 건에 원인이 여럿 붙을 수 있어 비율을 다 더하면 100%를 넘습니다.
+              <strong className="font-semibold"> 특정 사건이 그 원인일 확률이 아닙니다.</strong>
+            </dd>
+            <dt className="font-semibold text-ink-2">향상도</dt>
+            <dd>
+              그 원인이 이 피해에 유난히 몰리는 정도입니다. 평소 나오는 비율과 견줘
+              몇 배인지를 뜻하고, 1에 가까우면 어느 사고에나 붙는 흔한 원인이라 후보에서
+              뺍니다 — 설계결함(0.96)이 그런 경우입니다.
+            </dd>
+          </dl>
         </section>
       )}
 

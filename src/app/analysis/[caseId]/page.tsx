@@ -366,11 +366,24 @@ function CausePicker({
 }: { caseId: number; candidates: CauseCandidate[]; picked: string[] }) {
   return (
     <form method="get" action={`/analysis/${caseId}`} className="mt-4 border border-rule px-4 py-3.5">
-      <div className="label">원인 후보 — 이 피해에서 실제로 무엇이 원인이었나</div>
+      <div className="label">원인 후보 — 같은 피해가 난 다른 사건에서는 무엇이 원인이었나</div>
       <p className="mt-1.5 max-w-3xl text-[12px] leading-relaxed text-ink-3">
         해외 리콜 자료에서 같은 피해가 난 사건의 원인을 세어 본 것입니다. 이 사건의 원인이라는
         뜻이 아니라 <strong className="font-semibold">확인해 볼 만한 후보</strong>입니다.
         품목을 아는 담당자만 이 중 무엇이 그럴듯한지 가릴 수 있습니다.
+      </p>
+      {/*
+        분모와 출처를 반드시 적는다 (담당자 지적, 2026-09-05)
+
+        "과열 59%" 만 적으면 "이 사건이 과열일 확률 59%" 로 읽힌다. 전혀 다른 뜻이다 —
+        해외 리콜이라는 **다른 자료**에서 관찰된 비율이고 이 사건과는 무관하게 계산됐다.
+        게다가 한 사건에 원인 코드가 여러 개 붙어 비율의 합이 100%를 넘는다(59+39+25+13).
+        나눠 가진 몫처럼 읽히면 안 되므로 분모를 줄마다 그대로 적는다.
+      */}
+      <p className="mt-1.5 max-w-3xl text-[12px] leading-relaxed text-ink-3">
+        비율은 <strong className="font-semibold">해외 리콜에서 같은 피해가 난 사건 중</strong> 이
+        원인이 함께 적힌 비율입니다. 이 사건이 그 원인일 확률이 아닙니다. 한 사건에 원인이
+        여럿 붙을 수 있어 비율을 다 더하면 100%를 넘습니다.
       </p>
 
       <div className="mt-3">
@@ -384,8 +397,9 @@ function CausePicker({
             <span className="text-[13px] font-medium">{c.nameKo ?? c.hfCode}</span>
             <span className="addr text-[10px] text-ink-3">{c.hfCode}</span>
             <span className="ml-auto text-[11px] text-ink-3">
-              같은 피해 {c.sampleSize.toLocaleString()}건 중 <span className="addr">{c.support.toLocaleString()}</span>건
-              <span className="addr ml-2">{(c.confidence * 100).toFixed(0)}%</span>
+              해외 리콜 {c.sampleSize.toLocaleString()}건 중{' '}
+              <span className="addr">{c.support.toLocaleString()}</span>건에 함께 적힘
+              <span className="addr ml-2">({(c.confidence * 100).toFixed(0)}%)</span>
             </span>
           </label>
         ))}
