@@ -33,7 +33,8 @@ import { readFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { getDb, closeDb } from '../src/lib/db';
 import { standardsForCase } from '../src/lib/cases/resolve-scope';
-import { searchCandidates, type MatchConfig, type MatchInput } from '../src/lib/search/match';
+import { searchCandidates, type Candidate, type MatchConfig, type MatchInput } from '../src/lib/search/match';
+import { withEstimatedCauses, mergeByRank } from '../src/lib/search/estimate-cause';
 import { rerankCandidates } from '../src/lib/llm/rerank';
 import { openaiConfig, tuning } from '../src/lib/env';
 
@@ -69,12 +70,20 @@ interface Metrics {
   found: number;
 }
 
-/** §5.8 이 켜라고 한 순서대로. 앞 행에서 한 갈래씩만 더한다 */
-function configs(base: MatchConfig): Array<{ label: string; config: MatchConfig }> {
+/**
+ * §5.8 이 켜라고 한 순서대로. 앞 행에서 한 갈래씩만 더한다
+ *
+ * 「+ 원인 다리」는 갈래를 켜는 것이 아니라 **입력을 바꾼다**(04-1 §8).
+ * 원인이 미상인 사건에 추정 원인을 얹어 같은 하이브리드 구성으로 돌린다.
+ * 다리를 켠 행과 끈 행이 나란히 찍혀야 효과를 그 자리에서 판정할 수 있다.
+ */
+function configs(base: MatchConfig): Array<{ label: string; config: MatchConfig; bridge?: 'replace' | 'merge' }> {
   return [
     { label: '① 코드만', config: { ...base, useCode: true, useKeyword: false, useVector: false, useRerank: false } },
     { label: '①+② 코드+어휘', config: { ...base, useCode: true, useKeyword: true, useVector: false, useRerank: false } },
     { label: '①+②+③ 하이브리드', config: { ...base, useCode: true, useKeyword: true, useVector: true, useRerank: false } },
+    { label: '+ 원인 다리(대체)', config: { ...base, useCode: true, useKeyword: true, useVector: true, useRerank: false }, bridge: 'replace' },
+    { label: '+ 원인 다리(병합)', config: { ...base, useCode: true, useKeyword: true, useVector: true, useRerank: false }, bridge: 'merge' },
     { label: '+ 리랭킹', config: { ...base, useCode: true, useKeyword: true, useVector: true, useRerank: true } },
   ];
 }
@@ -187,13 +196,39 @@ async function runCase(
   }
 
   const out: Metrics[] = [];
-  for (const { label, config } of configs(base)) {
-    let candidates = await searchCandidates(input, config);
+  for (const { label, config, bridge } of configs(base)) {
+    let runInput = input;
+    let candidates: Candidate[];
+
+    if (bridge) {
+      const est = await withEstimatedCauses(input);
+      if (bridge === 'replace') {
+        if (est.candidates.length) {
+          console.log(`  원인 다리: ${est.candidates.map((c) => `${c.nameKo ?? c.hfCode}(${c.support}건)`).join(' · ')}`);
+        } else if (est.skipped) {
+          console.log('  원인 다리: 원인이 이미 확정된 사건이라 건너뜁니다');
+        } else {
+          console.log('  원인 다리: 이 피해유형에 담긴 원인 후보가 없습니다');
+        }
+      }
+      runInput = est.input;
+      candidates = bridge === 'replace'
+        ? await searchCandidates(runInput, config)
+        // 병합: 결과로 찾은 것과 원인으로 찾은 것이 같은 칸 수를 번갈아 나눠 쓴다.
+        // 후보를 늘려 재현율을 올리는 것이 아님을 분명히 하려고 limit 을 그대로 둔다
+        : mergeByRank(
+            await searchCandidates(input, config),
+            est.candidates.length ? await searchCandidates(est.input, config) : [],
+            config.candidateCount,
+          );
+    } else {
+      candidates = await searchCandidates(runInput, config);
+    }
 
     if (config.useRerank && candidates.length > 1) {
       const cfg = openaiConfig();
       const scores = await rerankCandidates(
-        { itemName: input.itemName, narrative: input.narrative, hfCodes: input.hfCodes, dtCodes: input.dtCodes },
+        { itemName: runInput.itemName, narrative: runInput.narrative, hfCodes: runInput.hfCodes, dtCodes: runInput.dtCodes },
         candidates.map((c) => ({
           clauseId: c.clauseId, marker: c.marker,
           contextHeader: c.contextHeader, body: c.body, testConditions: c.testConditions,
@@ -274,7 +309,9 @@ async function main() {
   }
 
   const key = JSON.parse(readFileSync(ANSWER_KEY, 'utf8')) as AnswerKey;
-  const targets = onlyCase ? key.cases.filter((c) => c.caseId === onlyCase) : key.cases;
+  // 정답셋의 caseId 는 DB bigint 에서 나와 문자열로 저장돼 있다. Number 로 씻지 않으면
+  // --case 가 항상 빈 목록을 돌려준다(전체 실행은 그대로 동작해 드러나지 않던 결함)
+  const targets = onlyCase ? key.cases.filter((c) => Number(c.caseId) === onlyCase) : key.cases;
   if (targets.length === 0) throw new Error('정답셋에 해당 사건이 없습니다.');
 
   console.log(`정답셋 ${targets.length}건 · 상위 ${k}건 기준`);
