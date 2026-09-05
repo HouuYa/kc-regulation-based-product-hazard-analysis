@@ -23,12 +23,30 @@ import {
   searchCandidates, diagnoseEmpty, persistRun, isCauseUnresolved,
   type MatchConfig, type MatchInput, type Candidate, type EmptyReason,
 } from './match';
+import { groupBySection, flattenSections } from './group-section';
 import { rerankCandidates } from '../llm/rerank';
 import { checkReadiness, type NotReadyReason } from './readiness';
 import { openaiConfig, tuning } from '../env';
 
 /** 상위 몇 건을 기본 표시할 것인가. 나머지는 감추지 않고 접어 둔다(결정항목 17) */
 export const SHORTLIST = 5;
+
+/**
+ * 절로 묶기 전에 훑는 후보 수.
+ *
+ * 200 과 600 을 재 봤다. 600 은 재현율이 23.8% → 20.8% 로 오히려 떨어졌다 —
+ * 잡음이 늘어 절 순위가 흐려진다. 넓게 잡는 것 자체가 개선은 아니다.
+ */
+const SECTION_POOL = 200;
+
+/**
+ * 절 점수를 무엇으로 낼 것인가.
+ *
+ * 합·최대·상위3 을 재 봤다. 합은 조항 수가 많은 절이 그냥 이겨서 12.0% 로 나빠졌고,
+ * 최대가 23.8% 로 가장 좋았다 — 가장 잘 맞는 조항 하나로 절을 대표시키면 크기 편향이
+ * 없다.
+ */
+const SECTION_SCORING = 'max' as const;
 
 export interface RunOutcome {
   /** 품목에 대응하는 기준을 못 찾아 실행하지 않았다 */
@@ -143,7 +161,30 @@ export async function runAnalysis(
     };
   }
 
-  let candidates = await searchCandidates(input, config);
+  /*
+    넓게 뽑아 절로 묶은 뒤 같은 칸 수로 좁힌다 (2026-09-05 실측으로 채택)
+
+    조항 하나하나는 신호가 약해도 같은 절의 형제가 여럿 걸리면 그 절은 강한 신호다.
+    15.1 이 50위, 15.1.1 이 80위, 15.2 가 120위면 개별로는 다 밀리지만 절 15 는
+    세 번 걸린 셈이다. 진단에서 정답 조항의 49%가 바로 이렇게 밀려 있었다.
+
+      ①+②+③ 하이브리드      재현율 16.2%  오탐 89.5%  상위5 14.5%
+      + 절 묶음(최대)        재현율 23.8%  오탐 87.9%  상위5 14.6%
+      + 절 묶음 + 리랭킹      재현율 23.8%  오탐 87.9%  상위5 32.8%
+
+    재현율이 오르면서 오탐도 함께 줄었다. 원인 다리와 달리 기본 목록에 바로 반영하는
+    이유가 이것이다 — 잘 찾던 것을 망가뜨리지 않고 더 찾는다.
+
+    600 건까지 넓히면 오히려 20.8% 로 떨어졌다. 잡음이 늘어 절 순위가 흐려진다.
+    넓게 잡는 것 자체가 개선이 아니라는 뜻이라 200 에서 멈춘다.
+
+    LLM 비용은 늘지 않는다. 넓히는 것은 SQL 조회이고, 리랭킹은 좁힌 뒤에 부른다.
+  */
+  const wide = await searchCandidates(input, { ...config, candidateCount: SECTION_POOL });
+  let candidates = flattenSections(
+    groupBySection(wide, SECTION_SCORING),
+    config.candidateCount,
+  );
 
   /*
     리랭킹의 결과를 세 갈래로 구분해 남긴다 (031)

@@ -35,8 +35,20 @@ import { getDb, closeDb } from '../src/lib/db';
 import { standardsForCase } from '../src/lib/cases/resolve-scope';
 import { searchCandidates, type Candidate, type MatchConfig, type MatchInput } from '../src/lib/search/match';
 import { withEstimatedCauses, mergeByRank } from '../src/lib/search/estimate-cause';
+import { groupBySection, flattenSections, type SectionScoring } from '../src/lib/search/group-section';
 import { rerankCandidates } from '../src/lib/llm/rerank';
 import { openaiConfig, tuning } from '../src/lib/env';
+
+/** 절로 묶기 전에 몇 건까지 훑을 것인가. 진단에서 정답의 49%가 상위 20 밖 200 안에 있었다 */
+const SECTION_POOL = 200;
+
+/**
+ * LLM 을 쓰는 행을 뺀다 (`--no-llm`)
+ *
+ * 리랭킹은 사건마다 모델을 부르므로 정답셋 47건을 돌리면 호출이 수십 번 쌓인다.
+ * 검색 쪽만 손보는 동안에는 그 비용을 낼 이유가 없다. 결론을 낼 때만 켠다.
+ */
+const noLlm = process.argv.includes('--no-llm');
 
 const ANSWER_KEY = join(import.meta.dirname, '..', 'docs', 'eval', 'answer-key.json');
 
@@ -77,15 +89,47 @@ interface Metrics {
  * 원인이 미상인 사건에 추정 원인을 얹어 같은 하이브리드 구성으로 돌린다.
  * 다리를 켠 행과 끈 행이 나란히 찍혀야 효과를 그 자리에서 판정할 수 있다.
  */
-function configs(base: MatchConfig): Array<{ label: string; config: MatchConfig; bridge?: 'replace' | 'merge' }> {
-  return [
+interface EvalVariant {
+  label: string;
+  config: MatchConfig;
+  bridge?: 'replace' | 'merge';
+  section?: SectionScoring;
+  /** 절로 묶기 전에 훑을 후보 수. 기본 SECTION_POOL */
+  pool?: number;
+  /** LLM 에게 몇 건을 보여 주고 고르게 할 것인가. 없으면 순서만 바꾼다 */
+  rerankPool?: number;
+}
+
+function configs(base: MatchConfig): EvalVariant[] {
+  const all: EvalVariant[] = [
     { label: '① 코드만', config: { ...base, useCode: true, useKeyword: false, useVector: false, useRerank: false } },
     { label: '①+② 코드+어휘', config: { ...base, useCode: true, useKeyword: true, useVector: false, useRerank: false } },
     { label: '①+②+③ 하이브리드', config: { ...base, useCode: true, useKeyword: true, useVector: true, useRerank: false } },
     { label: '+ 원인 다리(대체)', config: { ...base, useCode: true, useKeyword: true, useVector: true, useRerank: false }, bridge: 'replace' },
     { label: '+ 원인 다리(병합)', config: { ...base, useCode: true, useKeyword: true, useVector: true, useRerank: false }, bridge: 'merge' },
+    /*
+      절 묶음 — 넓게 뽑아 절 단위로 근거를 합치고, 같은 칸 수를 절 순서로 다시 채운다.
+      점수 내는 방식 셋을 나란히 잰다. 어느 쪽이 맞는지는 자료가 정한다(CLAUDE.md §6).
+    */
+    { label: '+ 절 묶음(합)', config: { ...base, useCode: true, useKeyword: true, useVector: true, useRerank: false }, section: 'sum' },
+    { label: '+ 절 묶음(최대)', config: { ...base, useCode: true, useKeyword: true, useVector: true, useRerank: false }, section: 'max' },
+    { label: '+ 절 묶음(상위3)', config: { ...base, useCode: true, useKeyword: true, useVector: true, useRerank: false }, section: 'top3' },
+    // 더 넓게 훑으면 밀려 있던 절이 더 걸리는가
+    { label: '+ 절 묶음 넓게(600)', config: { ...base, useCode: true, useKeyword: true, useVector: true, useRerank: false }, section: 'max', pool: 600 },
+    // 절로 살려 낸 뒤 LLM 이 순서를 다듬으면 담당자가 보는 상위 5건이 좋아지는가.
+    // 사건당 호출 1회라 비용이 작다
+    { label: '+ 절 묶음 + 리랭킹', config: { ...base, useCode: true, useKeyword: true, useVector: true, useRerank: true }, section: 'max' },
+    /*
+      넓게 잡아 LLM 이 좁힌다 (담당자 요청)
+
+      위 행에서 LLM 은 RRF 가 고른 20건의 **순서만** 바꾼다. 여기서는 50건을 보여 주고
+      그중 무엇을 남길지 고르게 한다 — 좁히는 판단 자체가 LLM 으로 넘어간다.
+      제시 건수는 똑같이 20건으로 잘라 다른 행과 나란히 견준다.
+    */
+    { label: '+ 절 묶음 + LLM이 50→20', config: { ...base, useCode: true, useKeyword: true, useVector: true, useRerank: true }, section: 'max', pool: 600, rerankPool: 50 },
     { label: '+ 리랭킹', config: { ...base, useCode: true, useKeyword: true, useVector: true, useRerank: true } },
   ];
+  return all.filter((r) => !noLlm || !r.config.useRerank);
 }
 
 async function loadCase(caseId: number): Promise<MatchInput> {
@@ -196,11 +240,25 @@ async function runCase(
   }
 
   const out: Metrics[] = [];
-  for (const { label, config, bridge } of configs(base)) {
+  for (const { label, config, bridge, section, pool, rerankPool } of configs(base)) {
     let runInput = input;
     let candidates: Candidate[];
 
-    if (bridge) {
+    if (section) {
+      /*
+        넓게 뽑은 뒤 절로 묶는다. 넓게 뽑는 것 자체가 개선이 아니어야 하므로
+        마지막에 같은 칸 수(candidateCount)로 잘라 다른 행과 나란히 견준다.
+      */
+      const wide = await searchCandidates(input, { ...config, candidateCount: pool ?? SECTION_POOL });
+      /*
+        LLM 에게 좁히는 일을 맡길 때는 여기서 더 많이 남긴다.
+
+        rerankPool 이 없으면 RRF 점수가 고른 20건을 LLM 이 받아 순서만 바꾼다.
+        있으면 LLM 이 그만큼을 보고 무엇을 버릴지 정한다 — 좁히는 판단이 LLM 으로 넘어간다.
+        어느 쪽이든 마지막에 같은 칸 수로 잘라야 다른 행과 나란히 견줄 수 있다.
+      */
+      candidates = flattenSections(groupBySection(wide, section), rerankPool ?? config.candidateCount);
+    } else if (bridge) {
       const est = await withEstimatedCauses(input);
       if (bridge === 'replace') {
         if (est.candidates.length) {
@@ -239,6 +297,9 @@ async function runCase(
       candidates = [...candidates].sort(
         (a, b) => (byId.get(b.clauseId)?.relevance ?? -1) - (byId.get(a.clauseId)?.relevance ?? -1),
       );
+      // LLM 이 넓은 목록에서 골랐으면 여기서 칸 수를 맞춘다. 자르지 않으면
+      // 제시 건수가 달라져 다른 행과 견줄 수 없다
+      if (rerankPool) candidates = candidates.slice(0, config.candidateCount);
     }
 
     out.push(measure(label, candidates.map((c) => c.clauseId), expected, k));
