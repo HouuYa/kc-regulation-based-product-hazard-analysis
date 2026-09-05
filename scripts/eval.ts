@@ -36,6 +36,7 @@ import { standardsForCase } from '../src/lib/cases/resolve-scope';
 import { searchCandidates, type Candidate, type MatchConfig, type MatchInput } from '../src/lib/search/match';
 import { withEstimatedCauses, mergeByRank } from '../src/lib/search/estimate-cause';
 import { groupBySection, flattenSections, type SectionScoring } from '../src/lib/search/group-section';
+import { hydeQuery } from '../src/lib/search/hyde';
 import { rerankCandidates } from '../src/lib/llm/rerank';
 import { openaiConfig, tuning } from '../src/lib/env';
 
@@ -49,6 +50,20 @@ const SECTION_POOL = 200;
  * 검색 쪽만 손보는 동안에는 그 비용을 낼 이유가 없다. 결론을 낼 때만 켠다.
  */
 const noLlm = process.argv.includes('--no-llm');
+
+/** 판정이 끝난 변형까지 모두 돌린다 */
+const showAll = process.argv.includes('--all');
+
+/**
+ * 특정 행만 돌린다 — 쉼표로 나눈 정확한 이름 (`--rows`)
+ *
+ * 한 가지를 판정하려고 전량을 돌리면 상관없는 리랭킹 행까지 LLM 을 부른다.
+ * 견줄 행만 골라 돌리면 같은 결론을 훨씬 싸게 낸다.
+ */
+const onlyRows = (() => {
+  const i = process.argv.indexOf('--rows');
+  return i >= 0 && process.argv[i + 1] ? process.argv[i + 1].split(',').map((x) => x.trim()) : null;
+})();
 
 const ANSWER_KEY = join(import.meta.dirname, '..', 'docs', 'eval', 'answer-key.json');
 
@@ -98,6 +113,15 @@ interface EvalVariant {
   pool?: number;
   /** LLM 에게 몇 건을 보여 주고 고르게 할 것인가. 없으면 순서만 바꾼다 */
   rerankPool?: number;
+  /** 의미 갈래의 질의를 가상 조항 임베딩으로 바꾼다 */
+  hyde?: boolean;
+  /**
+   * 판정이 끝난 변형. 기본 실행에서 뺀다(--all 로 되살린다)
+   *
+   * 결론이 난 행을 계속 돌리면 채점할 때마다 LLM 값을 낸다. 근거는 구현이력에 남았고,
+   * 다시 재야 할 일이 생기면 --all 로 되살리면 된다.
+   */
+  retired?: boolean;
 }
 
 function configs(base: MatchConfig): EvalVariant[] {
@@ -105,17 +129,17 @@ function configs(base: MatchConfig): EvalVariant[] {
     { label: '① 코드만', config: { ...base, useCode: true, useKeyword: false, useVector: false, useRerank: false } },
     { label: '①+② 코드+어휘', config: { ...base, useCode: true, useKeyword: true, useVector: false, useRerank: false } },
     { label: '①+②+③ 하이브리드', config: { ...base, useCode: true, useKeyword: true, useVector: true, useRerank: false } },
-    { label: '+ 원인 다리(대체)', config: { ...base, useCode: true, useKeyword: true, useVector: true, useRerank: false }, bridge: 'replace' },
-    { label: '+ 원인 다리(병합)', config: { ...base, useCode: true, useKeyword: true, useVector: true, useRerank: false }, bridge: 'merge' },
+    { label: '+ 원인 다리(대체)', config: { ...base, useCode: true, useKeyword: true, useVector: true, useRerank: false }, bridge: 'replace' , retired: true },
+    { label: '+ 원인 다리(병합)', config: { ...base, useCode: true, useKeyword: true, useVector: true, useRerank: false }, bridge: 'merge' , retired: true },
     /*
       절 묶음 — 넓게 뽑아 절 단위로 근거를 합치고, 같은 칸 수를 절 순서로 다시 채운다.
       점수 내는 방식 셋을 나란히 잰다. 어느 쪽이 맞는지는 자료가 정한다(CLAUDE.md §6).
     */
-    { label: '+ 절 묶음(합)', config: { ...base, useCode: true, useKeyword: true, useVector: true, useRerank: false }, section: 'sum' },
+    { label: '+ 절 묶음(합)', config: { ...base, useCode: true, useKeyword: true, useVector: true, useRerank: false }, section: 'sum' , retired: true },
     { label: '+ 절 묶음(최대)', config: { ...base, useCode: true, useKeyword: true, useVector: true, useRerank: false }, section: 'max' },
-    { label: '+ 절 묶음(상위3)', config: { ...base, useCode: true, useKeyword: true, useVector: true, useRerank: false }, section: 'top3' },
+    { label: '+ 절 묶음(상위3)', config: { ...base, useCode: true, useKeyword: true, useVector: true, useRerank: false }, section: 'top3' , retired: true },
     // 더 넓게 훑으면 밀려 있던 절이 더 걸리는가
-    { label: '+ 절 묶음 넓게(600)', config: { ...base, useCode: true, useKeyword: true, useVector: true, useRerank: false }, section: 'max', pool: 600 },
+    { label: '+ 절 묶음 넓게(600)', config: { ...base, useCode: true, useKeyword: true, useVector: true, useRerank: false }, section: 'max', pool: 600 , retired: true },
     // 절로 살려 낸 뒤 LLM 이 순서를 다듬으면 담당자가 보는 상위 5건이 좋아지는가.
     // 사건당 호출 1회라 비용이 작다
     { label: '+ 절 묶음 + 리랭킹', config: { ...base, useCode: true, useKeyword: true, useVector: true, useRerank: true }, section: 'max' },
@@ -126,10 +150,22 @@ function configs(base: MatchConfig): EvalVariant[] {
       그중 무엇을 남길지 고르게 한다 — 좁히는 판단 자체가 LLM 으로 넘어간다.
       제시 건수는 똑같이 20건으로 잘라 다른 행과 나란히 견준다.
     */
-    { label: '+ 절 묶음 + LLM이 50→20', config: { ...base, useCode: true, useKeyword: true, useVector: true, useRerank: true }, section: 'max', pool: 600, rerankPool: 50 },
+    { label: '+ 절 묶음 + LLM이 50→20', config: { ...base, useCode: true, useKeyword: true, useVector: true, useRerank: true }, section: 'max', pool: 600, rerankPool: 50 , retired: true },
+    /*
+      HyDE — 사고 서술로 "답에 해당할 법한 조항"을 지어내 의미 갈래의 질의로 쓴다(04-2 §4.1)
+
+      사고 서술과 기준 조항은 문체가 달라 겹치는 낱말이 거의 없다. 진단에서 정답의
+      49%가 "찾기는 하는데 순위에서 밀린" 상태였고, 문체 차이가 원인의 하나로 보인다.
+      의미 갈래만 바꾸므로 코드·어휘 갈래의 성적은 그대로다.
+    */
+    { label: '+ 절 묶음 + HyDE', config: { ...base, useCode: true, useKeyword: true, useVector: true, useRerank: false }, section: 'max', hyde: true },
+    { label: '+ 절 묶음 + HyDE + 리랭킹', config: { ...base, useCode: true, useKeyword: true, useVector: true, useRerank: true }, section: 'max', hyde: true },
     { label: '+ 리랭킹', config: { ...base, useCode: true, useKeyword: true, useVector: true, useRerank: true } },
   ];
-  return all.filter((r) => !noLlm || !r.config.useRerank);
+  // HyDE 도 사건마다 모델을 부른다. 리랭킹만 빼면 반만 아끼게 된다
+  return all
+    .filter((r) => (onlyRows ? onlyRows.includes(r.label) : showAll || !r.retired))
+    .filter((r) => !noLlm || (!r.config.useRerank && !r.hyde));
 }
 
 async function loadCase(caseId: number): Promise<MatchInput> {
@@ -240,16 +276,27 @@ async function runCase(
   }
 
   const out: Metrics[] = [];
-  for (const { label, config, bridge, section, pool, rerankPool } of configs(base)) {
+  for (const { label, config, bridge, section, pool, rerankPool, hyde } of configs(base)) {
     let runInput = input;
     let candidates: Candidate[];
+
+    // HyDE: 의미 갈래의 질의만 가상 조항 임베딩으로 바꾼다. 실패하면 원래 것으로 간다
+    let searchInput = input;
+    if (hyde) {
+      try {
+        const h = await hydeQuery(input);
+        searchInput = { ...input, embedding: h.embedding };
+      } catch (e) {
+        console.warn(`  HyDE 실패 — 원래 임베딩으로 진행합니다: ${e instanceof Error ? e.message : e}`);
+      }
+    }
 
     if (section) {
       /*
         넓게 뽑은 뒤 절로 묶는다. 넓게 뽑는 것 자체가 개선이 아니어야 하므로
         마지막에 같은 칸 수(candidateCount)로 잘라 다른 행과 나란히 견준다.
       */
-      const wide = await searchCandidates(input, { ...config, candidateCount: pool ?? SECTION_POOL });
+      const wide = await searchCandidates(searchInput, { ...config, candidateCount: pool ?? SECTION_POOL });
       /*
         LLM 에게 좁히는 일을 맡길 때는 여기서 더 많이 남긴다.
 
@@ -372,7 +419,11 @@ async function main() {
   const key = JSON.parse(readFileSync(ANSWER_KEY, 'utf8')) as AnswerKey;
   // 정답셋의 caseId 는 DB bigint 에서 나와 문자열로 저장돼 있다. Number 로 씻지 않으면
   // --case 가 항상 빈 목록을 돌려준다(전체 실행은 그대로 동작해 드러나지 않던 결함)
-  const targets = onlyCase ? key.cases.filter((c) => Number(c.caseId) === onlyCase) : key.cases;
+  const limit = argValue('--limit') ? Number(argValue('--limit')) : null;
+  // 앞 몇 건만 돌린다. LLM 을 쓰는 행이 있어 방향만 볼 때는 전량을 돌릴 이유가 없다
+  const targets = onlyCase
+    ? key.cases.filter((c) => Number(c.caseId) === onlyCase)
+    : (limit ? key.cases.slice(0, limit) : key.cases);
   if (targets.length === 0) throw new Error('정답셋에 해당 사건이 없습니다.');
 
   console.log(`정답셋 ${targets.length}건 · 상위 ${k}건 기준`);
