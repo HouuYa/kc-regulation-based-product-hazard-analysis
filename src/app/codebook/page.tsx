@@ -1,4 +1,5 @@
 import { getDb } from '@/lib/db';
+import { loadBridge, type BridgeRow, type CauseRoute } from '@/lib/codebook/cause-bridge';
 import { PageHead, ConnectionError, EmptyState, TermsNote } from '@/components/Panel';
 import { PageToc, type TocItem } from '@/components/PageToc';
 
@@ -6,9 +7,18 @@ export const dynamic = 'force-dynamic';
 
 const CODEBOOK_TOC: TocItem[] = [
   { id: 'codebook-current', label: '현재 코드북 판' },
+  { id: 'codebook-bridge', label: '결과 → 원인 다리' },
   { id: 'codebook-hf', label: '위해요인 HF' },
   { id: 'codebook-dt', label: '피해유형 DT' },
 ];
+
+/** 확인 경로를 담당자 말로 옮긴다. 코드값을 그대로 보이면 뜻이 전달되지 않는다 */
+const ROUTE_LABEL: Record<CauseRoute, { name: string; hint: string }> = {
+  TEST: { name: '시험', hint: '불량 — 안전기준 시험으로 확인한다' },
+  LEGAL: { name: '법령', hint: '불법 — 인증·표시 위반이라 시험 대상이 아니다' },
+  GAP: { name: '기준공백', hint: '기준 자체가 없거나 미흡하다' },
+  OTHER: { name: '기타', hint: '관리·공정·사람 요인이라 시험으로 확인할 수 없다' },
+};
 
 /**
  * 위해요인 코드북 — 참고 문서 (조회 전용)
@@ -68,6 +78,7 @@ export default async function CodebookPage() {
   let usage: UsageRow[] = [];
   let diffs: DiffRow[] = [];
   let staleVersion: string | null = null;
+  let bridge: BridgeRow[] = [];
   let error: string | null = null;
 
   try {
@@ -113,6 +124,8 @@ export default async function CodebookPage() {
           limit 50
         `;
       }
+
+      bridge = await loadBridge();
     }
   } catch (e) {
     console.error('코드북 화면 조회 실패:', e);
@@ -254,6 +267,109 @@ export default async function CodebookPage() {
               기록해야 합니다. {c.reason}
             </p>
           ))}
+        </section>
+      )}
+
+      {/*
+        결과 → 원인 다리
+
+        HF 목록과 DT 목록은 있었지만 둘을 잇는 줄이 없었다. 사고보고서 77%가 원인
+        미상이라 담당자는 피해에서 원인을 짐작해야 하는데, 그 짐작을 도울 근거가
+        시스템에 없던 것이다. 리콜 자료에서 세어 만든 표가 이 자리에 온다.
+
+        고치는 기능은 두지 않는다. 이 화면은 조회 전용이고(v0.7 §0.4), 초기값이
+        얼마나 맞는지 세어 보기 전에는 검수 화면을 만들지 않기로 했다(04-1 §9).
+      */}
+      {bridge.length > 0 && (
+        <section id="codebook-bridge" className="mt-10 scroll-mt-8">
+          <h2 className="text-[15px] font-semibold">
+            결과 → 원인 다리
+            <span className="addr ml-2 text-[12px] font-normal text-ink-3">{bridge.length}</span>
+          </h2>
+          <p className="mt-2 max-w-3xl text-[12px] leading-relaxed text-ink-3">
+            어떤 피해가 났을 때 원인이 무엇이었는지를 해외 리콜 자료에서 세어 만든 표입니다.
+            사고조사보고서는 열에 여덟이 원인 미상이라 여기서 셀 수 없지만, 리콜은 원인이
+            적혀 있습니다. 원인이 밝혀지지 않은 사고에서 <strong className="font-semibold">원인
+            후보를 좁히는 데</strong> 씁니다.
+          </p>
+          <p className="mt-2 max-w-3xl text-[12px] leading-relaxed text-ink-3">
+            <strong className="font-semibold">시험</strong>으로 표시된 것만 시험항목을 찾는 데
+            쓰입니다. 인증 위반·표시사항 같은 <strong className="font-semibold">법령</strong> 항목은
+            불법이라 시험으로 확인할 수 없고, 담당자가 인증·표시를 직접 확인할 일입니다.
+          </p>
+          <div className="mt-3 flex flex-wrap items-center gap-3">
+            <a
+              href="/api/codebook/cause-bridge/export"
+              className="inline-block border border-rule bg-surface px-4 py-2 text-[13px] hover:bg-rule-soft"
+            >
+              CSV 내려받기
+            </a>
+            <span className="text-[11px] text-ink-3">
+              {bridge[0]?.computedAt?.slice(0, 10)} 계산 · 다시 만들려면{' '}
+              <span className="addr">npm run cause:build</span>
+            </span>
+          </div>
+
+          <div className="mt-4">
+            {Object.entries(
+              bridge.reduce<Record<string, BridgeRow[]>>((acc, r) => {
+                (acc[r.dtCode] ??= []).push(r);
+                return acc;
+              }, {}),
+            ).map(([dtCode, rows]) => (
+              <details key={dtCode} className="border-t border-rule py-2.5">
+                <summary className="cursor-pointer">
+                  <span className="text-[13px] font-medium">{rows[0].dtName ?? dtCode}</span>
+                  <span className="addr ml-2 text-[11px] text-ink-3">{dtCode}</span>
+                  <span className="ml-3 text-[11px] text-ink-3">
+                    사건 {rows[0].sampleSize.toLocaleString()}건에서 원인 후보 {rows.length}개
+                  </span>
+                </summary>
+                <div className="mt-2 overflow-x-auto">
+                  <table className="w-full min-w-[36rem] text-[12px]">
+                    <thead>
+                      <tr className="text-ink-3">
+                        <th className="py-1 pr-3 text-left font-normal">원인</th>
+                        <th className="py-1 pr-3 text-left font-normal">확인 경로</th>
+                        <th className="py-1 pr-3 text-right font-normal">근거</th>
+                        <th className="py-1 pr-3 text-right font-normal">비율</th>
+                        <th className="py-1 text-right font-normal">특이도</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {rows.map((r) => (
+                        <tr key={r.hfCode} className="border-t border-rule-soft">
+                          <td className="py-1 pr-3">
+                            {r.hfName ?? r.hfCode}
+                            <span className="addr ml-2 text-[10px] text-ink-3">{r.hfCode}</span>
+                          </td>
+                          <td className="py-1 pr-3">
+                            <span
+                              title={ROUTE_LABEL[r.route].hint}
+                              className={`border px-1.5 text-[10px] ${
+                                r.route === 'TEST' ? 'border-measure text-measure' : 'border-rule text-ink-3'
+                              }`}
+                            >
+                              {ROUTE_LABEL[r.route].name}
+                            </span>
+                          </td>
+                          <td className="addr py-1 pr-3 text-right">{r.support.toLocaleString()}건</td>
+                          <td className="addr py-1 pr-3 text-right">{(r.confidence * 100).toFixed(1)}%</td>
+                          <td className="addr py-1 text-right text-ink-3">{r.lift.toFixed(2)}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </details>
+            ))}
+          </div>
+
+          <p className="mt-3 max-w-3xl text-[11px] leading-relaxed text-ink-3">
+            비율은 그 피해가 난 사건 중 이 원인이 함께 적힌 비율입니다. 특이도는 그 원인이
+            이 피해에 유난히 몰리는 정도이고, 1에 가까우면 어느 사고에나 붙는 흔한 원인이라
+            후보에서 뺍니다 — 설계결함이 그런 경우입니다.
+          </p>
         </section>
       )}
 

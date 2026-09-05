@@ -209,3 +209,57 @@ export async function estimateCauses(
     sampleSize: Number(r.sample_size),
   }));
 }
+
+export interface BridgeRow {
+  dtCode: string;
+  dtName: string | null;
+  hfCode: string;
+  hfName: string | null;
+  route: CauseRoute;
+  support: number;
+  confidence: number;
+  lift: number;
+  sampleSize: number;
+  computedAt: string;
+}
+
+/**
+ * 화면에 보여 줄 다리 전체.
+ *
+ * 확인 경로로 거르지 않고 다 돌려준다. 담당자가 "왜 이 원인은 시험 목록에 없는가"를
+ * 물을 수 있어야 하고, 그 답이 화면에 함께 있어야 한다.
+ */
+export async function loadBridge(): Promise<BridgeRow[]> {
+  const rows = await getDb()<{
+    dt_code: string; dt_name: string | null; hf_code: string; hf_name: string | null;
+    route: CauseRoute; support: string; confidence: string; lift: string;
+    sample_size: string; computed_at: string;
+  }[]>`
+    select
+      b.dt_code, d.name_ko dt_name, b.hf_code, h.name_ko hf_name, r.route,
+      b.support::text, b.confidence::text, b.lift::text, b.sample_size::text,
+      b.computed_at::text
+    from codebook.cause_bridge b
+    join codebook.hf_route r on r.code = b.hf_code
+    left join codebook.hazard_factor h
+      on h.code = b.hf_code
+     and h.version_id = (select id from codebook.version where status = 'active')
+    left join codebook.damage_type d
+      on d.code = b.dt_code
+     and d.version_id = (select id from codebook.version where status = 'active')
+    order by b.sample_size desc, b.dt_code, b.confidence desc
+  `;
+
+  return rows.map((r) => ({
+    dtCode: r.dt_code,
+    dtName: r.dt_name,
+    hfCode: r.hf_code,
+    hfName: r.hf_name,
+    route: r.route,
+    support: Number(r.support),
+    confidence: Number(r.confidence),
+    lift: Number(r.lift),
+    sampleSize: Number(r.sample_size),
+    computedAt: r.computed_at,
+  }));
+}

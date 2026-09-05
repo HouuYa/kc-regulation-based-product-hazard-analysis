@@ -7,6 +7,10 @@ import { EvidenceStrip, type EvidenceLevel, type MatchPath } from '@/components/
 import { PageToc, type TocItem } from '@/components/PageToc';
 import type { GpcCandidate } from '@/lib/gpc/lookup';
 import type { GpcMatchLevel } from '@/lib/gpc/verify';
+import { estimateCauses, type CauseCandidate } from '@/lib/codebook/cause-bridge';
+import { withEstimatedCauses } from '@/lib/search/estimate-cause';
+import { searchCandidates, type Candidate as SearchCandidate } from '@/lib/search/match';
+import { loadCaseInput, defaultMatchConfig } from '@/lib/search/run';
 import { recordReview, runAnalysisAction } from './actions';
 import { REJECT_REASONS } from './review-options';
 
@@ -347,16 +351,94 @@ function Candidate({ r, caseId }: { r: ResultRow; caseId: number }) {
   );
 }
 
+/**
+ * 원인 후보 고르기 — 원인이 미상인 사건에서만 나온다 (04-1 §7)
+ *
+ * 기본 목록을 덮어쓰지 않는 것이 핵심이다. 실측에서 추정 원인을 기본 검색에 자동으로
+ * 섞었더니 정답셋 47건 평균 재현율이 16.2% → 14.6% 로 떨어졌다. 잘 찾고 있던 8건이
+ * 나빠졌기 때문이다. 반대로 아무것도 못 찾던 23건 중 5건은 이 경로로만 답이 나왔다.
+ *
+ * 그래서 자동으로 켜지 않고, 담당자가 고른 원인으로 **두 번째 목록**을 따로 만든다.
+ * 주소에 실어 두므로(?cause=…) 같은 화면을 다시 열거나 남에게 보내도 그대로 나온다.
+ */
+function CausePicker({
+  caseId, candidates, picked,
+}: { caseId: number; candidates: CauseCandidate[]; picked: string[] }) {
+  return (
+    <form method="get" action={`/analysis/${caseId}`} className="mt-4 border border-rule px-4 py-3.5">
+      <div className="label">원인 후보 — 이 피해에서 실제로 무엇이 원인이었나</div>
+      <p className="mt-1.5 max-w-3xl text-[12px] leading-relaxed text-ink-3">
+        해외 리콜 자료에서 같은 피해가 난 사건의 원인을 세어 본 것입니다. 이 사건의 원인이라는
+        뜻이 아니라 <strong className="font-semibold">확인해 볼 만한 후보</strong>입니다.
+        품목을 아는 담당자만 이 중 무엇이 그럴듯한지 가릴 수 있습니다.
+      </p>
+
+      <div className="mt-3">
+        {candidates.map((c) => (
+          <label key={c.hfCode} className="flex cursor-pointer items-baseline gap-2.5 border-t border-rule py-2">
+            <input
+              type="checkbox" name="cause" value={c.hfCode}
+              defaultChecked={picked.includes(c.hfCode)}
+              className="mt-0.5"
+            />
+            <span className="text-[13px] font-medium">{c.nameKo ?? c.hfCode}</span>
+            <span className="addr text-[10px] text-ink-3">{c.hfCode}</span>
+            <span className="ml-auto text-[11px] text-ink-3">
+              같은 피해 {c.sampleSize.toLocaleString()}건 중 <span className="addr">{c.support.toLocaleString()}</span>건
+              <span className="addr ml-2">{(c.confidence * 100).toFixed(0)}%</span>
+            </span>
+          </label>
+        ))}
+      </div>
+
+      <div className="mt-3 flex flex-wrap items-center gap-3">
+        <button type="submit" className="border border-rule px-3 py-1.5 text-[12px] hover:bg-rule-soft">
+          고른 원인으로 시험항목 찾기
+        </button>
+        {picked.length > 0 && (
+          <Link href={`/analysis/${caseId}`} className="text-[12px] text-ink-3 underline">
+            지우기
+          </Link>
+        )}
+        <span className="text-[11px] text-ink-3">위의 기본 목록은 그대로 둡니다</span>
+      </div>
+    </form>
+  );
+}
+
+/** 원인으로 찾은 조항 — 저장하지 않는다. 담당자가 지금 보려고 만든 목록이다 */
+function CauseResult({ c }: { c: SearchCandidate }) {
+  return (
+    <article className="border-t border-rule py-4">
+      <div className="flex flex-wrap items-baseline gap-2.5">
+        <span className="addr text-[15px] font-medium">{c.marker}</span>
+        <span className="text-[12px] text-ink-3">{c.standardName}</span>
+        <span className="addr ml-auto text-[11px] text-ink-3">{c.score.toFixed(4)}</span>
+      </div>
+      {c.breadcrumbPath && (
+        <div className="addr mt-2 text-[11px] text-ink-3">{c.breadcrumbPath}</div>
+      )}
+      <p className="mt-2 max-w-3xl text-[13px] leading-relaxed text-ink-2">{c.body}</p>
+      {c.testMethods.length > 0 && (
+        <p className="mt-2 max-w-3xl text-[12px] text-ink-3">
+          시험방법 {c.testMethods.map((t) => t.marker).join(' · ')}
+        </p>
+      )}
+    </article>
+  );
+}
+
 export default async function AnalysisPage({
   params,
   searchParams,
 }: {
   params: Promise<{ caseId: string }>;
-  searchParams: Promise<{ done?: string }>;
+  searchParams: Promise<{ done?: string; cause?: string | string[] }>;
 }) {
   const { caseId: raw } = await params;
-  const { done } = await searchParams;
+  const { done, cause } = await searchParams;
   const caseId = Number(raw);
+  const picked = (Array.isArray(cause) ? cause : cause ? [cause] : []).filter(Boolean);
 
   let data: Awaited<ReturnType<typeof load>> = null;
   let error: string | null = null;
@@ -392,6 +474,33 @@ export default async function AnalysisPage({
   const rest = results.slice(SHORTLIST);
   const hfUnresolved = tags.length > 0
     && causeUnresolved(tags.filter((t) => t.axis === 'HF').map((t) => t.code));
+
+  /*
+    원인 후보와, 담당자가 고른 원인으로 찾은 두 번째 목록.
+
+    화면을 그릴 때 검색을 한 번 더 도는 것이라 저장하지 않는다. 기록으로 남길 것은
+    담당자가 채택·반려한 판단이지, 목록을 펼쳐 본 사실이 아니다. 리랭킹도 끈다 —
+    LLM 을 부르면 화면이 느려지고, 여기서 필요한 것은 순서 다듬기가 아니라
+    "원인으로 찾으면 무엇이 나오는가"이다.
+  */
+  let causeCandidates: CauseCandidate[] = [];
+  let causeResults: SearchCandidate[] = [];
+  if (hfUnresolved) {
+    try {
+      const dtCodes = tags.filter((t) => t.axis === 'DT').map((t) => t.code);
+      causeCandidates = await estimateCauses(dtCodes, { limit: 8 });
+      if (picked.length > 0) {
+        const input = await loadCaseInput(ev.id);
+        const est = await withEstimatedCauses(input, { picked });
+        if (est.candidates.length > 0) {
+          causeResults = await searchCandidates(est.input, defaultMatchConfig({ useRerank: false }));
+        }
+      }
+    } catch (e) {
+      // 원인 후보를 못 만들어도 기본 목록은 그대로 보여 준다. 곁가지가 본 줄기를 막지 않는다
+      console.error(`원인 후보 조회 실패 (사건 ${ev.id}):`, e);
+    }
+  }
 
   return (
     <div className="mx-auto max-w-6xl px-6 py-10 lg:px-10 lg:py-14">
@@ -705,6 +814,73 @@ export default async function AnalysisPage({
               분석을 다시 실행하면 재채점이 붙습니다.
             </p>
           )}
+
+
+            {causeCandidates.length > 0 && (
+              <CausePicker caseId={ev.id} candidates={causeCandidates} picked={picked} />
+            )}
+
+            {picked.length > 0 && (
+              <section className="mt-5 border border-measure px-4 py-3.5">
+                <div className="label text-measure">원인으로 찾은 조항</div>
+                <p className="mt-1.5 max-w-3xl text-[12px] leading-relaxed text-ink-3">
+                  고르신 원인{' '}
+                  <strong className="font-semibold">
+                    {causeCandidates.filter((c) => picked.includes(c.hfCode))
+                      .map((c) => c.nameKo ?? c.hfCode).join(' · ') || picked.join(' · ')}
+                  </strong>
+                  을 확인할 수 있는 조항입니다. 아래 기본 목록과 성격이 다릅니다 — 기본 목록은
+                  <strong className="font-semibold"> 피해유형을 다루는 조항</strong>이고,
+                  이것은 <strong className="font-semibold">원인 가설을 확인할 시험</strong>입니다.
+                </p>
+                <p className="mt-1.5 text-[11px] text-ink-3">
+                  이 목록은 저장되지 않습니다. 채택·반려 기록은 아래 기본 목록에서 남겨 주세요.
+                </p>
+
+                {causeResults.length === 0 ? (
+                  <p className="mt-3 text-[13px] text-ink-2">
+                    고르신 원인으로는 조항을 찾지 못했습니다. 이 기준에 그 원인의 코드가 붙은
+                    조항이 아직 없을 수 있습니다.
+                  </p>
+                ) : (
+                  <div className="mt-2">
+                    {causeResults.slice(0, SHORTLIST).map((c) => (
+                      <CauseResult key={c.clauseId} c={c} />
+                    ))}
+                    {causeResults.length > SHORTLIST && (
+                      <details className="mt-3 border-t border-rule pt-3">
+                        <summary className="cursor-pointer text-[13px] text-ink-2 hover:text-ink">
+                          나머지 {causeResults.length - SHORTLIST}건 더 보기
+                        </summary>
+                        <div className="mt-1">
+                          {causeResults.slice(SHORTLIST).map((c) => (
+                            <CauseResult key={c.clauseId} c={c} />
+                          ))}
+                        </div>
+                      </details>
+                    )}
+                  </div>
+                )}
+              </section>
+            )}
+
+            {/*
+              내려받기 — 담당자가 화면 다음에 하는 일은 시험 의뢰서를 쓰는 것이다.
+              조항 번호를 손으로 옮겨 적게 두면 틀리고, 근거도 함께 사라진다.
+              주소에 실린 원인 선택을 그대로 넘겨 화면과 파일이 어긋나지 않게 한다.
+            */}
+            <div className="mt-5 flex flex-wrap items-center gap-3 border-t border-rule pt-4">
+              <a
+                href={`/api/analysis/${ev.id}/export${picked.map((c, i) => `${i === 0 ? '?' : '&'}cause=${encodeURIComponent(c)}`).join('')}`}
+                className="inline-block border border-rule bg-surface px-4 py-2 text-[13px] hover:bg-rule-soft"
+              >
+                CSV 내려받기
+              </a>
+              <span className="text-[11px] text-ink-3">
+                조항 번호·본문·근거·담당자 판단이 함께 나옵니다
+                {picked.length > 0 && ' (원인으로 찾은 목록 포함)'}
+              </span>
+            </div>
 
           {results.length === 0 ? (
             <section className="mt-6 border-t border-rule pt-5">
