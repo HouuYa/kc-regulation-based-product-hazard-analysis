@@ -28,7 +28,7 @@ export interface ExtractResult {
 }
 
 export interface PiiFinding {
-  kind: '주민등록번호' | '전화번호' | '이메일' | '계좌번호' | '카드번호';
+  kind: '주민등록번호' | '전화번호' | '이메일' | '카드번호';
   sample: string;
   count: number;
 }
@@ -42,21 +42,12 @@ const SCANNED_CHARS_PER_PAGE = 50;
  * 완벽한 탐지가 목적이 아니다. 명백한 것을 놓치지 않는 것이 목적이다.
  * 걸리면 사람이 확인하게 만들고, 확인 전에는 외부로 내보내지 않는다.
  */
-const PII_PATTERNS: Array<{ kind: PiiFinding['kind']; re: RegExp; minDigits?: number }> = [
+const PII_PATTERNS: Array<{ kind: PiiFinding['kind']; re: RegExp }> = [
   // 주민등록번호 — 생년월일 6자리 + 성별코드로 시작하는 7자리
   { kind: '주민등록번호', re: /\b\d{6}\s*[-–]\s*[1-4]\d{6}\b/g },
   { kind: '전화번호',     re: /\b01[016789][-\s]?\d{3,4}[-\s]?\d{4}\b/g },
   { kind: '이메일',       re: /\b[\w.+-]+@[\w-]+\.[\w.]{2,}\b/g },
   { kind: '카드번호',     re: /\b(?:\d{4}[-\s]){3}\d{4}\b/g },
-  {
-    kind: '계좌번호',
-    re: /\b\d{2,3}[-]\d{2,6}[-]\d{2,6}(?:[-]\d{1,6})?\b/g,
-    // 사고조사보고서는 접수일자를 "25-11-24"(YY-MM-DD) 형태로 적는다. 이 모양이
-    // 계좌번호 패턴에 그대로 걸린다 — 실제로 (25)48·(26)1 두 건에서 확인된 오탐이다.
-    // 국내 계좌번호는 하이픈을 뺀 총 자릿수가 10~14 자리라 6자리 날짜와는 확실히
-    // 구분되므로, 총 자릿수로 걸러낸다(형태소 분석 없이 자릿수만으로 충분).
-    minDigits: 9,
-  },
 ];
 
 /** 값 자체를 로그에 남기지 않는다. 앞뒤만 남기고 가린다 */
@@ -67,17 +58,14 @@ function mask(s: string): string {
 
 export function detectPii(text: string): PiiFinding[] {
   const out: PiiFinding[] = [];
-  // 앞선 패턴이 잡은 구간은 지우고 넘긴다.
-  // 그러지 않으면 전화번호가 계좌번호 패턴에도 걸려 같은 값이 두 번 보고된다.
-  // 패턴 순서가 곧 우선순위이므로 구체적인 것부터 둔다.
+  // 앞선 패턴이 잡은 구간은 지우고 넘긴다. 패턴 순서가 곧 우선순위이므로 구체적인 것부터 둔다.
   let remaining = text;
 
-  for (const { kind, re, minDigits } of PII_PATTERNS) {
+  for (const { kind, re } of PII_PATTERNS) {
     re.lastIndex = 0;
     const hits: string[] = [];
     let m: RegExpExecArray | null;
     while ((m = re.exec(remaining)) !== null) {
-      if (minDigits && m[0].replace(/\D/g, '').length < minDigits) continue;
       hits.push(m[0]);
     }
     if (!hits.length) continue;
