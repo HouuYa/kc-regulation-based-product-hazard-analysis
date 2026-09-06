@@ -38,6 +38,8 @@ const STAGES = [
 const ASIDE = [
   // 세 번째 산출물. 1~3 의 결과가 쌓여야 숫자가 생기므로 흐름 뒤에 둔다
   { href: '/insights', label: 'KC안전기준 개선 요인', sub: '사각지대·국내외 대조·시험항목' },
+  // 두 사전은 한 흐름이다 — 일상어를 법정 품목으로 옮긴 뒤(검색어), 그 품목의 기준을 정한다(용어)
+  { href: '/keywords', label: '품목 검색어 사전',     sub: '일상어 → 법정 품목' },
   { href: '/terms',    label: '품목 용어 사전',       sub: '품목 → 적용기준' },
   { href: '/codebook', label: '위해요인 코드',        sub: '참고 문서' },
   { href: '/ops',      label: '운영',                sub: '상태·알림·접속 관리' },

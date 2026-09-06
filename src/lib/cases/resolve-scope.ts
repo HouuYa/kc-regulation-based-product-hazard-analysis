@@ -27,7 +27,7 @@ export interface ResolvedScope {
   standardCount: number;
   /** 왜 이 품목·기준으로 봤는가. 화면과 감사에 그대로 쓴다 */
   evidence: string;
-  method: '용어 사전' | '품목명 일치' | '별칭 일치' | '적용범위 검색' | '적용범위 의미 검색';
+  method: '용어 사전' | '검색어 사전' | '품목명 일치' | '별칭 일치' | '적용범위 검색' | '적용범위 의미 검색';
 }
 
 /** "전지_보조배터리" → ["전지", "보조배터리"] 처럼 후보를 넓힌다 */
@@ -129,6 +129,75 @@ export async function resolveProductScope(
         (unreviewed > 0 ? ` · 미검수 ${unreviewed}건 포함` : '') +
         (ids.length > dictHits.length ? ` · 제1부 ${ids.length - dictHits.length}건 포함` : ''),
       method: '용어 사전',
+    };
+  }
+
+  /*
+    ── 검색어 사전으로 법정 품목을 거쳐 간다 (2026-09-06) ─────────────────
+
+    사고보고서는 담당자가 쓰는 글이라 법정어가 84% 지만, 해외 리콜 1,553종은 6%만
+    법정어와 맞는다("토끼 나무 기차"). 그 간극을 메우려고 만든 사전이 item_keyword 다.
+
+      일상어 → item_keyword → 법정 품목 → product_taxonomy → 부속서 기준
+
+    안전하게 쓰기 위한 조건 셋. 하나라도 어기면 엉뚱한 기준이 붙는다.
+
+    1) 정확 일치만 쓴다
+       부분 일치는 쓰지 않는다. 실제로 "고압세척기"가 진공청소기에 붙어 있고,
+       "세척기" 같은 조각말은 식기세척기까지 끌어온다.
+
+    2) 여러 품목에 걸친 말은 쓰지 않는다
+       검색어 5,982개 중 600개가 두 품목 이상에 붙어 있다. 어느 쪽인지 정할 수 없으면
+       고르지 않는다 — 담당자가 화면에서 판단할 일이다(/keywords 「손볼 곳」).
+
+    3) 확정된 것만 쓴다
+       AI 제안(source='LLM')은 검수를 통과해야 한다. scope_term 의 LLM 제안과 같은 규칙이다.
+
+    제외어(item_keyword_stopword)는 협회가 정한 「일일동향보고 검색 제외어」다.
+    위해유형 이름처럼 품목이 아닌 말이 섞여 들어오면 엉뚱한 품목에 걸린다.
+  */
+  const viaKeyword = await db<{ id: number; display_name: string; target: string }[]>`
+    with hit as (
+      select k.item_group, coalesce(k.sub_item, k.item, '') target
+      from public.item_keyword k
+      where k.keyword_key = public.scope_term_key(${itemName})
+        and k.review_status = 'approved'
+        and not exists (
+          select 1 from public.item_keyword_stopword w where w.word_key = k.keyword_key)
+        -- 여러 품목에 걸친 말은 자동으로 쓰지 않는다
+        and (
+          select count(distinct coalesce(k2.sub_item, k2.item, ''))
+          from public.item_keyword k2
+          where k2.keyword_key = k.keyword_key and k2.review_status <> 'rejected'
+        ) = 1
+    )
+    select distinct s.id, s.display_name, hit.target
+    from hit
+    join public.product_taxonomy t
+      on t.item_group = hit.item_group
+     and hit.target in (t.item, t.sub_item, t.sub_sub_item)
+    -- 법정 품목명이 기준의 품목명과 맞는 것만. 부속서 33종 중 32종이 이렇게 이어진다
+    join public.standard s
+      on s.is_current and s.item_name is not null
+     and public.scope_term_key(s.item_name) in (
+           public.scope_term_key(t.item),
+           public.scope_term_key(coalesce(t.sub_item, '')),
+           public.scope_term_key(coalesce(t.sub_sub_item, '')))
+    order by s.display_name
+  `;
+
+  if (viaKeyword.length > 0) {
+    const ids = await withGeneralPart(viaKeyword.map((h) => h.id));
+    return {
+      productScopeId: null,
+      scopeName: viaKeyword[0].target,
+      standardIds: ids,
+      standardCount: ids.length,
+      evidence:
+        `검색어 사전 — "${itemName}" → 법정 품목 "${viaKeyword[0].target}" → ` +
+        viaKeyword.map((h) => h.display_name).join(', ') +
+        (ids.length > viaKeyword.length ? ` · 제1부 ${ids.length - viaKeyword.length}건 포함` : ''),
+      method: '검색어 사전',
     };
   }
 
