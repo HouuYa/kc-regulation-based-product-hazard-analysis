@@ -24,6 +24,7 @@ import {
   type MatchConfig, type MatchInput, type Candidate, type EmptyReason,
 } from './match';
 import { groupBySection, flattenSections } from './group-section';
+import { hydeQuery } from './hyde';
 import { rerankCandidates } from '../llm/rerank';
 import { checkReadiness, type NotReadyReason } from './readiness';
 import { openaiConfig, tuning } from '../env';
@@ -180,7 +181,35 @@ export async function runAnalysis(
 
     LLM 비용은 늘지 않는다. 넓히는 것은 SQL 조회이고, 리랭킹은 좁힌 뒤에 부른다.
   */
-  const wide = await searchCandidates(input, { ...config, candidateCount: SECTION_POOL });
+  /*
+    HyDE — 사고 서술로 "답에 해당할 법한 조항"을 지어내 의미 갈래의 질의로 쓴다
+    (04-2 §4, 2026-09-06 실측으로 채택)
+
+    사고 서술과 기준 조항은 문체가 아예 달라 겹치는 낱말이 거의 없다.
+      사고   "가습기를 켜 두고 자는데 타는 냄새가 나서 보니 불이 붙어 있었다"
+      조항   "이상운전 시 온도 상승은 표 9에서 정한 값을 초과하여서는 안 된다"
+
+      + 절 묶음(최대)             재현율 23.8%  오탐 87.9%  상위5 14.6%
+      + 절 묶음 + 리랭킹           재현율 23.8%  오탐 87.9%  상위5 33.5%
+      + 절 묶음 + HyDE + 리랭킹    재현율 25.2%  오탐 86.3%  상위5 36.5%
+
+    리랭킹과 함께 써야 값어치가 난다. HyDE 만 켜면 재현율이 되레 23.2% 로 내려가는데,
+    리랭킹을 얹으면 25.2% 로 오른다 — HyDE 가 만든 후보가 리랭커에게 더 나은 재료가 된다.
+
+    실패하면 원래 임베딩으로 간다. HyDE 는 의미 갈래를 다듬는 단계이지 후보를 만드는
+    단계가 아니므로, 여기서 멈출 이유가 없다.
+  */
+  let searchInput = input;
+  if (config.useRerank && input.embedding) {
+    try {
+      const h = await hydeQuery(input);
+      searchInput = { ...input, embedding: h.embedding };
+    } catch (e) {
+      console.error(`가상 조항 생성 실패 (사건 ${caseId}) — 원래 임베딩으로 진행합니다:`, e);
+    }
+  }
+
+  const wide = await searchCandidates(searchInput, { ...config, candidateCount: SECTION_POOL });
   let candidates = flattenSections(
     groupBySection(wide, SECTION_SCORING),
     config.candidateCount,
