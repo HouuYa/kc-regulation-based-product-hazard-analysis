@@ -194,6 +194,8 @@ erDiagram
 | 비동기 처리 | `embed_queue`, `job_run`, `ops_alert` | 임베딩·수집 작업과 실패 상태 관리 |
 | 코드 정의 | `codebook.hazard_factor`, `codebook.damage_type` | 위해요인·피해유형 코드의 정의를 판(version)별로 저장 |
 | 코드 연결 | `codebook.cause_bridge`, `codebook.hf_route` | 피해유형 → 원인 후보 대응과, 원인별 확인 경로(시험/법령) 저장 |
+| 품목 사전 | `item_keyword`, `item_keyword_stopword` | 일상어 → 법정 품목. 담당자가 만든 것과 AI 제안을 출처로 구분해 저장 |
+| 품목 연결 | `product_taxonomy`, `taxonomy_standard` | 법정 품목 ↔ GPC 대응(협회 원본)과, 법정 품목 → KC기준 대응 저장 |
 
 DB는 두 스키마로 나뉩니다. `codebook`은 코드의 정의를 판별로 관리하고, `public`은 기준 원문·사건·분석 이력을 담습니다. 각 표가 무엇을 담고 왜 그렇게 생겼는지는 별도 문서에 있습니다.
 
