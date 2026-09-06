@@ -273,3 +273,33 @@ export async function saveLinks(suggestions: LinkSuggestion[]): Promise<number> 
   }
   return saved;
 }
+
+/**
+ * "이을 기준을 못 찾았다"도 담는다 (050)
+ *
+ * 전에는 콘솔에 몇 줄 찍고 버렸다. 그러면 담당자가 "왜 이 품목엔 기준이 없지?"를
+ * 확인할 방법이 없다. 이 저장소는 조항 쪽에서 이미 "0건도 산출물"이라고 정해 두었고
+ * (match.ts diagnoseEmpty), 품목 쪽에서도 같아야 한다.
+ *
+ * 남기면 두 가지를 할 수 있다.
+ *   담당자가 그 자리에서 바로잡는다 — "아니다, 이 기준이다"
+ *   정말 기준이 없는 품목은 **적재해야 할 기준 목록**이 된다
+ */
+export async function saveDeclines(
+  declined: LinkOutcome['declined'],
+): Promise<number> {
+  const db = getDb();
+  let saved = 0;
+  for (const d of declined) {
+    const [row] = await db<{ id: number }[]>`
+      insert into public.taxonomy_standard
+        (item_group, item, sub_item, standard_id, source, review_status, confidence, evidence)
+      values (${d.target.itemGroup}, ${d.target.item}, ${d.target.subItem}, null,
+              'SEMANTIC_LLM', 'auto_unreviewed', null, ${d.reason})
+      on conflict do nothing
+      returning id
+    `;
+    if (row) saved++;
+  }
+  return saved;
+}

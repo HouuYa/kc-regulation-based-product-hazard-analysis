@@ -46,7 +46,8 @@
     "alias:eval": "cross-env NODE_OPTIONS=--use-system-ca tsx scripts/eval-alias.ts",
     "alias:build": "cross-env NODE_OPTIONS=--use-system-ca tsx scripts/build-aliases.ts",
     "scopes:embed": "cross-env NODE_OPTIONS=--use-system-ca tsx scripts/embed-scopes.ts",
-    "taxonomy:link": "cross-env NODE_OPTIONS=--use-system-ca tsx scripts/link-taxonomy-standards.ts"
+    "taxonomy:link": "cross-env NODE_OPTIONS=--use-system-ca tsx scripts/link-taxonomy-standards.ts",
+    "link:eval": "cross-env NODE_OPTIONS=--use-system-ca tsx scripts/eval-link.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.58.0",

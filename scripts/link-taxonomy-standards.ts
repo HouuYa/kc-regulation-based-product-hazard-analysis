@@ -10,7 +10,7 @@
  */
 
 import { getDb, closeDb } from '../src/lib/db';
-import { linkTargets, suggestLinks, saveLinks, BATCH } from '../src/lib/taxonomy/link-standards';
+import { linkTargets, suggestLinks, saveLinks, saveDeclines, BATCH } from '../src/lib/taxonomy/link-standards';
 
 function argValue(name: string): string | null {
   const i = process.argv.indexOf(name);
@@ -59,11 +59,12 @@ async function main() {
       );
       console.log(`      ${s.evidence}`);
     }
-    for (const d of declined.slice(0, 2)) {
-      console.log(`  ${(d.target.subItem || d.target.item || '').padEnd(22)} → (고르지 않음) ${d.reason.slice(0, 70)}`);
+    // 거절도 모두 보여 준다 — 담당자가 그 자리에서 바로잡거나, 적재해야 할 기준을 찾는 재료다
+    for (const d of declined) {
+      console.log(`  ${(d.target.subItem || d.target.item || '').padEnd(22)} → (이을 기준 없음) ${d.reason.slice(0, 90)}`);
     }
 
-    if (save) saved += await saveLinks(suggestions);
+    if (save) { saved += await saveLinks(suggestions); saved += await saveDeclines(declined); }
     console.log(`  … ${Math.min(i + BATCH, targets.length)}/${targets.length}\n`);
   }
 

@@ -38,7 +38,7 @@ interface LinkRow {
   id: number;
   item_group: string;
   target: string;
-  display_name: string;
+  display_name: string | null;
   title_ko: string | null;
   scope_text: string;
   confidence: string | null;
@@ -78,7 +78,7 @@ async function load(params: { view?: string; q?: string; page?: string }) {
     **실제 사고·리콜에 걸리는 품목**이 먼저이고, 그중 **확신이 낮은 것**이 먼저다.
     확신 99% 짜리를 먼저 보여 주면 담당자가 지루해져 정작 위험한 것에 눈이 무뎌진다.
   */
-  const links = view === 'link' ? await db<LinkRow[]>`
+  const links = view === 'link' || view === 'nomatch' ? await db<LinkRow[]>`
     select
       x.id, x.item_group, coalesce(x.sub_item, x.item, '') target,
       s.display_name, s.title_ko,
@@ -93,8 +93,10 @@ async function load(params: { view?: string; q?: string; page?: string }) {
           and k.review_status <> 'rejected' and ce.item_name is not null
       ), 0) used_by
     from public.taxonomy_standard x
-    join public.standard s on s.id = x.standard_id
+    -- 기준을 못 찾은 줄은 standard_id 가 비어 있다(050). left join 이라야 그 줄도 나온다
+    left join public.standard s on s.id = x.standard_id
     where ${q ? db`(coalesce(x.sub_item, x.item, '') ilike ${'%' + q + '%'} or s.display_name ilike ${'%' + q + '%'})` : db`true`}
+      ${view === 'nomatch' ? db`and x.standard_id is null` : db`and x.standard_id is not null`}
     order by
       (x.review_status = 'auto_unreviewed') desc,
       used_by desc,
@@ -103,7 +105,8 @@ async function load(params: { view?: string; q?: string; page?: string }) {
   ` : [];
 
   // 품목 단위 목록 — 검수는 품목 단위로 하는 편이 빠르다
-  const groups = view === 'risk' || view === 'conflict' || view === 'link' ? [] : await db<GroupRow[]>`
+  const groups = view === 'risk' || view === 'conflict' || view === 'link' || view === 'nomatch'
+    ? [] : await db<GroupRow[]>`
     with live as (
       select id, item_group, coalesce(sub_item, item, '') target,
              keyword, keyword_key, source, review_status
@@ -228,13 +231,14 @@ export default async function KeywordsPage({
             {tab('risk', '손볼 곳', '실제로 걸리면서 충돌·과매칭 위험이 있는 것')}
             {tab('conflict', '충돌만', '같은 말이 여러 품목에 붙어 있는 것')}
             {tab('link', '법정 품목 → 기준', '적용범위·제목을 뜻으로 견주어 이은 것')}
+            {tab('nomatch', '이을 기준 없음', '이을 기준을 못 찾은 품목과 그 사유')}
             {tab('pending', '검수 대기')}
             {tab('expert', '담당자 사전')}
             {tab('all', '전체')}
           </div>
 
           {/* ── 법정 품목 → 기준 ───────────────────────────── */}
-          {view === 'link' && (
+          {(view === 'link' || view === 'nomatch') && (
             <section className="mt-6">
               <div className="border border-rule-soft px-4 py-3 text-[12px] leading-relaxed text-ink-2">
                 검색어가 <span className="text-ink">법정 품목</span>까지 데려다주면, 그다음은 그 품목의
@@ -256,7 +260,11 @@ export default async function KeywordsPage({
                       <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
                         <span className="text-[14px] font-semibold">{l.target}</span>
                         <span className="text-[12px] text-ink-3">→</span>
-                        <span className="addr text-[13px] font-medium">{l.display_name}</span>
+                        {l.display_name ? (
+                          <span className="addr text-[13px] font-medium">{l.display_name}</span>
+                        ) : (
+                          <span className="text-[13px] font-medium text-caution">이을 기준을 찾지 못함</span>
+                        )}
                         {pct !== null && (
                           <span className={`border px-1.5 text-[10px] ${
                             pct >= 90 ? 'border-rule text-ink-3' : 'border-caution text-caution'
@@ -296,15 +304,20 @@ export default async function KeywordsPage({
                         <ActionForm
                           action={reviewLink}
                           hidden={{ id: String(l.id), toStatus: 'approved' }}
-                          label="이 기준이 맞다"
+                          label={l.display_name ? '이 기준이 맞다' : '기준이 없는 게 맞다'}
                           pendingLabel="확정하는 중…"
                         />
                         <ActionForm
                           action={reviewLink}
                           hidden={{ id: String(l.id), toStatus: 'rejected' }}
-                          label="아니다 (반려)"
+                          label={l.display_name ? '아니다 (반려)' : '아니다, 기준이 있다'}
                           pendingLabel="반려하는 중…"
                         />
+                        {!l.display_name && (
+                          <span className="self-center text-[11px] text-ink-3">
+                            「기준이 없는 게 맞다」로 확정하면 <strong className="font-semibold">적재해야 할 기준</strong> 목록이 됩니다
+                          </span>
+                        )}
                       </div>
                     </article>
                   );
@@ -381,7 +394,7 @@ export default async function KeywordsPage({
           )}
 
           {/* ── 품목 단위 목록 ─────────────────────────────── */}
-          {view !== 'risk' && view !== 'conflict' && view !== 'link' && (
+          {view !== 'risk' && view !== 'conflict' && view !== 'link' && view !== 'nomatch' && (
             <section className="mt-6">
               <form method="get" className="mb-4 flex flex-wrap gap-2">
                 <input type="hidden" name="view" value={view} />
