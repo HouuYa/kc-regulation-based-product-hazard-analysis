@@ -157,3 +157,37 @@ export async function applyImport(csv: string): Promise<string> {
     return `반영하지 못했습니다 — ${e instanceof Error ? e.message : e}`;
   }
 }
+
+/* ── 법정 품목 → 기준 대응 검수 ─────────────────────────────────────────── */
+
+/**
+ * 대응 하나를 확정하거나 반려한다.
+ *
+ * 이 판단이 특히 무겁다. 품목이 틀리면 그 품목으로 이어지는 **모든** 사고·리콜에
+ * 엉뚱한 기준의 시험이 근거로 제시된다. 검색어 하나가 틀린 것보다 파급이 크다.
+ */
+export async function reviewLink(_prev: string | null, formData: FormData): Promise<string> {
+  const id = Number(formData.get('id'));
+  const to = String(formData.get('toStatus') ?? '');
+  if (!id) return '대응을 찾지 못했습니다.';
+  if (to !== 'approved' && to !== 'rejected') return '알 수 없는 검수 결과입니다.';
+
+  try {
+    const [r] = await getDb()<{ name: string }[]>`
+      update public.taxonomy_standard x
+      set review_status = ${to}, reviewed_by = ${'담당자'}, reviewed_at = now()
+      from public.standard s
+      where x.id = ${id} and s.id = x.standard_id
+        and x.review_status is distinct from ${to}
+      returning coalesce(x.sub_item, x.item, '') || ' → ' || s.display_name as name
+    `;
+    revalidatePath('/keywords');
+    if (!r) return '이미 같은 상태였습니다.';
+    return to === 'approved'
+      ? `확정했습니다 — ${r.name}. 이제 이 품목은 이 기준으로 분석됩니다.`
+      : `반려했습니다 — ${r.name}. 더 이상 쓰지 않습니다.`;
+  } catch (e) {
+    console.error(`대응 검수 실패 (${id}):`, e);
+    return `처리하지 못했습니다 — ${e instanceof Error ? e.message : e}`;
+  }
+}

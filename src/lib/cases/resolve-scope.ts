@@ -171,19 +171,39 @@ export async function resolveProductScope(
           where k2.keyword_key = k.keyword_key and k2.review_status <> 'rejected'
         ) = 1
     )
-    select distinct s.id, s.display_name, hit.target
-    from hit
-    join public.product_taxonomy t
-      on t.item_group = hit.item_group
-     and hit.target in (t.item, t.sub_item, t.sub_sub_item)
-    -- 법정 품목명이 기준의 품목명과 맞는 것만. 부속서 33종 중 32종이 이렇게 이어진다
-    join public.standard s
-      on s.is_current and s.item_name is not null
-     and public.scope_term_key(s.item_name) in (
-           public.scope_term_key(t.item),
-           public.scope_term_key(coalesce(t.sub_item, '')),
-           public.scope_term_key(coalesce(t.sub_sub_item, '')))
-    order by s.display_name
+    /*
+      법정 품목에서 기준으로 가는 길이 둘이다.
+
+      ① 기준의 품목명과 맞는 것 — 부속서 33종 중 32종이 이렇게 이어진다
+      ② 대응표(taxonomy_standard) — 적용범위·제목을 뜻으로 견주어 만든 것(049)
+
+      전기용품 43종은 품목명이 비어 있어 ①로는 닿지 못한다. 그 자리가 ②다.
+      ②는 **확정된 것만** 쓴다 — 품목이 틀리면 엉뚱한 기준의 시험이 근거로 제시된다.
+    */
+    , linked as (
+      select distinct s.id, s.display_name, hit.target
+      from hit
+      join public.product_taxonomy t
+        on t.item_group = hit.item_group
+       and hit.target in (t.item, t.sub_item, t.sub_sub_item)
+      join public.standard s
+        on s.is_current and s.item_name is not null
+       and public.scope_term_key(s.item_name) in (
+             public.scope_term_key(t.item),
+             public.scope_term_key(coalesce(t.sub_item, '')),
+             public.scope_term_key(coalesce(t.sub_sub_item, '')))
+
+      union
+
+      select distinct s.id, s.display_name, hit.target
+      from hit
+      join public.taxonomy_standard x
+        on x.item_group = hit.item_group
+       and hit.target in (x.item, x.sub_item)
+       and x.review_status = 'approved'
+      join public.standard s on s.id = x.standard_id and s.is_current
+    )
+    select id, display_name, target from linked order by display_name
   `;
 
   if (viaKeyword.length > 0) {

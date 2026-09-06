@@ -44,7 +44,9 @@
     "taxonomy:load": "cross-env NODE_OPTIONS=--use-system-ca tsx scripts/load-taxonomy.ts",
     "keywords:load": "cross-env NODE_OPTIONS=--use-system-ca tsx scripts/load-item-keywords.ts",
     "alias:eval": "cross-env NODE_OPTIONS=--use-system-ca tsx scripts/eval-alias.ts",
-    "alias:build": "cross-env NODE_OPTIONS=--use-system-ca tsx scripts/build-aliases.ts"
+    "alias:build": "cross-env NODE_OPTIONS=--use-system-ca tsx scripts/build-aliases.ts",
+    "scopes:embed": "cross-env NODE_OPTIONS=--use-system-ca tsx scripts/embed-scopes.ts",
+    "taxonomy:link": "cross-env NODE_OPTIONS=--use-system-ca tsx scripts/link-taxonomy-standards.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.58.0",
