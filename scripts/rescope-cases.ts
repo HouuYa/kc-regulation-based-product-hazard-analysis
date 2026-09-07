@@ -5,6 +5,7 @@
  *   npm run cases:rescope -- --dry
  *   npm run cases:rescope -- --source-type RECALL_OVERSEAS --no-llm
  *   npm run cases:rescope -- --source-type RECALL_OVERSEAS --limit 30
+ *   npm run cases:rescope -- --redo "적용범위 원문 검색" --limit 30   이미 붙은 것 다시 보기
  *
  * 왜 따로 두는가
  *   cases:code 는 코드 부여까지 함께 한다. 코드는 이미 붙어 있는데 품목만 없는
@@ -45,20 +46,36 @@ async function main() {
   const limit = argValue('--limit') ? Number(argValue('--limit')) : null;
   const db = getDb();
 
+  /*
+    이미 붙어 있는 것도 다시 볼 수 있어야 한다 (--redo, 2026-09-07)
+
+    품목 확정 방법이 나아지면 예전 방식으로 붙은 것은 낡은 답이 된다. 실제로
+    원문검색을 「구 먼저」로 고치자 표본에서 붙는 기준이 83종 → 10종으로 줄었다
+    ("안전 조끼"에 전기다리미가 붙어 있었다). 그 1,406건을 그대로 두면 담당자가
+    낡은 답을 근거로 검토하게 된다.
+
+    근거를 지우고 다시 돌리는 방법도 있지만 그러지 않는다 — 지우면 "전에 무엇으로
+    붙었는지"가 사라져 나아졌는지 나빠졌는지 견줄 수 없다. 대신 어느 방법으로 붙은
+    것을 다시 볼지 골라서 태운다.
+  */
+  const redo = argValue('--redo');
   const rows = await db<{ id: number; title: string; narrative: string; item_name: string | null; extracted_text: string | null }[]>`
     select e.id, e.title, e.narrative, e.item_name, f.extracted_text
     from public.case_event e
     left join public.source_file f on f.id = e.source_file_id
     where e.product_scope_id is null
       ${sourceType ? db`and e.source_type = ${sourceType}` : db``}
-      -- 용어 사전(042)이 생겼으므로, 의미 검색으로 붙인 것도 다시 본다.
-      -- 담당자가 확정한 대응이 있으면 그쪽이 맞다
-      and (e.scope_evidence is null or e.scope_evidence like '적용범위 의미 검색%')
+      ${redo
+        // 지정한 방법으로 붙은 것만 다시 본다 (예: --redo "적용범위 원문 검색")
+        ? db`and e.scope_evidence like ${redo + '%'}`
+        // 기본은 아직 못 붙인 것과, 의미 검색으로 붙인 것.
+        // 용어 사전(042)이 생겼으므로 담당자가 확정한 대응이 있으면 그쪽이 맞다
+        : db`and (e.scope_evidence is null or e.scope_evidence like '적용범위 의미 검색%')`}
     order by e.id
     ${limit ? db`limit ${limit}` : db``}
   `;
   console.log(
-    `품목 미확정 사건 ${rows.length}건` +
+    `${redo ? `「${redo}」 으로 붙은 사건` : '품목 미확정 사건'} ${rows.length}건` +
     `${sourceType ? ` (${sourceType})` : ''}${noLlm ? ' · 의미 검색 끔' : ''}${dry ? ' · dry' : ''}\n`,
   );
 
@@ -70,7 +87,25 @@ async function main() {
     const itemName = c.item_name ?? extractItemName(c.extracted_text ?? '');
     if (!itemName) { no++; console.log(`  [${c.id}] 품목명을 못 뽑음`); continue; }
     const scope = await resolveProductScope(itemName, c.narrative, { allowSemantic: !noLlm });
-    if (!scope) { no++; continue; }
+    if (!scope) {
+      no++;
+      /*
+        다시 보는 중(--redo)에 못 찾았으면 예전 답을 지운다.
+
+        지우지 않으면 "안전 조끼 → 전기다리미" 같은 낡은 답이 그대로 남아, 고친
+        뒤에도 담당자가 그것을 근거로 검토하게 된다. 못 찾은 것은 못 찾았다고
+        보이는 편이 맞다 — 이 체계에서 틀린 답은 빈칸보다 나쁘다.
+      */
+      if (redo && !dry) {
+        await db`
+          update public.case_event
+          set product_scope_id = null, scope_evidence = null
+          where id = ${c.id}
+        `;
+        console.log(`  [${c.id}] "${itemName}" → 못 찾음 · 예전 답을 지웠다`);
+      }
+      continue;
+    }
     ok++;
     byMethod.set(scope.method, (byMethod.get(scope.method) ?? 0) + 1);
     console.log(`  [${c.id}] "${itemName}" → ${scope.method} · 기준 ${scope.standardCount}종`);
