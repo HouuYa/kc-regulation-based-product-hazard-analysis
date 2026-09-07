@@ -77,7 +77,7 @@ export async function hydeQuery(input: {
     model: openaiConfig().rerankModel,
     system: SYSTEM,
     user,
-    schemaName: 'hypothetical_clause',
+    schemaName: 'hypothetical_clause', purpose: 'hyde',
     schema,
     effort: 'low',
   });

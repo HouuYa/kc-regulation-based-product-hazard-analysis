@@ -100,7 +100,7 @@ export async function analyzePhotos(
     images: photos.map((p) => ({
       dataUrl: `data:image/jpeg;base64,${p.jpeg.toString('base64')}`,
     })),
-    schemaName: 'photo_analysis',
+    schemaName: 'photo_analysis', purpose: 'tagging',
     schema: SCHEMA,
     effort: cfg.visionEffort as never,
   });

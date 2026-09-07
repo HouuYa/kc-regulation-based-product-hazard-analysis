@@ -147,7 +147,7 @@ export async function verifyGpcMatch(
     model: cfg.rerankModel,
     system: SYSTEM,
     user,
-    schemaName: 'gpc_verification',
+    schemaName: 'gpc_verification', purpose: 'gpc_verify',
     schema,
     effort: cfg.rerankEffort as ReasoningEffort,
   });

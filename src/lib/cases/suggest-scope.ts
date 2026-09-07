@@ -139,7 +139,7 @@ export async function suggestScope(
     model: openaiConfig().rerankModel,
     system: SYSTEM,
     user,
-    schemaName: 'scope_suggestion',
+    schemaName: 'scope_suggestion', purpose: 'scope_suggest',
     schema,
     effort: 'low',
   });

@@ -121,7 +121,7 @@ export async function rerankCandidates(
     model,
     system: SYSTEM,
     user,
-    schemaName: 'rerank_scores',
+    schemaName: 'rerank_scores', purpose: 'rerank',
     schema,
     effort: openaiConfig().rerankEffort as ReasoningEffort,
   });

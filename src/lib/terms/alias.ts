@@ -195,7 +195,7 @@ export async function suggestAliases(targets: AliasTarget[]): Promise<AliasSugge
     model: openaiConfig().rerankModel,
     system: SYSTEM,
     user,
-    schemaName: 'item_aliases',
+    schemaName: 'item_aliases', purpose: 'alias',
     schema,
     effort: 'low',
   });

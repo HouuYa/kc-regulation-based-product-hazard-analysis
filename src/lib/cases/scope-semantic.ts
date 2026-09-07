@@ -159,7 +159,7 @@ export async function resolveScopeSemantically(
     model: cfg.rerankModel,
     system: SYSTEM,
     user,
-    schemaName: 'scope_verification',
+    schemaName: 'scope_verification', purpose: 'scope_semantic',
     schema,
     effort: cfg.rerankEffort as Parameters<typeof structuredCall>[0]['effort'],
   });
@@ -241,7 +241,7 @@ export async function filterScopeCandidates(
     model: cfg.rerankModel,
     system: FILTER_SYSTEM,
     user,
-    schemaName: 'scope_filter',
+    schemaName: 'scope_filter', purpose: 'scope_filter',
     schema,
     effort: cfg.rerankEffort as Parameters<typeof structuredCall>[0]['effort'],
   });

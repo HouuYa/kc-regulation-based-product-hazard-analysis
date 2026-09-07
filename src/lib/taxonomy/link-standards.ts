@@ -203,7 +203,7 @@ export async function suggestLinks(targets: LinkTarget[]): Promise<LinkOutcome> 
     model: openaiConfig().rerankModel,
     system: SYSTEM,
     user: `${user}\n\ntarget 에는 위 [품목] 의 이름을 그대로 적는다.`,
-    schemaName: 'taxonomy_standard_links',
+    schemaName: 'taxonomy_standard_links', purpose: 'taxonomy_link',
     schema,
     effort: 'low',
   });

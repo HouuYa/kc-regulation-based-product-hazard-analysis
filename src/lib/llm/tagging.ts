@@ -288,7 +288,7 @@ async function runTagging(
       model,
       system,
       user,
-      schemaName: 'hazard_tagging',
+      schemaName: 'hazard_tagging', purpose: 'tagging',
       schema,
       effort: effort as ReasoningEffort,
     });

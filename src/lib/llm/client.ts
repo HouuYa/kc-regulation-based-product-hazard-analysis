@@ -31,6 +31,56 @@ export interface CallUsage {
 }
 
 /**
+ * 호출을 부른 자리. 화면이 이 값으로 묶어 "어디에 얼마 썼나"를 보여 준다(052).
+ *
+ * 문자열을 아무렇게나 받지 않고 목록으로 묶는 이유는, 오타 하나로 같은 단계가
+ * 두 줄로 갈라져 집계가 조용히 틀어지기 때문이다.
+ */
+export type LlmPurpose =
+  | 'tagging'        // 사건·조항에 HF·DT 코드 부여
+  | 'rerank'         // 조항 후보 재채점
+  | 'hyde'           // 가상 조항 생성
+  | 'scope_semantic' // 적용범위 의미검색으로 기준 고르기
+  | 'scope_filter'   // 원문검색 후보 거르기
+  | 'scope_suggest'  // 품목에 맞는 기준 제안
+  | 'gpc_verify'     // GPC 계위 검증
+  | 'alias'          // 법정 품목의 일상어 별칭 생성
+  | 'taxonomy_link'  // 법정 품목 → 기준 잇기
+  | 'embedding';     // 임베딩
+
+/**
+ * 호출 한 건을 남긴다 (052)
+ *
+ * 기록에 실패해도 본 작업은 계속한다. 비용을 못 적는 것보다 처리가 멈추는 편이
+ * 훨씬 나쁘다 — 기록은 곁다리다.
+ *
+ * DB 를 여기서 직접 부르지 않고 늦게 불러오는(dynamic import) 이유는, 이 파일이
+ * 스크립트·서버 양쪽에서 쓰이는데 db 모듈을 위에서 정적으로 물면 임포트 고리가
+ * 생기기 때문이다.
+ */
+async function recordCall(row: {
+  purpose: LlmPurpose;
+  model: string;
+  usage: CallUsage;
+  itemCount?: number;
+  ok?: boolean;
+  error?: string | null;
+}): Promise<void> {
+  try {
+    const { getDb } = await import('../db');
+    await getDb()`
+      insert into public.llm_call
+        (purpose, model, input_tokens, output_tokens, reasoning_tokens, item_count, ok, error)
+      values (${row.purpose}, ${row.model},
+              ${row.usage.inputTokens}, ${row.usage.outputTokens}, ${row.usage.reasoningTokens},
+              ${row.itemCount ?? 1}, ${row.ok ?? true}, ${row.error ?? null})
+    `;
+  } catch (e) {
+    console.warn('AI 호출 기록 실패(처리는 계속합니다):', e instanceof Error ? e.message : e);
+  }
+}
+
+/**
  * 구조화 출력 호출 (§5.2.2 Structured Outputs)
  *
  * 자유 서술로 받고 나중에 파싱하는 방식과의 차이가 여기서 갈린다.
@@ -53,38 +103,59 @@ async function chatJsonCall<T>(args: {
   schemaName: string;
   schema: Record<string, unknown>;
   effort?: ReasoningEffort;
+  purpose?: LlmPurpose;
 }): Promise<{ value: T; usage: CallUsage }> {
-  const res = await getOpenAI().chat.completions.create({
-    model: args.model,
-    ...(args.effort ? { reasoning_effort: args.effort } : {}),
-    messages: [
-      { role: 'system', content: args.system },
-      { role: 'user', content: args.userContent },
-    ],
-    response_format: {
-      type: 'json_schema',
-      json_schema: {
-        name: args.schemaName,
-        strict: true,
-        schema: args.schema,
+  let res;
+  try {
+    res = await getOpenAI().chat.completions.create({
+      model: args.model,
+      ...(args.effort ? { reasoning_effort: args.effort } : {}),
+      messages: [
+        { role: 'system', content: args.system },
+        { role: 'user', content: args.userContent },
+      ],
+      response_format: {
+        type: 'json_schema',
+        json_schema: {
+          name: args.schemaName,
+          strict: true,
+          schema: args.schema,
+        },
       },
-    },
-  } as never);
-
-  const content = res.choices[0]?.message?.content;
-  if (!content) {
-    throw new Error(`LLM(${args.model})이 빈 응답을 반환했습니다.`);
+    } as never);
+  } catch (e) {
+    // 실패해도 입력 토큰은 이미 나갔다. 다만 응답이 없으므로 토큰 수를 알 수 없다 —
+    // 0 으로 남기되 실패였음을 표시해, 성공만 세다 실제 지출과 어긋나는 것을 막는다
+    if (args.purpose) {
+      await recordCall({
+        purpose: args.purpose,
+        model: args.model,
+        usage: { inputTokens: 0, outputTokens: 0, reasoningTokens: 0 },
+        ok: false,
+        error: e instanceof Error ? e.message.slice(0, 500) : String(e).slice(0, 500),
+      });
+    }
+    throw e;
   }
 
   const u = res.usage;
-  return {
-    value: JSON.parse(content) as T,
-    usage: {
-      inputTokens: u?.prompt_tokens ?? 0,
-      outputTokens: u?.completion_tokens ?? 0,
-      reasoningTokens: u?.completion_tokens_details?.reasoning_tokens ?? 0,
-    },
+  const usage: CallUsage = {
+    inputTokens: u?.prompt_tokens ?? 0,
+    outputTokens: u?.completion_tokens ?? 0,
+    reasoningTokens: u?.completion_tokens_details?.reasoning_tokens ?? 0,
   };
+
+  const content = res.choices[0]?.message?.content;
+  if (!content) {
+    if (args.purpose) {
+      await recordCall({ purpose: args.purpose, model: args.model, usage, ok: false, error: '빈 응답' });
+    }
+    throw new Error(`LLM(${args.model})이 빈 응답을 반환했습니다.`);
+  }
+
+  if (args.purpose) await recordCall({ purpose: args.purpose, model: args.model, usage });
+
+  return { value: JSON.parse(content) as T, usage };
 }
 
 export async function structuredCall<T>(args: {
@@ -94,6 +165,8 @@ export async function structuredCall<T>(args: {
   schemaName: string;
   schema: Record<string, unknown>;
   effort?: ReasoningEffort;
+  /** 어디서 부른 것인가. 주면 llm_call 에 기록한다(052) */
+  purpose?: LlmPurpose;
 }): Promise<{ value: T; usage: CallUsage }> {
   return chatJsonCall<T>({ ...args, userContent: args.user });
 }
@@ -112,6 +185,7 @@ export async function structuredVisionCall<T>(args: {
   schemaName: string;
   schema: Record<string, unknown>;
   effort?: ReasoningEffort;
+  purpose?: LlmPurpose;
 }): Promise<{ value: T; usage: CallUsage }> {
   const userContent = [
     { type: 'text', text: args.user },
@@ -166,6 +240,16 @@ export async function embedBatch(texts: string[]): Promise<number[][]> {
     model: cfg.embeddingModel,
     input,
     dimensions: cfg.embeddingDim,
+  });
+
+  // 임베딩도 돈이 든다. 한 번에 여러 건을 보내므로 건수도 함께 남긴다(052).
+  // 실제로 의미검색이 매번 기준 73종을 다시 임베딩하고 있었는데, 이런 낭비는
+  // 기록이 없으면 드러나지 않는다
+  await recordCall({
+    purpose: 'embedding',
+    model: cfg.embeddingModel,
+    usage: { inputTokens: res.usage?.prompt_tokens ?? 0, outputTokens: 0, reasoningTokens: 0 },
+    itemCount: input.length,
   });
 
   const vectors = res.data
