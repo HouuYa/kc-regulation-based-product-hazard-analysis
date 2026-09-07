@@ -12,6 +12,23 @@
  *   korea_relevance 는 approved 건 전부 true 였다(hub.ts 시절과 같은 결과 —
  *   변별력은 없지만 조건에는 명시해 둔다).
  *
+ * 화면의 「관리 대상」이 korea_relevance 다 (2026-09-07 확인)
+ *   Recall Hub 관리자 화면(docs/해외리콜수집/recall-hub-admin화면.png)에는 「승인」과
+ *   「관리 대상」이 **서로 다른 칸**으로 있다. 승인은 승인/반려 배지이고, 관리 대상은
+ *   켜고 끄는 토글이다. 코드에서는 각각 approval_status 와 korea_relevance 인데,
+ *   이름만 봐서는 「관리 대상」인 줄 알 수 없어 "그 조건이 걸려 있느냐"는 물음이
+ *   반복됐다. 그래서 실물로 세어 근거를 남긴다.
+ *
+ *     승인   · 관리대상 O  2,336건   ← 우리가 받아 오는 것
+ *     승인   · 관리대상 X      0건
+ *     반려   · 관리대상 O      4건   ← 두 칸이 따로 움직인다는 증거
+ *     반려   · 관리대상 X  2,634건
+ *     대기   · 관리대상 X      5건
+ *
+ *   「승인이면서 관리대상 아님」은 0건이라 지금은 두 조건이 겹쳐 보이지만, 반려인데
+ *   관리대상이 켜진 것이 4건 있다. 관리대상만으로 거르면 그 4건이 섞여 들어오므로
+ *   **두 조건을 AND 로 함께 건다.**
+ *
  * 서버 전용. sb_secret_* 키는 RLS 를 우회하므로 브라우저로 절대 노출하면 안 된다
  * (파일명이 source.ts 인 것과 NEXT_PUBLIC_ 접두사가 없는 것이 방어선 — server.ts 와 동일).
  */
@@ -76,7 +93,10 @@ export interface FetchOptions {
   offset?: number;
 }
 
-/** approval_status='approved' AND korea_relevance=true 인 건만 페이지를 넘겨 가며 모은다 */
+/**
+ * 화면의 「승인」이면서 「관리 대상」인 건만 페이지를 넘겨 가며 모은다.
+ * (approval_status='approved' AND korea_relevance=true — 위 주석의 실측 참고)
+ */
 export async function fetchApprovedRecalls(opts: FetchOptions = {}): Promise<SourceRecall[]> {
   const sb = getClient();
   const cap = opts.limit ?? Number.MAX_SAFE_INTEGER;
