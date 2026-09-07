@@ -3,6 +3,8 @@ import { PageHead, ConnectionError, TermsNote } from '@/components/Panel';
 import { ActionForm } from '@/components/ActionForm';
 import { AutoRefresh } from '@/components/AutoRefresh';
 import { PageToc, type TocItem } from '@/components/PageToc';
+import { usageSummary, PURPOSE_LABEL, type UsageSummary } from '@/lib/llm/usage';
+import { formatCost } from '@/lib/llm/pricing';
 import {
   runEmbedTick, retryParked, sendTestAlert,
   sendCustomMessage, runJobNow, toggleAutoTagging, resetTagFailures,
@@ -83,6 +85,8 @@ interface Data {
     taggingRecovered: number;
     embeddingRecovered: number;
   };
+  /** AI 사용·비용 현황(052). 기록이 없거나 조회에 실패하면 null */
+  usage: UsageSummary | null;
   taggable: number;
   /** 세 번 연속 실패해 자동 대상에서 빠진 조항. 남은 건수와 절대 합치지 않는다(029) */
   stalledTagging: number;
@@ -120,6 +124,7 @@ const OPS_TOC: TocItem[] = [
   { id: 'ops-attention', label: '확인이 필요한 것' },
   { id: 'ops-actions', label: '지금 하기' },
   { id: 'ops-details', label: '자동으로 도는 일' },
+  { id: 'ops-llm', label: '🤖 AI 사용과 비용' },
   { id: 'ops-alerts', label: '알림' },
   { id: 'ops-access', label: '접속 관리' },
 ];
@@ -216,10 +221,18 @@ async function load(): Promise<{ data: Data | null; error: string | null }> {
               and exists (select 1 from vault.decrypted_secrets where name = 'site_base_url')) as ok
     `;
 
+    // AI 사용·비용 (052). 기록이 없어도 화면은 떠야 하므로 실패해도 넘어간다
+    let usage: UsageSummary | null = null;
+    try {
+      usage = await usageSummary(30);
+    } catch (err) {
+      console.error('AI 사용 현황 조회 실패:', err);
+    }
+
     return {
       data: {
         ops, embed, jobs, runs, parkedRows, cronFailures, alerts,
-        recovery,
+        recovery, usage,
         taggable: t.n, stalledTagging: t.stalled,
         autoTagging: at.on, embeddedToday: e.n, jobsConfigured: j.ok,
       },
@@ -751,7 +764,107 @@ export default async function OpsPage() {
             ))}
           </Section>
 
-          {/* ── 6. 알림 ───────────────────────────────────────────── */}
+          {/* ── 6. AI 사용과 비용 ─────────────────────────────────── */}
+          <Section
+            id="ops-llm"
+            title="🤖 AI를 어디에 쓰고 있나"
+            lead="이 시스템은 정해진 자리에서만 AI를 부릅니다. 어느 조항이 걸리는지는 SQL이 계산하고, AI는 뜻을 옮기거나 후보를 걸러내는 일만 합니다. 아래는 최근 30일 동안 실제로 부른 기록입니다."
+          >
+            {!data.usage || data.usage.totalCalls === 0 ? (
+              <div className="border border-rule-soft px-4 py-3 text-[12px] leading-relaxed text-ink-2">
+                아직 기록이 없습니다. 기록은 2026-09-07부터 쌓기 시작했으므로, 그 전에 돌린
+                작업은 여기에 나오지 않습니다.
+              </div>
+            ) : (
+              <>
+                <div className="grid gap-x-8 sm:grid-cols-3">
+                  <Signal
+                    label="부른 횟수"
+                    value={`${data.usage.totalCalls.toLocaleString()}회`}
+                    level="ok"
+                    note={data.usage.totalFailed > 0 ? `실패 ${data.usage.totalFailed}회 포함` : undefined}
+                  />
+                  <Signal
+                    label="비용 (최근 30일)"
+                    value={formatCost(data.usage.knownCost)}
+                    level={data.usage.unpricedModels.length > 0 ? 'caution' : 'ok'}
+                    note={
+                      data.usage.unpricedModels.length > 0
+                        ? `${data.usage.unpricedModels.join(', ')} 단가가 없어 빠졌습니다`
+                        : undefined
+                    }
+                  />
+                  <Signal label="마지막 호출" value={when(data.usage.lastCallAt)} level="ok" />
+                </div>
+
+                {data.usage.unpricedModels.length > 0 && (
+                  <div className="mt-4 border border-caution bg-caution-soft px-4 py-3 text-[12px] leading-relaxed text-ink-2">
+                    <span className="font-semibold text-caution">금액이 실제보다 적게 보입니다.</span>{' '}
+                    단가를 모르는 모델({data.usage.unpricedModels.join(', ')})은 0원으로 세지 않고
+                    아예 뺐습니다. 모르는 값을 0으로 적으면 &ldquo;얼마 안 드네&rdquo;라고 잘못
+                    판단하게 되기 때문입니다. <code className="addr">.env.local</code>에{' '}
+                    <code className="addr">LLM_PRICES</code>를 넣으면 계산합니다 — 100만 토큰당
+                    미국 달러입니다.
+                  </div>
+                )}
+
+                <div className="mt-5 overflow-x-auto">
+                  <table className="w-full min-w-[46rem] border-collapse text-[12px]">
+                    <thead>
+                      <tr className="border-b border-rule text-left text-ink-3">
+                        <th className="py-2 pr-4 font-normal">어디에</th>
+                        <th className="py-2 pr-4 font-normal">모델</th>
+                        <th className="py-2 pr-4 text-right font-normal">횟수</th>
+                        <th className="py-2 pr-4 text-right font-normal">입력 토큰</th>
+                        <th className="py-2 pr-4 text-right font-normal">출력 토큰</th>
+                        <th className="py-2 text-right font-normal">비용</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {data.usage.rows.map((r) => {
+                        const label = PURPOSE_LABEL[r.purpose];
+                        return (
+                          <tr key={`${r.purpose}-${r.model}`} className="border-b border-rule-soft align-top">
+                            <td className="py-2 pr-4">
+                              <div className="text-ink">{label?.name ?? r.purpose}</div>
+                              {label && <div className="mt-0.5 text-[11px] text-ink-3">{label.where}</div>}
+                            </td>
+                            <td className="py-2 pr-4 text-ink-2">{r.model}</td>
+                            <td className="py-2 pr-4 text-right tabular-nums">
+                              {r.calls.toLocaleString()}
+                              {r.failed > 0 && (
+                                <span className="ml-1 text-caution">실패 {r.failed}</span>
+                              )}
+                            </td>
+                            <td className="py-2 pr-4 text-right tabular-nums text-ink-2">
+                              {r.inputTokens.toLocaleString()}
+                            </td>
+                            <td className="py-2 pr-4 text-right tabular-nums text-ink-2">
+                              {r.outputTokens.toLocaleString()}
+                              {r.reasoningTokens > 0 && (
+                                <div className="text-[11px] text-ink-3">
+                                  생각 {r.reasoningTokens.toLocaleString()}
+                                </div>
+                              )}
+                            </td>
+                            <td className="py-2 text-right tabular-nums">{formatCost(r.costUsd)}</td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+
+                <p className="mt-3 text-[12px] leading-relaxed text-ink-3">
+                  「생각」은 추론 모델이 속으로 쓴 토큰입니다. 출력 토큰에 이미 포함되어
+                  청구되므로 따로 더하지 않습니다. 임베딩은 한 번에 여러 건을 묶어 보내므로
+                  호출 횟수가 처리 건수보다 적습니다.
+                </p>
+              </>
+            )}
+          </Section>
+
+          {/* ── 7. 알림 ───────────────────────────────────────────── */}
           <Section
             id="ops-alerts"
             title="알림 (텔레그램)"

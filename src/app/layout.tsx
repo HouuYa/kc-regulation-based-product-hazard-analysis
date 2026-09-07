@@ -22,10 +22,19 @@ export const metadata: Metadata = {
  *   등록과 분석을 따로 두지 않고 한 화면에 합친 것은, 담당자가 "사고보고서 + KC안전기준
  *   연계 분석"을 하나의 일로 인식하기 때문이다.
  */
+/**
+ * 🤖 는 그 화면에서 AI 가 관여한다는 표시다 (2026-09-07)
+ *
+ * 장식이 아니라 경고에 가깝다. AI 가 손댄 결과는 **사람이 한 번 확인해야 하는 것**
+ * 이라는 뜻이고, 이 체계의 산출물이 판정이 아니라 후보인 이유이기도 하다.
+ * 어디에 무엇이 얼마나 쓰이는지는 운영 화면의 「🤖 AI 사용과 비용」에 있다.
+ */
+const AI_NOTE = 'AI가 관여하는 화면입니다 — 결과는 후보이고, 확정은 담당자가 합니다';
+
 const STAGES = [
-  { no: '1', href: '/standards', label: '안전기준',   sub: '조항·시험 적재' },
-  { no: '2', href: '/accidents', label: '사고보고서', sub: '등록·현황·분석' },
-  { no: '3', href: '/recalls',   label: '리콜',       sub: '수집·현황·분석' },
+  { no: '1', href: '/standards', label: '안전기준',   sub: '조항·시험 적재',   ai: true },
+  { no: '2', href: '/accidents', label: '사고보고서', sub: '등록·현황·분석',   ai: true },
+  { no: '3', href: '/recalls',   label: '리콜',       sub: '수집·현황·분석',   ai: true },
 ];
 
 /**
@@ -36,11 +45,12 @@ const STAGES = [
  * 운영은 상태가 이상할 때만 여는 화면이라 눈길이 가는 자리에 둘 이유가 없다.
  */
 const ASIDE = [
-  // 세 번째 산출물. 1~3 의 결과가 쌓여야 숫자가 생기므로 흐름 뒤에 둔다
+  // 세 번째 산출물. 1~3 의 결과가 쌓여야 숫자가 생기므로 흐름 뒤에 둔다.
+  // 여기는 쌓인 것을 세기만 하므로 AI 를 부르지 않는다
   { href: '/insights', label: 'KC안전기준 개선 요인', sub: '사각지대·국내외 대조·시험항목' },
   // 두 사전은 한 흐름이다 — 일상어를 법정 품목으로 옮긴 뒤(검색어), 그 품목의 기준을 정한다(용어)
-  { href: '/keywords', label: '품목 검색어 사전',     sub: '일상어 → 법정 품목' },
-  { href: '/terms',    label: '품목 용어 사전',       sub: '품목 → 적용기준' },
+  { href: '/keywords', label: '품목 검색어 사전',     sub: '일상어 → 법정 품목', ai: true },
+  { href: '/terms',    label: '품목 용어 사전',       sub: '품목 → 적용기준',    ai: true },
   { href: '/codebook', label: '위해요인 코드',        sub: '참고 문서' },
   { href: '/ops',      label: '운영',                sub: '상태·알림·접속 관리' },
 ];
@@ -102,6 +112,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                       <span className="min-w-0">
                         <span className="block text-[13px] font-medium whitespace-nowrap">
                           {s.label}
+                          {s.ai && (
+                            <span aria-label={AI_NOTE} title={AI_NOTE} className="ml-1">
+                              🤖
+                            </span>
+                          )}
                         </span>
                         <span className="block text-[11px] whitespace-nowrap text-ink-3">
                           {s.sub}
@@ -127,6 +142,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     >
                       <span className="block text-[13px] font-medium whitespace-nowrap group-hover:text-measure">
                         {a.label}
+                        {a.ai && (
+                          <span aria-label={AI_NOTE} title={AI_NOTE} className="ml-1">
+                            🤖
+                          </span>
+                        )}
                       </span>
                       <span className="block text-[11px] whitespace-nowrap text-ink-3">
                         {a.sub}
