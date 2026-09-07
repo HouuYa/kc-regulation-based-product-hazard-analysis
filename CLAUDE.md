@@ -89,6 +89,10 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 - 실측으로 확인한 수치(적재 건수, 검증 결과 등)가 있으면 반드시 남긴다 —
   이 프로젝트는 "구현 전 설계 문서의 가정을 실물로 검증하는" 성격이 커서,
   숫자가 곧 근거가 된다.
+- 초안을 쓴 뒤 `.claude/skills/round-log/` 절차로 형식(한 줄 문단·기존 항목
+  보존 여부)을 점검한다.
+- 문장을 다듬을 때는 `skills/humanize-korean/`을 `구현이력.md` 모드(보수적,
+  실측 수치·결정 이유 보존)로 사용한다.
 
 ## 6. 설계문서 버전이 여러 개 공존할 수 있다
 
@@ -103,6 +107,8 @@ LLM 요약을 넣을지 뺄지).
   이 방식으로 되어 있다.
 - 새 설계문서가 도착하면 이전 버전과 무엇이 다른지, 어느 쪽을 따랐는지를
   커밋 메시지와 `구현이력.md`에 남긴다.
+- 새 문서를 만들 때는 §11의 frontmatter `status`/`supersedes`로 이전 버전과의
+  관계를 표시한다.
 
 ## 7. 자격증명·개인정보
 
@@ -163,3 +169,31 @@ LLM 요약을 넣을지 뺄지).
 
 xlsx는 `scripts/build-answer-key.ts`의 방식(zip + XML 직접 파싱)으로 읽는다 —
 이 저장소는 파일 몇 개를 읽자고 xlsx 라이브러리를 들이지 않는다.
+
+`docs/`에는 이 두 파일 외에도 업무자료(품목분류·GPC 가이드, 해외 리콜 연동
+원자료, 정답지, 실측 대조 결과 등)가 계속 쌓인다. 제도·법령·업무 절차·업무
+자료 조회는 `.claude/skills/kc-work-reference/`로 절차화되어 있으니 관련
+질문에는 이 스킬을 쓴다. 새 업무자료가 `docs/`에 추가되면 이 스킬의 업무자료
+지도도 함께 갱신한다.
+
+## 11. 새 `.md` 문서에는 표준 frontmatter를 붙인다
+
+새로 만드는 `docs/*.md`, 루트 설계문서(`00.`~`04-*`), `codebook/*.md` 등
+업무 문서에는 맨 위에 아래 frontmatter를 붙인다. 기존 문서에는 소급 적용하지
+않는다 — §3(외과적 변경) 원칙대로 손대지 않는다. `구현이력.md`(append-only
+이력)와 `skills/*/SKILL.md`(Claude 스킬 자체 frontmatter 규격을 따름)는
+이 규칙 대상이 아니다.
+
+```yaml
+---
+created: YYYY-MM-DD      # 생성일자 (필수)
+updated: YYYY-MM-DD      # 마지막 업데이트일자 (필수, 문서를 고칠 때마다 최신화)
+description: 이 문서가 무엇을 다루는지 한 줄 (필수)
+status: draft | active | superseded | deprecated   # 문서 상태 (선택)
+supersedes: []             # 이 문서가 대체하는 이전 문서 파일명 (있으면)
+related: []                 # 함께 참고해야 할 문서 파일명 (있으면)
+---
+```
+
+`status`/`supersedes`는 §6과 바로 연결된다 — 새 버전이 나오면 이전 문서에
+`status: superseded`를 달고, 새 문서의 `supersedes`에 이전 파일명을 적는다.
