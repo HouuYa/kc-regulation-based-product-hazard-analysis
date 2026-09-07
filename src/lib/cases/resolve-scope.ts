@@ -17,7 +17,7 @@
  */
 
 import { getDb } from '../db';
-import { resolveScopeSemantically } from './scope-semantic';
+import { resolveScopeSemantically, filterScopeCandidates } from './scope-semantic';
 
 export interface ResolvedScope {
   productScopeId: number | null;
@@ -35,6 +35,53 @@ function variants(itemName: string): string[] {
   const cleaned = itemName.replace(/[()[\]]/g, ' ').replace(/\s+/g, ' ').trim();
   const parts = cleaned.split(/[\s,·/]+/).filter((p) => p.length >= 2);
   return [...new Set([cleaned, ...parts])];
+}
+
+/** 혼자서 이 비율 넘게 걸리는 말은 고르는 데 도움이 안 된다 */
+const USELESS_RATIO = 0.5;
+
+type Db = ReturnType<typeof getDb>;
+interface ScopeHit { id: number; display_name: string; snippet: string }
+
+/** 적용범위 원문에서 찾는다. 질의가 비면 아무것도 돌려주지 않는다 */
+async function searchScope(db: Db, query: string): Promise<ScopeHit[]> {
+  if (!query.trim()) return [];
+  return db<ScopeHit[]>`
+    select s.id, s.display_name,
+           substring(s.scope_text from 1 for 120) as snippet
+    from public.standard s
+    where s.is_current
+      and s.scope_text is not null
+      and s.scope_text operator(extensions.&@~) ${query}
+    limit 10
+  `;
+}
+
+/**
+ * 조각 중 변별력이 있는 것만 남긴다.
+ *
+ * 몇 종에 걸리는지를 그때그때 세어서 정한다. 낱말 목록을 손으로 관리하면 기준이
+ * 늘고 줄 때마다 어긋나고, 무엇보다 빼면 안 되는 말을 빼게 된다.
+ */
+async function discriminating(db: Db, words: string[]): Promise<string[]> {
+  if (words.length === 0) return [];
+
+  const [{ total }] = await db<{ total: number }[]>`
+    select count(*)::int total from public.standard
+    where is_current and scope_text is not null
+  `;
+  if (total === 0) return words;
+
+  const kept: string[] = [];
+  for (const w of words) {
+    const [{ n }] = await db<{ n: number }[]>`
+      select count(*)::int n from public.standard
+      where is_current and scope_text is not null
+        and scope_text operator(extensions.&@~) ${w}
+    `;
+    if (n > 0 && n / total < USELESS_RATIO) kept.push(w);
+  }
+  return kept;
 }
 
 /**
@@ -81,7 +128,17 @@ export async function resolveProductScope(
   itemName: string,
   /** 사건 서술. 있으면 의미 검색의 신호가 훨씬 좋아진다 — 품목 이름만으로는 짧다 */
   narrative?: string | null,
+  /**
+   * 의미 검색(LLM)까지 갈지. 기본은 간다.
+   *
+   * 끄고 쓰는 자리가 있다 — 리콜 2,299건처럼 큰 묶음을 한 번에 돌릴 때다.
+   * 값싼 경로가 빗나간 건마다 임베딩·LLM 을 부르고, 성공하면 scope_term 에
+   * 미검수로 쌓기까지 한다. 지금은 검수 대기가 이미 병목이라(검색어 4,943개),
+   * 먼저 값싼 경로만 돌려 이득을 재고 LLM 은 따로 결정하는 편이 낫다.
+   */
+  options?: { allowSemantic?: boolean },
 ): Promise<ResolvedScope | null> {
+  const allowSemantic = options?.allowSemantic ?? true;
   const db = getDb();
   const cands = variants(itemName);
 
@@ -249,20 +306,63 @@ export async function resolveProductScope(
     };
   }
 
-  // ── 2) 적용범위 원문 검색 ────────────────────────────────────────────
-  //
-  // PGroonga 로 찾는다. 조사가 붙어도 잡아야 하기 때문이다("가습기의", "가습기를").
-  // 여러 기준이 걸리면 전부 적용 후보로 둔다 — 하나로 좁히는 것은 담당자의 몫이고,
-  // 시스템이 임의로 고르면 시험 항목을 놓친다.
-  const hits = await db<{ id: number; display_name: string; snippet: string }[]>`
-    select s.id, s.display_name,
-           substring(s.scope_text from 1 for 120) as snippet
-    from public.standard s
-    where s.is_current
-      and s.scope_text is not null
-      and s.scope_text operator(extensions.&@~) ${cands.join(' OR ')}
-    limit 10
-  `;
+  /*
+    ── 2) 적용범위 원문 검색 ────────────────────────────────────────────
+
+    PGroonga 로 찾는다. 조사가 붙어도 잡아야 하기 때문이다("가습기의", "가습기를").
+    여러 기준이 걸리면 전부 적용 후보로 둔다 — 하나로 좁히는 것은 담당자의 몫이고,
+    시스템이 임의로 고르면 시험 항목을 놓친다.
+
+    구를 먼저 던진다 (2026-09-07)
+      전에는 품목명을 낱말로 쪼개 전부 OR 로 묶어 한 번에 던졌다. 그러면 가장 흔한
+      조각 하나가 결과를 지배한다. 실측하면 이렇게 된다.
+
+        "안전 조끼"     조각 OR: 56종   /   전체 구만: 0종
+        "전기 자전거"   조각 OR: 42종   /   전체 구만: 1종   ← 정확히 맞는 1종
+        "전기요"        조각 OR:  0종   /   전체 구만: 0종
+
+      담당자가 "전기는 빼면 안 된다, 전기요·전기자전거에서 쓰인다"고 짚었고 맞았다.
+      낱말이 문제가 아니라 쪼개서 OR 로 붙이는 것이 문제였다. 그래서 낱말 목록을
+      만들어 관리하지 않는다 — 목록은 언젠가 반드시 필요한 낱말을 빼먹는다.
+
+      구로 걸리면 거기서 멈추고, 0건일 때만 조각으로 넓힌다. 그때도 혼자서 절반
+      넘게 걸리는 조각은 고르는 데 도움이 안 되므로 뺀다(안전 77% · 사용 77% ·
+      기기 56% · 전기 55%. 반면 어린이 23% · 자전거 4% 는 남는다).
+  */
+  const phraseHits = await searchScope(db, cands[0]);
+  const rawHits = phraseHits.length > 0
+    ? phraseHits
+    : await searchScope(db, (await discriminating(db, cands.slice(1))).join(' OR '));
+
+  /*
+    걸린 것이 둘 이상이면 모델에게 되물어 거른다 (2026-09-07)
+
+    구 우선으로 고쳐도 조각이 저마다 변별력을 가지면서 여럿 걸리는 경우가 남는다
+    ("성인 휴대용 침대 난간" → 유아용 의자·침대 매트리스·휴대용 예초기 … 10종).
+    이 갈래만 검증이 없어서 그런 목록이 그대로 "품목 확정"으로 기록돼 왔다.
+
+    한 건이면 부르지 않는다. 구가 통째로 걸려 하나만 나온 것은 이미 충분히 좁다.
+    모델이 다 아니라고 하면 아래 의미검색으로 넘어간다 — 억지로 붙이지 않는다.
+    모델 호출이 실패하면 거르지 않은 원래 결과를 쓴다. 사전은 거들 뿐이다.
+  */
+  let hits = rawHits;
+  let filterNote = '';
+  if (allowSemantic && rawHits.length >= 2) {
+    try {
+      const rows = await db<{ id: number; display_name: string; scope_text: string | null }[]>`
+        select id, display_name, scope_text from public.standard
+        where id = any(${rawHits.map((h) => Number(h.id))}::bigint[])
+      `;
+      const filtered = await filterScopeCandidates(itemName, narrative, rows);
+      if (filtered) {
+        const keep = new Set(filtered.standardIds);
+        hits = rawHits.filter((h) => keep.has(Number(h.id)));
+        filterNote = ` · 후보 ${rawHits.length}종에서 모델이 ${hits.length}종으로 거름(${filtered.reasoning.slice(0, 120)})`;
+      }
+    } catch (e) {
+      console.warn(`적용범위 후보 거르기 실패 ("${itemName}"):`, e instanceof Error ? e.message : e);
+    }
+  }
 
   /*
     ── 3) 뜻으로 찾기 (2026-09-04 추가) ──────────────────────────────────
@@ -281,6 +381,8 @@ export async function resolveProductScope(
     제1부에 있고, 실제로 담당자도 두 기준을 함께 적었다(엑셀 55건 중 17건이 2종 이상).
   */
   if (hits.length === 0) {
+    if (!allowSemantic) return null;
+
     const semantic = await resolveScopeSemantically(itemName, narrative);
     if (!semantic) return null;
 
@@ -332,7 +434,7 @@ export async function resolveProductScope(
       `적용범위 원문 검색으로 ${hits.length}건` +
       (withParts.length > hits.length ? ` + 제1부 ${withParts.length - hits.length}건` : '') + ' — ' +
       hits.slice(0, 3).map((h) => h.display_name).join(', ') +
-      (hits.length > 3 ? ` 외 ${hits.length - 3}건` : ''),
+      (hits.length > 3 ? ` 외 ${hits.length - 3}건` : '') + filterNote,
     method: '적용범위 검색',
   };
 }

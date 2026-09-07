@@ -63,6 +63,16 @@ export interface SemanticScope {
 /** 후보를 몇 개까지 보여 줄 것인가. 실측상 정답이 10위 안에 들어왔다 */
 const CANDIDATES = 12;
 
+const FILTER_SYSTEM = [
+  '당신은 한국 KC 안전기준의 적용범위를 읽고, 주어진 제품에 적용되는 기준만 골라냅니다.',
+  '',
+  '판정 규칙',
+  '- 적용범위 원문에 그 제품이 포함되는 것만 고릅니다. 낱말이 스쳤다고 고르지 않습니다.',
+  '- 한 제품에 여러 기준이 함께 적용될 수 있습니다. 맞는 것은 모두 고릅니다.',
+  '- 맞는 것이 하나도 없으면 빈 목록을 돌려줍니다. 억지로 고르지 않습니다.',
+  '- 기준은 법령 용어를, 사고·리콜은 일상 용어를 씁니다. 말이 달라도 같은 물건이면 맞습니다.',
+].join('\n');
+
 /** 이 아래면 붙이지 않는다. 틀린 품목은 안 붙인 것보다 나쁘다 */
 const MIN_CONFIDENCE = 0.6;
 
@@ -84,12 +94,25 @@ export async function resolveScopeSemantically(
 ): Promise<SemanticScope | null> {
   const db = getDb();
 
-  const stds = await db<{ id: number; display_name: string; scope_text: string }[]>`
-    select id, display_name, scope_text
+  /*
+    미리 계산해 둔 적용범위 임베딩을 쓴다(048).
+
+    전에는 부를 때마다 기준 73종의 적용범위 27,985자를 통째로 다시 임베딩했다.
+    048 에서 standard.scope_embedding 에 저장해 두었는데도 이쪽을 함께 고치지
+    않아, 사건 한 건에 27,985자씩 헛돈이 나가고 있었다(리콜 471건이면 1,300만 자).
+    link-standards.ts 는 처음부터 저장된 것을 쓰고 있었다 — 같은 방식으로 맞춘다.
+  */
+  const stds = await db<{
+    id: number; display_name: string; scope_text: string; scope_embedding: string;
+  }[]>`
+    select id, display_name, scope_text, scope_embedding::text
     from public.standard
-    where is_current and scope_text is not null and length(btrim(scope_text)) > 20
+    where is_current and scope_embedding is not null
+      and scope_text is not null and length(btrim(scope_text)) > 20
   `;
   if (stds.length === 0) return null;
+
+  const scopeVecs = stds.map((s) => JSON.parse(s.scope_embedding) as number[]);
 
   /*
     질의를 만든다.
@@ -99,10 +122,7 @@ export async function resolveScopeSemantically(
   */
   const query = [itemName, (narrative ?? '').slice(0, 600)].filter(Boolean).join('\n');
 
-  const [queryVec, ...scopeVecs] = await embedBatch([
-    query,
-    ...stds.map((s) => `${s.display_name}\n${s.scope_text.slice(0, 1500)}`),
-  ]);
+  const [queryVec] = await embedBatch([query]);
 
   const ranked = stds
     .map((s, i) => ({ ...s, sim: cosine(queryVec, scopeVecs[i]) }))
@@ -156,5 +176,81 @@ export async function resolveScopeSemantically(
     confidence: value.confidence_score,
     reasoning: value.reasoning,
     candidateCount: ranked.length,
+  };
+}
+
+export interface ScopeFilterResult {
+  /** 실제로 적용된다고 본 기준 id. 하나도 없으면 빈 배열 */
+  standardIds: number[];
+  reasoning: string;
+}
+
+/**
+ * 적용범위 원문검색이 데려온 후보 중 실제로 맞는 것만 남긴다 (2026-09-07)
+ *
+ * 왜 필요한가
+ *   다섯 갈래 중 원문검색만 아무 검증 없이 최대 10종을 그대로 담고 있었다. 정작 더
+ *   조심스러운 의미검색은 LLM 에게 되물어 확인하는데, 훨씬 넓게 걸리는 쪽이 그냥
+ *   통과한 것이다. 담당자가 "모두 빗나가면 부를 게 아니라 중간에 점검해야 하지
+ *   않나"고 짚은 자리다.
+ *
+ *   구를 먼저 던지도록 고쳐(resolve-scope.ts) 「안전 조끼 → 56종」 같은 것은 사라졌지만,
+ *   조각이 저마다 변별력이 있으면서 여럿 걸리는 경우가 남는다.
+ *
+ *     "성인 휴대용 침대 난간" → 유아용 의자 · 침대 매트리스 · 휴대용 예초기 … 10종
+ *
+ * 하나로 좁히지 않는다
+ *   한 제품에 여러 기준이 함께 적용되는 것이 정상이다(제1부 + 제2-x부). 그래서
+ *   고르는 것이 아니라 **거르는** 일을 시킨다. 다 아니라고 하면 빈 배열을 돌려주고,
+ *   부르는 쪽이 의미검색으로 넘어간다.
+ */
+export async function filterScopeCandidates(
+  itemName: string,
+  narrative: string | null | undefined,
+  candidates: { id: number; display_name: string; scope_text: string | null }[],
+): Promise<ScopeFilterResult | null> {
+  if (candidates.length === 0) return { standardIds: [], reasoning: '후보 없음' };
+
+  const cfg = openaiConfig();
+  const schema = {
+    type: 'object',
+    additionalProperties: false,
+    required: ['applicable_standard_ids', 'reasoning'],
+    properties: {
+      applicable_standard_ids: {
+        type: 'array',
+        items: { type: 'string', enum: candidates.map((c) => String(c.id)) },
+        description: '적용되는 기준의 id. 맞는 것이 없으면 빈 배열',
+      },
+      reasoning: { type: 'string', description: '왜 그렇게 갈랐는지 한두 문장' },
+    },
+  };
+
+  const user = [
+    '[제품]',
+    itemName,
+    narrative ? `\n[사고 상황]\n${narrative.slice(0, 600)}` : '',
+    '',
+    '[기준 후보]',
+    candidates
+      .map((c) => `- id=${c.id} · ${c.display_name}\n  적용범위: ${(c.scope_text ?? '').slice(0, 700).replace(/\s+/g, ' ')}`)
+      .join('\n'),
+  ].filter(Boolean).join('\n');
+
+  const { value } = await structuredCall<{ applicable_standard_ids: string[]; reasoning: string }>({
+    model: cfg.rerankModel,
+    system: FILTER_SYSTEM,
+    user,
+    schemaName: 'scope_filter',
+    schema,
+    effort: cfg.rerankEffort as Parameters<typeof structuredCall>[0]['effort'],
+  });
+
+  if (!value) return null;
+
+  const allowed = new Set(candidates.map((c) => Number(c.id)));
+  return {
+    standardIds: [...new Set(value.applicable_standard_ids.map(Number))].filter((id) => allowed.has(id)),
+    reasoning: value.reasoning,
   };
 }
