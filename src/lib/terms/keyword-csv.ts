@@ -46,6 +46,24 @@ export async function exportKeywordsCsv(): Promise<string> {
   ]));
 }
 
+/**
+ * 제외어 내보내기 (2026-09-07)
+ *
+ * 왜 따로 내보내는가
+ *   우리 코드는 검색어를 쓸 때 늘 제외어를 뺀다(resolve-scope.ts). 그런데 밖에서
+ *   검색어 사전만 받아 가면 그 규칙을 모른 채 쓰게 되어, 받는 쪽이 우리보다 넓게
+ *   매칭한다 — 위해유형 이름 같은 "품목이 아닌 말"에 엉뚱한 품목이 걸린다.
+ *
+ *   검색어 CSV 에 섞지 않고 파일을 나눈 이유는 그 파일이 되돌려 넣는 왕복용이기
+ *   때문이다. 칸을 늘리면 담당자가 쓰던 파일 모양이 바뀐다.
+ */
+export async function exportStopwordsCsv(): Promise<string> {
+  const rows = await getDb()<{ word: string; source_file: string | null }[]>`
+    select word, source_file from public.item_keyword_stopword order by word
+  `;
+  return toCsv(['제외어', '출처'], rows.map((r) => [r.word, r.source_file ?? '']));
+}
+
 /* ── 가져오기 ──────────────────────────────────────────────────────────── */
 
 /** 아주 작은 CSV 파서 — 따옴표 안의 쉼표와 이스케이프된 따옴표만 다룬다 */

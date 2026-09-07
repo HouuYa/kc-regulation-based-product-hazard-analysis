@@ -147,6 +147,20 @@ export default async function TermsPage({
               </a>
               <TermImport />
             </div>
+
+            {/*
+              다른 시스템이 가져가는 길도 같은 주소다. 사람이 누르는 버튼과 기계가 부르는
+              API 를 따로 두지 않았다 — 검수 상태가 칸으로 함께 나가므로 받는 쪽이
+              확정된 것만 골라 쓸 수 있다.
+            */}
+            <div className="mt-4 border-t border-rule-soft pt-3 text-[12px] leading-relaxed text-ink-3">
+              <span className="text-ink-2">다른 시스템에 넘길 때</span>도 같은 주소를 씁니다 —{' '}
+              <code className="addr">GET /api/terms/export</code>. 검수 상태(확정·미검수·반려)가
+              칸으로 함께 나가므로 받는 쪽에서 확정된 것만 골라 쓸 수 있습니다. 인증은 이 사이트
+              접속과 같은 계정입니다.
+              <br />
+              계정은 사이트 전체를 여는 열쇠이니 안전한 경로로 전달해 주세요.
+            </div>
           </section>
 
           {/* ── 직접 추가 ───────────────────────────────────── */}

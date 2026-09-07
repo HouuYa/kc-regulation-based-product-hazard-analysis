@@ -540,6 +540,19 @@ export default async function KeywordsPage({
               <KeywordImport />
             </div>
 
+            <div className="mt-4 border-t border-rule-soft pt-3 text-[12px] leading-relaxed text-ink-3">
+              <span className="text-ink-2">다른 시스템에 넘길 때</span>도 같은 주소를 씁니다 —{' '}
+              <code className="addr">GET /api/keywords/export</code>. 검수 상태(확정·미검수·반려)가
+              칸으로 함께 나가므로 받는 쪽에서 확정된 것만 골라 쓸 수 있습니다. 인증은 이 사이트
+              접속과 같은 계정이며, 계정은 사이트 전체를 여는 열쇠이니 안전한 경로로 전달해 주세요.
+              <br />
+              <span className="text-ink-2">제외어도 함께 넘겨야 합니다</span> —{' '}
+              <a href="/api/keywords/stopwords" className="underline hover:text-ink">
+                <code className="addr">GET /api/keywords/stopwords</code>
+              </a>
+              . 이 시스템은 검색어를 쓸 때 늘 제외어를 빼는데, 검색어만 받아 가면 그 규칙을 모른 채
+              쓰게 되어 엉뚱한 품목이 걸립니다.
+            </div>
           </section>
         </>
       )}
