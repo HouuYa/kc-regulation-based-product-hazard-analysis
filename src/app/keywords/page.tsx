@@ -5,6 +5,7 @@ import { ActionForm } from '@/components/ActionForm';
 import { riskSummary, riskyKeywords, type KeywordRisk } from '@/lib/terms/keyword-check';
 import { reviewKeyword, reviewTarget, addKeyword, deleteKeyword, suggestForTarget, reviewLink } from './actions';
 import { KeywordImport } from './KeywordImport';
+import { ReviewShortcuts } from '@/components/ReviewShortcuts';
 
 export const dynamic = 'force-dynamic';
 
@@ -237,6 +238,23 @@ export default async function KeywordsPage({
             {tab('all', '전체')}
           </div>
 
+          {/*
+            행 단위로 판단하는 화면에만 단축키를 붙인다. 판단을 줄이는 장치가 아니라
+            버튼을 찾아 누르는 손동작만 줄이는 장치다 — 검수할 것이 5,400건이다.
+          */}
+          {(view === 'risk' || view === 'conflict' || view === 'link' || view === 'nomatch') && (
+            <>
+              <ReviewShortcuts />
+              <p className="mt-3 text-[11px] text-ink-3">
+                키보드로도 됩니다 — <span className="text-ink-2">j·↓</span> 다음 ·{' '}
+                <span className="text-ink-2">k·↑</span> 이전 ·{' '}
+                <span className="text-ink-2">a</span> 확정 ·{' '}
+                <span className="text-ink-2">r</span> 반려. 판단은 한 건씩 그대로 하시고,
+                버튼을 찾아 누르는 수고만 덜어 드립니다.
+              </p>
+            </>
+          )}
+
           {/* ── 법정 품목 → 기준 ───────────────────────────── */}
           {(view === 'link' || view === 'nomatch') && (
             <section className="mt-6">
@@ -256,7 +274,13 @@ export default async function KeywordsPage({
                 data.links.map((l) => {
                   const pct = l.confidence ? Math.round(Number(l.confidence) * 100) : null;
                   return (
-                    <article key={l.id} className="border-t border-rule py-3.5">
+                    <article
+                      key={l.id}
+                      data-review-row
+                      tabIndex={0}
+                      // 지금 보고 있는 줄을 계측의 색으로만 표시한다. 경고색은 쓰지 않는다
+                      className="border-t border-rule py-3.5 focus:bg-measure-soft"
+                    >
                       <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
                         <span className="text-[14px] font-semibold">{l.target}</span>
                         <span className="text-[12px] text-ink-3">→</span>
@@ -306,12 +330,14 @@ export default async function KeywordsPage({
                           hidden={{ id: String(l.id), toStatus: 'approved' }}
                           label={l.display_name ? '이 기준이 맞다' : '기준이 없는 게 맞다'}
                           pendingLabel="확정하는 중…"
+                          hotkeyRole="approve"
                         />
                         <ActionForm
                           action={reviewLink}
                           hidden={{ id: String(l.id), toStatus: 'rejected' }}
                           label={l.display_name ? '아니다 (반려)' : '아니다, 기준이 있다'}
                           pendingLabel="반려하는 중…"
+                          hotkeyRole="reject"
                         />
                         {!l.display_name && (
                           <span className="self-center text-[11px] text-ink-3">
@@ -333,7 +359,12 @@ export default async function KeywordsPage({
                 <EmptyState message="손볼 곳이 없습니다." />
               ) : (
                 data.risks.map((r) => (
-                  <article key={r.id} className="border-t border-rule py-3.5">
+                  <article
+                    key={r.id}
+                    data-review-row
+                    tabIndex={0}
+                    className="border-t border-rule py-3.5 focus:bg-measure-soft"
+                  >
                     <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
                       <span className="text-[14px] font-semibold">{r.keyword}</span>
                       <span className="text-[12px] text-ink-3">→ {r.target}</span>
@@ -373,12 +404,14 @@ export default async function KeywordsPage({
                         hidden={{ id: String(r.id), toStatus: 'approved' }}
                         label="이 품목이 맞다"
                         pendingLabel="확정하는 중…"
+                        hotkeyRole="approve"
                       />
                       <ActionForm
                         action={reviewKeyword}
                         hidden={{ id: String(r.id), toStatus: 'rejected' }}
                         label="아니다 (반려)"
                         pendingLabel="반려하는 중…"
+                        hotkeyRole="reject"
                       />
                       <ActionForm
                         action={deleteKeyword}
@@ -506,6 +539,7 @@ export default async function KeywordsPage({
               </a>
               <KeywordImport />
             </div>
+
           </section>
         </>
       )}

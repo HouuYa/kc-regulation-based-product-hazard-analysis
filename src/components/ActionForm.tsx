@@ -31,6 +31,7 @@ export function ActionForm({
   className = '',
   messageClassName = 'text-[11px] leading-snug text-ink-2',
   textInput,
+  hotkeyRole,
 }: {
   action: (prev: string | null, formData: FormData) => Promise<string>;
   hidden?: Record<string, string | number>;
@@ -40,6 +41,8 @@ export function ActionForm({
   messageClassName?: string;
   /** 글을 적어 보내는 버튼일 때. 이름과 안내 문구를 준다 */
   textInput?: { name: string; placeholder: string };
+  /** 검수 단축키(a·r)가 찾아 누를 버튼임을 표시한다. ReviewShortcuts 가 읽는다 */
+  hotkeyRole?: 'approve' | 'reject';
 }) {
   const [message, formAction, pending] = useActionState(action, null);
   const router = useRouter();
@@ -70,6 +73,7 @@ export function ActionForm({
           type="submit"
           disabled={pending}
           aria-busy={pending}
+          data-review-action={hotkeyRole}
           className={`${className} ${pending ? 'cursor-wait opacity-60' : ''}`}
         >
           {pending ? pendingLabel : label}
