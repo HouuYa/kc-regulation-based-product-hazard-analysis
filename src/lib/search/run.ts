@@ -200,10 +200,15 @@ export async function runAnalysis(
     단계가 아니므로, 여기서 멈출 이유가 없다.
   */
   let searchInput = input;
+  // 지어낸 문단을 들고 있다가 match_run 에 남긴다(051). hyde.ts 가 "되짚기 위해
+  // 돌려줄 뿐이다"라고 적어 두었는데 여기서 버리고 있었다 — 그러면 담당자가
+  // "왜 이 조항이 나왔지"를 되짚을 때 이 단계가 빈칸이 된다
+  let hydeText: string | null = null;
   if (config.useRerank && input.embedding) {
     try {
       const h = await hydeQuery(input);
       searchInput = { ...input, embedding: h.embedding };
+      hydeText = h.text;
     } catch (e) {
       console.error(`가상 조항 생성 실패 (사건 ${caseId}) — 원래 임베딩으로 진행합니다:`, e);
     }
@@ -260,6 +265,7 @@ export async function runAnalysis(
     rerankStatus,
     // 리랭커 모델·프롬프트 묶음의 판번호. 태깅의 tagging_version 과 같은 구실이다
     promptVersion: cfg ? `RERANK-${cfg.rerankModel}-${cfg.rerankEffort}` : null,
+    hydeText,
   });
 
   // 0건도 1급 산출물이다 — 왜 0건인지를 남긴다(2.3 결정 A, v0.7 §7.8)

@@ -281,6 +281,8 @@ export async function persistRun(
     rerankStatus: 'skipped' | 'ok' | 'failed';
     /** 리랭커 모델·프롬프트 묶음의 판번호 */
     promptVersion: string | null;
+    /** HyDE 가 지어낸 가상 조항. 어떤 문장으로 물었는지 되짚는 근거다(051) */
+    hydeText?: string | null;
   },
 ): Promise<number> {
   const db = getDb();
@@ -293,14 +295,18 @@ export async function persistRun(
        queried_hf_codes, queried_dt_codes, require_approved_tags,
        -- 그때 무엇을 물었는지까지 남긴다. 사건 서술은 나중에 바뀔 수 있으므로
        -- 여기서 다시 읽어 오면 그 시점의 질문을 증명할 수 없다(031)
-       query_text, query_keywords, rerank_status, prompt_version, finished_at)
+       query_text, query_keywords, rerank_status, prompt_version,
+       -- HyDE 가 지어낸 문장으로 의미 갈래를 물었다면 그 문장도 남긴다(051).
+       -- 어떤 조항이 떠오르는지를 바꾸는 단계라 빠지면 되짚기가 끊긴다
+       hyde_text, finished_at)
     values (${input.caseId}, ${config.useCode}, ${config.useKeyword}, ${config.useVector},
             ${config.useRerank}, ${config.rrfK}, ${config.wCode}, ${config.wCodePartial},
             ${config.candidateCount}, ${meta.embeddingModel}, ${meta.rerankModel},
             ${candidates.length}, ${input.hfCodes}::text[], ${input.dtCodes}::text[],
             ${config.requireApprovedTags},
             ${input.narrative}, ${input.keywords}::text[],
-            ${meta.rerankStatus}, ${meta.promptVersion}, now())
+            ${meta.rerankStatus}, ${meta.promptVersion},
+            ${meta.hydeText ?? null}, now())
     returning id
   `;
 
