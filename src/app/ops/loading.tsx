@@ -14,10 +14,10 @@ export default function Loading() {
       title="시스템이 지금 제대로 돌고 있는가"
       lead="자동 작업 상태와 확인할 문제를 보여 줍니다. 문제가 없으면 조치할 일이 없습니다."
       workflow={[
-        { label: '현재 상태' },
-        { label: '확인할 문제' },
-        { label: '필요한 작업' },
-        { label: '처리 내역' },
+        { label: '자동으로 돎' },
+        { label: '문제 찾기' },
+        { label: '알림' },
+        { label: '손보기', who: '사람' },
       ]}
       rows={4}
     />

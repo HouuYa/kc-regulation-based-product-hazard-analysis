@@ -87,12 +87,35 @@ export default async function OverviewPage() {
         label="개요"
         title="분석을 시작할 수 있는 상태인가"
         lead="먼저 준비 상태를 보고, 다음에 확인할 자료와 검토 결과를 엽니다."
-        workflow={[
-          { label: '준비 상태 확인' },
-          { label: '사고·리콜 확인' },
-          { label: '분석 결과 검토' },
-          { label: '판단 기록' },
-        ]}
+        /*
+          전체 업무 흐름 (담당자 요청, 2026-09-09)
+          이 화면은 개별 일을 하는 자리가 아니라 「어디까지 왔나」를 보는 자리다.
+          그래서 흐름도가 곧 이 화면의 본문이고, 각 상자가 그 일을 하는 화면으로 간다.
+        */
+        workflow={status ? [
+          { label: '안전기준 들여오기', href: '/standards', note: `${status.standards}종`, state: 'done' },
+          { label: '품목 잇기', who: '사람', href: '/terms', note: '용어 사전', state: 'done' },
+          {
+            label: '사고·리콜 들어옴',
+            href: '/accidents',
+            note: `사고 ${status.accidents} · 리콜 ${status.recalls.toLocaleString()}`,
+            state: 'done',
+          },
+          {
+            label: '분석',
+            who: '사람',
+            href: '/recalls',
+            note: `${status.analyzed.toLocaleString()}건 실행`,
+            state: 'here',
+          },
+          {
+            label: '검수·채택',
+            who: '사람',
+            note: `${status.reviews.toLocaleString()}건 기록`,
+            state: 'todo',
+          },
+          { label: '산출물 3종', href: '/insights', note: '시험항목·확인항목·개선요인', state: 'todo' },
+        ] : undefined}
       />
 
       {error && <ConnectionError error={error} />}

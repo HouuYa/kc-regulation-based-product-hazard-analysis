@@ -113,10 +113,10 @@ export default async function LlmPage() {
             title="어디에 어떤 모델을 쓰고, 얼마가 드는가"
             lead="이 시스템은 정해진 자리에서만 AI를 부릅니다. 어느 조항이 걸리는지는 SQL이 계산하고, AI는 뜻을 옮기거나 후보를 걸러내는 일만 합니다. 그 자리와 비용을 여기서 봅니다."
             workflow={[
-              { label: '어디에 어떤 모델', href: '#llm-sites' },
-              { label: '무엇이 비싼가', href: '#llm-cost' },
-              { label: '추이', href: '#llm-daily' },
-              { label: '운영 화면', href: '/ops' },
+              { label: 'AI를 부름', href: '#llm-sites', note: '정해진 자리에서만', state: 'done' },
+              { label: '호출을 기록', note: '토큰·비용·근거', state: 'done' },
+              { label: '비용으로 환산', href: '#llm-cost', note: '단가표로', state: 'done' },
+              { label: '비싼 자리 손보기', who: '사람', href: '#llm-daily', state: 'here' },
             ]}
           />
 

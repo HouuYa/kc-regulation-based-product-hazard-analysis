@@ -204,6 +204,24 @@ export default async function KeywordsPage({
         label="참고"
         title="품목 검색어 사전"
         lead="사고보고서와 해외 리콜에 적히는 일상 용어를 법정 품목으로 잇습니다. 여기서 이어야 그다음에 적용 기준을 찾습니다."
+        /*
+          「리콜에서 기준까지 가는 길」은 다리가 둘이다
+          (docs/전체_프로세스와_용어.md §6 「사전」이 셋).
+          이 화면은 그중 다리 1 을 맡는다. 다리 하나라도 미검수면 통과하지 못하므로
+          흐름도에 다리 2 까지 함께 그려 어디서 끊겨 있는지 보이게 한다.
+        */
+        workflow={data ? [
+          { label: '일상어', note: '천장등', state: 'done' },
+          {
+            label: '다리 1 · 검색어 사전',
+            who: '사람',
+            note: data.summary.unreviewed > 0 ? `검수 대기 ${data.summary.unreviewed.toLocaleString()}` : '검수 끝',
+            state: data.summary.unreviewed > 0 ? 'here' : 'done',
+          },
+          { label: '법정 품목', note: 'LED등기구', state: 'done' },
+          { label: '다리 2 · 기준 대응표', who: '사람', href: '/standards', note: '미검수', state: 'todo' },
+          { label: 'KC안전기준', note: 'KC 60598-2-4', state: 'todo' },
+        ] : undefined}
       />
 
       {error && <ConnectionError error={error} />}

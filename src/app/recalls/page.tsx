@@ -9,6 +9,7 @@ import { ActionForm } from '@/components/ActionForm';
 import { AutoRefresh } from '@/components/AutoRefresh';
 import { PageToc, type TocItem } from '@/components/PageToc';
 import { runAnalysisAction } from '@/app/analysis/[caseId]/actions';
+import { GROUP_ORDER } from '@/lib/standards/label';
 
 export const dynamic = 'force-dynamic';
 
@@ -62,6 +63,8 @@ interface RecallRow {
   embedding_pending: boolean | null;
   run_count: number;
   last_results: number | null;
+  /** 대분류 — 전기용품·생활용품·어린이제품. 사전에 없는 이름이면 null(화면에서 「기타」) */
+  item_group: string | null;
 }
 
 const DISTRIBUTION_LABEL: Record<string, string> = {
@@ -85,6 +88,7 @@ async function load(params: BoardParams) {
   const orderBy = SORTS[sort] ?? SORTS.published_on;
   const origin = params.origin ?? '';
   const check = params.check ?? '';
+  const group = params.group ?? '';
 
   const summaryQuery = db<Summary[]>`
     select
@@ -105,6 +109,16 @@ async function load(params: BoardParams) {
         where coalesce(domestic_check, 'UNCHECKED') = 'UNCHECKED')                        as "uncheckedDistribution"
   `;
 
+  /*
+    대분류로 걸러 보기 (담당자 요청, 2026-09-09)
+
+    "검토 시 전기/생활/어린이는 대분류로 무조건 구분하여 정렬될 수 있도록.
+     가능하다면 해외 리콜도 그렇게 해 주고, 애매하면 기타로 빼면 됨."
+
+    대분류는 case_event_group 뷰가 계산한다(059) — 서류의 제품명을 품목 용어
+    사전으로 옮겨 안전기준의 대분류를 얻는다. 사전에 없는 이름은 행이 없으므로
+    「기타」로 다룬다. 지금 해외 리콜 2,338건 중 765건(33%)에 대분류가 붙는다.
+  */
   const where = db`
     where true
       ${q ? db`and (rc.title ilike ${'%' + q + '%'} or rc.brand ilike ${'%' + q + '%'}
@@ -112,10 +126,17 @@ async function load(params: BoardParams) {
                     or rc.recall_country ilike ${'%' + q + '%'})` : db``}
       ${origin ? db`and rc.origin = ${origin}` : db``}
       ${check ? db`and coalesce(rc.domestic_check, 'UNCHECKED') = ${check}` : db``}
+      ${group === '기타' ? db`and cg.item_group is null` : db``}
+      ${group && group !== '기타' ? db`and cg.item_group = ${group}` : db``}
+  `;
+
+  const from = db`
+    from public.recall_cache rc
+    left join public.case_event_group cg on cg.case_id = rc.case_id
   `;
 
   const totalQuery = db<{ total: number }[]>`
-    select count(*)::int as total from public.recall_cache rc ${where}
+    select count(*)::int as total ${from} ${where}
   `;
 
   const rowsQuery = db<RecallRow[]>`
@@ -129,9 +150,11 @@ async function load(params: BoardParams) {
               where q.target_table = 'case_event' and q.row_id = e.id and q.status = 'sent') as embedding_pending,
       coalesce((select count(*)::int from public.match_run r where r.case_id = rc.case_id), 0) as run_count,
       (select r.result_count from public.match_run r
-        where r.case_id = rc.case_id order by r.started_at desc limit 1) as last_results
+        where r.case_id = rc.case_id order by r.started_at desc limit 1) as last_results,
+      cg.item_group
     from public.recall_cache rc
     left join public.case_event e on e.id = rc.case_id
+    left join public.case_event_group cg on cg.case_id = rc.case_id
     ${where}
     order by ${db.unsafe(orderBy)} ${db.unsafe(dir)} nulls last, rc.id desc
     limit ${per} offset ${offset}
@@ -148,11 +171,21 @@ async function load(params: BoardParams) {
     Promise.all 이 그 오류를 그대로 올리므로, 바깥의 try/catch 가 지금처럼
     연결 실패 화면을 그린다 — 동작이 달라지지 않는다.
   */
-  const [[summary], [{ total }], rows] = await Promise.all([
-    summaryQuery, totalQuery, rowsQuery,
+  const groupQuery = db<{ item_group: string | null; n: number }[]>`
+    select cg.item_group, count(*)::int as n
+    from public.recall_cache rc
+    left join public.case_event_group cg on cg.case_id = rc.case_id
+    group by cg.item_group
+  `;
+
+  const [[summary], [{ total }], rows, groups] = await Promise.all([
+    summaryQuery, totalQuery, rowsQuery, groupQuery,
   ]);
 
-  return { summary, rows, total, page, per };
+  const groupCount = new Map<string, number>();
+  for (const g of groups) groupCount.set(g.item_group ?? '기타', g.n);
+
+  return { summary, rows, total, page, per, groupCount };
 }
 
 /** 26.09.01. 처럼 붙여 쓴다. ko-KR 기본값은 "26. 09. 01." 로 공백이 들어간다 */
@@ -188,12 +221,35 @@ export default async function RecallsPage({
         label="3 · 리콜"
         title="리콜과 안전기준 연계 분석"
         lead="리콜 자료를 확인하고 국내 유통 여부를 기록한 뒤, 관련될 수 있는 안전기준을 찾습니다."
-        workflow={[
-          { label: '리콜 수집' },
-          { label: '국내 유통 확인' },
-          { label: '분석 실행' },
-          { label: '결과 검토', href: '#recalls-list' },
-        ]}
+        workflow={data ? [
+          {
+            label: '리콜 수집',
+            note: `${(data.summary.overseas + data.summary.domestic).toLocaleString()}건`,
+            state: 'done',
+          },
+          {
+            label: '위해요인 코드',
+            note: `${data.summary.coded.toLocaleString()} / ${data.summary.cases.toLocaleString()}`,
+            state: data.summary.coded < data.summary.cases ? 'here' : 'done',
+          },
+          {
+            label: '뜻 검색 준비',
+            note: `${data.summary.embedded.toLocaleString()} / ${data.summary.cases.toLocaleString()}`,
+            state: data.summary.embedded < data.summary.cases ? 'here' : 'done',
+          },
+          {
+            label: '분석',
+            who: '사람',
+            note: `${data.summary.analyzed.toLocaleString()} / ${data.summary.cases.toLocaleString()}`,
+            state: 'here',
+          },
+          {
+            label: '국내 유통 확인',
+            who: '사람',
+            note: `미확인 ${data.summary.uncheckedDistribution.toLocaleString()}`,
+            state: 'todo',
+          },
+        ] : undefined}
       />
 
       <DoneBanner message={done} />
@@ -262,6 +318,23 @@ export default async function RecallsPage({
             ]}
           />
 
+          {/* 대분류 — 담당자는 대개 한 대분류만 맡는다(2026-09-09) */}
+          <BoardTabs
+            basePath="/recalls"
+            params={params}
+            name="group"
+            options={GROUP_ORDER.map((g) => ({
+              value: g,
+              label: `${g} ${(data.groupCount.get(g) ?? 0).toLocaleString()}`,
+            }))}
+          />
+          <p className="mt-1.5 text-[11px] leading-relaxed text-ink-3">
+            대분류는 서류의 제품명을{' '}
+            <Link href="/terms" className="underline decoration-rule underline-offset-2">품목 용어 사전</Link>
+            으로 옮겨 얻습니다. 사전에 아직 없는 이름은 <span className="text-ink-2">기타</span>로 둡니다 —
+            사전이 자라면 저절로 제자리를 찾습니다.
+          </p>
+
           {data.total === 0 ? (
             <EmptyState
               message={
@@ -302,6 +375,10 @@ export default async function RecallsPage({
                     </div>
 
                     <div className="mt-1 text-[11px] leading-snug text-ink-3">
+                      <span className={r.item_group ? 'text-ink-2' : 'text-ink-3'}>
+                        {r.item_group ?? '기타'}
+                      </span>
+                      {' · '}
                       {r.origin === 'OVERSEAS' ? '해외' : '국내'}
                       {r.recall_country && ` · ${r.recall_country}`}
                       {r.brand && ` · ${r.brand}`}

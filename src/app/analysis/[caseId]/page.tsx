@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { DoneBanner } from '@/components/Panel';
+import { DoneBanner, FlowChart } from '@/components/Panel';
 import { ActionForm } from '@/components/ActionForm';
 import { getDb } from '@/lib/db';
 import { standardsForCase } from '@/lib/cases/resolve-scope';
@@ -640,25 +640,34 @@ export default async function AnalysisPage({
         <h1 className="mt-2 max-w-2xl text-[24px] leading-snug font-semibold tracking-tight">
           {ev.title ?? ev.narrative.slice(0, 60)}
         </h1>
-        <nav className="mt-5 border-y border-rule-soft py-3" aria-label="업무 흐름">
-          <ol className="flex flex-wrap items-center gap-y-1 text-[12px] text-ink-2">
-            {[
-              ['사건 내용 확인', '#analysis-case'],
-              ['품목·기준 확인', '#analysis-scope'],
-              ['후보 조항 확인', '#analysis-results'],
-              ['채택·반려 기록', undefined],
-            ].map(([label, href], index) => (
-              <li key={label} className="flex items-center">
-                {index > 0 && <span className="mx-2 text-ink-3" aria-hidden="true">→</span>}
-                {href ? (
-                  <a href={href} className="underline decoration-rule underline-offset-2 hover:text-measure">{label}</a>
-                ) : (
-                  <span className="font-medium text-ink">{label}</span>
-                )}
-              </li>
-            ))}
-          </ol>
-        </nav>
+        {/*
+          이 화면의 일 순서를 다른 화면과 같은 모양의 순서도로 (담당자 요청, 2026-09-09)
+          원본은 docs/전체_프로세스와_용어.md §3 의 C1~D1 구간이다.
+        */}
+        <FlowChart
+          steps={[
+            { label: '사건 내용', href: '#analysis-case', state: 'done' },
+            {
+              label: '품목·기준 확정',
+              href: '#analysis-scope',
+              note: standards.length > 0 ? `기준 ${standards.length}종` : '미확정 — 여기서 멈춤',
+              state: standards.length > 0 ? 'done' : 'here',
+            },
+            {
+              label: '조항 후보 찾기',
+              href: '#analysis-results',
+              note: run ? `${results.length}건` : '아직 실행 안 함',
+              state: run ? 'done' : 'here',
+            },
+            {
+              label: '채택·반려',
+              who: '사람',
+              note: `${results.filter((r) => r.decision != null).length} / ${results.length}`,
+              state: 'here',
+            },
+            { label: '산출물', href: '/insights', note: '시험항목·개선요인', state: 'todo' },
+          ]}
+        />
         {/*
           원문을 접어 둔다 (담당자 요청: "사고보고서 분석 페이지가 너무 길어요")
 

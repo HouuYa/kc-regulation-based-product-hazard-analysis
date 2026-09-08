@@ -187,6 +187,18 @@ export default async function InsightsPage() {
             label="산출물 3"
             title="KC안전기준 개선 요인"
             lead="사고·리콜과 담당자의 판단을 모아, 전문가가 다시 볼 자리를 찾습니다. 결론을 내지는 않습니다."
+            /*
+              이 화면은 방향이 반대다 (docs/전체_프로세스와_용어.md §1)
+              앞의 두 산출물이 「가진 기준으로 이 사건을 본다」라면, 이것은
+              「이 사건들이 우리 기준에 없는 것을 가리킨다」이다. 흐름도도 그렇게 그린다.
+            */
+            workflow={[
+              { label: '사고·리콜', href: '/recalls', state: 'done' },
+              { label: '조항 후보 검색', state: 'done' },
+              { label: '담당자 판단', who: '사람', href: '/accidents', note: '채택·반려', state: 'done' },
+              { label: '대응 조항이 없는 자리', note: '사각지대', state: 'here' },
+              { label: '전문가가 다시 봄', who: '사람', note: '결론은 내지 않는다', state: 'todo' },
+            ]}
           />
 
           {error && <ConnectionError error={error} />}

@@ -174,10 +174,10 @@ export default async function ReviewPage({
         title="조항 위해요인 코드 검수"
         lead="AI가 붙인 코드를 사람이 확인합니다. 확정한 코드만 정식 근거로 쓰입니다."
         workflow={[
-          { label: '기준 확인', href: '/standards' },
-          { label: '코드 부여' },
-          { label: '코드 검수' },
-          { label: '분석에 사용' },
+          { label: '기준 확인', href: '/standards', state: 'done' },
+          { label: '코드 부여', note: 'AI가 붙임', state: 'done' },
+          { label: '코드 검수', who: '사람', note: '이 화면', state: 'here' },
+          { label: '분석에 사용', href: '/accidents', note: '근거등급 A', state: 'todo' },
         ]}
       />
 

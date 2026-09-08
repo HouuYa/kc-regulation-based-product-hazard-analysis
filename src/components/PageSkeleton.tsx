@@ -1,4 +1,4 @@
-import { PageHead } from '@/components/Panel';
+import { PageHead, type FlowStep } from '@/components/Panel';
 
 /**
  * 조회가 끝나기 전에 먼저 보여 주는 뼈대
@@ -24,7 +24,7 @@ export function PageSkeleton({
   label: string;
   title: string;
   lead?: string;
-  workflow?: Array<{ label: string; href?: string }>;
+  workflow?: FlowStep[];
   /** 목록 자리에 비워 둘 줄 수 */
   rows?: number;
 }) {

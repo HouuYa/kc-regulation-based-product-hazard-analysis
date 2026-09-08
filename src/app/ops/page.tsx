@@ -448,11 +448,15 @@ export default async function OpsPage() {
         label="운영"
         title="시스템이 지금 제대로 돌고 있는가"
         lead="자동 작업 상태와 확인할 문제를 보여 줍니다. 문제가 없으면 조치할 일이 없습니다."
+        /*
+          이 화면은 업무 흐름 위에 있지 않다 — 흐름이 지금 돌고 있는지 보는 자리다.
+          그래서 순서도도 「감시 → 발견 → 알림 → 손보기」의 순서로 그린다.
+        */
         workflow={[
-          { label: '현재 상태' },
-          { label: '확인할 문제', href: '#ops-attention' },
-          { label: '필요한 작업', href: '#ops-actions' },
-          { label: '처리 내역', href: '#ops-recent' },
+          { label: '자동으로 돎', href: '#ops-details', note: '데이터베이스 안에서', state: 'done' },
+          { label: '문제 찾기', href: '#ops-attention', note: '5분마다', state: 'done' },
+          { label: '알림', note: '텔레그램', state: 'done' },
+          { label: '손보기', who: '사람', href: '#ops-actions', state: 'here' },
         ]}
       />
 

@@ -177,10 +177,16 @@ export default async function CodebookPage() {
         label="참고 · 위해요인 코드"
         title={version ? `코드북 ${version.version}` : '위해요인 코드북'}
         lead="사고 원인과 피해 유형을 나눠 보는 코드 목록입니다. 이 화면에서는 내용을 바꾸지 않습니다."
+        /*
+          이 화면은 「코드가 어디서 와서 어디에 쓰이는가」를 보는 자리다.
+          코드 자체를 여기서 고치지는 않는다(조회 전용, v0.7 §0.4).
+        */
         workflow={[
-          { label: '현재 버전 확인' },
-          { label: '코드 뜻 보기', href: '#codebook-hf' },
-          { label: '변경 확인', href: '#codebook-current' },
+          { label: '고시로 정해짐', note: `버전 ${version?.version ?? '—'}`, state: 'done' },
+          { label: '코드 뜻', href: '#codebook-codes', note: `HF ${hf.length} · DT ${dt.length}`, state: 'here' },
+          { label: '조항·사건에 부여', href: '/standards', note: 'AI가 붙임', state: 'todo' },
+          { label: '담당자 검수', who: '사람', href: '/standards/review', state: 'todo' },
+          { label: '분석 근거로 사용', href: '/accidents', state: 'todo' },
         ]}
       />
 

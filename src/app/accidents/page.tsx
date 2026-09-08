@@ -3,9 +3,10 @@ import { getDb } from '@/lib/db';
 import { PageHead, ConnectionError, EmptyState, TermsNote, DoneBanner } from '@/components/Panel';
 import { StatusBar } from '@/components/StatusBar';
 import {
-  BoardToolbar, BoardPager, SortHeader, parseBoard, type BoardParams,
+  BoardToolbar, BoardPager, BoardTabs, SortHeader, parseBoard, type BoardParams,
 } from '@/components/Board';
 import { FILE_STATUS_LABEL } from '@/lib/terms';
+import { GROUP_ORDER } from '@/lib/standards/label';
 import { uploadAccidentPdfs, confirmCase } from './actions';
 import { ActionForm } from '@/components/ActionForm';
 import { AutoRefresh } from '@/components/AutoRefresh';
@@ -62,6 +63,71 @@ interface FileRow {
   run_count: number;
   last_results: number | null;
   adopted: number;
+  /** 대분류 — 059 뷰가 서류의 제품명을 품목 용어 사전으로 옮겨 얻는다. 없으면 「기타」 */
+  item_group: string | null;
+}
+
+/*
+  올린 뒤 무슨 일이 일어나는가 (담당자 요청, 2026-09-09)
+
+  "파일 올리기 → 개인/민감정보 검출된 것 보이기 → 사용자가 검토 → 태깅·파싱 →
+   결과를 사용자가 검수(DB에 어떻게 올라갔는지, 그다음에는 뭐 하게 되는지, 다음에
+   사용자가 해야 할 일 등 알기 쉽게) → 최종 승인 처리"
+
+  절차 자체는 이미 이 순서로 돌고 있었다. 없던 것은 「지금 어디까지 왔고 다음에
+  내가 무엇을 해야 하는가」를 화면이 말해 주는 일이다. 파일 한 줄에 상태 낱말만
+  흩어져 있으면 처음 쓰는 사람은 다음 동작을 못 찾는다.
+
+  그래서 여섯 걸음을 이름 붙여 두고, 파일마다 지금 걸음과 다음 할 일을 적는다.
+  사람이 해야 하는 걸음은 3(원문 확인)과 6(검수)뿐이고 나머지는 자동이다 —
+  그 사실도 함께 밝힌다. 기다리면 되는 것을 기다릴 줄 알아야 한다.
+*/
+const UPLOAD_STEPS = [
+  { no: 1, name: '올리기', who: '사람', what: 'PDF 를 올립니다. 같은 파일은 자동으로 걸러집니다' },
+  { no: 2, name: '글자 뽑기 · 개인정보 검사', who: '자동', what: 'PDF 에서 글자를 뽑고, 주민등록번호·전화번호처럼 개인정보로 보이는 값이 있는지 봅니다. 걸리면 거기서 멈추고 AI 에 보내지 않습니다' },
+  { no: 3, name: '원문 확인', who: '사람', what: '뽑아낸 글자가 원본과 맞는지 봅니다. 표가 뭉개졌는지는 사람만 알 수 있습니다. 확인해야 다음으로 갑니다' },
+  { no: 4, name: '코드 붙이기 · 검색 준비', who: '자동', what: '위해요인 코드를 붙이고 뜻으로 찾을 수 있게 준비합니다. 1분 안에 저절로 시작합니다' },
+  { no: 5, name: '분석', who: '사람이 시작', what: '적용기준의 조항 중 이 사고와 관련된 것을 찾습니다' },
+  { no: 6, name: '검수 · 채택', who: '사람', what: '찾아온 조항을 보고 시험항목으로 쓸 것을 채택합니다' },
+] as const;
+
+/** 이 파일이 지금 몇 번째 걸음에 있고, 담당자가 다음에 무엇을 해야 하는가 */
+function stepOf(r: FileRow): { step: number; next: string; blocked: boolean } {
+  if (r.status === 'error') {
+    return {
+      step: 2,
+      blocked: true,
+      next: '아래 빨간 줄의 사유를 보고 판단해 주세요. 개인정보가 발견된 것이면, 그 값을 지운 파일로 다시 올려야 합니다.',
+    };
+  }
+  if (!r.case_id) {
+    return { step: 2, blocked: true, next: '사건으로 만들지 못했습니다. 개발자에게 파일명을 알려 주세요.' };
+  }
+  if (!r.is_confirmed) {
+    return {
+      step: 3,
+      blocked: false,
+      next: '「뽑아낸 원문 확인」을 펼쳐 표가 뭉개지지 않았는지 보고, 아래 단추를 눌러 주세요. 여기서 멈춰 있으면 다음 단계가 시작되지 않습니다.',
+    };
+  }
+  if (!r.embedded || r.tag_count === 0) {
+    return {
+      step: 4,
+      blocked: false,
+      next: '자동으로 준비하는 중입니다. 기다리시면 됩니다 — 보통 1~2분입니다.',
+    };
+  }
+  if (r.run_count === 0) {
+    return { step: 5, blocked: false, next: '「분석 실행」을 눌러 관련 조항을 찾습니다.' };
+  }
+  if (r.adopted === 0) {
+    return {
+      step: 6,
+      blocked: false,
+      next: '「분석 상세보기」에서 찾아온 조항을 보고, 시험항목으로 쓸 것을 채택해 주세요.',
+    };
+  }
+  return { step: 6, blocked: false, next: '채택까지 끝났습니다. 더 볼 것이 있으면 분석 상세보기로 갑니다.' };
 }
 
 /** 정렬 가능한 열. 주소줄에서 오는 값이므로 반드시 이 목록 안에서만 고른다 */
@@ -76,6 +142,7 @@ async function load(params: BoardParams) {
   const { q, per, offset, sort, dir, page } = parseBoard(params, 'uploaded_at');
   const orderBy = SORTS[sort] ?? SORTS.uploaded_at;
   const status = params.status ?? '';
+  const group = params.group ?? '';
 
   const summaryQuery = db<Summary[]>`
     select
@@ -101,12 +168,15 @@ async function load(params: BoardParams) {
       ${q ? db`and (f.filename ilike ${'%' + q + '%'} or e.title ilike ${'%' + q + '%'}
                     or e.narrative ilike ${'%' + q + '%'})` : db``}
       ${status ? db`and f.status = ${status}` : db``}
+      ${group === '기타' ? db`and cg.item_group is null` : db``}
+      ${group && group !== '기타' ? db`and cg.item_group = ${group}` : db``}
   `;
 
   const totalQuery = db<{ total: number }[]>`
     select count(*)::int as total
     from public.source_file f
     left join public.case_event e on e.source_file_id = f.id
+    left join public.case_event_group cg on cg.case_id = e.id
     ${where}
   `;
 
@@ -126,9 +196,11 @@ async function load(params: BoardParams) {
       coalesce((select count(*)::int from public.review_log rl
         join public.match_result mr on mr.id = rl.match_result_id
         join public.match_run mrun on mrun.id = mr.run_id
-        where mrun.case_id = e.id and rl.decision = 'ADOPTED'), 0) as adopted
+        where mrun.case_id = e.id and rl.decision = 'ADOPTED'), 0) as adopted,
+      cg.item_group
     from public.source_file f
     left join public.case_event e on e.source_file_id = f.id
+    left join public.case_event_group cg on cg.case_id = e.id
     ${where}
     order by ${db.unsafe(orderBy)} ${db.unsafe(dir)} nulls last, f.id desc
     limit ${per} offset ${offset}
@@ -145,11 +217,23 @@ async function load(params: BoardParams) {
     Promise.all 이 그 오류를 그대로 올리므로, 바깥의 try/catch 가 지금처럼
     연결 실패 화면을 그린다 — 동작이 달라지지 않는다.
   */
-  const [[summary], [{ total }], rows] = await Promise.all([
-    summaryQuery, totalQuery, rowsQuery,
+  const groupQuery = db<{ item_group: string | null; n: number }[]>`
+    select cg.item_group, count(*)::int as n
+    from public.source_file f
+    left join public.case_event e on e.source_file_id = f.id
+    left join public.case_event_group cg on cg.case_id = e.id
+    where f.kind = 'ACCIDENT_PDF'
+    group by cg.item_group
+  `;
+
+  const [[summary], [{ total }], rows, groups] = await Promise.all([
+    summaryQuery, totalQuery, rowsQuery, groupQuery,
   ]);
 
-  return { summary, rows, total, page, per };
+  const groupCount = new Map<string, number>();
+  for (const g of groups) groupCount.set(g.item_group ?? '기타', g.n);
+
+  return { summary, rows, total, page, per, groupCount };
 }
 
 /** 26.09.01. 처럼 붙여 쓴다. ko-KR 기본값은 "26. 09. 01." 로 공백이 들어간다 */
@@ -185,12 +269,39 @@ export default async function AccidentsPage({
         label="2 · 사고보고서"
         title="사고보고서와 안전기준 연계 분석"
         lead="PDF를 올리고 원문을 확인하면, 사고와 관련될 수 있는 안전기준 조항을 찾습니다."
-        workflow={[
-          { label: 'PDF 등록', href: '#accidents-upload' },
-          { label: '원문 확인' },
-          { label: '분석 실행' },
-          { label: '후보 검토', href: '#accidents-list' },
-        ]}
+        /* 여섯 걸음의 이름과 뜻은 UPLOAD_STEPS 에 한 벌만 둔다 */
+        workflow={data ? [
+          { label: '올리기', who: '사람', href: '#accidents-upload', note: `${data.summary.files}건`, state: 'done' },
+          {
+            label: '글자·개인정보 검사',
+            note: data.summary.fileErrors > 0 ? `막힘 ${data.summary.fileErrors}` : '이상 없음',
+            state: data.summary.fileErrors > 0 ? 'here' : 'done',
+          },
+          {
+            label: '원문 확인',
+            who: '사람',
+            note: `${data.summary.confirmed} / ${data.summary.cases}`,
+            state: data.summary.confirmed < data.summary.cases ? 'here' : 'done',
+          },
+          {
+            label: '코드·검색 준비',
+            note: `${data.summary.embedded} / ${data.summary.cases}`,
+            state: data.summary.embedded < data.summary.cases ? 'here' : 'done',
+          },
+          {
+            label: '분석',
+            who: '사람',
+            note: `${data.summary.analyzed} / ${data.summary.confirmed}`,
+            state: data.summary.analyzed < data.summary.confirmed ? 'here' : 'done',
+          },
+          {
+            label: '검수·채택',
+            who: '사람',
+            href: '#accidents-list',
+            note: `채택 ${data.summary.adopted}`,
+            state: 'todo',
+          },
+        ] : undefined}
       />
 
       <DoneBanner message={done} />
@@ -256,6 +367,38 @@ export default async function AccidentsPage({
             </form>
           </details>
 
+          {/* 올린 뒤 무슨 일이 일어나는가 (담당자 요청, 2026-09-09) */}
+          <details className="mt-4 border border-rule-soft">
+            <summary className="cursor-pointer px-4 py-2.5 text-[12px] text-ink-2">
+              올린 뒤 무슨 일이 일어나는지 — 여섯 걸음 중{' '}
+              <span className="text-ink">사람이 할 일은 두 걸음</span>입니다
+            </summary>
+            <div className="border-t border-rule-soft px-4 py-3.5">
+              {UPLOAD_STEPS.map((st) => (
+                <div key={st.no} className="flex gap-3 border-t border-rule-soft py-2 first:border-t-0">
+                  <span className="addr tnum w-4 shrink-0 text-[12px] text-ink-3">{st.no}</span>
+                  <div className="min-w-0">
+                    <div className="text-[12px]">
+                      <span className="font-medium">{st.name}</span>
+                      <span
+                        className={`ml-2 border px-1 text-[10px] ${
+                          st.who === '자동' ? 'border-rule text-ink-3' : 'border-measure text-measure'
+                        }`}
+                      >
+                        {st.who}
+                      </span>
+                    </div>
+                    <p className="mt-0.5 text-[11px] leading-relaxed text-ink-3">{st.what}</p>
+                  </div>
+                </div>
+              ))}
+              <p className="mt-3 text-[11px] leading-relaxed text-ink-3">
+                걸음 3 에서 멈춰 있는 파일은 다음으로 가지 않습니다. 뽑아낸 글자가 원본과
+                다른데 그대로 분석하면, 없는 사고를 분석하는 셈이 되기 때문입니다.
+              </p>
+            </div>
+          </details>
+
           {/* 준비가 밀려 있으면 숫자가 계속 바뀐다 — 새로고침을 사람이 누르지 않게 한다 */}
           <div className="mt-4">
             <AutoRefresh
@@ -274,6 +417,17 @@ export default async function AccidentsPage({
               label: '진행',
               options: Object.entries(FILE_STATUS_LABEL).map(([value, label]) => ({ value, label })),
             }]}
+          />
+
+          {/* 대분류 — 담당자는 대개 한 대분류만 맡는다(2026-09-09) */}
+          <BoardTabs
+            basePath="/accidents"
+            params={params}
+            name="group"
+            options={GROUP_ORDER.map((g) => ({
+              value: g,
+              label: `${g} ${(data.groupCount.get(g) ?? 0).toLocaleString()}`,
+            }))}
           />
 
           {data.total === 0 ? (
@@ -305,6 +459,10 @@ export default async function AccidentsPage({
                   </div>
 
                   <div className="addr tnum mt-1 text-[11px] text-ink-3">
+                    <span className={r.item_group ? 'text-ink-2' : 'text-ink-3'}>
+                      {r.item_group ?? '기타'}
+                    </span>
+                    {' · '}
                     {r.page_count ?? '—'}쪽 · 뽑아낸 글자 {(r.extracted_chars ?? 0).toLocaleString()}자
                     {/*
                       원본 미보관은 이제 중립적인 상태가 아니다 (02 설계서 §3.3)

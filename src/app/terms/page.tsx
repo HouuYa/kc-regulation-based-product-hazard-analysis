@@ -220,6 +220,18 @@ export default async function TermsPage({
         label="참고"
         title="품목 용어 사전"
         lead="사고보고서와 리콜 서류에 적힌 제품 이름을, 어느 안전기준으로 볼 것인지 이어 둔 표입니다. 분석은 여기서 정해진 기준만 뒤집니다."
+        workflow={data ? [
+          { label: '서류의 제품명', href: '/accidents', note: '사고·리콜에서', state: 'done' },
+          { label: '사전에 등록', note: `${data.summary.terms.toLocaleString()}종`, state: 'done' },
+          { label: '기준 이어 붙이기', note: 'AI가 적용범위와 견줌', state: 'done' },
+          {
+            label: '담당자 검수',
+            who: '사람',
+            note: data.summary.unreviewed > 0 ? `대기 ${data.summary.unreviewed.toLocaleString()}` : '끝',
+            state: data.summary.unreviewed > 0 ? 'here' : 'done',
+          },
+          { label: '분석 범위로 사용', href: '/analysis', note: '이 기준만 뒤진다', state: 'todo' },
+        ] : undefined}
       />
 
       {error && <ConnectionError error={error} />}

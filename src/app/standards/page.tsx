@@ -185,12 +185,33 @@ export default async function StandardsPage() {
         label="1 · 안전기준"
         title="들여온 기준과 준비 상태"
         lead="기준을 확인하고, 조항과 시험방법이 분석에 쓸 수 있는 상태인지 봅니다."
-        workflow={[
-          { label: '기준 확인' },
-          { label: '조항 확인', href: '#standards-electric' },
-          { label: '시험방법 확인' },
-          { label: '분석에 사용' },
-        ]}
+        /*
+          이 화면이 맡은 일의 순서 (담당자 요청, 2026-09-09)
+          숫자를 함께 실어 흐름도가 현황판을 겸하게 한다 — 어디서 막혀 있는지가
+          그림에서 바로 보여야 한다.
+        */
+        workflow={summary ? [
+          { label: '기준 들여오기', who: '사람', note: `${summary.standards}종`, state: 'done' },
+          { label: '조항으로 나누기', note: `${summary.clauses.toLocaleString()}개`, state: 'done' },
+          {
+            label: '코드 붙이기',
+            note: `${summary.tagged.toLocaleString()} / ${summary.taggable.toLocaleString()}`,
+            state: summary.tagged >= summary.taggable ? 'done' : 'here',
+          },
+          {
+            label: '뜻 검색 준비',
+            note: `${summary.embedded.toLocaleString()} / ${summary.embeddable.toLocaleString()}`,
+            state: summary.embedded >= summary.embeddable ? 'done' : 'here',
+          },
+          {
+            label: '코드 검수',
+            who: '사람',
+            href: '/standards/review',
+            note: summary.unreviewedClauses > 0 ? `대기 ${summary.unreviewedClauses.toLocaleString()}` : '끝',
+            state: summary.unreviewedClauses > 0 ? 'here' : 'done',
+          },
+          { label: '분석에 사용', href: '/accidents', note: `시험연결 ${summary.testLinks.toLocaleString()}`, state: 'todo' },
+        ] : undefined}
       />
 
       {error && <ConnectionError error={error} />}
