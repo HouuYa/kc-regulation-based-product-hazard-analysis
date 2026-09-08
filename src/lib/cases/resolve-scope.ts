@@ -124,6 +124,90 @@ async function withGeneralPart(standardIds: number[]): Promise<number[]> {
   return [...new Set([...standardIds.map(Number), ...parts.map((p) => Number(p.id))])];
 }
 
+/**
+ * 어린이제품이면 공통안전기준을 적용 세트에 더한다 (2026-09-08)
+ *
+ * 「어린이제품 공통안전기준」 고시 1. 적용범위 비고가 규칙을 직접 적는다.
+ *   "개별 안전기준이 있는 어린이제품은 개별 안전기준과 어린이제품 공통안전기준을
+ *    모두 적용한다" (「어린이제품 안전 특별법 시행규칙」 제2조 제1항~제3항)
+ *
+ * 전에는 이 묶음이 standard_applicability 의 COMMON 관계로만 있었고, 그 관계는
+ * 품목명·별칭이 정확히 일치하는 경로에서만 쓰였다. 실측하면 사건 2,405건 중 그
+ * 경로를 탄 것은 47건(1.9%)뿐이고, 나머지는 용어 사전·적용범위 검색으로 확정되어
+ * 공통안전기준이 빠진 채 분석됐다. 유해원소·프탈레이트·자석 요구사항은 개별
+ * 부속서가 아니라 공통기준에만 있어서, 빠지면 대응 조항이 없는 것처럼 보인다.
+ * 전기용품 제1부와 사정이 같으므로 같은 자리에서 같은 방식으로 붙인다.
+ *
+ * 어린이제품인지는 지어내지 않고 이미 확정된 법정 품목 정보로만 판정한다. 색상·
+ * 포장·광고 같은 가이드라인의 결정요소는 제품 실물을 봐야 하는 사람의 판단이다
+ * (docs/제품안전법제도/어린이제품_가이드라인.md).
+ *
+ * item_name 이 비어 있는 기준(전기용품 43종)을 반드시 걸러야 한다 —
+ * scope_term_key 는 null·빈 문자열을 모두 '' 로 만들기 때문에, 걸러내지 않으면
+ * 품목명이 없는 기준이 sub_item 이 비어 있는 법정 품목과 '' = '' 로 걸린다.
+ */
+async function withChildCommon(standardIds: number[]): Promise<number[]> {
+  if (standardIds.length === 0) return standardIds;
+  const db = getDb();
+
+  const [child] = await db<{ id: number; display_name: string }[]>`
+    select s.id, s.display_name
+    from public.standard s
+    where s.id = any(${standardIds}::bigint[])
+      and (
+        -- ① 법정 품목 대응표에서 어린이제품 품목군에 걸린다
+        exists (
+          select 1 from public.product_taxonomy t
+          where t.item_group = '어린이제품'
+            and nullif(btrim(s.item_name), '') is not null
+            and public.scope_term_key(s.item_name) in (
+                  public.scope_term_key(t.item),
+                  public.scope_term_key(t.sub_item),
+                  public.scope_term_key(t.sub_sub_item)))
+        -- ② 담당자가 확정한 법정 품목 → 기준 대응표에서 어린이제품이다
+        or exists (
+          select 1 from public.taxonomy_standard x
+          where x.standard_id = s.id
+            and x.item_group = '어린이제품'
+            and x.review_status = 'approved')
+        -- ③ 대응표에 아직 없는 품목을 놓치지 않기 위한 보수적 보강
+        --    ("어린이용 인라인스케이트"가 실제로 ①②로 닿지 않는다)
+        or s.display_name ~ '어린이|유아|아동')
+    limit 1
+  `;
+  if (!child) return standardIds;
+
+  const commons = await db<{ id: number }[]>`
+    select id from public.standard
+    where is_current and display_name like '%공통안전기준%'
+  `;
+  return [...new Set([...standardIds.map(Number), ...commons.map((c) => Number(c.id))])];
+}
+
+/** 함께 봐야 하는 기준을 더한 결과와, 무엇을 더했는지 담당자에게 보일 한 줄 */
+interface Companions {
+  ids: number[];
+  /** " · 제1부 1건 + 어린이제품 공통안전기준 포함" — 더한 것이 없으면 빈 문자열 */
+  note: string;
+}
+
+/**
+ * 확정된 기준에 함께 봐야 하는 기준을 더한다.
+ *
+ * 무엇을 더했는지 문장으로 돌려주는 이유는, 근거에 "제1부 1건 포함" 처럼 개수만
+ * 적어 두면 공통안전기준이 섞여 들어왔을 때 담당자가 제1부로 오해하기 때문이다.
+ */
+async function withCompanions(standardIds: number[]): Promise<Companions> {
+  const base = [...new Set(standardIds.map(Number))];
+  const withParts = await withGeneralPart(base);
+  const ids = await withChildCommon(withParts);
+
+  const added: string[] = [];
+  if (withParts.length > base.length) added.push(`제1부 ${withParts.length - base.length}건`);
+  if (ids.length > withParts.length) added.push('어린이제품 공통안전기준');
+  return { ids, note: added.length ? ` · ${added.join(' + ')} 포함` : '' };
+}
+
 export async function resolveProductScope(
   itemName: string,
   /** 사건 서술. 있으면 의미 검색의 신호가 훨씬 좋아진다 — 품목 이름만으로는 짧다 */
@@ -172,7 +256,7 @@ export async function resolveProductScope(
   `;
 
   if (dictHits.length > 0) {
-    const ids = await withGeneralPart(dictHits.map((h) => h.id));
+    const { ids, note } = await withCompanions(dictHits.map((h) => h.id));
     const expert = dictHits.filter((h) => h.source === 'EXPERT').length;
     const unreviewed = dictHits.filter((h) => h.review_status === 'auto_unreviewed').length;
     return {
@@ -184,7 +268,7 @@ export async function resolveProductScope(
         `용어 사전 — "${itemName}" → ${dictHits.map((h) => h.display_name).join(', ')}` +
         (expert > 0 ? ` (담당자 확정 ${expert}건)` : '') +
         (unreviewed > 0 ? ` · 미검수 ${unreviewed}건 포함` : '') +
-        (ids.length > dictHits.length ? ` · 제1부 ${ids.length - dictHits.length}건 포함` : ''),
+        note,
       method: '용어 사전',
     };
   }
@@ -264,7 +348,7 @@ export async function resolveProductScope(
   `;
 
   if (viaKeyword.length > 0) {
-    const ids = await withGeneralPart(viaKeyword.map((h) => h.id));
+    const { ids, note } = await withCompanions(viaKeyword.map((h) => h.id));
     return {
       productScopeId: null,
       scopeName: viaKeyword[0].target,
@@ -272,8 +356,7 @@ export async function resolveProductScope(
       standardCount: ids.length,
       evidence:
         `검색어 사전 — "${itemName}" → 법정 품목 "${viaKeyword[0].target}" → ` +
-        viaKeyword.map((h) => h.display_name).join(', ') +
-        (ids.length > viaKeyword.length ? ` · 제1부 ${ids.length - viaKeyword.length}건 포함` : ''),
+        viaKeyword.map((h) => h.display_name).join(', ') + note,
       method: '검색어 사전',
     };
   }
@@ -386,7 +469,7 @@ export async function resolveProductScope(
     const semantic = await resolveScopeSemantically(itemName, narrative);
     if (!semantic) return null;
 
-    const ids = await withGeneralPart([semantic.standardId]);
+    const { ids, note } = await withCompanions([semantic.standardId]);
 
     /*
       찾아낸 대응을 사전에 쌓는다. 미검수로 넣으므로 담당자가 확인하기 전까지는
@@ -416,13 +499,12 @@ export async function resolveProductScope(
       standardCount: ids.length,
       evidence:
         `적용범위 의미 검색 — ${semantic.displayName} (확신 ${semantic.confidence.toFixed(2)}, ` +
-        `후보 ${semantic.candidateCount}종 중) · ${semantic.reasoning}` +
-        (ids.length > 1 ? ` · 제1부 ${ids.length - 1}건 포함` : ''),
+        `후보 ${semantic.candidateCount}종 중) · ${semantic.reasoning}` + note,
       method: '적용범위 의미 검색',
     };
   }
 
-  const withParts = await withGeneralPart(hits.map((h) => h.id));
+  const { ids: withParts, note } = await withCompanions(hits.map((h) => h.id));
 
   return {
     // 아직 품목으로 등록하지 않는다. 담당자가 확인한 뒤 등록하는 것이 순서다.
@@ -431,8 +513,7 @@ export async function resolveProductScope(
     standardIds: withParts,
     standardCount: withParts.length,
     evidence:
-      `적용범위 원문 검색으로 ${hits.length}건` +
-      (withParts.length > hits.length ? ` + 제1부 ${withParts.length - hits.length}건` : '') + ' — ' +
+      `적용범위 원문 검색으로 ${hits.length}건` + note + ' — ' +
       hits.slice(0, 3).map((h) => h.display_name).join(', ') +
       (hits.length > 3 ? ` 외 ${hits.length - 3}건` : '') + filterNote,
     method: '적용범위 검색',
@@ -459,7 +540,7 @@ export async function standardsForCase(caseId: number): Promise<number[]> {
       join public.standard s on s.id = a.standard_id
       where a.product_scope_id = ${ev.product_scope_id} and s.is_current
     `;
-    return withGeneralPart(rows.map((r) => Number(r.id)));
+    return (await withCompanions(rows.map((r) => Number(r.id)))).ids;
   }
 
   // 품목이 등록되지 않은 전기용품 등 — 적용범위 검색으로 그때그때 찾는다

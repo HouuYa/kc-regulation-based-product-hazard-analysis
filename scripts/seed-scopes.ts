@@ -8,8 +8,10 @@
  *   1) 각 기준의 적용범위(SCOPE) 조항 본문을 standard.scope_text 에 모은다.
  *      품목→기준 확정의 근거가 되고, 담당자에게 "왜 이 기준인가"를 문장으로 보인다.
  *   2) 이름이 붙은 기준(어린이제품 33건)으로 품목을 만들고 ANNEX 로 연결한다.
- *   3) 어린이제품 품목 전부에 공통안전기준을 COMMON 으로 연결한다.
+ *   3) 어린이제품 품목에 공통안전기준을 COMMON 으로 연결한다.
  *      유아용 의자 사고면 부속서 8 만으로 부족하고 공통안전기준을 함께 봐야 한다.
+ *      어린이제품이 아닌 품목에는 걸지 않는다 — 이름이 붙은 기준 33종 중 16종이
+ *      생활용품이다(053).
  *
  * 전기용품(KC 60335 계열 등)은 여기서 품목을 만들지 않는다.
  *   파일명에 품목이 없어 이름을 지어낼 수 없고, 지어내면 틀린 이름이 고정된다.
@@ -62,12 +64,45 @@ async function main() {
 
   let annexLinks = 0;
   let commonLinks = 0;
+  let childScopes = 0;
 
   for (const name of itemNames) {
+    /*
+      품목군을 법정 품목 대응표로 판정한다 (2026-09-08)
+
+      전에는 category 를 '어린이제품' 으로 박아 넣었다. 이름이 붙은 기준이
+      어린이제품 부속서뿐이라고 본 것인데, 실제로는 33종 중 16종이 생활용품이다
+      (가스라이터·우산 및 양산·디지털도어록·휴대용 예초기의 날 …). 그대로 두면
+      아래에서 어린이제품 공통안전기준이 생활용품 품목에도 걸린다.
+
+      여러 품목군에 걸리면 어린이제품으로 본다. 대응표에 아직 없는 품목은 이름으로
+      보수적으로 판정한다 — 근거는 docs/제품안전법제도/어린이제품_공통안전기준.md.
+    */
+    const [g] = await db<{ category: string }[]>`
+      select case
+        when ${name} ~ '어린이|유아|아동'
+          or exists (select 1 from public.product_taxonomy t
+                     where t.item_group = '어린이제품'
+                       and public.scope_term_key(${name}) in (
+                             public.scope_term_key(t.item),
+                             public.scope_term_key(t.sub_item),
+                             public.scope_term_key(t.sub_sub_item)))
+        then '어린이제품'
+        else coalesce((select t.item_group from public.product_taxonomy t
+                       where public.scope_term_key(${name}) in (
+                               public.scope_term_key(t.item),
+                               public.scope_term_key(t.sub_item),
+                               public.scope_term_key(t.sub_sub_item))
+                       limit 1), '기타')
+      end as category
+    `;
+    const isChild = g.category === '어린이제품';
+    if (isChild) childScopes++;
+
     const [scope] = await db<{ id: number }[]>`
       insert into public.product_scope (name, category)
-      values (${name}, '어린이제품')
-      on conflict (name) do update set name = excluded.name
+      values (${name}, ${g.category})
+      on conflict (name) do update set name = excluded.name, category = excluded.category
       returning id
     `;
 
@@ -81,8 +116,9 @@ async function main() {
       annexLinks += r.count;
     }
 
-    // 공통안전기준은 자기 자신에게 COMMON 으로 걸지 않는다
+    // 공통안전기준은 어린이제품에만, 그리고 자기 자신에게는 걸지 않는다
     for (const c of commons) {
+      if (!isChild) continue;
       if (named.some((x) => x.item_name === name && x.id === c.id)) continue;
       const r = await db`
         insert into public.standard_applicability
@@ -103,7 +139,7 @@ async function main() {
   `;
 
   console.log('');
-  console.log(`품목 ${n.scopes}개 · 적용기준 연결 ${n.links}건 (신규 ANNEX ${annexLinks} / COMMON ${commonLinks})`);
+  console.log(`품목 ${n.scopes}개 (그중 어린이제품 ${childScopes}개) · 적용기준 연결 ${n.links}건 (신규 ANNEX ${annexLinks} / COMMON ${commonLinks})`);
   console.log(`적용범위 원문을 가진 기준 ${n.withScope}건`);
   console.log('');
   console.log('전기용품은 품목을 미리 만들지 않았습니다 — 사건이 들어올 때');
