@@ -19,10 +19,21 @@
  *   부풀려진다. 그래서 **둘 다 계산해 범위로 보여 준다.** 정확한 한 숫자를
  *   지어내는 것보다 "이 사이"라고 말하는 편이 정직하다.
  *
- * 어떻게 넣나
- *   .env.local 에 100 만 토큰당 미국 달러로 적는다. long 단가는 없으면 생략한다.
+ * 캐시된 입력은 단가가 1/10 이다 (2026-09-08 확인)
+ *   같은 프롬프트 앞부분을 다시 보내면 그 부분은 "cached input" 으로 싸게 청구된다.
  *
- *     LLM_PRICES={"gpt-5.6-terra":{"input":2,"output":12,"inputLong":4,"outputLong":18}}
+ *     gpt-5.6-terra   입력 $2.00 / 캐시된 입력 $0.20
+ *     gpt-5.6-luna    입력 $0.20 / 캐시된 입력 $0.02
+ *
+ *   이 체계는 입력이 출력의 20배가 넘는 구조라 이 차이가 금액을 좌우한다. 응답이
+ *   알려 주는 적중 토큰 수(054)를 빼서 따로 매긴다. 캐시 단가가 등록되지 않은
+ *   모델은 적중분도 일반 입력 단가로 센다 — 모르면 비싸게 잡는다.
+ *
+ * 어떻게 넣나
+ *   .env.local 에 100 만 토큰당 미국 달러로 적는다. 없는 칸은 생략한다.
+ *
+ *     LLM_PRICES={"gpt-5.6-terra":{"input":2,"cachedInput":0.2,"output":12,
+ *                                  "inputLong":4,"cachedInputLong":0.4,"outputLong":18}}
  */
 
 export interface ModelPrice {
@@ -30,8 +41,12 @@ export interface ModelPrice {
   input: number;
   /** 100만 출력 토큰당 USD. 임베딩처럼 출력이 없으면 생략 */
   output?: number;
+  /** 캐시 적중 입력의 단가. 없으면 input 과 같다고 본다(비싸게 잡는 쪽) */
+  cachedInput?: number;
   /** 긴 문맥일 때의 입력 단가. 없으면 input 과 같다고 본다 */
   inputLong?: number;
+  /** 긴 문맥일 때의 캐시 적중 입력 단가 */
+  cachedInputLong?: number;
   /** 긴 문맥일 때의 출력 단가 */
   outputLong?: number;
 }
@@ -53,6 +68,8 @@ export function priceTable(): Record<string, ModelPrice> {
 export interface TokenCount {
   inputTokens: number;
   outputTokens: number;
+  /** 입력 토큰 중 캐시 적중분. inputTokens 에 포함된 값이다(054). 모르면 0 */
+  cachedTokens?: number;
 }
 
 /** 가장 싸게 잡았을 때와 비싸게 잡았을 때. 두 단가가 같으면 min === max */
@@ -74,12 +91,22 @@ export function estimateCost(model: string, tokens: TokenCount): CostRange | nul
   const p = priceTable()[model];
   if (!p) return null;
 
-  const calc = (inRate: number, outRate: number | undefined) =>
-    (tokens.inputTokens / 1_000_000) * inRate +
+  // 적중분은 입력 토큰 안에 들어 있다. 빼서 각자의 단가로 매긴다.
+  // 적중 토큰이 입력보다 클 수는 없지만, 기록이 어긋나도 음수가 나오지 않게 막는다
+  const cached = Math.min(Math.max(tokens.cachedTokens ?? 0, 0), tokens.inputTokens);
+  const fresh = tokens.inputTokens - cached;
+
+  const calc = (inRate: number, cachedRate: number, outRate: number | undefined) =>
+    (fresh / 1_000_000) * inRate +
+    (cached / 1_000_000) * cachedRate +
     (outRate ? (tokens.outputTokens / 1_000_000) * outRate : 0);
 
-  const low = calc(p.input, p.output);
-  const high = calc(p.inputLong ?? p.input, p.outputLong ?? p.output);
+  const low = calc(p.input, p.cachedInput ?? p.input, p.output);
+  const high = calc(
+    p.inputLong ?? p.input,
+    p.cachedInputLong ?? p.cachedInput ?? p.inputLong ?? p.input,
+    p.outputLong ?? p.output,
+  );
   return { min: Math.min(low, high), max: Math.max(low, high) };
 }
 

@@ -275,6 +275,8 @@ async function runTagging(
   user: string,
   snapshot: CodebookSnapshot,
   withIncidentFields = false,
+  /** 무엇을 코드화하다 부른 것인가. 기록에 남겨 건당 비용을 되짚는다(054) */
+  target: { caseId?: number | null; standardId?: number | null } = {},
 ): Promise<TagResult> {
   const schema = buildSchema(snapshot, withIncidentFields);
   const cfg = openaiConfig();
@@ -289,6 +291,7 @@ async function runTagging(
       system,
       user,
       schemaName: 'hazard_tagging', purpose: 'tagging',
+      caseId: target.caseId, standardId: target.standardId,
       schema,
       effort: effort as ReasoningEffort,
     });
@@ -363,6 +366,8 @@ async function runTagging(
 export function tagClause(
   clause: { contextHeader: string; marker: string; body: string; testConditions?: string[] },
   snapshot: CodebookSnapshot,
+  /** 어느 기준의 조항인가. 기록에 남긴다(054) */
+  standardId?: number | null,
 ): Promise<TagResult> {
   const user = [
     '[위해요인(HF) 코드 목록]',
@@ -380,13 +385,15 @@ export function tagClause(
     .filter(Boolean)
     .join('\n');
 
-  return runTagging(SYSTEM_CLAUSE, user, snapshot);
+  return runTagging(SYSTEM_CLAUSE, user, snapshot, false, { standardId });
 }
 
 /** L2 — 사고·국내리콜 코드화 */
 export function tagCase(
   event: { itemName: string | null; title: string | null; narrative: string },
   snapshot: CodebookSnapshot,
+  /** 어느 사건인가. 기록에 남긴다(054) */
+  caseId?: number | null,
 ): Promise<TagResult> {
   const user = [
     '[위해요인(HF) 코드 목록]',
@@ -403,7 +410,7 @@ export function tagCase(
     .filter(Boolean)
     .join('\n');
 
-  return runTagging(SYSTEM_CASE, user, snapshot, true);
+  return runTagging(SYSTEM_CASE, user, snapshot, true, { caseId });
 }
 
 /** 태깅 결과를 clause_tag / case_tag 행 모양으로 편다 (축별 행 — v0.7 §5.2) */

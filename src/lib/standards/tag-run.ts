@@ -77,6 +77,8 @@ function taggableWhere(
 
 interface ClauseRow {
   id: number;
+  /** 어느 기준의 조항인가. AI 호출 기록에 함께 남긴다(054) */
+  standard_id: number;
   marker: string;
   part: string | null;
   breadcrumb_path: string | null;
@@ -166,7 +168,7 @@ export async function runTagging(opts: TagRunOptions = {}): Promise<TagRunResult
 
   const rows = await db<ClauseRow[]>`
     select
-      c.id, c.marker, c.part, c.breadcrumb_path, c.level_code, c.clause_type, c.body,
+      c.id, c.standard_id, c.marker, c.part, c.breadcrumb_path, c.level_code, c.clause_type, c.body,
       s.item_name, s.display_name,
       (select array_agg(
          tc.item_name || ' ' || coalesce(tc.allowance_raw, '')
@@ -267,6 +269,7 @@ export async function runTagging(opts: TagRunOptions = {}): Promise<TagRunResult
       const tagged = await tagClause(
         { contextHeader: header, marker: c.marker, body: c.body, testConditions: c.test_conditions ?? undefined },
         snapshot,
+        Number(c.standard_id),
       );
 
       if (tagged.escalated) result.escalated++;

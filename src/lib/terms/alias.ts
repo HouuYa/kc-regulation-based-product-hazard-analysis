@@ -97,26 +97,40 @@ async function fewShot(exclude: AliasTarget[]): Promise<string> {
   ].join('\n');
 }
 
-const schema = {
-  type: 'object',
-  additionalProperties: false,
-  properties: {
-    items: {
-      type: 'array',
+/**
+ * 대상 품목명을 enum 으로 못박는다 (2026-09-08)
+ *
+ * 검색어(별칭) 자체는 만들어 내는 것이라 고정할 수 없다 — 그것이 이 호출의 목적이다.
+ * 하지만 **어느 품목에 붙일 것인가**는 우리가 물어본 목록 안에서만 나와야 한다.
+ * 전에는 target 이 자유 문자열이라 이름이 살짝 어긋나면 그 묶음의 검색어가 통째로
+ * 버려졌고, 버려진 사실도 아무 데도 남지 않았다.
+ */
+function buildSchema(names: string[]) {
+  return {
+    type: 'object',
+    additionalProperties: false,
+    properties: {
       items: {
-        type: 'object',
-        additionalProperties: false,
-        properties: {
-          target: { type: 'string' },
-          keywords: { type: 'array', items: { type: 'string' } },
-          note: { type: 'string' },
+        type: 'array',
+        items: {
+          type: 'object',
+          additionalProperties: false,
+          properties: {
+            target: { type: 'string', enum: names },
+            keywords: {
+              type: 'array',
+              items: { type: 'string' },
+              description: '이 품목을 사람들이 실제로 부르는 말. 두 글자 이상, 서른 글자 이하',
+            },
+            note: { type: 'string', description: '왜 이 말들을 골랐는지 한 줄' },
+          },
+          required: ['target', 'keywords', 'note'],
         },
-        required: ['target', 'keywords', 'note'],
       },
     },
-  },
-  required: ['items'],
-} as const;
+    required: ['items'],
+  } as const;
+}
 
 /** 한 번에 몇 품목을 물을 것인가. 크게 묶을수록 싸지만 답이 성의 없어진다 */
 export const BATCH = 20;
@@ -196,22 +210,28 @@ export async function suggestAliases(targets: AliasTarget[]): Promise<AliasSugge
     system: SYSTEM,
     user,
     schemaName: 'item_aliases', purpose: 'alias',
-    schema,
+    // 같은 이름이 두 번 들어가면 OpenAI 가 enum 을 거절한다. 묶음 안에 동명이 있을 수 있다
+    schema: buildSchema([...new Set(targets.map(label))].filter((s) => s.length > 0)),
     effort: 'low',
   });
 
   const byName = new Map(targets.map((t) => [label(t), t]));
   const out: AliasSuggestion[] = [];
+  // enum 으로 막았어도 세어 둔다. 조용히 사라지는 것이 이 자리에서 가장 알기 어려운 고장이다
+  let dropped = 0;
   for (const it of value.items ?? []) {
     const target = byName.get(it.target?.trim() ?? '');
     // 목록에 없는 이름은 버린다. 지어낸 품목에 별칭이 붙으면 되짚을 수 없다
-    if (!target) continue;
+    if (!target) { dropped++; continue; }
     const seen = new Set<string>();
     const keywords = (it.keywords ?? [])
       .map((k) => (k ?? '').trim())
       .filter((k) => k.length >= 2 && k.length <= 30)
       .filter((k) => (seen.has(k) ? false : (seen.add(k), true)));
     if (keywords.length) out.push({ target, keywords, note: it.note ?? '' });
+  }
+  if (dropped > 0) {
+    console.warn(`검색어 생성 — 목록 밖 품목 ${dropped}건을 버렸습니다 (묶음 ${targets.length}종)`);
   }
   return out;
 }

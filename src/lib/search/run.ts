@@ -206,7 +206,7 @@ export async function runAnalysis(
   let hydeText: string | null = null;
   if (config.useRerank && input.embedding) {
     try {
-      const h = await hydeQuery(input);
+      const h = await hydeQuery({ ...input, caseId });
       searchInput = { ...input, embedding: h.embedding };
       hydeText = h.text;
     } catch (e) {
@@ -240,6 +240,7 @@ export async function runAnalysis(
           contextHeader: c.contextHeader, body: c.body, testConditions: c.testConditions,
         })),
         cfg.rerankModel,
+        caseId,
       );
       const byId = new Map(scores.map((s) => [s.clause_id, s]));
       candidates = candidates

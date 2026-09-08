@@ -57,27 +57,44 @@ const SYSTEM = [
   '- reason 은 한 문장으로 짧게 쓴다. 담당자가 확정·반려를 판단할 근거다.',
 ].join('\n');
 
-const schema = {
-  type: 'object',
-  additionalProperties: false,
-  properties: {
-    standards: {
-      type: 'array',
-      items: {
-        type: 'object',
-        additionalProperties: false,
-        properties: {
-          display_name: { type: 'string' },
-          reason: { type: 'string' },
-          confidence: { type: 'number' },
+/**
+ * 고를 대상을 id 목록으로 못박는다 (2026-09-08)
+ *
+ * 전에는 `display_name` 을 자유 문자열로 받고, 목록에 없는 이름이면 코드에서 버렸다.
+ * 프롬프트로 "지어내지 마라"라고 이르는 것과, 스키마가 **지어낼 수 없게** 만드는 것은
+ * 다르다. 실제로 버려진 답이 몇 건인지 아무도 세지 않아, 이름을 살짝 다르게 적어
+ * 통째로 사라진 제안이 있어도 드러나지 않았다.
+ *
+ * 이 저장소의 다른 아홉 자리는 이미 id enum 으로 고정돼 있다(rerank·scope_semantic·
+ * gpc_verify·taxonomy_link …). 여기만 예외였다.
+ *
+ * id 를 문자열로 쓰는 이유는 OpenAI 가 integer 타입의 enum 을 거절하기 때문이다
+ * (rerank.ts 에 같은 주석이 있다 — "enum value 6070 does not validate against
+ * {'type': 'integer'}").
+ */
+function buildSchema(ids: number[]) {
+  return {
+    type: 'object',
+    additionalProperties: false,
+    properties: {
+      standards: {
+        type: 'array',
+        items: {
+          type: 'object',
+          additionalProperties: false,
+          properties: {
+            standard_id: { type: 'string', enum: ids.map(String) },
+            reason: { type: 'string', description: '왜 이 기준인지 한 문장. 담당자가 확정·반려를 판단할 근거다' },
+            confidence: { type: 'number', description: '0.0~1.0 자기보고 확신도' },
+          },
+          required: ['standard_id', 'reason', 'confidence'],
         },
-        required: ['display_name', 'reason', 'confidence'],
       },
+      note: { type: 'string', description: '고른 것이 없으면 그 이유. 비대상 품목이면 그렇게 적는다' },
     },
-    note: { type: 'string' },
-  },
-  required: ['standards', 'note'],
-} as const;
+    required: ['standards', 'note'],
+  } as const;
+}
 
 /**
  * 기준 목록을 LLM 에게 보여 줄 형태로 만든다.
@@ -128,34 +145,39 @@ export async function suggestScope(
     `[품목명] ${itemName}`,
     narrative ? `[사고 서술] ${narrative.replace(/\s+/g, ' ').slice(0, 600)}` : '',
     '',
-    '[고를 수 있는 기준 목록]',
-    ...list.map((s) => `- ${s.line}`),
+    '[고를 수 있는 기준 목록] — standard_id 로 답한다',
+    ...list.map((s) => `- [${s.id}] ${s.line}`),
   ].filter(Boolean).join('\n');
 
   const { value: res } = await structuredCall<{
-    standards: Array<{ display_name: string; reason: string; confidence: number }>;
+    standards: Array<{ standard_id: string; reason: string; confidence: number }>;
     note: string;
   }>({
     model: openaiConfig().rerankModel,
     system: SYSTEM,
     user,
     schemaName: 'scope_suggestion', purpose: 'scope_suggest',
-    schema,
+    schema: buildSchema(list.map((s) => s.id)),
     effort: 'low',
   });
 
-  const byName = new Map(list.map((s) => [s.name, s.id]));
+  const byId = new Map(list.map((s) => [Number(s.id), s.name]));
   const suggestions: ScopeSuggestion[] = [];
+  // enum 이 뚫리는 일은 없어야 하지만, 뚫렸을 때 조용히 사라지지 않도록 세어서 알린다
+  let dropped = 0;
   for (const s of res.standards ?? []) {
-    // 목록에 없는 이름은 버린다. 지어낸 기준이 사전에 들어가면 되짚을 수 없다
-    const id = byName.get(s.display_name);
-    if (!id) continue;
+    const id = Number(s.standard_id);
+    const name = byId.get(id);
+    if (!name) { dropped++; continue; }
     suggestions.push({
       standardId: id,
-      standardName: s.display_name,
+      standardName: name,
       reason: s.reason,
       confidence: Math.max(0, Math.min(1, Number(s.confidence) || 0)),
     });
+  }
+  if (dropped > 0) {
+    console.warn(`품목 기준 제안 — 목록 밖 기준 ${dropped}건을 버렸습니다 ("${itemName}")`);
   }
 
   return {

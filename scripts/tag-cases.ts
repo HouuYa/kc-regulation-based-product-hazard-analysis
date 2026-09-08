@@ -113,6 +113,7 @@ async function main() {
       const result = await tagCase(
         { itemName, title: c.title, narrative: c.narrative.slice(0, 12000) },
         snapshot,
+        c.id,
       );
 
       const tagRows = toTagRows(result);

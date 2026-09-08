@@ -62,6 +62,8 @@ export async function rerankCandidates(
   query: { itemName: string | null; narrative: string; hfCodes: string[]; dtCodes: string[] },
   candidates: RerankCandidate[],
   model: string,
+  /** 어느 사건을 분석하다 부른 것인가. 기록에 남겨 건당 비용을 되짚는다(054) */
+  caseId?: number | null,
 ): Promise<RerankScore[]> {
   if (candidates.length === 0) return [];
 
@@ -121,7 +123,7 @@ export async function rerankCandidates(
     model,
     system: SYSTEM,
     user,
-    schemaName: 'rerank_scores', purpose: 'rerank',
+    schemaName: 'rerank_scores', purpose: 'rerank', caseId,
     schema,
     effort: openaiConfig().rerankEffort as ReasoningEffort,
   });

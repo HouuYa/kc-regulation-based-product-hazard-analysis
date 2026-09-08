@@ -125,7 +125,7 @@ async function main() {
   for (const s of rows) {
     try {
       const context = buildProductContext(s);
-      const { candidates, verification } = await findAndVerifyGpc(s.item_name, context, CANDIDATE_COUNT);
+      const { candidates, verification } = await findAndVerifyGpc(s.item_name, context, CANDIDATE_COUNT, { standardId: Number(s.id) });
       const top = candidates[0] ?? null;
 
       await db`

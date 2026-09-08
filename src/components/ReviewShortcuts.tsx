@@ -50,7 +50,6 @@ export function ReviewShortcuts() {
       const parent = rows()[0]?.parentElement;
       if (!parent) return;
 
-      let fallback: ReturnType<typeof setTimeout>;
       const done = () => {
         observer.disconnect();
         clearTimeout(fallback);
@@ -59,7 +58,7 @@ export function ReviewShortcuts() {
       const observer = new MutationObserver(done);
       observer.observe(parent, { childList: true });
       // 목록이 그대로일 수도 있다(이미 같은 상태였던 경우). 그때도 포커스는 돌려준다
-      fallback = setTimeout(done, 1500);
+      const fallback = setTimeout(done, 1500);
     };
 
     const onKeyDown = (event: KeyboardEvent) => {

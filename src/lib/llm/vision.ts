@@ -45,32 +45,48 @@ const SYSTEM = `당신은 제품안전 사고조사보고서에 첨부된 사진
   그대로 쓰인다 — 재질·형태·용도 같은 분류에 도움되는 관찰 위주로 쓴다.
   증거 사진이 하나도 없으면 빈 문자열로 둔다.`;
 
-const SCHEMA = {
-  type: 'object',
-  additionalProperties: false,
-  required: ['photos', 'product_description'],
-  properties: {
-    photos: {
-      type: 'array',
-      items: {
-        type: 'object',
-        additionalProperties: false,
-        required: ['page_number', 'is_relevant_photo', 'description', 'hazard_note'],
-        properties: {
-          page_number: { type: 'integer' },
-          is_relevant_photo: { type: 'boolean' },
-          description: { type: 'string' },
-          hazard_note: { type: 'string' },
+/**
+ * 쪽 번호를 실제 첨부 쪽의 enum 으로 고정한다 (2026-09-08)
+ *
+ * 전에는 정수면 무엇이든 받았다. 모델이 쪽을 하나 건너뛰거나 없는 쪽을 적으면
+ * 사진 설명이 엉뚱한 쪽에 붙는데, 그 결과는 화면에 그대로 나가고 사람이 사진과
+ * 대조하지 않는 한 드러나지 않는다.
+ *
+ * 정수 enum 은 OpenAI 가 거절하므로(rerank.ts 주석 참고) 문자열로 받아 코드에서
+ * 숫자로 되돌린다.
+ */
+function buildSchema(pageNumbers: number[]) {
+  return {
+    type: 'object',
+    additionalProperties: false,
+    required: ['photos', 'product_description'],
+    properties: {
+      photos: {
+        type: 'array',
+        items: {
+          type: 'object',
+          additionalProperties: false,
+          required: ['page_number', 'is_relevant_photo', 'description', 'hazard_note'],
+          properties: {
+            page_number: {
+              type: 'string',
+              enum: [...new Set(pageNumbers)].map(String),
+              description: '이 사진이 있던 보고서 쪽 번호. 준 순서와 같아야 한다',
+            },
+            is_relevant_photo: { type: 'boolean', description: '실제 사고·제품 증거 사진인가' },
+            description: { type: 'string', description: '사진에 실제로 보이는 것만' },
+            hazard_note: { type: 'string', description: '손상·탄 흔적·파손 등 관찰. 없으면 빈 문자열' },
+          },
         },
       },
+      product_description: { type: 'string', description: '증거 사진들을 종합한 제품 서술 한 문장' },
     },
-    product_description: { type: 'string' },
-  },
-} as const;
+  } as const;
+}
 
 interface RawOutput {
   photos: Array<{
-    page_number: number;
+    page_number: string;
     is_relevant_photo: boolean;
     description: string;
     hazard_note: string;
@@ -100,14 +116,17 @@ export async function analyzePhotos(
     images: photos.map((p) => ({
       dataUrl: `data:image/jpeg;base64,${p.jpeg.toString('base64')}`,
     })),
-    schemaName: 'photo_analysis', purpose: 'tagging',
-    schema: SCHEMA,
+    // 태깅과 한 줄로 합쳐 기록하던 것을 갈랐다 (2026-09-08)
+    //   둘 다 같은 급의 모델을 쓰므로 모델명으로도 갈라낼 수 없어, 사진 분석에
+    //   얼마를 쓰는지 셀 수 없었다. 사진은 호출 한 번이 비싸므로 따로 보여야 한다
+    schemaName: 'photo_analysis', purpose: 'vision',
+    schema: buildSchema(photos.map((p) => p.pageNumber)),
     effort: cfg.visionEffort as never,
   });
 
   return {
     photos: value.photos.map((p) => ({
-      pageNumber: p.page_number,
+      pageNumber: Number(p.page_number),
       isRelevantPhoto: p.is_relevant_photo,
       description: p.description,
       hazardNote: p.hazard_note,

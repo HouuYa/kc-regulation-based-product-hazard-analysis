@@ -103,6 +103,8 @@ Segment(가장 포괄적) 계층으로 주어진다.
 export async function verifyGpcMatch(
   productContext: string,
   candidates: GpcCandidate[],
+  /** 무엇에 품목분류를 붙이다 부른 것인가. 기록에 남긴다(054) */
+  target: { caseId?: number | null; standardId?: number | null } = {},
 ): Promise<GpcVerification | null> {
   if (candidates.length === 0) return null;
 
@@ -148,6 +150,7 @@ export async function verifyGpcMatch(
     system: SYSTEM,
     user,
     schemaName: 'gpc_verification', purpose: 'gpc_verify',
+    caseId: target.caseId, standardId: target.standardId,
     schema,
     effort: cfg.rerankEffort as ReasoningEffort,
   });

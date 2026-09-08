@@ -28,6 +28,17 @@ export interface CallUsage {
   inputTokens: number;
   outputTokens: number;
   reasoningTokens: number;
+  /**
+   * 입력 토큰 중 캐시 적중분. inputTokens 에 이미 포함된 값이다.
+   *
+   * 단가가 일반 입력의 10% 라(2026-09-08 단가표) 따로 세지 않으면 금액이 부풀려진다.
+   *
+   * 2026-09-08 실측으로는 적중률이 0% 다(호출 926건). 적중은 프롬프트 앞부분이 글자
+   * 그대로 같을 때만 걸리는데, 지금은 품목명·사고 서술처럼 매번 다른 값이 앞쪽에
+   * 온다. 고정 덩어리를 앞으로 보내는 개편을 하면 달라질 자리이고, 그 효과를 숫자로
+   * 보려면 먼저 세고 있어야 한다.
+   */
+  cachedTokens: number;
 }
 
 /**
@@ -38,6 +49,7 @@ export interface CallUsage {
  */
 export type LlmPurpose =
   | 'tagging'        // 사건·조항에 HF·DT 코드 부여
+  | 'vision'         // 사고보고서 첨부 사진 분석
   | 'rerank'         // 조항 후보 재채점
   | 'hyde'           // 가상 조항 생성
   | 'scope_semantic' // 적용범위 의미검색으로 기준 고르기
@@ -65,15 +77,21 @@ async function recordCall(row: {
   itemCount?: number;
   ok?: boolean;
   error?: string | null;
+  /** 어느 사건·기준을 처리하다 부른 것인가. 052 가 칸을 만들어 두고 비워 두었다 */
+  caseId?: number | null;
+  standardId?: number | null;
 }): Promise<void> {
   try {
     const { getDb } = await import('../db');
     await getDb()`
       insert into public.llm_call
-        (purpose, model, input_tokens, output_tokens, reasoning_tokens, item_count, ok, error)
+        (purpose, model, input_tokens, output_tokens, reasoning_tokens, cached_tokens,
+         item_count, ok, error, case_id, standard_id)
       values (${row.purpose}, ${row.model},
               ${row.usage.inputTokens}, ${row.usage.outputTokens}, ${row.usage.reasoningTokens},
-              ${row.itemCount ?? 1}, ${row.ok ?? true}, ${row.error ?? null})
+              ${row.usage.cachedTokens},
+              ${row.itemCount ?? 1}, ${row.ok ?? true}, ${row.error ?? null},
+              ${row.caseId ?? null}, ${row.standardId ?? null})
     `;
   } catch (e) {
     console.warn('AI 호출 기록 실패(처리는 계속합니다):', e instanceof Error ? e.message : e);
@@ -104,6 +122,8 @@ async function chatJsonCall<T>(args: {
   schema: Record<string, unknown>;
   effort?: ReasoningEffort;
   purpose?: LlmPurpose;
+  caseId?: number | null;
+  standardId?: number | null;
 }): Promise<{ value: T; usage: CallUsage }> {
   let res;
   try {
@@ -130,9 +150,11 @@ async function chatJsonCall<T>(args: {
       await recordCall({
         purpose: args.purpose,
         model: args.model,
-        usage: { inputTokens: 0, outputTokens: 0, reasoningTokens: 0 },
+        usage: { inputTokens: 0, outputTokens: 0, reasoningTokens: 0, cachedTokens: 0 },
         ok: false,
         error: e instanceof Error ? e.message.slice(0, 500) : String(e).slice(0, 500),
+        caseId: args.caseId,
+        standardId: args.standardId,
       });
     }
     throw e;
@@ -143,17 +165,28 @@ async function chatJsonCall<T>(args: {
     inputTokens: u?.prompt_tokens ?? 0,
     outputTokens: u?.completion_tokens ?? 0,
     reasoningTokens: u?.completion_tokens_details?.reasoning_tokens ?? 0,
+    // 응답이 이 칸을 안 주는 모델·경로가 있다. 없으면 0 — 모르는 것을 적중으로 세면
+    // 금액이 실제보다 적어 보인다(054)
+    cachedTokens: u?.prompt_tokens_details?.cached_tokens ?? 0,
   };
 
   const content = res.choices[0]?.message?.content;
   if (!content) {
     if (args.purpose) {
-      await recordCall({ purpose: args.purpose, model: args.model, usage, ok: false, error: '빈 응답' });
+      await recordCall({
+        purpose: args.purpose, model: args.model, usage, ok: false, error: '빈 응답',
+        caseId: args.caseId, standardId: args.standardId,
+      });
     }
     throw new Error(`LLM(${args.model})이 빈 응답을 반환했습니다.`);
   }
 
-  if (args.purpose) await recordCall({ purpose: args.purpose, model: args.model, usage });
+  if (args.purpose) {
+    await recordCall({
+      purpose: args.purpose, model: args.model, usage,
+      caseId: args.caseId, standardId: args.standardId,
+    });
+  }
 
   return { value: JSON.parse(content) as T, usage };
 }
@@ -167,6 +200,9 @@ export async function structuredCall<T>(args: {
   effort?: ReasoningEffort;
   /** 어디서 부른 것인가. 주면 llm_call 에 기록한다(052) */
   purpose?: LlmPurpose;
+  /** 무엇을 처리하다 부른 것인가. 주면 함께 남긴다 — 건당 비용을 되짚는 재료다(054) */
+  caseId?: number | null;
+  standardId?: number | null;
 }): Promise<{ value: T; usage: CallUsage }> {
   return chatJsonCall<T>({ ...args, userContent: args.user });
 }
@@ -186,6 +222,8 @@ export async function structuredVisionCall<T>(args: {
   schema: Record<string, unknown>;
   effort?: ReasoningEffort;
   purpose?: LlmPurpose;
+  caseId?: number | null;
+  standardId?: number | null;
 }): Promise<{ value: T; usage: CallUsage }> {
   const userContent = [
     { type: 'text', text: args.user },
@@ -248,7 +286,11 @@ export async function embedBatch(texts: string[]): Promise<number[][]> {
   await recordCall({
     purpose: 'embedding',
     model: cfg.embeddingModel,
-    usage: { inputTokens: res.usage?.prompt_tokens ?? 0, outputTokens: 0, reasoningTokens: 0 },
+    // 임베딩에는 캐시 단가가 없다(단가표에 칸 자체가 없다). 0 으로 둔다
+    usage: {
+      inputTokens: res.usage?.prompt_tokens ?? 0,
+      outputTokens: 0, reasoningTokens: 0, cachedTokens: 0,
+    },
     itemCount: input.length,
   });
 

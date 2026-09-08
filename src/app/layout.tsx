@@ -38,21 +38,47 @@ const STAGES = [
 ];
 
 /**
- * 업무 흐름 위에 있지 않은 것들 — 번호를 주지 않고 선 아래에 둔다
+ * 흐름 아래는 세 묶음으로 나눈다 (2026-09-08, 담당자 요청)
  *
- * 순서는 담당자가 손대는 빈도를 따른다(담당자 요청, 2026-09-05).
- * 산출물이 먼저, 찾아보는 참고 자료가 다음, 평소 할 일이 없는 운영이 마지막이다.
- * 운영은 상태가 이상할 때만 여는 화면이라 눈길이 가는 자리에 둘 이유가 없다.
+ * 전에는 번호 없는 것 다섯이 한 줄로 이어져 있었다. 성격이 제각각인데 생김새가
+ * 같으니, 「KC안전기준 개선 요인」(산출물)과 「운영」(시스템)이 같은 무게로 보였다.
+ * AI 화면을 새로 만들면서 그 자리를 정해야 했고, 이 참에 묶음을 나눴다.
+ *
+ *   산출물   1~3 이 쌓여야 숫자가 생기는 결과물
+ *   사전·참고 무엇을 기준으로 삼는가 — 담당자가 채우고 고치는 자료
+ *   시스템    지금 제대로 돌고 있는가 · AI 를 어디에 쓰고 얼마가 드는가
+ *
+ * 묶음 안의 순서는 담당자가 손대는 빈도를 따른다(2026-09-05 요청). 시스템 묶음은
+ * 평소 할 일이 없어 맨 아래다.
  */
-const ASIDE = [
-  // 세 번째 산출물. 1~3 의 결과가 쌓여야 숫자가 생기므로 흐름 뒤에 둔다.
-  // 여기는 쌓인 것을 세기만 하므로 AI 를 부르지 않는다
-  { href: '/insights', label: 'KC안전기준 개선 요인', sub: '사각지대·국내외 대조·시험항목' },
-  // 두 사전은 한 흐름이다 — 일상어를 법정 품목으로 옮긴 뒤(검색어), 그 품목의 기준을 정한다(용어)
-  { href: '/keywords', label: '품목 검색어 사전',     sub: '일상어 → 법정 품목', ai: true },
-  { href: '/terms',    label: '품목 용어 사전',       sub: '품목 → 적용기준',    ai: true },
-  { href: '/codebook', label: '위해요인 코드',        sub: '참고 문서' },
-  { href: '/ops',      label: '운영',                sub: '상태·알림·접속 관리' },
+const GROUPS: Array<{
+  title: string;
+  items: Array<{ href: string; label: string; sub: string; ai?: boolean }>;
+}> = [
+  {
+    title: '산출물',
+    items: [
+      // 여기는 쌓인 것을 세기만 하므로 AI 를 부르지 않는다
+      { href: '/insights', label: 'KC안전기준 개선 요인', sub: '사각지대·국내외 대조·시험항목' },
+    ],
+  },
+  {
+    title: '사전 · 참고',
+    items: [
+      // 두 사전은 한 흐름이다 — 일상어를 법정 품목으로 옮긴 뒤(검색어), 그 품목의 기준을 정한다(용어)
+      { href: '/keywords', label: '품목 검색어 사전', sub: '일상어 → 법정 품목', ai: true },
+      { href: '/terms',    label: '품목 용어 사전',   sub: '품목 → 적용기준',    ai: true },
+      { href: '/codebook', label: '위해요인 코드',    sub: '참고 문서' },
+    ],
+  },
+  {
+    title: '시스템',
+    items: [
+      // AI 는 운영과 성격이 다르다 — 상태 점검이 아니라 관리 대상이라 화면을 따로 뒀다(2026-09-08)
+      { href: '/llm', label: 'AI 사용과 비용', sub: '자리·모델·단가', ai: true },
+      { href: '/ops', label: '운영',           sub: '상태·알림·접속 관리' },
+    ],
+  },
 ];
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -99,6 +125,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               넓은 화면에서는 원래대로 세로 레일이다.
             */}
             <div className="flex items-stretch overflow-x-auto px-2 py-3 lg:block lg:py-4">
+              {/* 묶음 이름은 넓은 화면에서만. 좁은 화면에서는 항목이 밀린다 */}
+              <div className="label hidden px-3 pb-1 lg:block">업무 흐름</div>
               <ol className="flex lg:block">
                 {STAGES.map((s) => (
                   <li key={s.href} className="shrink-0">
@@ -133,35 +161,61 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 자리다. 그래서 번호를 주지 않고 선 하나를 사이에 둔다. 번호가 의미를
                 담고 있으므로 아무 데나 4를 붙이면 그 의미가 깨진다.
               */}
-              <ul className="ml-2 flex shrink-0 border-l border-rule-soft pl-2 lg:mt-3 lg:ml-0 lg:block lg:border-t lg:border-l-0 lg:pt-3 lg:pl-0">
-                {ASIDE.map((a) => (
-                  <li key={a.href} className="shrink-0">
-                    <Link
-                      href={a.href}
-                      className="group block rounded-sm px-3 py-2.5 transition-colors hover:bg-measure-soft"
-                    >
-                      <span className="block text-[13px] font-medium whitespace-nowrap group-hover:text-measure">
-                        {a.label}
-                        {a.ai && (
-                          <span aria-label={AI_NOTE} title={AI_NOTE} className="ml-1">
-                            🤖
+              {GROUPS.map((g) => (
+                <div
+                  key={g.title}
+                  className="ml-2 flex shrink-0 border-l border-rule-soft pl-2 lg:mt-3 lg:ml-0 lg:block lg:border-t lg:border-l-0 lg:pt-3 lg:pl-0"
+                >
+                  {/*
+                    묶음 이름은 넓은 화면에서만 보인다. 좁은 화면에서는 메뉴가 가로로
+                    눕는데, 거기에 제목까지 끼면 정작 항목이 화면 밖으로 밀린다.
+                  */}
+                  <div className="label hidden px-3 pb-1 lg:block">{g.title}</div>
+                  <ul className="flex lg:block">
+                    {g.items.map((a) => (
+                      <li key={a.href} className="shrink-0">
+                        <Link
+                          href={a.href}
+                          className="group block rounded-sm px-3 py-2.5 transition-colors hover:bg-measure-soft"
+                        >
+                          <span className="block text-[13px] font-medium whitespace-nowrap group-hover:text-measure">
+                            {a.label}
+                            {a.ai && (
+                              <span aria-label={AI_NOTE} title={AI_NOTE} className="ml-1">
+                                🤖
+                              </span>
+                            )}
                           </span>
-                        )}
-                      </span>
-                      <span className="block text-[11px] whitespace-nowrap text-ink-3">
-                        {a.sub}
-                      </span>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
+                          <span className="block text-[11px] whitespace-nowrap text-ink-3">
+                            {a.sub}
+                          </span>
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
             </div>
 
             {/* 이 도구의 성격을 화면에 상주시킨다. 담당자가 결과를 판정으로 읽지 않도록. */}
-            <p className="mx-5 mb-5 hidden border-t border-rule-soft pt-4 text-[11px] leading-relaxed text-ink-3 lg:block">
-              이 시스템은 위반 여부를 판정하지 않습니다. 관련될 수 있는 조항과 그 근거를
-              제시하고, 확인 여부는 담당자가 정합니다.
-            </p>
+            <div className="mx-5 mb-5 hidden border-t border-rule-soft pt-4 lg:block">
+              <p className="text-[11px] leading-relaxed text-ink-3">
+                이 시스템은 위반 여부를 판정하지 않습니다. 관련될 수 있는 조항과 그 근거를
+                제시하고, 확인 여부는 담당자가 정합니다.
+              </p>
+              {/*
+                🤖 가 무슨 뜻인지 화면에 적어 둔다. 표시만 있고 뜻을 어디에도 안 적으면
+                장식으로 읽히는데, 이것은 "이 화면의 결과는 후보"라는 경고에 가깝다.
+              */}
+              <p className="mt-3 text-[11px] leading-relaxed text-ink-3">
+                🤖 표시는 그 화면에서 AI가 관여한다는 뜻입니다. 어디에 어떤 모델을 쓰고 얼마가
+                드는지는{' '}
+                <Link href="/llm" className="underline decoration-rule underline-offset-2 hover:text-measure">
+                  AI 사용과 비용
+                </Link>
+                에 있습니다.
+              </p>
+            </div>
           </nav>
 
           <main id="top" className="min-w-0">{children}</main>

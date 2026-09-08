@@ -51,13 +51,15 @@ export async function findAndVerifyGpc(
   productName: string,
   productContext: string,
   candidateCount: number = DEFAULT_GPC_CANDIDATE_COUNT,
+  /** 무엇에 붙이는 것인가. AI 호출 기록에 함께 남긴다(054) */
+  target: { caseId?: number | null; standardId?: number | null } = {},
 ): Promise<GpcAssignment> {
   const candidates = await findGpcCandidates(productName, productContext, candidateCount);
   if (candidates.length === 0) {
     return { candidates: [], verification: NO_CANDIDATES_VERIFICATION };
   }
 
-  const verification = await verifyGpcMatch(productContext, candidates);
+  const verification = await verifyGpcMatch(productContext, candidates, target);
   // candidates.length > 0 이므로 verifyGpcMatch() 는 여기서 null 을 반환하지 않는다
   // (그 함수의 null 분기는 candidates.length === 0 일 때뿐이다 — verify.ts 참고).
   return { candidates, verification: verification ?? NO_CANDIDATES_VERIFICATION };

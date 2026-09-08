@@ -1,9 +1,11 @@
+import Link from 'next/link';
 import { getDb } from '@/lib/db';
 import { PageHead, ConnectionError, TermsNote } from '@/components/Panel';
 import { ActionForm } from '@/components/ActionForm';
 import { AutoRefresh } from '@/components/AutoRefresh';
 import { PageToc, type TocItem } from '@/components/PageToc';
 import { usageSummary, PURPOSE_LABEL, type UsageSummary } from '@/lib/llm/usage';
+import { CALL_SITES } from '@/lib/llm/catalog';
 import { formatCost } from '@/lib/llm/pricing';
 import {
   runEmbedTick, retryParked, sendTestAlert,
@@ -808,58 +810,30 @@ export default async function OpsPage() {
                   </div>
                 )}
 
-                <div className="mt-5 overflow-x-auto">
-                  <table className="w-full min-w-[46rem] border-collapse text-[12px]">
-                    <thead>
-                      <tr className="border-b border-rule text-left text-ink-3">
-                        <th className="py-2 pr-4 font-normal">어디에</th>
-                        <th className="py-2 pr-4 font-normal">모델</th>
-                        <th className="py-2 pr-4 text-right font-normal">횟수</th>
-                        <th className="py-2 pr-4 text-right font-normal">입력 토큰</th>
-                        <th className="py-2 pr-4 text-right font-normal">출력 토큰</th>
-                        <th className="py-2 text-right font-normal">비용</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {data.usage.rows.map((r) => {
-                        const label = PURPOSE_LABEL[r.purpose];
-                        return (
-                          <tr key={`${r.purpose}-${r.model}`} className="border-b border-rule-soft align-top">
-                            <td className="py-2 pr-4">
-                              <div className="text-ink">{label?.name ?? r.purpose}</div>
-                              {label && <div className="mt-0.5 text-[11px] text-ink-3">{label.where}</div>}
-                            </td>
-                            <td className="py-2 pr-4 text-ink-2">{r.model}</td>
-                            <td className="py-2 pr-4 text-right tabular-nums">
-                              {r.calls.toLocaleString()}
-                              {r.failed > 0 && (
-                                <span className="ml-1 text-caution">실패 {r.failed}</span>
-                              )}
-                            </td>
-                            <td className="py-2 pr-4 text-right tabular-nums text-ink-2">
-                              {r.inputTokens.toLocaleString()}
-                            </td>
-                            <td className="py-2 pr-4 text-right tabular-nums text-ink-2">
-                              {r.outputTokens.toLocaleString()}
-                              {r.reasoningTokens > 0 && (
-                                <div className="text-[11px] text-ink-3">
-                                  생각 {r.reasoningTokens.toLocaleString()}
-                                </div>
-                              )}
-                            </td>
-                            <td className="py-2 text-right tabular-nums">{formatCost(r.costUsd)}</td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
-                </div>
+                {/*
+                  자세한 것은 전용 화면으로 옮겼다 (2026-09-08)
 
-                <p className="mt-3 text-[12px] leading-relaxed text-ink-3">
-                  「생각」은 추론 모델이 속으로 쓴 토큰입니다. 출력 토큰에 이미 포함되어
-                  청구되므로 따로 더하지 않습니다. 임베딩은 한 번에 여러 건을 묶어 보내므로
-                  호출 횟수가 처리 건수보다 적습니다.
-                </p>
+                  운영은 "지금 제대로 돌고 있는가"를 보는 자리다. 어디에 무엇을 묻고,
+                  답을 어떻게 받고, 근거가 어디 남는지는 상태 점검이 아니라 관리 대상이라
+                  한 절에 눌러 담으면 표 하나로 줄어든다. 여기에는 이상 여부만 남긴다.
+                */}
+                <div className="mt-5 border border-rule-soft px-4 py-3 text-[12px] leading-relaxed text-ink-2">
+                  용도별·모델별 비용, 부르는 자리 {CALL_SITES.length}곳의 모델·스키마·근거 저장
+                  위치, 날짜별 추이는{' '}
+                  <Link href="/llm" className="underline decoration-rule underline-offset-2 hover:text-measure">
+                    🤖 AI 사용 화면
+                  </Link>
+                  에서 봅니다.
+                  {data.usage.rows.length > 0 && (
+                    <>
+                      {' '}가장 많이 쓴 자리는{' '}
+                      <span className="text-ink">
+                        {PURPOSE_LABEL[data.usage.rows[0].purpose]?.name ?? data.usage.rows[0].purpose}
+                      </span>
+                      ({data.usage.rows[0].model} · {formatCost(data.usage.rows[0].costUsd)})입니다.
+                    </>
+                  )}
+                </div>
               </>
             )}
           </Section>

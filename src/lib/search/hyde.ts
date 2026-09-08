@@ -63,6 +63,8 @@ export async function hydeQuery(input: {
   narrative: string;
   hfCodes: string[];
   dtCodes: string[];
+  /** 어느 사건인가. 기록에 남긴다(054) */
+  caseId?: number | null;
 }): Promise<HydeOutcome> {
   const user = [
     input.itemName ? `[품목] ${input.itemName}` : '',
@@ -77,7 +79,7 @@ export async function hydeQuery(input: {
     model: openaiConfig().rerankModel,
     system: SYSTEM,
     user,
-    schemaName: 'hypothetical_clause', purpose: 'hyde',
+    schemaName: 'hypothetical_clause', purpose: 'hyde', caseId: input.caseId,
     schema,
     effort: 'low',
   });
