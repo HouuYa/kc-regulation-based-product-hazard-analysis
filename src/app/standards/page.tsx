@@ -3,13 +3,27 @@ import { getDb } from '@/lib/db';
 import { PageHead, ConnectionError, EmptyState, Row, TermsNote } from '@/components/Panel';
 import { StatusBar } from '@/components/StatusBar';
 import { PageToc, type TocItem } from '@/components/PageToc';
+import {
+  GROUP_ORDER, GROUP_SOURCE_NOTE, CERT_TYPE_NOTE, CERT_SOURCE_NOTE,
+  asGroup, standardName, byKoreanName, sortCertTypes, CERT_TYPE_ORDER,
+  type ItemGroup,
+} from '@/lib/standards/label';
 
 export const dynamic = 'force-dynamic';
 
 const STANDARDS_TOC: TocItem[] = [
   { id: 'standards-status', label: '준비 상태' },
-  { id: 'standards-list', label: '안전기준 목록' },
+  { id: 'standards-electric', label: '전기용품' },
+  { id: 'standards-living', label: '생활용품' },
+  { id: 'standards-child', label: '어린이제품' },
 ];
+
+const GROUP_ANCHOR: Record<ItemGroup, string> = {
+  전기용품: 'standards-electric',
+  생활용품: 'standards-living',
+  어린이제품: 'standards-child',
+  기타: 'standards-etc',
+};
 
 /**
  * 안전기준 적재 현황
@@ -31,6 +45,18 @@ interface StandardRow {
   cert_scheme: string | null;
   item_name: string | null;
   total_pages: number | null;
+  /** 전기용품 · 생활용품 · 어린이제품 · 기타 (057 뷰가 정한다) */
+  item_group: string;
+  /** 대분류를 무엇을 보고 정했는가 — TAXONOMY · SCHEME · NAME */
+  item_group_source: string;
+  /** 인증구분 — 대분류와 별개의 축이다(058). 기준 하나가 여러 구분에 걸릴 수 있다 */
+  cert_types: string[] | null;
+  cert_type_source: string | null;
+  /** 이 기준이 걸리는 세부품목. 미검수분이 섞여 있어 화면에서 그렇게 밝힌다 */
+  sub_items: string[] | null;
+  /** 품목→기준 대응 건수와 그중 확정된 건수 */
+  link_count: number;
+  approved_count: number;
   clauses: number;
   tagged: number;
   embedded: number;
@@ -118,6 +144,8 @@ export default async function StandardsPage() {
     const rowsQuery = db<StandardRow[]>`
       select
         s.id, s.display_name, s.title_ko, s.cert_scheme, s.item_name, s.total_pages,
+        s.item_group, s.item_group_source, s.cert_types, s.cert_type_source,
+        s.sub_items, s.link_count, s.approved_count,
         count(c.id)::int as clauses,
         count(*) filter (where exists (
           select 1 from public.clause_tag t where t.clause_id = c.id))::int as tagged,
@@ -132,11 +160,12 @@ export default async function StandardsPage() {
         (select count(*)::int from public.test_condition tc
           join public.clause cc on cc.id = tc.clause_id
           where cc.standard_id = s.id) as conditions
-      from public.standard s
+      from public.standard_view s
       left join public.clause c on c.standard_id = s.id
       where s.is_current
-      group by s.id
-      order by count(c.id) desc
+      group by s.id, s.display_name, s.title_ko, s.cert_scheme, s.item_name,
+               s.total_pages, s.item_group, s.item_group_source, s.cert_types,
+               s.cert_type_source, s.sub_items, s.link_count, s.approved_count
     `;
 
     // 두 조회는 서로의 결과를 쓰지 않는다. 함께 보내면 느린 쪽만큼만 기다린다(§4.1)
@@ -158,7 +187,7 @@ export default async function StandardsPage() {
         lead="기준을 확인하고, 조항과 시험방법이 분석에 쓸 수 있는 상태인지 봅니다."
         workflow={[
           { label: '기준 확인' },
-          { label: '조항 확인', href: '#standards-list' },
+          { label: '조항 확인', href: '#standards-electric' },
           { label: '시험방법 확인' },
           { label: '분석에 사용' },
         ]}
@@ -229,6 +258,50 @@ export default async function StandardsPage() {
         </div>
       )}
 
+      {/*
+        처음 보는 사람을 위한 두 축 설명 (담당자 지적, 2026-09-09)
+
+        "안전기준 담당자는 품목별로 나뉘어 있어, 자기 품목군이 아니면 다른 품목에
+        대해선 일반인보다도 잘 모르는 경우가 많다." 그래서 화면이 쓰는 낱말을
+        화면 안에서 설명한다. 밖의 문서로 미루면 아무도 안 본다.
+
+        대분류와 인증구분은 서로를 결정하지 않는 별개의 축이다(058). 같은 전기용품
+        안에도 안전인증 품목과 공급자적합성확인 품목이 함께 있다.
+      */}
+      {rows.length > 0 && (
+        <details className="mt-6 border border-rule-soft">
+          <summary className="cursor-pointer px-4 py-2.5 text-[12px] text-ink-2">
+            이 화면의 낱말 — <span className="text-ink">대분류</span>와{' '}
+            <span className="text-ink">인증구분</span>은 다른 것입니다
+          </summary>
+          <div className="border-t border-rule-soft px-4 py-3.5 text-[12px] leading-relaxed text-ink-2">
+            <p>
+              <span className="text-ink">대분류</span>는 어느 법의 어느 품목군인가입니다 —
+              전기용품 · 생활용품 · 어린이제품. 목록을 이 셋으로 나눠 두었습니다.
+            </p>
+            <p className="mt-2">
+              <span className="text-ink">인증구분</span>은 팔기 전에 무엇을 거쳐야 하는가입니다.
+              대분류와 서로를 결정하지 않습니다 — 같은 전기용품 안에도 안전인증 품목과
+              공급자적합성확인 품목이 함께 있습니다. 기준 하나가 여러 구분에 걸리기도 합니다.
+            </p>
+            <ul className="mt-2.5 space-y-1">
+              {CERT_TYPE_ORDER.map((c) => (
+                <li key={c}>
+                  <span className="text-ink">{c}</span>
+                  <span className="text-ink-3"> — {CERT_TYPE_NOTE[c]}</span>
+                </li>
+              ))}
+            </ul>
+            <p className="mt-2.5 text-[11px] text-ink-3">
+              품목명 옆에{' '}
+              <span className="text-caution">품목표에서 따옴 · 검수 전</span> 이 붙은 것은,
+              담당자 품목표를 AI 가 이어 붙인 뒤 아직 아무도 확인하지 않은 이름입니다.
+              근거 자료는 docs/제품안전법제도/안전기준목록조사 취합(전기 생활 어린이).xlsx 입니다.
+            </p>
+          </div>
+        </details>
+      )}
+
       {!error && rows.length === 0 && (
         <EmptyState
           message="아직 들여온 기준이 없습니다."
@@ -240,65 +313,140 @@ export default async function StandardsPage() {
         />
       )}
 
-      {rows.length > 0 && (
-        <section id="standards-list" className="mt-10 scroll-mt-8">
-          {/*
-            머리글을 고정한다 (담당자 요청).
-            76건을 아래로 훑다 보면 어느 숫자가 무슨 칸인지 잊는다. 화면 위에 붙여 둔다.
-          */}
-          <div className={`label sticky top-0 z-10 border-b border-rule bg-paper pt-2 pb-2 ${GRID}`}>
-            <span>기준</span>
-            <span className="text-right">조항</span>
-            <span className="text-right">코드</span>
-            <span className="text-right">의미검색</span>
-            <span className="text-right">시험연결</span>
-            <span className="text-right">허용치</span>
-          </div>
+      {/*
+        대분류로 나눠 보여 준다 (담당자 요청, 2026-09-09)
 
-          {rows.map((r) => {
-            const notReady = r.tagged === 0 || r.test_links === 0;
-            const name = r.title_ko ?? r.item_name;
-            return (
-              <Row key={r.id}>
-                <div className={`items-baseline ${GRID}`}>
-                  <div className="min-w-0">
-                    <div className="text-[13px] font-medium">
-                      <span className="addr">{r.display_name}</span>
-                      {name && <span className="ml-2 font-normal text-ink-2">{name}</span>}
-                    </div>
-                    <div className="text-[11px] text-ink-3">
-                      {r.cert_scheme}
-                      {r.total_pages && ` · ${r.total_pages}쪽`}
-                      {r.unresolved > 0 && (
-                        <span className="text-caution"> · 다른 기준 참조 {r.unresolved}</span>
-                      )}
-                    </div>
-                  </div>
-                  <span className="addr tnum text-right text-[13px]">{r.clauses}</span>
-                  <span className={`addr tnum text-right text-[13px] ${r.tagged ? '' : 'text-caution'}`}>
-                    {r.tagged}
-                  </span>
-                  <span className={`addr tnum text-right text-[13px] ${r.embedded ? '' : 'text-ink-3'}`}>
-                    {r.embedded}
-                  </span>
-                  <span className={`addr tnum text-right text-[13px] ${r.test_links ? '' : 'text-caution'}`}>
-                    {r.test_links}
-                  </span>
-                  <span className="addr tnum text-right text-[13px] text-ink-2">{r.conditions}</span>
-                </div>
-                {notReady && (
-                  <div className="mt-1.5 text-[11px] leading-snug text-caution">
-                    {r.tagged === 0 &&
-                      '위해요인 코드가 없어 코드로 찾는 방식이 작동하지 않습니다. 뜻이 비슷한 문장을 찾는 방식만 남습니다. '}
-                    {r.test_links === 0 &&
-                      '시험방법 연결이 없습니다. 관련 조항은 찾을 수 있지만 어떤 시험을 의뢰해야 하는지까지는 알려 드리지 못합니다.'}
-                  </div>
+        "전기/생활/어린이는 대분류로 무조건 구분하여 정렬될 수 있도록. 왜냐하면
+        KC안전기준, 용어 리스트 등이 너무 많음." 76건을 한 줄로 늘어놓으면 자기
+        품목군을 찾는 데만 시간이 든다. 담당자는 대개 한 대분류만 맡으므로,
+        나머지 둘은 접어 둘 수 있어야 한다.
+
+        정렬은 번호가 아니라 품목명 가나다순이다 — 담당자는 품목으로 찾지
+        번호로 찾지 않는다. 한글 정렬은 DB 로캘에 기대지 않고 화면에서 한다.
+      */}
+      {rows.length > 0 && GROUP_ORDER.map((group) => {
+        const inGroup = rows.filter((r) => asGroup(r.item_group) === group).sort(byKoreanName);
+        if (inGroup.length === 0) return null;
+        const needName = inGroup.filter((r) => standardName(r).name === null).length;
+        return (
+          <section
+            key={group}
+            id={GROUP_ANCHOR[group]}
+            className="mt-10 scroll-mt-8"
+          >
+            <details open>
+              <summary className="flex cursor-pointer flex-wrap items-baseline gap-x-3 gap-y-1 border-b-2 border-ink py-2">
+                <span className="text-[15px] font-semibold">{group}</span>
+                <span className="addr tnum text-[12px] text-ink-3">{inGroup.length}종</span>
+                {needName > 0 && (
+                  <span className="text-[11px] text-caution">명칭 확인 필요 {needName}건</span>
                 )}
-              </Row>
-            );
-          })}
-        </section>
-      )}
+                <span className="ml-auto text-[11px] text-ink-3">눌러서 접기</span>
+              </summary>
+
+              {/* 머리글 고정(담당자 요청) — 아래로 훑다 보면 어느 숫자가 무슨 칸인지 잊는다 */}
+              <div className={`label sticky top-0 z-10 border-b border-rule bg-paper pt-3 pb-2 ${GRID}`}>
+                <span>품목 · 기준</span>
+                <span className="text-right">조항</span>
+                <span className="text-right">코드</span>
+                <span className="text-right">의미검색</span>
+                <span className="text-right">시험연결</span>
+                <span className="text-right">허용치</span>
+              </div>
+
+              {inGroup.map((r) => {
+                const notReady = r.tagged === 0 || r.test_links === 0;
+                const { name, from } = standardName(r);
+                const certs = sortCertTypes(r.cert_types);
+                /* 세부품목은 대응표에서 온 것이라 미검수분이 섞여 있다. 몇 개만 보이고
+                   나머지는 숫자로 알린다 — KC 62368-1 은 75개다. */
+                const subs = (r.sub_items ?? []).filter(Boolean);
+                const shown = subs.slice(0, 6);
+                return (
+                  <Row key={r.id}>
+                    <div className={`items-baseline ${GRID}`}>
+                      <div className="min-w-0">
+                        <div className="flex flex-wrap items-baseline gap-x-2">
+                          {name ? (
+                            <span className="text-[14px] font-semibold">{name}</span>
+                          ) : (
+                            <span className="text-[13px] font-semibold text-caution">
+                              명칭 확인 필요
+                            </span>
+                          )}
+                          <span className="addr text-[12px] text-ink-2">{r.display_name}</span>
+                          {from === 'sub_items' && (
+                            <span className="text-[10px] text-caution">품목표에서 따옴 · 검수 전</span>
+                          )}
+                        </div>
+                        <div className="mt-0.5 text-[11px] text-ink-3">
+                          {certs.length > 0 ? (
+                            <span title={certs.map((c) => `${c} — ${CERT_TYPE_NOTE[c] ?? ''}`).join(' / ')}>
+                              {certs.join(' · ')}
+                            </span>
+                          ) : (
+                            <span className="text-caution">인증구분 미상</span>
+                          )}
+                          {r.total_pages ? ` · ${r.total_pages}쪽` : ''}
+                          {r.cert_type_source && r.cert_type_source !== 'MANUAL' && (
+                            <span> ({CERT_SOURCE_NOTE[r.cert_type_source]})</span>
+                          )}
+                          {r.item_group_source !== 'TAXONOMY' && (
+                            <span> · 대분류는 {GROUP_SOURCE_NOTE[r.item_group_source]}</span>
+                          )}
+                          {r.unresolved > 0 && (
+                            <span className="text-caution"> · 다른 기준 참조 {r.unresolved}</span>
+                          )}
+                        </div>
+                        {shown.length > 0 && (
+                          <div className="mt-1 text-[11px] leading-relaxed text-ink-2">
+                            <span className="text-ink-3">이 기준이 걸리는 품목 </span>
+                            {shown.join(' · ')}
+                            {subs.length > shown.length && (
+                              <span className="text-ink-3"> 외 {subs.length - shown.length}종</span>
+                            )}
+                            {r.approved_count === 0 && (
+                              <span className="text-caution"> — 아직 아무도 확인하지 않음</span>
+                            )}
+                          </div>
+                        )}
+                        {shown.length === 0 && (
+                          <div className="mt-1 text-[11px] text-caution">
+                            품목 대응이 없습니다 —{' '}
+                            <Link href="/terms" className="underline decoration-rule underline-offset-2">
+                              품목 용어 사전
+                            </Link>
+                            에서 이어 주면 이 기준이 분석에 걸립니다.
+                          </div>
+                        )}
+                      </div>
+                      <span className="addr tnum text-right text-[13px]">{r.clauses}</span>
+                      <span className={`addr tnum text-right text-[13px] ${r.tagged ? '' : 'text-caution'}`}>
+                        {r.tagged}
+                      </span>
+                      <span className={`addr tnum text-right text-[13px] ${r.embedded ? '' : 'text-ink-3'}`}>
+                        {r.embedded}
+                      </span>
+                      <span className={`addr tnum text-right text-[13px] ${r.test_links ? '' : 'text-caution'}`}>
+                        {r.test_links}
+                      </span>
+                      <span className="addr tnum text-right text-[13px] text-ink-2">{r.conditions}</span>
+                    </div>
+                    {notReady && (
+                      <div className="mt-1.5 text-[11px] leading-snug text-caution">
+                        {r.tagged === 0 &&
+                          '위해요인 코드가 없어 코드로 찾는 방식이 작동하지 않습니다. 뜻이 비슷한 문장을 찾는 방식만 남습니다. '}
+                        {r.test_links === 0 &&
+                          '시험방법 연결이 없습니다. 관련 조항은 찾을 수 있지만 어떤 시험을 의뢰해야 하는지까지는 알려 드리지 못합니다.'}
+                      </div>
+                    )}
+                  </Row>
+                );
+              })}
+            </details>
+          </section>
+        );
+      })}
 
       <TermsNote />
       </div>

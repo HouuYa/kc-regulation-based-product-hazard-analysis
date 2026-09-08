@@ -7,9 +7,8 @@ export const dynamic = 'force-dynamic';
 
 const CODEBOOK_TOC: TocItem[] = [
   { id: 'codebook-current', label: '현재 버전' },
+  { id: 'codebook-codes', label: '코드 상세' },
   { id: 'codebook-bridge', label: '위해원인 추정' },
-  { id: 'codebook-hf', label: '위해요인 HF' },
-  { id: 'codebook-dt', label: '피해유형 DT' },
 ];
 
 /** 확인 경로를 담당자 말로 옮긴다. 코드값을 그대로 보이면 뜻이 전달되지 않는다 */
@@ -293,6 +292,97 @@ export default async function CodebookPage() {
       )}
 
       {/*
+        코드 목록은 참고 자료다 (담당자 확인, 2026-09-05)
+
+        전에는 64개(HF)·16개(DT)가 한 줄씩 죽 늘어서 있어 어디까지가 한 갈래인지
+        보이지 않았다. 코드 체계 자체가 대분류를 갖고 있으므로 그대로 묶어 준다 —
+        HF 는 M-SHELL 대분류(하드웨어·환경·관리·절차·사람), DT 는 피해 갈래다.
+        대분류는 코드의 두 번째 마디에 들어 있어 따로 조회할 필요가 없다.
+
+        두 목록을 하나로 묶고 접었다 (담당자 요청, 2026-09-09)
+
+        "두 영역을 「피해유형에 따른 위해원인 추정」 위로 올리고, 둘을 묶는 상위
+        목록으로 만든 뒤 각각 접어서 펼 수 있도록." 맞는 순서다 — 아래의 추정표는
+        이 두 코드 목록을 알고 있어야 읽을 수 있다. 모르는 낱말로 된 표를 먼저
+        보여 주고 낱말풀이를 뒤에 두면 아무도 못 읽는다.
+
+        기본은 접힌 상태다. 코드 80개가 늘 펼쳐져 있으면 그 아래 있는 것들이
+        화면에서 사라진다.
+      */}
+      {(hf.length > 0 || dt.length > 0) && (
+        <section id="codebook-codes" className="mt-10 scroll-mt-8">
+          <h2 className="text-[15px] font-semibold">위해요인 · 피해유형 코드 상세</h2>
+          <p className="mt-1.5 max-w-3xl text-[12px] leading-relaxed text-ink-3">
+            이 체계가 쓰는 두 가지 코드입니다. 하나는 <span className="text-ink-2">왜 위험했는가</span>,
+            다른 하나는 <span className="text-ink-2">어떤 피해가 났는가</span>입니다. 아래의 추정표와
+            분석 결과에 나오는 코드 이름이 모두 여기서 옵니다. 참고용이라 이 화면에서는 바꾸지 않습니다.
+          </p>
+
+          {[
+            {
+              id: 'codebook-hf',
+              title: '위해요인 (HF) — 왜 위험했는가',
+              unit: '가지',
+              rows: hf,
+              groups: HF_GROUPS,
+              note: '사고를 일으킨 원인의 갈래입니다. 하드웨어·환경·관리·절차·사람으로 나뉩니다.',
+            },
+            {
+              id: 'codebook-dt',
+              title: '피해유형 (DT) — 어떤 피해가 났는가',
+              unit: '가지',
+              rows: dt,
+              groups: DT_GROUPS,
+              note: '사람이나 재산이 실제로 입은 피해의 갈래입니다.',
+            },
+          ].map(
+            (axis) =>
+              axis.rows.length > 0 && (
+                <details key={axis.id} id={axis.id} className="mt-4 scroll-mt-8 border border-rule-soft">
+                  <summary className="cursor-pointer px-4 py-2.5">
+                    <span className="text-[13px] font-semibold">{axis.title}</span>
+                    <span className="ml-2 text-[12px] text-ink-3">
+                      코드 {axis.rows.length}{axis.unit}
+                    </span>
+                    <span className="ml-2 text-[11px] text-ink-3">{axis.note}</span>
+                  </summary>
+
+                  <div className="grid gap-x-8 gap-y-6 border-t border-rule-soft px-4 py-4 lg:grid-cols-2">
+                    {groupCodes(axis.rows, axis.groups).map(([label, rows]) => (
+                      <div key={label} className="break-inside-avoid">
+                        <div className="label border-b border-rule pb-1">
+                          {label}
+                          <span className="ml-2 font-normal text-ink-3">{rows.length}가지</span>
+                        </div>
+                        {rows.map((c) => (
+                          <div key={c.code} className="border-b border-rule-soft py-1.5">
+                            <div
+                              className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5"
+                              style={{ paddingLeft: `${Math.max(0, c.depth - 2) * 12}px` }}
+                            >
+                              <span className="text-[13px] font-medium">{c.name_ko}</span>
+                              <span className="addr text-[10px] text-ink-3">{c.code}</span>
+                              {!c.is_recall_common && (
+                                <span className="border border-caution px-1 text-[10px] text-caution">
+                                  병기 필요
+                                </span>
+                              )}
+                            </div>
+                            {c.definition && (
+                              <p className="mt-0.5 text-[11px] leading-snug text-ink-3">{c.definition}</p>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    ))}
+                  </div>
+                </details>
+              ),
+          )}
+        </section>
+      )}
+
+      {/*
         피해유형(DT)에 따른 위해원인(HF) 추정
 
         HF 목록과 DT 목록은 있었지만 둘을 잇는 줄이 없었다. 사고보고서 77%가 원인
@@ -306,7 +396,13 @@ export default async function CodebookPage() {
         <section id="codebook-bridge" className="mt-10 scroll-mt-8">
           <h2 className="text-[15px] font-semibold">
             피해유형(DT)에 따른 위해원인(HF) 추정
-            <span className="addr ml-2 text-[12px] font-normal text-ink-3">{bridge.length}</span>
+            {/*
+              숫자만 있으면 무엇의 개수인지 알 수 없다 (담당자 지적, 2026-09-09).
+              이 표의 한 줄은 「이 피해에는 이 원인」 한 쌍이다.
+            */}
+            <span className="ml-2 text-[12px] font-normal text-ink-3">
+              피해–원인 짝 {bridge.length}줄
+            </span>
           </h2>
           <p className="mt-2 max-w-3xl text-[12px] leading-relaxed text-ink-3">
             어떤 피해가 났을 때 원인이 무엇이었는지를 해외 리콜 자료에서 세어 만든 표입니다.
@@ -414,63 +510,6 @@ export default async function CodebookPage() {
         </section>
       )}
 
-      {/*
-        코드 목록은 참고 자료다 (담당자 확인, 2026-09-05)
-
-        전에는 64개(HF)·16개(DT)가 한 줄씩 죽 늘어서 있어 어디까지가 한 갈래인지
-        보이지 않았다. 코드 체계 자체가 대분류를 갖고 있으므로 그대로 묶어 준다 —
-        HF 는 M-SHELL 대분류(하드웨어·환경·관리·절차·사람), DT 는 피해 갈래다.
-        대분류는 코드의 두 번째 마디에 들어 있어 따로 조회할 필요가 없다.
-      */}
-      {[
-        { id: 'codebook-hf', title: '위해요인 (HF) — 왜 위험했는가', rows: hf, groups: HF_GROUPS },
-        { id: 'codebook-dt', title: '피해유형 (DT) — 어떤 피해가 났는가', rows: dt, groups: DT_GROUPS },
-      ].map(
-        (axis) =>
-          axis.rows.length > 0 && (
-            <section key={axis.id} id={axis.id} className="mt-10 scroll-mt-8">
-              <h2 className="text-[15px] font-semibold">
-                {axis.title}
-                <span className="addr ml-2 text-[12px] font-normal text-ink-3">
-                  {axis.rows.length}
-                </span>
-              </h2>
-              <p className="mt-1.5 text-[12px] text-ink-3">
-                참고용 목록입니다. 이 화면에서는 내용을 바꾸지 않습니다.
-              </p>
-
-              <div className="mt-4 grid gap-x-8 gap-y-6 lg:grid-cols-2">
-                {groupCodes(axis.rows, axis.groups).map(([label, rows]) => (
-                  <div key={label} className="break-inside-avoid">
-                    <div className="label border-b border-rule pb-1">
-                      {label}
-                      <span className="addr ml-2 font-normal text-ink-3">{rows.length}</span>
-                    </div>
-                    {rows.map((c) => (
-                      <div key={c.code} className="border-b border-rule-soft py-1.5">
-                        <div
-                          className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5"
-                          style={{ paddingLeft: `${Math.max(0, c.depth - 2) * 12}px` }}
-                        >
-                          <span className="text-[13px] font-medium">{c.name_ko}</span>
-                          <span className="addr text-[10px] text-ink-3">{c.code}</span>
-                          {!c.is_recall_common && (
-                            <span className="border border-caution px-1 text-[10px] text-caution">
-                              병기 필요
-                            </span>
-                          )}
-                        </div>
-                        {c.definition && (
-                          <p className="mt-0.5 text-[11px] leading-snug text-ink-3">{c.definition}</p>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                ))}
-              </div>
-            </section>
-          ),
-      )}
 
       <TermsNote />
       </div>

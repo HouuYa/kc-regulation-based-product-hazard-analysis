@@ -8,6 +8,7 @@ import { PageToc, type TocItem } from '@/components/PageToc';
 import type { GpcCandidate } from '@/lib/gpc/lookup';
 import type { GpcMatchLevel } from '@/lib/gpc/verify';
 import { estimateCauses, type CauseCandidate } from '@/lib/codebook/cause-bridge';
+import { standardName, shortTitle } from '@/lib/standards/label';
 import { withEstimatedCauses } from '@/lib/search/estimate-cause';
 import { searchCandidates, type Candidate as SearchCandidate } from '@/lib/search/match';
 import { loadCaseInput, defaultMatchConfig } from '@/lib/search/run';
@@ -56,6 +57,8 @@ interface ResultRow {
   breadcrumb_path: string | null;
   body: string;
   standard_name: string | null;
+  /** 그 기준이 무슨 품목의 기준인가 — 번호만 보고는 알 수 없다 */
+  standard_item: string | null;
   has_reviewed_tag: boolean;
   codes: string[] | null;
   test_conditions: string[] | null;
@@ -163,13 +166,24 @@ async function load(caseId: number) {
   // 이 사건에 적용되는 기준. 품목 확정의 결과이자 검색 범위 그 자체다(v0.7 §3.2).
   // 명령줄 분석과 같은 함수를 쓴다 — 화면과 실제 검색 범위가 어긋나면 안 된다.
   const standardIds = await standardsForCase(caseId);
+  /*
+    번호만으로는 담당자가 알 수 없다 (담당자 지적, 2026-09-09)
+
+    "모든 것들은 안전기준에 있는 품목 명칭을 다 꼭 모두 넣어 주세요(다른 페이지 포함).
+     왜냐하면 검토 시 너무 양이 많아 분간이 어렵다." 안전기준 담당자는 품목별로
+    나뉘어 있어 자기 품목군 밖의 번호는 읽어도 무엇인지 모른다. 그래서 이 화면도
+    번호 옆에 품목명을 함께 싣는다. 이름의 재료는 standard_view 에 모여 있다(057·058).
+  */
   const standards = standardIds.length
-    ? await db<{ display_name: string; relation: string | null }[]>`
-        select s.display_name,
+    ? await db<{
+        display_name: string; item_name: string | null; title_ko: string | null;
+        sub_items: string[] | null; relation: string | null;
+      }[]>`
+        select s.display_name, s.item_name, s.title_ko, s.sub_items,
                (select a.relation from public.standard_applicability a
                 where a.standard_id = s.id and a.product_scope_id = ${ev.product_scope_id}
                 limit 1) as relation
-        from public.standard s
+        from public.standard_view s
         where s.id = any(${standardIds}::bigint[])
         order by s.display_name
       `
@@ -215,6 +229,8 @@ async function load(caseId: number) {
           r.rerank_score, r.rerank_reason, r.final_rank,
           c.marker, c.breadcrumb_path, c.body,
           s.display_name as standard_name,
+          -- 조항이 어느 품목의 기준인지도 함께 — 번호만으로는 분간이 안 된다(2026-09-09)
+          coalesce(s.item_name, s.title_ko) as standard_item,
           exists (select 1 from public.clause_tag t
                   where t.clause_id = c.id and t.review_status = 'approved') as has_reviewed_tag,
           (select array_agg(t.code order by t.is_primary desc, t.axis)
@@ -282,7 +298,12 @@ function Candidate({ r, caseId }: { r: ResultRow; caseId: number }) {
       <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
         <h3 className="flex items-baseline gap-2.5">
           <span className="addr text-[17px] font-medium">{r.marker}</span>
-          <span className="text-[12px] text-ink-3">{r.standard_name}</span>
+          <span className="text-[12px] text-ink-3">
+            {r.standard_item && (
+              <span className="text-ink-2">{shortTitle(r.standard_item) ?? r.standard_item} </span>
+            )}
+            <span className="addr">{r.standard_name}</span>
+          </span>
         </h3>
         <span className="addr tnum text-[11px] text-ink-3">
           {Number(r.search_score).toFixed(4)}
@@ -695,12 +716,16 @@ export default async function AnalysisPage({
                 )}
                 {standards.length > 0 && (
                   <div className="mt-2 flex flex-wrap gap-1.5">
-                    {standards.map((s) => (
-                      <span key={s.display_name} className="addr border border-rule px-1.5 py-0.5 text-[11px] text-ink-2">
-                        {s.display_name}
-                        {s.relation && <span className="ml-1 text-ink-3">{s.relation === 'ANNEX' ? '부속서' : '공통'}</span>}
-                      </span>
-                    ))}
+                    {standards.map((s) => {
+                      const { name } = standardName(s);
+                      return (
+                        <span key={s.display_name} className="border border-rule px-1.5 py-0.5 text-[11px] text-ink-2">
+                          {name && <span className="mr-1">{name}</span>}
+                          <span className="addr text-ink-3">{s.display_name}</span>
+                          {s.relation && <span className="ml-1 text-ink-3">{s.relation === 'ANNEX' ? '부속서' : '공통'}</span>}
+                        </span>
+                      );
+                    })}
                   </div>
                 )}
               </>

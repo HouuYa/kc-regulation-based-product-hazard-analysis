@@ -95,6 +95,23 @@ interface Data {
   autoTagging: boolean;
   embeddedToday: number;
   jobsConfigured: boolean;
+  /*
+    검색용 문장이 없어 뜻 검색을 준비할 수 없는 것들 (담당자 요청, 2026-09-09)
+
+    "1건은 아직 준비할 재료(검색용 문장)가 없습니다" 라고만 적혀 있으니
+    "문제가 있는 KC안전기준 명 또는 파일명을 알려 주면 디버깅이 편하다"는
+    지적을 받았다. 맞는 말이다 — 숫자만 있고 무엇인지 모르면 손을 댈 수가 없다.
+    조항은 건수가 많으므로 기준별로 묶어 상위 몇 개를, 사고보고서·리콜은
+    건별로 보여 준다.
+  */
+  noMaterialClause: { display_name: string; name: string | null; n: number }[];
+  noMaterialCase: { id: number; source_type: string; label: string | null }[];
+  /*
+    최근 발송 요약 (담당자 요청, 2026-09-09)
+    "발송 내역 목록이 길어지니깐 접히게 하고, 최근 발송 내역을 요약해서 간단히 보이기 —
+     예를 들어 몇월몇일 몇시부터 현재까지 전달 성공·실패 몇건."
+  */
+  alertStat: { sent: number; ok: number; failed: number; pending: number; since: string | null };
 }
 
 /** 자료 종류 이름 — 담당자 지적으로 "사건"을 사고보고서·리콜로 나눴다 */
@@ -104,14 +121,59 @@ const TARGET_LABEL: Record<string, string> = {
   recall: '리콜',
 };
 
-/** 자동 작업이 하는 일을 한 줄로 */
-const JOB_PURPOSE: Record<string, string> = {
-  'embed-tick': '의미 검색 준비가 안 된 자료를 찾아 준비한다',
-  'ops-watch': '문제를 찾아 알림을 보낸다',
-  'cron-log-prune': '30일 지난 실행 기록을 지운다',
-  'job-recalls-fetch': '새 리콜을 가져온다',
-  'job-standards-sync': '안전기준 폴더에 새 문서가 있는지 본다',
-  'job-tag-chunk': '위해요인 코드를 이어서 부여한다 (켜 뒀을 때만)',
+/*
+  자동 작업이 하는 일 (담당자 지적, 2026-09-09)
+
+  "전반적으로 초보자가 보기에 가독성과 의미가 어렵다. auto-recover 가 무슨 뜻인지,
+   30일 지난 실행 기록이 무슨 실행 기록인지 모르겠다."
+
+  두 가지가 문제였다. 첫째로 auto-recover 와 job-retry 는 여기 목록에 아예 없어서
+  영어 이름이 그대로 화면에 나왔다 — 목록에 없으면 jobname 을 그대로 찍는 코드였다.
+  둘째로 있는 것들도 한 줄이라 "왜 이게 필요한가"가 빠져 있었다.
+
+  그래서 한 줄 요약(what)과 한 문단 설명(why)을 나눠 담는다. 목록에서는 요약만
+  보이고, 펼치면 설명이 나온다.
+*/
+interface JobInfo {
+  /** 한 줄 요약 — 목록에 늘 보인다 */
+  what: string;
+  /** 펼쳤을 때 나오는 설명. 왜 필요한지, 무엇을 건드리는지 */
+  why: string;
+}
+
+const JOB_INFO: Record<string, JobInfo> = {
+  'embed-tick': {
+    what: '뜻으로 찾을 수 있게 자료를 준비한다',
+    why: '안전기준 조항·사고보고서·리콜의 문장을 숫자 목록(임베딩)으로 바꿔 둡니다. 이것이 있어야 「감전」으로 찾을 때 「전격」이라고 적힌 조항도 함께 걸립니다. 새 자료가 들어오면 자동으로 대상이 됩니다.',
+  },
+  'ops-watch': {
+    what: '문제를 찾아 텔레그램으로 알린다',
+    why: '아래 「알림」 절에 적힌 다섯 가지를 5분마다 살펴보고, 걸리는 것이 있으면 알립니다. 화면을 열어 봐야만 알 수 있는 상태를 없애기 위한 작업입니다.',
+  },
+  'auto-recover': {
+    what: '막힌 것을 스스로 다시 돌린다',
+    why: '일시적인 문제(네트워크 끊김, 상대 서버의 순간 오류)로 멈춘 작업을 사람 손을 거치지 않고 다시 시도합니다. 위해요인 코드 부여와 뜻 검색 준비가 대상입니다. 다시 돌린 건수와 결국 포기한 건수는 「최근 처리」 절에 나옵니다 — 조용히 매일 같은 일을 되풀이하고 있으면 그것은 고쳐진 것이 아니기 때문입니다.',
+  },
+  'job-retry': {
+    what: '실패한 정기 작업을 다시 부른다',
+    why: '아래 job- 으로 시작하는 작업들이 실패로 끝났을 때 다시 부릅니다. 세 번까지 시도하고 그래도 안 되면 포기하고 알림을 보냅니다.',
+  },
+  'cron-log-prune': {
+    what: '오래된 실행 기록을 지운다',
+    why: '이 절에 보이는 자동 작업들이 언제 돌아 성공했는지 실패했는지의 기록(cron.job_run_details)입니다. 1분마다 도는 작업이 있어 하루에 수천 줄이 쌓이므로, 30일이 지난 것은 지웁니다. 자료 자체가 아니라 실행 이력만 지웁니다.',
+  },
+  'job-recalls-fetch': {
+    what: '새 리콜을 가져온다',
+    why: '해외 리콜 원본 시스템에서 새로 승인된 건을 받아 옵니다. 2분마다 확인하지만 새것이 없으면 아무 일도 하지 않습니다.',
+  },
+  'job-standards-sync': {
+    what: '안전기준 폴더에 새 문서가 있는지 본다',
+    why: 'KC안전기준 폴더에 새 기준 문서가 들어왔는지 확인합니다. 넣는 것 자체는 사람이 명령으로 합니다 — 기준이 조용히 바뀌면 분석 결과도 조용히 바뀌기 때문입니다.',
+  },
+  'job-tag-chunk': {
+    what: '위해요인 코드를 이어서 부여한다 (켜 뒀을 때만)',
+    why: 'AI 를 불러 조항에 위해요인 코드를 붙입니다. 돈이 드는 작업이라 기본은 꺼져 있고, 아래 「지금 하기」에서 켤 수 있습니다.',
+  },
 };
 
 const RUN_LABEL: Record<string, string> = {
@@ -125,7 +187,7 @@ const OPS_TOC: TocItem[] = [
   { id: 'ops-recent', label: '최근 처리' },
   { id: 'ops-attention', label: '확인이 필요한 것' },
   { id: 'ops-actions', label: '지금 하기' },
-  { id: 'ops-details', label: '자동으로 도는 일' },
+  { id: 'ops-details', label: '자동으로 도는 작업' },
   { id: 'ops-llm', label: '🤖 AI 사용과 비용' },
   { id: 'ops-alerts', label: '알림' },
   { id: 'ops-access', label: '접속 관리' },
@@ -223,6 +285,43 @@ async function load(): Promise<{ data: Data | null; error: string | null }> {
               and exists (select 1 from vault.decrypted_secrets where name = 'site_base_url')) as ok
     `;
 
+    /*
+      뜻 검색을 준비할 수 없는 것들을 지목한다 (담당자 요청, 2026-09-09)
+
+      검색용 문장(search_text)이 없으면 임베딩을 만들 수 없다. 지금까지 화면은
+      건수만 말했는데, 그것만으로는 무엇을 고쳐야 할지 알 수 없다.
+      조항은 기준별로 묶고(7천 건이 넘는다), 사고보고서·리콜은 건별로 짚는다.
+    */
+    const noMaterialClause = await db<Data['noMaterialClause']>`
+      select s.display_name, coalesce(s.item_name, s.title_ko) as name, count(*)::int as n
+      from public.clause c
+      join public.standard s on s.id = c.standard_id
+      where c.embedding is null
+        and (c.search_text is null or length(btrim(c.search_text)) = 0)
+      group by s.display_name, coalesce(s.item_name, s.title_ko)
+      order by n desc limit 6
+    `;
+
+    const noMaterialCase = await db<Data['noMaterialCase']>`
+      select id, source_type,
+             coalesce(nullif(btrim(item_name), ''), title) as label
+      from public.case_event
+      where embedding is null
+        and (search_text is null or length(btrim(search_text)) = 0)
+      order by id desc limit 6
+    `;
+
+    const [alertStat] = await db<Data['alertStat'][]>`
+      select count(*)::int                                        as sent,
+             count(*) filter (where status_code = 200)::int       as ok,
+             count(*) filter (where status_code is not null
+                                and status_code <> 200)::int      as failed,
+             count(*) filter (where status_code is null)::int     as pending,
+             min(sent_at)::text                                   as since
+      from public.ops_alert
+      where sent_at > now() - interval '7 days'
+    `;
+
     // AI 사용·비용 (052). 기록이 없어도 화면은 떠야 하므로 실패해도 넘어간다
     let usage: UsageSummary | null = null;
     try {
@@ -237,6 +336,7 @@ async function load(): Promise<{ data: Data | null; error: string | null }> {
         recovery, usage,
         taggable: t.n, stalledTagging: t.stalled,
         autoTagging: at.on, embeddedToday: e.n, jobsConfigured: j.ok,
+        noMaterialClause, noMaterialCase, alertStat,
       },
       error: null,
     };
@@ -278,6 +378,26 @@ function Section({
 function when(iso: string | null): string {
   if (!iso) return '기록 없음';
   return new Date(iso).toLocaleString('ko-KR', { dateStyle: 'short', timeStyle: 'short' });
+}
+
+/**
+ * cron 표기를 사람 말로 — 「5분마다」를 뜻하는 cron 문자열은 담당자에게 아무 뜻도 아니다
+ *
+ * 데이터베이스는 UTC 로 돌므로 하루 한 번짜리는 한국시간으로 바꿔 적는다.
+ * 알아볼 수 없는 표기는 원문을 그대로 보여 준다 — 틀리게 옮기느니 안 옮긴다.
+ */
+function humanSchedule(cron: string): string {
+  if (cron === '* * * * *') return '1분마다';
+  const everyMin = /^\*\/(\d+) \* \* \* \*$/.exec(cron);
+  if (everyMin) return `${everyMin[1]}분마다`;
+  const everyHour = /^(\d+) \*\/?(\d*) \* \* \*$/.exec(cron);
+  if (everyHour && !everyHour[2]) return `매시 ${everyHour[1]}분`;
+  const daily = /^(\d+) (\d+) \* \* \*$/.exec(cron);
+  if (daily) {
+    const kst = (Number(daily[2]) + 9) % 24;
+    return `매일 ${String(kst).padStart(2, '0')}:${daily[1].padStart(2, '0')}`;
+  }
+  return cron;
 }
 
 /** 라우트가 돌려준 JSON 요약을 사람이 읽을 문장으로 */
@@ -344,7 +464,7 @@ export default async function OpsPage() {
           <Section id="ops-status" title="지금 상태" lead="다섯 가지가 모두 초록이면 손댈 것이 없습니다.">
             <div className="grid gap-x-8 sm:grid-cols-2">
               <Signal
-                label="의미 검색 준비"
+                label="의미 검색 준비 (안전기준 조항 · 사고보고서 · 리콜)"
                 level={data.ops.parked > 0 ? 'halt' : data.ops.in_flight > 0 ? 'caution' : 'ok'}
                 value={
                   data.ops.parked > 0
@@ -353,7 +473,7 @@ export default async function OpsPage() {
                       ? `처리 중 ${data.ops.in_flight}건`
                       : '정상 — 밀린 것 없음'
                 }
-                note="새 자료가 들어오면 1분 안에 뜻으로 찾을 수 있게 준비합니다"
+                note="낱말이 달라도 뜻이 같은 것을 찾으려면 문장을 미리 숫자로 바꿔 둬야 합니다(임베딩). 새 자료가 들어오면 1분 안에 준비합니다"
               />
               <Signal
                 label="자동 작업"
@@ -698,35 +818,59 @@ export default async function OpsPage() {
           {/* ── 5. 자동 작업 상세 ─────────────────────────────────── */}
           <Section
             id="ops-details"
-            title="자동으로 도는 일"
-            lead="데이터베이스 안에서 스스로 돕니다. 웹사이트가 꺼져 있어도 돌아갑니다."
+            title="자동으로 도는 작업"
+            lead="아래 작업들은 데이터베이스 안에서 스스로 돕니다. 웹사이트가 꺼져 있어도 돌아갑니다. 각 줄을 눌러 펼치면 그 작업이 왜 필요한지 나옵니다."
           >
-            <div className="label grid grid-cols-[1fr_auto_auto] gap-3 pb-2">
-              <span>하는 일</span>
-              <span>주기</span>
+            <div className="label grid grid-cols-[1fr_auto_auto_auto] gap-3 pb-2">
+              <span>작업</span>
+              <span>얼마나 자주</span>
               <span className="text-right">마지막 실행</span>
+              <span className="text-right">상태</span>
             </div>
-            {data.jobs.map((j) => (
-              <div
-                key={j.jobname}
-                className="grid grid-cols-[1fr_auto_auto] items-baseline gap-3 border-t border-rule py-2.5"
-              >
-                <div className="min-w-0">
-                  <div className="text-[12px]">{JOB_PURPOSE[j.jobname] ?? j.jobname}</div>
-                  <div className="addr text-[11px] text-ink-3">
-                    {j.jobname}
-                    {!j.active && <span className="text-halt"> · 꺼짐</span>}
-                    {j.last_status === 'failed' && <span className="text-halt"> · 실패</span>}
-                  </div>
-                </div>
-                <span className="addr text-[11px] text-ink-3">{j.schedule}</span>
-                <span className="addr tnum text-right text-[11px] text-ink-3">
-                  {when(j.last_at)}
-                </span>
-              </div>
-            ))}
+            {data.jobs.map((j) => {
+              const info = JOB_INFO[j.jobname];
+              return (
+                <details key={j.jobname} className="border-t border-rule">
+                  <summary className="grid cursor-pointer grid-cols-[1fr_auto_auto_auto] items-baseline gap-3 py-2.5">
+                    <div className="min-w-0">
+                      <div className="text-[13px]">{info?.what ?? j.jobname}</div>
+                      <div className="addr text-[11px] text-ink-3">{j.jobname}</div>
+                    </div>
+                    <span className="text-[11px] text-ink-3">{humanSchedule(j.schedule)}</span>
+                    <span className="addr tnum text-right text-[11px] text-ink-3">
+                      {when(j.last_at)}
+                    </span>
+                    <span className="text-right text-[11px]">
+                      {!j.active ? (
+                        <span className="text-ink-3">꺼짐</span>
+                      ) : j.last_status === 'failed' ? (
+                        <span className="text-halt">실패</span>
+                      ) : (
+                        <span className="text-measure">도는 중</span>
+                      )}
+                    </span>
+                  </summary>
+                  <p className="pb-3 text-[12px] leading-relaxed text-ink-2">
+                    {info?.why ?? '설명이 아직 없습니다. 이 작업 이름을 개발자에게 알려 주세요.'}
+                    {j.last_message && (
+                      <span className="mt-1 block text-[11px] text-ink-3">
+                        마지막 결과 — {j.last_message}
+                      </span>
+                    )}
+                  </p>
+                </details>
+              );
+            })}
 
-            <div className="label mt-8 grid grid-cols-[1fr_repeat(4,minmax(48px,auto))] gap-3 pb-2">
+            <h3 className="mt-10 text-[13px] font-semibold">
+              뜻으로 찾기 준비 현황
+            </h3>
+            <p className="mt-1 mb-3 text-[12px] leading-relaxed text-ink-2">
+              위 「뜻으로 찾을 수 있게 자료를 준비한다」 작업이 어디까지 했는지입니다.
+              안전기준 조항 · 사고보고서 · 리콜의 문장을 미리 숫자로 바꿔 두어야, 낱말이
+              달라도 뜻이 같은 것을 찾아 줍니다.
+            </p>
+            <div className="label grid grid-cols-[1fr_repeat(4,minmax(48px,auto))] gap-3 pb-2">
               <span>자료</span>
               <span className="text-right">전체</span>
               <span className="text-right">준비됨</span>
@@ -764,6 +908,54 @@ export default async function OpsPage() {
                 </span>
               </div>
             ))}
+
+            {/*
+              무엇이 걸려 있는지 이름으로 짚어 준다 (담당자 요청, 2026-09-09)
+              "문제가 있는 KC안전기준 명 또는 파일명을 알려주면 디버깅이 편해짐"
+            */}
+            {(data.noMaterialClause.length > 0 || data.noMaterialCase.length > 0) && (
+              <details className="mt-4 border border-rule-soft">
+                <summary className="cursor-pointer px-3 py-2 text-[12px] text-ink-2">
+                  준비할 재료(검색용 문장)가 없는 것들 — 어느 기준·어느 건인지 보기
+                </summary>
+                <div className="border-t border-rule-soft px-3 py-3 text-[12px] leading-relaxed text-ink-2">
+                  <p className="text-[11px] text-ink-3">
+                    검색용 문장은 조항 본문·요약·낱말을 이어 붙여 만듭니다. 본문이 비어 있거나
+                    표만 있는 조각은 재료가 나오지 않습니다. 아래는 그런 것들입니다.
+                  </p>
+                  {data.noMaterialClause.length > 0 && (
+                    <div className="mt-3">
+                      <div className="label pb-1">안전기준 조항</div>
+                      {data.noMaterialClause.map((c) => (
+                        <div key={c.display_name} className="flex items-baseline justify-between gap-3 border-t border-rule-soft py-1.5">
+                          <span>
+                            <span className="text-ink">{c.name ?? '명칭 없음'}</span>{' '}
+                            <span className="addr text-[11px] text-ink-3">{c.display_name}</span>
+                          </span>
+                          <span className="addr tnum text-[11px] text-ink-3">{c.n.toLocaleString()}건</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  {data.noMaterialCase.length > 0 && (
+                    <div className="mt-4">
+                      <div className="label pb-1">사고보고서 · 리콜</div>
+                      {data.noMaterialCase.map((c) => (
+                        <div key={c.id} className="border-t border-rule-soft py-1.5">
+                          <Link
+                            href={`/analysis/${c.id}`}
+                            className="underline decoration-rule underline-offset-2 hover:text-measure"
+                          >
+                            {TARGET_LABEL[c.source_type === 'ACCIDENT' ? 'accident' : 'recall']} #{c.id}
+                          </Link>
+                          <span className="text-ink-3"> — {c.label ?? '제목 없음'}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </details>
+            )}
           </Section>
 
           {/* ── 6. AI 사용과 비용 ─────────────────────────────────── */}
@@ -892,30 +1084,59 @@ export default async function OpsPage() {
               </>
             )}
 
+            {/*
+              요약을 먼저, 목록은 접어 둔다 (담당자 요청, 2026-09-09)
+              목록이 길어지면 화면 아래쪽이 알림 내역으로 뒤덮여 그 아래 「접속 관리」가
+              보이지 않는다. 평소에 알고 싶은 것은 "잘 가고 있나" 한 줄이다.
+            */}
+            {data.alertStat.sent > 0 && (
+              <div className="mt-6 border border-rule-soft px-4 py-3 text-[12px] leading-relaxed text-ink-2">
+                <span className="addr tnum text-ink">{when(data.alertStat.since)}</span> 부터 지금까지{' '}
+                <span className="text-ink">{data.alertStat.sent}건</span> 보냈습니다 —{' '}
+                <span className="text-measure">전달 {data.alertStat.ok}건</span>
+                {data.alertStat.failed > 0 && (
+                  <span className="text-halt"> · 실패 {data.alertStat.failed}건</span>
+                )}
+                {data.alertStat.pending > 0 && (
+                  <span className="text-ink-3"> · 확인 중 {data.alertStat.pending}건</span>
+                )}
+                .
+                {data.alertStat.failed > 0 && (
+                  <span className="text-ink-3">
+                    {' '}실패가 있으면 봇 토큰이나 대화 번호가 바뀌었는지 봅니다.
+                  </span>
+                )}
+              </div>
+            )}
+
             {data.alerts.length > 0 && (
-              <>
-                <div className="label mt-6 pb-2">최근 발송</div>
-                {data.alerts.map((a, i) => (
-                  <div key={i} className="border-t border-rule py-2.5">
-                    <div className="flex flex-wrap items-baseline justify-between gap-x-4">
-                      <span className="text-[13px] font-medium">{a.kind}</span>
-                      <span className="addr tnum text-[11px] text-ink-3">
-                        {when(a.sent_at)}
-                        {a.status_code === 200 ? (
-                          <span className="ml-2 text-measure">전달됨</span>
-                        ) : a.status_code == null ? (
-                          <span className="ml-2 text-ink-3">확인 중</span>
-                        ) : (
-                          <span className="ml-2 text-halt">실패 {a.status_code}</span>
-                        )}
-                      </span>
+              <details className="mt-3 border border-rule-soft">
+                <summary className="cursor-pointer px-4 py-2.5 text-[12px] text-ink-2">
+                  최근 발송 내역 {data.alerts.length}건 펼쳐 보기
+                </summary>
+                <div className="border-t border-rule-soft px-4 pb-2">
+                  {data.alerts.map((a, i) => (
+                    <div key={i} className="border-t border-rule-soft py-2.5 first:border-t-0">
+                      <div className="flex flex-wrap items-baseline justify-between gap-x-4">
+                        <span className="text-[13px] font-medium">{a.kind}</span>
+                        <span className="addr tnum text-[11px] text-ink-3">
+                          {when(a.sent_at)}
+                          {a.status_code === 200 ? (
+                            <span className="ml-2 text-measure">전달됨</span>
+                          ) : a.status_code == null ? (
+                            <span className="ml-2 text-ink-3">확인 중</span>
+                          ) : (
+                            <span className="ml-2 text-halt">실패 {a.status_code}</span>
+                          )}
+                        </span>
+                      </div>
+                      <div className="mt-0.5 text-[11px] leading-snug whitespace-pre-line text-ink-3">
+                        {a.body.slice(0, 200)}
+                      </div>
                     </div>
-                    <div className="mt-0.5 text-[11px] leading-snug whitespace-pre-line text-ink-3">
-                      {a.body.slice(0, 200)}
-                    </div>
-                  </div>
-                ))}
-              </>
+                  ))}
+                </div>
+              </details>
             )}
           </Section>
 
