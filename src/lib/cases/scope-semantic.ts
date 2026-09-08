@@ -144,15 +144,28 @@ export async function resolveScopeSemantically(
     },
   };
 
+  /*
+    긴 덩어리를 앞에, 매번 달라지는 값을 뒤에 둔다 (2026-09-08)
+
+    OpenAI 는 프롬프트의 **앞부분이 글자 그대로 같을 때** 그 구간을 캐시해 1/10 단가로
+    청구한다. 전에는 제품명·사고 서술이 맨 앞이라 사건마다 첫 글자부터 달랐고, 실측
+    적중률이 0% 였다(호출 926건 · 입력 1,825,769토큰).
+
+    후보 블록은 사건이 달라도 자주 같다 — 같은 품목군의 리콜이 줄줄이 들어오면 위쪽
+    12종이 그대로 반복된다. 그 블록을 앞으로 보내면 그때부터 캐시가 걸린다.
+
+    순서를 바꿔도 모델이 보는 정보는 같다. "뜻이 가까운 순"이라는 설명은 후보 블록
+    머리에 그대로 둔다 — 순위 자체가 신호이기 때문이다.
+  */
   const user = [
-    '[제품]',
-    itemName,
-    narrative ? `\n[사고 상황]\n${narrative.slice(0, 600)}` : '',
-    '',
     '[기준 후보 (뜻이 가까운 순)]',
     ranked
       .map((r) => `- id=${r.id} · ${r.display_name}\n  적용범위: ${r.scope_text.slice(0, 700).replace(/\s+/g, ' ')}`)
       .join('\n'),
+    '',
+    '[제품]',
+    itemName,
+    narrative ? `\n[사고 상황]\n${narrative.slice(0, 600)}` : '',
   ].filter(Boolean).join('\n');
 
   const { value } = await structuredCall<VerifyOutput>({
@@ -226,15 +239,25 @@ export async function filterScopeCandidates(
     },
   };
 
+  /*
+    후보 블록을 앞에 둔다 — 캐시가 걸리는 자리다 (2026-09-08)
+
+    이 자리는 호출이 가장 많다(리콜 재확정 한 번에 930회 · $4.63~8.76). 그리고 후보가
+    자주 겹친다 — 어댑터 계열이 들어오면 KC 60335·62368 묶음이 반복된다. 앞부분이
+    같으면 그 구간은 1/10 단가로 청구되므로 변하는 값을 뒤로 민다.
+
+    후보 순서는 부르는 쪽이 준 순서(원문검색 결과 순)를 그대로 쓴다. 여기서 다시
+    정렬하면 같은 후보 집합인데 순서만 달라 캐시가 빗나가는 일이 생긴다.
+  */
   const user = [
-    '[제품]',
-    itemName,
-    narrative ? `\n[사고 상황]\n${narrative.slice(0, 600)}` : '',
-    '',
     '[기준 후보]',
     candidates
       .map((c) => `- id=${c.id} · ${c.display_name}\n  적용범위: ${(c.scope_text ?? '').slice(0, 700).replace(/\s+/g, ' ')}`)
       .join('\n'),
+    '',
+    '[제품]',
+    itemName,
+    narrative ? `\n[사고 상황]\n${narrative.slice(0, 600)}` : '',
   ].filter(Boolean).join('\n');
 
   const { value } = await structuredCall<{ applicable_standard_ids: string[]; reasoning: string }>({

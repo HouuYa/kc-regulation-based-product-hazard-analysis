@@ -19,15 +19,20 @@
  *   부풀려진다. 그래서 **둘 다 계산해 범위로 보여 준다.** 정확한 한 숫자를
  *   지어내는 것보다 "이 사이"라고 말하는 편이 정직하다.
  *
- * 캐시된 입력은 단가가 1/10 이다 (2026-09-08 확인)
+ * 캐시에는 값이 두 개 붙는다 — 적중은 할인, 기록은 웃돈 (2026-09-08 확인)
  *   같은 프롬프트 앞부분을 다시 보내면 그 부분은 "cached input" 으로 싸게 청구된다.
  *
- *     gpt-5.6-terra   입력 $2.00 / 캐시된 입력 $0.20
- *     gpt-5.6-luna    입력 $0.20 / 캐시된 입력 $0.02
+ *     gpt-5.6-terra   입력 $2.00 / 캐시 적중 $0.20 / 캐시 기록 $2.50
+ *     gpt-5.6-luna    입력 $0.20 / 캐시 적중 $0.02 / 캐시 기록 $0.25
  *
- *   이 체계는 입력이 출력의 20배가 넘는 구조라 이 차이가 금액을 좌우한다. 응답이
- *   알려 주는 적중 토큰 수(054)를 빼서 따로 매긴다. 캐시 단가가 등록되지 않은
- *   모델은 적중분도 일반 입력 단가로 센다 — 모르면 비싸게 잡는다.
+ *   적중은 1/10 로 싸지만 **기록은 1.25배로 비싸다.** 적중이 뒤따르면 남는 장사이고
+ *   (기록 1.25 + 적중 0.1n < 1.0(n+1) 은 n ≥ 1 에서 성립), 기록만 하고 못 읽으면
+ *   그냥 25% 더 낸 것이다. 실측에서 지금이 그 상태다(056).
+ *
+ *   다만 **기록 토큰이 실제로 그 웃돈으로 청구되는지는 우리가 확인하지 못했다.**
+ *   단가표에 칸은 있는데 조건이 적혀 있지 않고, 청구서를 우리가 보지 않는다.
+ *   그래서 문맥 길이와 같은 방식으로 범위에 담는다 — 낮은 쪽은 기록분을 일반 입력
+ *   단가로, 높은 쪽은 기록 단가로 계산한다. 확인되면 범위를 좁히면 된다.
  *
  * 어떻게 넣나
  *   .env.local 에 100 만 토큰당 미국 달러로 적는다. 없는 칸은 생략한다.
@@ -43,6 +48,10 @@ export interface ModelPrice {
   output?: number;
   /** 캐시 적중 입력의 단가. 없으면 input 과 같다고 본다(비싸게 잡는 쪽) */
   cachedInput?: number;
+  /** 캐시 기록 입력의 단가. 일반 입력보다 비싸다. 없으면 input 과 같다고 본다 */
+  cacheWrite?: number;
+  /** 긴 문맥일 때의 캐시 기록 단가 */
+  cacheWriteLong?: number;
   /** 긴 문맥일 때의 입력 단가. 없으면 input 과 같다고 본다 */
   inputLong?: number;
   /** 긴 문맥일 때의 캐시 적중 입력 단가 */
@@ -70,6 +79,8 @@ export interface TokenCount {
   outputTokens: number;
   /** 입력 토큰 중 캐시 적중분. inputTokens 에 포함된 값이다(054). 모르면 0 */
   cachedTokens?: number;
+  /** 입력 토큰 중 캐시 기록분. 역시 inputTokens 에 포함된다(056). 모르면 0 */
+  cacheWriteTokens?: number;
 }
 
 /** 가장 싸게 잡았을 때와 비싸게 잡았을 때. 두 단가가 같으면 min === max */
@@ -91,20 +102,27 @@ export function estimateCost(model: string, tokens: TokenCount): CostRange | nul
   const p = priceTable()[model];
   if (!p) return null;
 
-  // 적중분은 입력 토큰 안에 들어 있다. 빼서 각자의 단가로 매긴다.
-  // 적중 토큰이 입력보다 클 수는 없지만, 기록이 어긋나도 음수가 나오지 않게 막는다
+  // 적중분·기록분은 모두 입력 토큰 안에 들어 있다. 빼서 각자의 단가로 매긴다.
+  // 기록이 어긋나 합이 입력을 넘겨도 음수가 나오지 않게 막는다
   const cached = Math.min(Math.max(tokens.cachedTokens ?? 0, 0), tokens.inputTokens);
-  const fresh = tokens.inputTokens - cached;
+  const written = Math.min(Math.max(tokens.cacheWriteTokens ?? 0, 0), tokens.inputTokens - cached);
+  const fresh = tokens.inputTokens - cached - written;
 
-  const calc = (inRate: number, cachedRate: number, outRate: number | undefined) =>
+  const calc = (
+    inRate: number, cachedRate: number, writeRate: number, outRate: number | undefined,
+  ) =>
     (fresh / 1_000_000) * inRate +
     (cached / 1_000_000) * cachedRate +
+    (written / 1_000_000) * writeRate +
     (outRate ? (tokens.outputTokens / 1_000_000) * outRate : 0);
 
-  const low = calc(p.input, p.cachedInput ?? p.input, p.output);
+  // 낮은 쪽: 짧은 문맥 단가 · 기록분도 일반 입력으로 친다
+  const low = calc(p.input, p.cachedInput ?? p.input, p.input, p.output);
+  // 높은 쪽: 긴 문맥 단가 · 기록분에 웃돈을 매긴다
   const high = calc(
     p.inputLong ?? p.input,
     p.cachedInputLong ?? p.cachedInput ?? p.inputLong ?? p.input,
+    p.cacheWriteLong ?? p.cacheWrite ?? p.inputLong ?? p.input,
     p.outputLong ?? p.output,
   );
   return { min: Math.min(low, high), max: Math.max(low, high) };

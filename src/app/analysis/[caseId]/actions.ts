@@ -103,3 +103,38 @@ export async function runAnalysisAction(
   revalidatePath('/recalls');
   return message;
 }
+
+/**
+ * 어린이제품 여부를 담당자가 확정한다 (055)
+ *
+ * 왜 사람이 하는가
+ *   「어린이제품 가이드라인」 고시는 색상·포장·광고·소비자 인식·가격대까지 결정요소로
+ *   든다. 제품 실물과 판매 맥락을 봐야 하는 판단이라 기계가 흉내 내면 그럴듯한 오답이
+ *   나온다(docs/제품안전법제도/어린이제품_가이드라인.md).
+ *
+ * 무엇이 달라지는가
+ *   CHILD 로 정하면 적용 기준에 어린이제품 공통안전기준이 들어가고, NOT_CHILD 면
+ *   자동 판정이 붙였더라도 빠진다(resolve-scope.ts 의 childOverride).
+ *
+ * 근거를 함께 받는다
+ *   무엇을 보고 그렇게 정했는지가 남지 않으면 다음 사람이 다시 판정해야 한다.
+ *   비워 두어도 저장은 되지만, 화면이 근거 칸을 늘 보여 준다.
+ */
+export async function setChildProductCheck(formData: FormData): Promise<void> {
+  const caseId = Number(formData.get('caseId'));
+  const value = String(formData.get('value') ?? '');
+  const note = (formData.get('note') as string | null)?.trim() || null;
+
+  const allowed = ['UNCHECKED', 'CHILD', 'NOT_CHILD', 'UNKNOWN'];
+  if (!caseId || !allowed.includes(value)) return;
+
+  await getDb()`
+    update public.case_event
+    set child_product_check = ${value},
+        child_product_note = ${note},
+        child_product_checked_at = ${value === 'UNCHECKED' ? null : new Date()}
+    where id = ${caseId}
+  `;
+
+  revalidatePath(`/analysis/${caseId}`);
+}

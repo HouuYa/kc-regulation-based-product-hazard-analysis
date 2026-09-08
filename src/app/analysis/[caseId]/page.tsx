@@ -11,7 +11,7 @@ import { estimateCauses, type CauseCandidate } from '@/lib/codebook/cause-bridge
 import { withEstimatedCauses } from '@/lib/search/estimate-cause';
 import { searchCandidates, type Candidate as SearchCandidate } from '@/lib/search/match';
 import { loadCaseInput, defaultMatchConfig } from '@/lib/search/run';
-import { recordReview, runAnalysisAction } from './actions';
+import { recordReview, runAnalysisAction, setChildProductCheck } from './actions';
 import { REJECT_REASONS } from './review-options';
 
 export const dynamic = 'force-dynamic';
@@ -32,6 +32,14 @@ export const dynamic = 'force-dynamic';
  */
 
 const SHORTLIST = 5;
+
+/** 어린이제품 여부 — 확인하지 않은 것과 아니라고 확인한 것은 다른 상태다(055) */
+const CHILD_CHECK_LABEL: Record<string, string> = {
+  UNCHECKED: '미확인 — 담당자 확인이 필요합니다',
+  CHILD: '어린이제품 (공통안전기준 적용)',
+  NOT_CHILD: '어린이제품 아님',
+  UNKNOWN: '확인했지만 알아내지 못함',
+};
 
 interface ResultRow {
   id: number;
@@ -92,6 +100,7 @@ interface CaseEventRow {
   source_type: string; occurred_on: string | null;
   product_scope_id: number | null; scope_evidence: string | null; basis_date: string | null;
   scope_name: string | null;
+  child_product_check: string; child_product_note: string | null;
   gpc_brick_code: string | null; gpc_candidates: GpcCandidate[] | null;
   gpc_verified_level: GpcMatchLevel | null;
   gpc_verified_segment_code: string | null; gpc_verified_segment_title: string | null;
@@ -136,6 +145,7 @@ async function load(caseId: number) {
   const [ev] = await db<CaseEventRow[]>`
     select e.id, e.title, e.narrative, e.item_name, e.source_type, e.occurred_on::text,
            e.product_scope_id, e.scope_evidence, e.basis_date::text,
+           e.child_product_check, e.child_product_note,
            ps.name as scope_name,
            e.gpc_brick_code, e.gpc_candidates,
            e.gpc_verified_level,
@@ -189,9 +199,10 @@ async function load(caseId: number) {
     use_vector: boolean; use_rerank: boolean; result_count: number;
     rerank_model: string | null; embedding_model: string | null;
     rerank_status: 'skipped' | 'ok' | 'failed';
+    hyde_text: string | null;
   }[]>`
     select id, started_at::text, use_code, use_keyword, use_vector, use_rerank,
-           result_count, rerank_model, embedding_model, rerank_status
+           result_count, rerank_model, embedding_model, rerank_status, hyde_text
     from public.match_run where case_id = ${caseId}
     order by started_at desc limit 1
   `;
@@ -702,6 +713,76 @@ export default async function AnalysisPage({
                 </p>
               </div>
             )}
+
+            {/*
+              어린이제품인가 — 사람이 정하고, 정하면 적용 기준이 바뀐다 (055)
+
+              가이드라인의 결정요소(사용연령 표시·포장 문구·판매 구역 …)는 실물을 봐야
+              판정된다. 그래서 시스템은 추정하지 않고 받아 적는다. 확정하면 어린이제품
+              공통안전기준이 적용 기준에 들어가고(유해원소·프탈레이트·자석·작은 부품),
+              아니라고 하면 자동 판정이 붙였더라도 뺀다.
+            */}
+            <div className="mt-4 border border-rule-soft px-3 py-2.5">
+              <div className="flex flex-wrap items-baseline gap-2">
+                <span className="label">어린이제품 여부</span>
+                <span className={`text-[12px] font-medium ${
+                  ev.child_product_check === 'CHILD' ? 'text-measure'
+                  : ev.child_product_check === 'NOT_CHILD' ? 'text-ink-2'
+                  : 'text-caution'}`}
+                >
+                  {CHILD_CHECK_LABEL[ev.child_product_check] ?? '미확인'}
+                </span>
+              </div>
+
+              {ev.child_product_note && (
+                <p className="mt-1.5 text-[12px] leading-relaxed text-ink-2">
+                  근거: {ev.child_product_note}
+                </p>
+              )}
+
+              <p className="mt-1.5 text-[11px] leading-relaxed text-ink-3">
+                만 13세 이하 어린이가 쓰거나 어린이를 위해 쓰는 물품이면 어린이제품입니다.
+                포장·광고·사용연령 표시·판매 구역을 보고 정합니다(「어린이제품 가이드라인」 고시).
+                <strong className="font-semibold"> 어린이제품으로 정하면 공통안전기준이 적용 기준에 들어갑니다</strong> —
+                유해원소·프탈레이트·자석·작은 부품은 부속서가 아니라 그 기준에만 있습니다.
+              </p>
+
+              <form action={setChildProductCheck} className="mt-2.5 flex flex-wrap items-center gap-2">
+                <input type="hidden" name="caseId" value={caseId} />
+                <input
+                  name="note"
+                  defaultValue={ev.child_product_note ?? ''}
+                  placeholder="무엇을 보고 정했는지 — 예: 포장에 '3세 이상' 표시"
+                  className="min-w-[16rem] flex-1 border border-rule bg-surface px-2 py-1.5 text-[12px]"
+                />
+                <button
+                  type="submit" name="value" value="CHILD"
+                  className="border border-measure bg-measure px-3 py-1.5 text-[12px] font-medium text-white hover:opacity-85"
+                >
+                  어린이제품
+                </button>
+                <button
+                  type="submit" name="value" value="NOT_CHILD"
+                  className="border border-rule px-3 py-1.5 text-[12px] text-ink-2 hover:bg-measure-soft"
+                >
+                  아님
+                </button>
+                <button
+                  type="submit" name="value" value="UNKNOWN"
+                  className="border border-rule px-3 py-1.5 text-[12px] text-ink-2 hover:bg-measure-soft"
+                >
+                  알 수 없음
+                </button>
+                {ev.child_product_check !== 'UNCHECKED' && (
+                  <button
+                    type="submit" name="value" value="UNCHECKED"
+                    className="px-2 py-1.5 text-[11px] text-ink-3 underline underline-offset-2 hover:text-measure"
+                  >
+                    확인 취소
+                  </button>
+                )}
+              </form>
+            </div>
           </div>
         </div>
       </section>
@@ -890,6 +971,34 @@ export default async function AnalysisPage({
               순서를 다시 매길 때 AI 를 썼습니다({run.rerank_model}). 저장된 결과는 다시 열어도 그대로지만,
               같은 조건으로 다시 돌리면 순서가 달라질 수 있습니다.
             </p>
+          )}
+
+          {/*
+            AI 가 지어낸 검색용 문장(HyDE)을 보여 준다 (2026-09-08)
+
+            051 부터 match_run.hyde_text 에 저장은 했지만 화면에는 내보내지 않았다.
+            이 문단이 **어떤 조항이 후보로 떠오르는지를 바꾸기** 때문에(재현율
+            23.8% → 25.2%), 담당자가 "왜 이 조항이 나왔지"를 되짚을 때 이 단계가
+            빈칸이면 경로를 절반만 보는 셈이다.
+
+            다만 그 문단은 기준 원문이 아니다. 그대로 펼쳐 두면 실제 조항으로
+            오해하므로 접어 두고, 열기 전에 무엇인지부터 밝힌다.
+          */}
+          {run.hyde_text && (
+            <details className="mt-2 border border-rule-soft px-3 py-2">
+              <summary className="cursor-pointer text-[11px] text-ink-3">
+                🤖 검색에 쓴 「가상 조항」 보기 — AI가 지어낸 문장입니다 (기준 원문 아님)
+              </summary>
+              <p className="mt-2 text-[12px] leading-relaxed whitespace-pre-wrap text-ink-2">
+                {run.hyde_text}
+              </p>
+              <p className="mt-2 text-[11px] leading-relaxed text-ink-3">
+                사고 서술만으로는 기준의 문체와 어휘가 달라 의미 검색이 빗나갑니다. 그래서
+                「답에 해당할 법한 조항」을 AI에게 지어내게 해 그 문장으로 검색합니다. 위 문장은
+                <strong className="font-semibold"> 실제 안전기준에 존재하지 않습니다.</strong> 검색이
+                왜 이 방향으로 갔는지를 되짚는 용도이며, 근거로 인용해서는 안 됩니다.
+              </p>
+            </details>
           )}
 
           {/*

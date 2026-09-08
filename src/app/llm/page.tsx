@@ -153,10 +153,22 @@ export default async function LlmPage() {
                     level={data.usage.totalCached > 0 ? 'ok' : 'caution'}
                     note={data.usage.totalCached > 0
                       ? `입력 ${n(data.usage.totalInput)} 중 ${n(data.usage.totalCached)} 토큰이 1/10 단가`
-                      : '아직 적중이 없습니다 — 같은 프롬프트를 이어서 보낼 때만 걸립니다'}
+                      : `적중 0 · 기록 ${n(data.usage.totalCacheWrite)} 토큰 — 쓰기만 하고 읽지 못하는 중입니다`}
                   />
                   <Signal label="마지막 호출" value={when(data.usage.lastCallAt)} level="ok" />
                 </div>
+
+                {data.usage.totalCacheWrite > 0 && data.usage.totalCached === 0 && (
+                  <div className="mt-4 border border-caution bg-caution-soft px-4 py-3 text-[12px] leading-relaxed text-ink-2">
+                    <span className="font-semibold text-caution">캐시에 쓰기만 하고 한 번도 읽지 못했습니다.</span>{' '}
+                    입력 {n(data.usage.totalInput)} 토큰 중 {n(data.usage.totalCacheWrite)} 토큰이 캐시에
+                    기록됐는데 적중은 0건입니다. 단가표상 캐시 기록은 일반 입력보다 비싸고
+                    (gpt-5.6-terra 기준 $2.50 대 $2.00) 적중은 1/10 입니다 — 즉 지금은 할인을 못 받으면서 웃돈만 낼 수 있는
+                    상태입니다. 같은 프롬프트로 세 번 연속 부르고, 60초·3분 뒤에 다시 불러도 적중이
+                    잡히지 않았습니다(2026-09-08 실측). 계정에서 프롬프트 캐시가 켜져 있는지 확인이
+                    필요합니다.
+                  </div>
+                )}
 
                 {data.usage.unpricedModels.length > 0 && (
                   <div className="mt-4 border border-caution bg-caution-soft px-4 py-3 text-[12px] leading-relaxed text-ink-2">
@@ -266,6 +278,9 @@ export default async function LlmPage() {
                                 {r.cachedTokens > 0
                                   ? `${n(r.cachedTokens)} (${((r.cachedTokens / Math.max(1, r.inputTokens)) * 100).toFixed(0)}%)`
                                   : '—'}
+                                {r.cacheWriteTokens > 0 && (
+                                  <div className="text-[11px] text-caution">기록 {n(r.cacheWriteTokens)}</div>
+                                )}
                               </td>
                               <td className="py-2 pr-4 text-right tabular-nums text-ink-2">
                                 {n(r.outputTokens)}
@@ -367,7 +382,8 @@ export default async function LlmPage() {
                         <tr className="border-b border-rule text-left text-ink-3">
                           <th className="py-2 pr-4 font-normal">모델</th>
                           <th className="py-2 pr-4 text-right font-normal">입력</th>
-                          <th className="py-2 pr-4 text-right font-normal">캐시 입력</th>
+                          <th className="py-2 pr-4 text-right font-normal">캐시 적중</th>
+                          <th className="py-2 pr-4 text-right font-normal">캐시 기록</th>
                           <th className="py-2 pr-4 text-right font-normal">출력</th>
                           <th className="py-2 pr-4 text-right font-normal">긴 문맥 입력</th>
                           <th className="py-2 text-right font-normal">긴 문맥 출력</th>
@@ -380,6 +396,9 @@ export default async function LlmPage() {
                             <td className="py-2 pr-4 text-right tabular-nums text-ink-2">${p.input.toFixed(2)}</td>
                             <td className="py-2 pr-4 text-right tabular-nums text-ink-2">
                               {p.cachedInput === undefined ? '—' : `$${p.cachedInput.toFixed(2)}`}
+                            </td>
+                            <td className="py-2 pr-4 text-right tabular-nums text-caution">
+                              {p.cacheWrite === undefined ? '—' : `$${p.cacheWrite.toFixed(2)}`}
                             </td>
                             <td className="py-2 pr-4 text-right tabular-nums text-ink-2">
                               {p.output === undefined ? '—' : `$${p.output.toFixed(2)}`}
@@ -399,7 +418,9 @@ export default async function LlmPage() {
                 <p className="mt-3 max-w-3xl text-[12px] leading-relaxed text-ink-3">
                   100만 토큰당 미국 달러입니다. 어느 길이부터 「긴 문맥」인지는 단가표에 적혀 있지
                   않아, 화면은 짧은 쪽과 긴 쪽을 모두 계산해 범위로 보여 줍니다. 정확한 한 숫자를
-                  지어내는 것보다 「이 사이」라고 말하는 편이 정직하기 때문입니다.
+                  지어내는 것보다 「이 사이」라고 말하는 편이 정직하기 때문입니다. 「캐시 기록」이
+                  실제로 청구되는지도 확인하지 못해 같은 방식으로 범위에 담았습니다 — 낮은 쪽은
+                  일반 입력으로, 높은 쪽은 기록 단가로 계산합니다.
                 </p>
               </Section>
 

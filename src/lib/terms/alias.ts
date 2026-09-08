@@ -77,6 +77,16 @@ const SYSTEM = [
  *
  * 결을 말로 설명하는 것보다 실제 예를 보이는 편이 정확하다. 다만 지금 물어보는 품목의
  * 답을 예로 주면 채점이 무의미해지므로, **묻는 품목은 예에서 뺀다.**
+ *
+ * 예를 무작위로 고르지 않는다 (2026-09-08)
+ *   전에는 `order by random()` 이었다. 두 가지가 걸린다.
+ *
+ *   1) 부를 때마다 프롬프트 앞부분이 달라져 캐시가 절대 걸리지 않는다. 캐시된 입력은
+ *      단가가 1/10 이고, 이 호출은 묶음마다 예시 다섯 개를 통째로 다시 보낸다.
+ *   2) 같은 품목을 다시 물어도 답이 달라진 이유를 되짚을 수 없다. 예가 바뀌었는지
+ *      모델이 흔들린 것인지 구별되지 않는다.
+ *
+ *   이름 순으로 고정한다. 예의 다양성보다 되짚을 수 있음이 먼저다.
  */
 async function fewShot(exclude: AliasTarget[]): Promise<string> {
   const skip = exclude.map((t) => t.subItem ?? t.item ?? '');
@@ -86,7 +96,7 @@ async function fewShot(exclude: AliasTarget[]): Promise<string> {
     where source = 'EXPERT' and coalesce(sub_item, item, '') <> all(${skip})
     group by 1
     having count(*) between 4 and 12
-    order by random()
+    order by 1
     limit 5
   `;
   if (rows.length === 0) return '';
@@ -191,14 +201,22 @@ const label = (t: AliasTarget) => t.subItem || t.item || '';
 export async function suggestAliases(targets: AliasTarget[]): Promise<AliasSuggestion[]> {
   if (targets.length === 0) return [];
 
+  /*
+    고정된 예시를 앞에, 이번에 물어보는 품목을 뒤에 둔다 (2026-09-08)
+
+    예시 다섯 개는 묶음이 달라도 거의 같다(이름 순 고정). 앞에 두면 그 구간이 캐시에
+    걸려 1/10 단가로 청구된다. 뒤에 두면 앞의 품목 목록이 매번 달라 캐시가 통째로
+    빗나간다 — 같은 정보를 어느 순서로 놓느냐가 값을 가른다.
+  */
   const user = [
+    (await fewShot(targets)).replace(/^\n/, ''),
+    '',
     '[검색어를 만들 법정 품목]',
     ...targets.map((t) => {
       const name = label(t);
       const parent = t.item && t.subItem && t.item !== t.subItem ? ` (상위: ${t.item})` : '';
       return `- ${name}${parent} [${t.itemGroup}]${t.hint ? ` · 참고 분류: ${t.hint}` : ''}`;
     }),
-    await fewShot(targets),
     '',
     'target 에는 위 목록의 이름을 그대로 적는다.',
   ].join('\n');

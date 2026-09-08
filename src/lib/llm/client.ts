@@ -39,6 +39,13 @@ export interface CallUsage {
    * 보려면 먼저 세고 있어야 한다.
    */
   cachedTokens: number;
+  /**
+   * 입력 토큰 중 캐시에 **기록된** 분량. 역시 inputTokens 에 포함된다.
+   *
+   * 이쪽은 할인이 아니라 웃돈이다 — 단가가 일반 입력의 1.25배다(056). 적중이
+   * 뒤따르면 남는 장사지만, 기록만 하고 읽지 못하면 그냥 더 낸 것이다.
+   */
+  cacheWriteTokens: number;
 }
 
 /**
@@ -86,10 +93,10 @@ async function recordCall(row: {
     await getDb()`
       insert into public.llm_call
         (purpose, model, input_tokens, output_tokens, reasoning_tokens, cached_tokens,
-         item_count, ok, error, case_id, standard_id)
+         cache_write_tokens, item_count, ok, error, case_id, standard_id)
       values (${row.purpose}, ${row.model},
               ${row.usage.inputTokens}, ${row.usage.outputTokens}, ${row.usage.reasoningTokens},
-              ${row.usage.cachedTokens},
+              ${row.usage.cachedTokens}, ${row.usage.cacheWriteTokens},
               ${row.itemCount ?? 1}, ${row.ok ?? true}, ${row.error ?? null},
               ${row.caseId ?? null}, ${row.standardId ?? null})
     `;
@@ -150,7 +157,7 @@ async function chatJsonCall<T>(args: {
       await recordCall({
         purpose: args.purpose,
         model: args.model,
-        usage: { inputTokens: 0, outputTokens: 0, reasoningTokens: 0, cachedTokens: 0 },
+        usage: { inputTokens: 0, outputTokens: 0, reasoningTokens: 0, cachedTokens: 0, cacheWriteTokens: 0 },
         ok: false,
         error: e instanceof Error ? e.message.slice(0, 500) : String(e).slice(0, 500),
         caseId: args.caseId,
@@ -168,6 +175,9 @@ async function chatJsonCall<T>(args: {
     // 응답이 이 칸을 안 주는 모델·경로가 있다. 없으면 0 — 모르는 것을 적중으로 세면
     // 금액이 실제보다 적어 보인다(054)
     cachedTokens: u?.prompt_tokens_details?.cached_tokens ?? 0,
+    // 캐시 기록은 웃돈이다(056). 타입 정의에 없는 칸이라 좁혀서 읽는다
+    cacheWriteTokens:
+      (u?.prompt_tokens_details as { cache_write_tokens?: number } | undefined)?.cache_write_tokens ?? 0,
   };
 
   const content = res.choices[0]?.message?.content;
@@ -289,7 +299,7 @@ export async function embedBatch(texts: string[]): Promise<number[][]> {
     // 임베딩에는 캐시 단가가 없다(단가표에 칸 자체가 없다). 0 으로 둔다
     usage: {
       inputTokens: res.usage?.prompt_tokens ?? 0,
-      outputTokens: 0, reasoningTokens: 0, cachedTokens: 0,
+      outputTokens: 0, reasoningTokens: 0, cachedTokens: 0, cacheWriteTokens: 0,
     },
     itemCount: input.length,
   });

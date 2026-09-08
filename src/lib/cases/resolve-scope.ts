@@ -529,10 +529,15 @@ export async function resolveProductScope(
 export async function standardsForCase(caseId: number): Promise<number[]> {
   const db = getDb();
 
-  const [ev] = await db<{ product_scope_id: number | null; item_name: string | null }[]>`
-    select product_scope_id, item_name from public.case_event where id = ${caseId}
+  const [ev] = await db<{
+    product_scope_id: number | null; item_name: string | null; child_product_check: string;
+  }[]>`
+    select product_scope_id, item_name, child_product_check
+    from public.case_event where id = ${caseId}
   `;
   if (!ev) return [];
+
+  const applyOverride = (ids: number[]) => childOverride(ids, ev.child_product_check);
 
   if (ev.product_scope_id) {
     const rows = await db<{ id: number }[]>`
@@ -540,13 +545,39 @@ export async function standardsForCase(caseId: number): Promise<number[]> {
       join public.standard s on s.id = a.standard_id
       where a.product_scope_id = ${ev.product_scope_id} and s.is_current
     `;
-    return (await withCompanions(rows.map((r) => Number(r.id)))).ids;
+    return applyOverride((await withCompanions(rows.map((r) => Number(r.id)))).ids);
   }
 
   // 품목이 등록되지 않은 전기용품 등 — 적용범위 검색으로 그때그때 찾는다
   if (ev.item_name) {
     const resolved = await resolveProductScope(ev.item_name);
-    if (resolved) return resolved.standardIds;
+    if (resolved) return applyOverride(resolved.standardIds);
   }
   return [];
+}
+
+/**
+ * 담당자가 어린이제품 여부를 확인했으면 그 판단을 따른다 (055)
+ *
+ * 기계 판정은 법정 품목군으로 미루어 짐작한 것이고, 담당자 판정은 「어린이제품
+ * 가이드라인」의 결정요소로 실물과 판매 맥락을 본 결과다. 둘이 어긋나면 사람이 이긴다.
+ *
+ *   CHILD      공통안전기준을 넣는다 — 품목 대응이 아직 없어도 넣는다
+ *   NOT_CHILD  자동 판정이 붙였더라도 뺀다 — 성인용 제품에 유해원소 시험을 붙이지 않는다
+ *   그 밖       손대지 않는다. 확인하지 않은 것과 아니라고 확인한 것은 다르다
+ */
+async function childOverride(standardIds: number[], check: string): Promise<number[]> {
+  if (check !== 'CHILD' && check !== 'NOT_CHILD') return standardIds;
+
+  const commons = await getDb()<{ id: number }[]>`
+    select id from public.standard
+    where is_current and display_name like '%공통안전기준%'
+  `;
+  const commonIds = commons.map((c) => Number(c.id));
+  if (commonIds.length === 0) return standardIds;
+
+  const ids = standardIds.map(Number);
+  return check === 'CHILD'
+    ? [...new Set([...ids, ...commonIds])]
+    : ids.filter((id) => !commonIds.includes(id));
 }

@@ -29,6 +29,8 @@ export interface UsageRow {
   reasoningTokens: number;
   /** 입력 토큰 중 캐시 적중분. 입력에 포함된 값이다(054) */
   cachedTokens: number;
+  /** 입력 토큰 중 캐시 기록분. 단가가 입력의 1.25배라 웃돈이다(056) */
+  cacheWriteTokens: number;
   items: number;
   /** 단가가 등록되지 않았으면 null. 문맥 길이에 따라 단가가 갈리는 모델은 범위다 */
   costUsd: CostRange | null;
@@ -45,6 +47,8 @@ export interface UsageSummary {
   totalInput: number;
   totalOutput: number;
   totalCached: number;
+  /** 캐시에 기록만 하고 읽지 못한 분량이 얼마인지 보려고 함께 센다(056) */
+  totalCacheWrite: number;
   /**
    * 단가를 아는 것만 더한 값. 아는 것이 하나도 없으면 null.
    *
@@ -60,7 +64,7 @@ export interface UsageSummary {
 interface RawRow {
   purpose: string; model: string; calls: number; failed: number;
   input_tokens: number; output_tokens: number; reasoning_tokens: number;
-  cached_tokens: number; items: number;
+  cached_tokens: number; cache_write_tokens: number; items: number;
 }
 
 function toRow(r: RawRow): UsageRow {
@@ -73,11 +77,13 @@ function toRow(r: RawRow): UsageRow {
     outputTokens: r.output_tokens,
     reasoningTokens: r.reasoning_tokens,
     cachedTokens: r.cached_tokens,
+    cacheWriteTokens: r.cache_write_tokens,
     items: r.items,
     costUsd: estimateCost(r.model, {
       inputTokens: r.input_tokens,
       outputTokens: r.output_tokens,
       cachedTokens: r.cached_tokens,
+      cacheWriteTokens: r.cache_write_tokens,
     }),
   };
 }
@@ -94,6 +100,7 @@ export async function usageSummary(days = 30): Promise<UsageSummary> {
            coalesce(sum(output_tokens), 0)::bigint::int    output_tokens,
            coalesce(sum(reasoning_tokens), 0)::bigint::int reasoning_tokens,
            coalesce(sum(cached_tokens), 0)::bigint::int    cached_tokens,
+           coalesce(sum(cache_write_tokens), 0)::bigint::int cache_write_tokens,
            coalesce(sum(item_count), 0)::bigint::int       items
     from public.llm_call
     where called_at >= now() - make_interval(days => ${days})
@@ -109,6 +116,7 @@ export async function usageSummary(days = 30): Promise<UsageSummary> {
            coalesce(sum(output_tokens), 0)::bigint::int    output_tokens,
            coalesce(sum(reasoning_tokens), 0)::bigint::int reasoning_tokens,
            coalesce(sum(cached_tokens), 0)::bigint::int    cached_tokens,
+           coalesce(sum(cache_write_tokens), 0)::bigint::int cache_write_tokens,
            coalesce(sum(item_count), 0)::bigint::int       items
     from public.llm_call
     where called_at >= now() - make_interval(days => ${days})
@@ -144,6 +152,7 @@ export async function usageSummary(days = 30): Promise<UsageSummary> {
     totalInput: sum((r) => r.inputTokens),
     totalOutput: sum((r) => r.outputTokens),
     totalCached: sum((r) => r.cachedTokens),
+    totalCacheWrite: sum((r) => r.cacheWriteTokens),
     // 단가를 아는 줄이 하나도 없으면 "0원"이 아니라 "모른다"
     knownCost: pricedRows > 0 ? knownCost : null,
     unpricedModels: [...unpriced].filter((m) => !table[m]),
@@ -172,6 +181,7 @@ export async function dailyUsage(days = 14): Promise<DayUsage[]> {
   const rows = await db<{
     day: string; model: string; calls: number; failed: number;
     input_tokens: number; output_tokens: number; cached_tokens: number;
+    cache_write_tokens: number;
   }[]>`
     -- day 는 예약어에 가까워 별칭으로 그냥 쓰면 구문 오류가 난다. as 를 붙인다
     select to_char(called_at at time zone 'Asia/Seoul', 'YYYY-MM-DD') as day,
@@ -180,7 +190,8 @@ export async function dailyUsage(days = 14): Promise<DayUsage[]> {
            count(*) filter (where not ok)::int          failed,
            coalesce(sum(input_tokens), 0)::bigint::int  input_tokens,
            coalesce(sum(output_tokens), 0)::bigint::int output_tokens,
-           coalesce(sum(cached_tokens), 0)::bigint::int cached_tokens
+           coalesce(sum(cached_tokens), 0)::bigint::int cached_tokens,
+           coalesce(sum(cache_write_tokens), 0)::bigint::int cache_write_tokens
     from public.llm_call
     where called_at >= now() - make_interval(days => ${days})
     group by 1, 2
@@ -199,7 +210,8 @@ export async function dailyUsage(days = 14): Promise<DayUsage[]> {
     cur.outputTokens += r.output_tokens;
     cur.cachedTokens += r.cached_tokens;
     const c = estimateCost(r.model, {
-      inputTokens: r.input_tokens, outputTokens: r.output_tokens, cachedTokens: r.cached_tokens,
+      inputTokens: r.input_tokens, outputTokens: r.output_tokens,
+      cachedTokens: r.cached_tokens, cacheWriteTokens: r.cache_write_tokens,
     });
     // 단가를 모르는 모델이 하루에 하나라도 섞이면 그날 금액은 "모른다"로 둔다
     cur.cost = c === null || cur.cost === null ? null : addCost(cur.cost, c);
