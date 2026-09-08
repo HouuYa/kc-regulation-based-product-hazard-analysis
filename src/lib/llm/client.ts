@@ -121,6 +121,32 @@ async function recordCall(row: {
  *   태깅은 한 번 하고 저장하는 준비 단계이고, 재현성이 필요한 것은
  *   매칭(SQL)이다(§1.1 원칙 2).
  */
+/**
+ * Responses API 응답 중 우리가 읽는 부분만 (2026-09-09)
+ *
+ * SDK 타입에 아직 없는 칸(prompt_cache_options·cache_write_tokens)이 있어 좁게 적는다.
+ */
+interface ResponsesResult {
+  output_text?: string;
+  output?: Array<{ content?: Array<{ type?: string; text?: string }> }>;
+  usage?: {
+    input_tokens?: number;
+    output_tokens?: number;
+    input_tokens_details?: { cached_tokens?: number; cache_write_tokens?: number };
+    output_tokens_details?: { reasoning_tokens?: number };
+  };
+}
+
+/** 모델이 돌려준 JSON 본문. output_text 가 없으면 output 배열에서 긁어모은다 */
+function responseText(res: ResponsesResult): string {
+  if (res.output_text) return res.output_text;
+  return (res.output ?? [])
+    .flatMap((o) => o.content ?? [])
+    .filter((c) => typeof c.text === 'string')
+    .map((c) => c.text as string)
+    .join('');
+}
+
 async function chatJsonCall<T>(args: {
   model: string;
   system: string;
@@ -132,24 +158,54 @@ async function chatJsonCall<T>(args: {
   caseId?: number | null;
   standardId?: number | null;
 }): Promise<{ value: T; usage: CallUsage }> {
-  let res;
+  let res: ResponsesResult;
   try {
-    res = await getOpenAI().chat.completions.create({
+    /*
+      Chat Completions 가 아니라 Responses API 로 부른다 (2026-09-09)
+
+      왜 옮겼나 — 프롬프트 캐시 때문이다.
+        같은 프롬프트 앞부분을 다시 보내면 그 구간은 1/10 단가로 청구된다. 그런데
+        캐시를 켜는 설정(prompt_cache_options)이 **Responses API 에만 있다.**
+        Chat Completions 로 부르면 캐시에 기록만 되고(1.25배 웃돈) 한 번도 읽지
+        못한다. 실측이 정확히 그랬다 — 세 번 연속·60초 후·3분 후 모두
+        "기록 3,033 · 적중 0" 이었다(056).
+
+        같은 실험을 Responses API 로 하니 두 번째 호출부터 적중 3,004(99%)가 잡혔다.
+        하루치 입력 470만 토큰 중 캐시 기록이 148만 토큰이던 상황이라 값이 크다.
+
+      바뀐 것 셋 — 보내는 내용 자체는 같다.
+        response_format  → text.format      (스키마·strict 는 그대로)
+        reasoning_effort → reasoning.effort
+        messages/system  → input/developer
+    */
+    res = await (getOpenAI() as unknown as {
+      responses: { create: (a: Record<string, unknown>) => Promise<ResponsesResult> };
+    }).responses.create({
       model: args.model,
-      ...(args.effort ? { reasoning_effort: args.effort } : {}),
-      messages: [
-        { role: 'system', content: args.system },
-        { role: 'user', content: args.userContent },
+      ...(args.effort ? { reasoning: { effort: args.effort } } : {}),
+      // 캐시 위치를 알아서 잡게 둔다. 우리 프롬프트는 고정 덩어리가 앞에 오도록
+      // 이미 손봐 두었다(scope-semantic.ts·tagging.ts 주석 참고)
+      prompt_cache_options: { mode: 'implicit' },
+      // 라우팅 힌트다. 적중을 보장하지는 않지만 같은 용도끼리 모아 준다
+      ...(args.purpose ? { prompt_cache_key: `kc-${args.purpose}` } : {}),
+      input: [
+        { role: 'developer', content: [{ type: 'input_text', text: args.system }] },
+        {
+          role: 'user',
+          content: typeof args.userContent === 'string'
+            ? [{ type: 'input_text', text: args.userContent }]
+            : args.userContent,
+        },
       ],
-      response_format: {
-        type: 'json_schema',
-        json_schema: {
+      text: {
+        format: {
+          type: 'json_schema',
           name: args.schemaName,
           strict: true,
           schema: args.schema,
         },
       },
-    } as never);
+    });
   } catch (e) {
     // 실패해도 입력 토큰은 이미 나갔다. 다만 응답이 없으므로 토큰 수를 알 수 없다 —
     // 0 으로 남기되 실패였음을 표시해, 성공만 세다 실제 지출과 어긋나는 것을 막는다
@@ -167,20 +223,20 @@ async function chatJsonCall<T>(args: {
     throw e;
   }
 
+  // Responses API 는 칸 이름이 다르다: prompt_tokens → input_tokens (2026-09-09)
   const u = res.usage;
   const usage: CallUsage = {
-    inputTokens: u?.prompt_tokens ?? 0,
-    outputTokens: u?.completion_tokens ?? 0,
-    reasoningTokens: u?.completion_tokens_details?.reasoning_tokens ?? 0,
+    inputTokens: u?.input_tokens ?? 0,
+    outputTokens: u?.output_tokens ?? 0,
+    reasoningTokens: u?.output_tokens_details?.reasoning_tokens ?? 0,
     // 응답이 이 칸을 안 주는 모델·경로가 있다. 없으면 0 — 모르는 것을 적중으로 세면
     // 금액이 실제보다 적어 보인다(054)
-    cachedTokens: u?.prompt_tokens_details?.cached_tokens ?? 0,
-    // 캐시 기록은 웃돈이다(056). 타입 정의에 없는 칸이라 좁혀서 읽는다
-    cacheWriteTokens:
-      (u?.prompt_tokens_details as { cache_write_tokens?: number } | undefined)?.cache_write_tokens ?? 0,
+    cachedTokens: u?.input_tokens_details?.cached_tokens ?? 0,
+    // 캐시 기록은 웃돈이다(056)
+    cacheWriteTokens: u?.input_tokens_details?.cache_write_tokens ?? 0,
   };
 
-  const content = res.choices[0]?.message?.content;
+  const content = responseText(res);
   if (!content) {
     if (args.purpose) {
       await recordCall({
@@ -235,9 +291,12 @@ export async function structuredVisionCall<T>(args: {
   caseId?: number | null;
   standardId?: number | null;
 }): Promise<{ value: T; usage: CallUsage }> {
+  // Responses API 의 이미지 파트 모양이다 (2026-09-09)
+  //   Chat Completions: { type: 'image_url', image_url: { url } }
+  //   Responses:        { type: 'input_image', image_url: url }
   const userContent = [
-    { type: 'text', text: args.user },
-    ...args.images.map((img) => ({ type: 'image_url', image_url: { url: img.dataUrl } })),
+    { type: 'input_text', text: args.user },
+    ...args.images.map((img) => ({ type: 'input_image', image_url: img.dataUrl })),
   ];
   return chatJsonCall<T>({ ...args, userContent });
 }
