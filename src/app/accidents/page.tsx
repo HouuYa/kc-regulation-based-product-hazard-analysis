@@ -486,6 +486,27 @@ export default async function AccidentsPage({
                         : ''}
                   </div>
 
+                  {/*
+                    파일마다 「지금 몇 번째 걸음이고 다음에 무엇을 해야 하는가」
+                    (담당자 요청, 2026-09-09). 상태 낱말만 흩어져 있으면 처음 쓰는
+                    사람은 다음 동작을 못 찾는다.
+                  */}
+                  {(() => {
+                    const st = stepOf(r);
+                    return (
+                      <div
+                        className={`mt-2 border-l-2 px-3 py-1.5 text-[12px] leading-relaxed ${
+                          st.blocked ? 'border-halt bg-halt-soft text-ink-2' : 'border-rule bg-surface text-ink-2'
+                        }`}
+                      >
+                        <span className="addr text-[11px] text-ink-3">
+                          {st.step}/6 {UPLOAD_STEPS[st.step - 1].name}
+                        </span>
+                        <span className="ml-2">{st.next}</span>
+                      </div>
+                    );
+                  })()}
+
                   {r.error_reason && (
                     <p className="mt-2 border-l-2 border-halt bg-halt-soft px-3 py-2 text-[12px] leading-relaxed text-ink-2">
                       {r.error_reason}
