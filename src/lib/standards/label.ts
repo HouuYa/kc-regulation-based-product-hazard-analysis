@@ -57,6 +57,9 @@ export function shortTitle(titleKo: string | null | undefined): string | null {
     .replace(/^제\s*[\d\-­–—]+\s*부\s*[:：]?\s*/, '')
     .replace(/\s*(에 대한)?\s*개별\s*요구\s*사항\s*$/, '')
     .replace(/\s*[-–—]\s*개별요구사항\s*$/, '')
+    // 「…기기의 개별 요구사항」에서 뒤를 떼면 「…기기의」가 남는다. 조사만 남은 꼬리를
+    // 그대로 두면 이름이 아니라 잘린 문장으로 읽힌다(실측: KC 60335-2-6 · 2-73).
+    .replace(/(의|에 관한|에 대한)\s*$/, '')
     .replace(/[,·\s]+$/, '')
     .trim();
   return cut.length >= 2 ? cut : raw;

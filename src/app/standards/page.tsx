@@ -78,6 +78,8 @@ interface Summary {
   unresolved: number;
   /** 아직 사람이 확인하지 않은 코드가 붙은 조항 수 (037) */
   unreviewedClauses: number;
+  /** 요건 조항이 아닌데 코드가 붙어 있는 조항 수. 있으면 화면이 밝힌다 */
+  taggedOutside: number;
 }
 
 /** 표 머리글과 각 줄이 같은 칸 배분을 쓴다. 한 곳에서 정의해 어긋나지 않게 한다 */
@@ -107,9 +109,21 @@ export default async function StandardsPage() {
         (select count(*)::int from public.standard where is_current)                          as standards,
         (select count(*)::int from public.clause c
           join public.standard s on s.id = c.standard_id where s.is_current)                  as clauses,
+        -- 분자는 반드시 분모 안에서 센다 (2026-09-09 배포 화면에서 발견)
+        -- 전에는 「코드가 붙은 조항 전부」를 세고 분모는 「코드를 붙이는 요건 조항」이라
+        -- 6,400 / 6,392 처럼 분자가 분모보다 큰 값이 화면에 떴다. 요건이 아닌 조항
+        -- 8건에도 코드가 붙어 있어서다. 100%를 넘는 비율은 숫자 전체를 못 믿게 만든다.
         (select count(distinct t.clause_id)::int from public.clause_tag t
           join public.clause c on c.id = t.clause_id
-          join public.standard s on s.id = c.standard_id where s.is_current)                  as tagged,
+          join public.standard s on s.id = c.standard_id
+          where s.is_current and c.clause_role = 'REQUIREMENT'
+            and length(btrim(c.body)) >= 15)                                                  as tagged,
+        -- 요건이 아닌데 코드가 붙은 것. 0 이 아니면 화면이 그 사실을 밝힌다
+        (select count(distinct t.clause_id)::int from public.clause_tag t
+          join public.clause c on c.id = t.clause_id
+          join public.standard s on s.id = c.standard_id
+          where s.is_current and not (c.clause_role = 'REQUIREMENT'
+            and length(btrim(c.body)) >= 15))                                                 as "taggedOutside",
         -- 코드를 붙이는 대상은 "요건" 조항뿐이다(v0.7 §5.3). 정의·적용범위·시험방법에
         -- 코드를 붙이면 아무것도 요구하지 않는 문장이 진짜 요건과 같은 자격으로
         -- 검색에 걸린다. 본문이 거의 없는 조각도 제외한다.
@@ -256,7 +270,7 @@ export default async function StandardsPage() {
             { label: '조항', value: summary.clauses, note: '검색이 걸리는 가장 작은 덩어리입니다. 조항 하나가 한 덩어리' },
             {
               label: '위해요인 코드', value: summary.tagged, of: summary.taggable,
-              note: `오른쪽 수는 코드를 붙이는 요건 조항만 센 것입니다. 정의·적용범위·시험방법 ${(summary.clauses - summary.taggable).toLocaleString()}건에는 코드를 붙이지 않습니다`,
+              note: `오른쪽 수는 코드를 붙이는 요건 조항만 센 것입니다. 정의·적용범위·시험방법 ${(summary.clauses - summary.taggable).toLocaleString()}건에는 코드를 붙이지 않습니다${summary.taggedOutside > 0 ? `. 요건이 아닌데 코드가 붙은 조항이 ${summary.taggedOutside}건 따로 있습니다` : ''}`,
             },
             {
               label: '의미 검색 준비', value: summary.embedded, of: summary.embeddable,

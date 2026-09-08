@@ -48,7 +48,12 @@ async function loadStatus(): Promise<{ status: Status | null; error: string | nu
       select
         (select count(*)::int from public.standard where is_current)             as standards,
         (select count(*)::int from public.clause)                                as clauses,
-        (select count(distinct clause_id)::int from public.clause_tag)           as "clausesTagged",
+        -- 분자는 분모 안에서 센다 — 요건이 아닌 조항에 붙은 코드까지 세면
+        -- 6,400 / 6,392 처럼 100%를 넘는 값이 뜬다 (2026-09-09)
+        (select count(distinct t.clause_id)::int from public.clause_tag t
+          join public.clause c on c.id = t.clause_id
+          where c.clause_role = 'REQUIREMENT'
+            and length(btrim(c.body)) >= 15)                                      as "clausesTagged",
         -- 코드를 붙이는 대상은 요건 조항뿐이다 (v0.7 §5.3)
         (select count(*)::int from public.clause c
           join public.standard s on s.id = c.standard_id

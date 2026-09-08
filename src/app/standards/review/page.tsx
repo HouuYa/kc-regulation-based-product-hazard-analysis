@@ -3,7 +3,8 @@ import { getDb } from '@/lib/db';
 import { PageHead, ConnectionError, EmptyState } from '@/components/Panel';
 import { StatusBar } from '@/components/StatusBar';
 import { ActionForm } from '@/components/ActionForm';
-import { BoardPager, parseBoard, type BoardParams } from '@/components/Board';
+import { BoardPager, BoardTabs, parseBoard, type BoardParams } from '@/components/Board';
+import { GROUP_ORDER, standardName } from '@/lib/standards/label';
 import { loadCodebookSnapshot, codeLabelMap } from '@/lib/codebook/snapshot';
 import { reviewClause } from './actions';
 import { CLAUSE_REJECT_REASONS } from './reject-options';
@@ -50,6 +51,12 @@ interface ClauseRow {
   breadcrumb_path: string | null;
   body: string;
   standard_name: string | null;
+  /** 담당자는 자기 품목군만 맡는다 — 번호만으로는 남의 것인지 내 것인지도 모른다 */
+  item_group: string;
+  item_name: string | null;
+  title_ko: string | null;
+  /** 원인 코드가 「원인 미확인」뿐인가. 그렇다면 검수해도 얻을 것이 적다 */
+  only_unknown: boolean;
   evidence_span: string | null;
   codebook_version: string;
   tagging_version: string;
@@ -76,6 +83,38 @@ async function load(params: BoardParams) {
   const per = PER;
   const skip = (page - 1) * per;
   void offset;
+  const group = params.group ?? '';
+  const only = params.only ?? 'meaningful';
+
+  /*
+    줄 세우는 순서와 거르기 (2026-09-09, 배포 화면을 직접 열어 보고)
+
+    검수 화면을 실제로 열어 보니 첫 화면에 나온 것이 문서 표지의 영문 문구
+    ("Household and similar electrical appliances – Safety Part 2-13 …")였다.
+    `order by standard_id, order_index` 라 문서 순서대로 나오고, 그 앞머리는
+    거의 언제나 표지·머리말이다. 검수자가 처음 보는 열 건이 판단할 거리가 없는
+    것들이면 그 화면은 다시 열리지 않는다.
+
+    두 가지를 고친다.
+      1. 담당자는 자기 품목군만 맡는다. 대분류로 거를 수 있어야 한다.
+         (전기용품 3,394 · 어린이제품 1,773 · 생활용품 1,225)
+      2. 원인 코드가 「HF.UNKNOWN 원인 미확인」뿐인 조항이 6,400 중 절반이 넘는다.
+         그것을 확정해 봐야 분석에 보태는 것이 없다. 기본은 「판단할 거리가 있는 것」만
+         보이고, 나머지는 따로 골라 볼 수 있게 둔다 — 감추지는 않는다.
+  */
+  const meaningful = db`exists (
+    select 1 from public.clause_tag ct
+    where ct.clause_id = c.id and ct.axis = 'HF' and ct.code <> 'HF.UNKNOWN')`;
+
+  const where = db`
+    where s.is_current
+      and exists (
+        select 1 from public.clause_tag ct
+        where ct.clause_id = c.id and ct.review_status = 'auto_unreviewed')
+      ${group ? db`and s.item_group = ${group}` : db``}
+      ${only === 'meaningful' ? db`and ${meaningful}` : db``}
+      ${only === 'unknown' ? db`and not ${meaningful}` : db``}
+  `;
 
   // 검수 상태별 태그 수 — 담당자가 "얼마나 남았는가"를 먼저 본다
   const summaryQuery = db<Summary[]>`
@@ -99,6 +138,10 @@ async function load(params: BoardParams) {
     select
       c.id, c.marker, c.part, c.breadcrumb_path, c.body,
       s.display_name as standard_name,
+      s.item_group, s.item_name, s.title_ko,
+      not exists (select 1 from public.clause_tag ct
+                  where ct.clause_id = c.id and ct.axis = 'HF'
+                    and ct.code <> 'HF.UNKNOWN') as only_unknown,
       t.evidence_span, t.codebook_version, t.tagging_version,
       t.review_status, t.reviewed_by, t.reviewed_at::text,
       -- 코드 이름은 여기서 조인하지 않는다. 코드북 표는 판(version_id)별로 행이
@@ -112,7 +155,7 @@ async function load(params: BoardParams) {
        from public.clause_tag t2
        where t2.clause_id = c.id) as tags
     from public.clause c
-    join public.standard s on s.id = c.standard_id
+    join public.standard_view s on s.id = c.standard_id
     -- 조항의 대표 태그 하나에서 판번호·근거·상태를 읽는다. 같은 조항의 태그는
     -- 같은 실행에서 붙으므로 이 값들이 서로 다르지 않다
     join lateral (
@@ -121,18 +164,40 @@ async function load(params: BoardParams) {
       from public.clause_tag ct where ct.clause_id = c.id
       order by ct.id limit 1
     ) t on true
-    where s.is_current
-      and exists (
-        select 1 from public.clause_tag ct
-        where ct.clause_id = c.id and ct.review_status = 'auto_unreviewed')
-    order by c.standard_id, c.order_index
+    ${where}
+    -- 본문이 짧은 조각(표지·머리말·「제1부를 적용한다」류)은 판단할 거리가 적다.
+    -- 지우지는 않고 뒤로 민다.
+    order by (length(btrim(c.body)) < 40), c.standard_id, c.order_index
     limit ${per} offset ${skip}
   `;
 
-  const [[summary], rows, snapshot] = await Promise.all([
-    summaryQuery, rowsQuery, loadCodebookSnapshot({ includeUncommon: true }),
+  // 쪽 넘김은 「지금 걸러 본 것」의 수를 따라야 한다. 전체 수를 쓰면 빈 쪽이 생긴다
+  const filteredQuery = db<{ n: number }[]>`
+    select count(*)::int as n
+    from public.clause c
+    join public.standard_view s on s.id = c.standard_id
+    ${where}
+  `;
+
+  const groupQuery = db<{ item_group: string; n: number }[]>`
+    select s.item_group, count(distinct c.id)::int as n
+    from public.clause c
+    join public.standard_view s on s.id = c.standard_id
+    where s.is_current
+      and exists (select 1 from public.clause_tag ct
+                  where ct.clause_id = c.id and ct.review_status = 'auto_unreviewed')
+      and exists (select 1 from public.clause_tag ct
+                  where ct.clause_id = c.id and ct.axis = 'HF' and ct.code <> 'HF.UNKNOWN')
+    group by s.item_group
+  `;
+
+  const [[summary], rows, [filtered], groups, snapshot] = await Promise.all([
+    summaryQuery, rowsQuery, filteredQuery, groupQuery,
+    loadCodebookSnapshot({ includeUncommon: true }),
   ]);
   const labels = codeLabelMap(snapshot);
+  const groupCount = new Map<string, number>();
+  for (const g of groups) groupCount.set(g.item_group, g.n);
 
   return {
     summary,
@@ -140,7 +205,7 @@ async function load(params: BoardParams) {
       ...r,
       tags: (r.tags ?? []).map((t) => ({ ...t, label: labels.get(t.code) ?? null })),
     })),
-    page, per,
+    page, per, groupCount, only, filteredTotal: filtered.n,
   };
 }
 
@@ -202,6 +267,8 @@ export default async function ReviewPage({
             <span className="addr tnum text-ink">
               {data.summary.clausesUnreviewed.toLocaleString()}개
             </span>
+            이고, 아래 조건으로 걸러 본 것은{' '}
+            <span className="addr tnum text-ink">{data.filteredTotal.toLocaleString()}개</span>
             입니다.
           </p>
 
@@ -215,18 +282,66 @@ export default async function ReviewPage({
             반려한 코드는 지금도 검색에 쓰이지 않습니다.
           </div>
 
+          {/*
+            자기 품목군만 보게 한다 (담당자 지적, 2026-09-09)
+            "안전기준 담당자는 품목별로 나뉘어 있어 자기 품목군이 아니면 다른 품목에
+             대해선 일반인보다도 잘 모른다." 남의 품목을 검수하게 두면 안 된다.
+          */}
+          <BoardTabs
+            basePath="/standards/review"
+            params={params}
+            name="group"
+            options={[
+              { value: '', label: '전체' },
+              ...GROUP_ORDER.filter((g) => (data.groupCount.get(g) ?? 0) > 0).map((g) => ({
+                value: g,
+                label: `${g} ${(data.groupCount.get(g) ?? 0).toLocaleString()}`,
+              })),
+            ]}
+          />
+
+          <BoardTabs
+            basePath="/standards/review"
+            params={params}
+            name="only"
+            options={[
+              { value: 'meaningful', label: '판단할 거리가 있는 것' },
+              { value: 'unknown', label: '원인 미확인뿐인 것' },
+              { value: 'all', label: '전부' },
+            ]}
+          />
+          <p className="mt-1.5 text-[11px] leading-relaxed text-ink-3">
+            원인 코드가 <span className="addr">HF.UNKNOWN</span>(원인 미확인)뿐인 조항은
+            확정해도 분석에 보태는 것이 없어 기본 목록에서 뺐습니다. 미검수 조항 6,400개 중
+            절반이 넘습니다. 감춘 것이 아니라 뒤로 미룬 것이니, 가운데 단추로 따로 볼 수 있습니다.
+          </p>
+
           {data.rows.length === 0 ? (
             <div className="mt-8">
-              <EmptyState message="검수를 기다리는 조항이 없습니다. 새로 코드를 부여하면 이 목록에 나타납니다." />
+              <EmptyState message="이 조건에 맞는 조항이 없습니다. 위 단추로 조건을 넓혀 보세요." />
             </div>
           ) : (
             <section className="mt-8">
               {data.rows.map((c) => (
                 <article key={c.id} className="border-t border-rule py-5">
-                  <div className="addr text-[11px] text-ink-3">
-                    {c.standard_name ?? '기준 미상'}
-                    {c.part && ` · ${c.part}`}
-                    {c.breadcrumb_path && ` · ${c.breadcrumb_path}`}
+                  {/* 번호 옆에 대분류와 품목명 — 자기 품목이 아니면 번호는 아무 뜻도 아니다 */}
+                  <div className="flex flex-wrap items-baseline gap-x-2 text-[11px] text-ink-3">
+                    <span className="border border-rule px-1 text-[10px]">{c.item_group}</span>
+                    <span className="text-ink-2">
+                      {standardName({
+                        display_name: c.standard_name ?? '',
+                        item_name: c.item_name,
+                        title_ko: c.title_ko,
+                      }).name ?? '명칭 미상'}
+                    </span>
+                    <span className="addr">
+                      {c.standard_name ?? '기준 미상'}
+                      {c.part && ` · ${c.part}`}
+                      {c.breadcrumb_path && ` · ${c.breadcrumb_path}`}
+                    </span>
+                    {c.only_unknown && (
+                      <span className="text-caution">원인 미확인뿐 — 확정해도 분석에 쓰이지 않습니다</span>
+                    )}
                   </div>
                   <div className="mt-1 text-[14px] font-semibold">{c.marker}</div>
 
@@ -314,7 +429,7 @@ export default async function ReviewPage({
                   params={params}
                   page={data.page}
                   per={data.per}
-                  total={data.summary.clausesUnreviewed}
+                  total={data.filteredTotal}
                 />
               </div>
             </section>
