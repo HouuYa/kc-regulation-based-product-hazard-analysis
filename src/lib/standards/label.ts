@@ -69,8 +69,21 @@ export interface StandardNameSource {
   display_name: string;
   item_name?: string | null;
   title_ko?: string | null;
+  /** 품목표의 상위 품목. 예: 오디오·비디오 응용기기 */
+  items?: string[] | null;
+  /** 품목표의 세부품목. 예: 전기담요 및 매트, 전기침대 */
   sub_items?: string[] | null;
 }
+
+/*
+  이름으로 쓸 수 없는 상위 품목
+
+  품목표의 상위 품목은 대개 쓸 만한 이름이지만(「오디오·비디오 응용기기」),
+  전기용품 계열은 상당수가 「전기기기」 하나로 묶여 있어 이름이 되지 못한다.
+  그런 것은 세부품목으로 내려간다 — KC 60335-2-17 이 「전기담요 및 매트,
+  전기침대」로 불리는 것이 그 경우다.
+*/
+const GENERIC_ITEMS = new Set(['전기기기', '조명기기', '기타']);
 
 export interface StandardName {
   /** 화면에서 앞에 크게 내보내는 이름. 없으면 null */
@@ -78,7 +91,7 @@ export interface StandardName {
   /** 기준 번호 — 항상 함께 보인다 */
   no: string;
   /** 이름을 어디서 가져왔는가 */
-  from: 'item_name' | 'title_ko' | 'sub_items' | null;
+  from: 'item_name' | 'title_ko' | 'items' | 'sub_items' | null;
 }
 
 export function standardName(s: StandardNameSource): StandardName {
@@ -88,6 +101,19 @@ export function standardName(s: StandardNameSource): StandardName {
 
   const title = shortTitle(s.title_ko);
   if (title) return { name: title, no, from: 'title_ko' };
+
+  /*
+    상위 품목을 세부품목보다 먼저 본다 (2026-09-09)
+
+    전에는 세부품목만 봤는데, 세부품목이 많은 기준에서 이름이 엉뚱해졌다 —
+    KC 62368-1 은 세부품목이 75개라 가나다순 앞 둘을 잘라 「A/D 및 D/A 신호
+    변환기, A/V신호수신기」가 이름이 됐다. 그 기준의 상위 품목은
+    「오디오·비디오 응용기기 · 정보·통신·사무기기」로 훨씬 정확하다.
+  */
+  const items = (s.items ?? [])
+    .map((x) => x.trim())
+    .filter((x) => x && !GENERIC_ITEMS.has(x));
+  if (items.length > 0) return { name: items.slice(0, 2).join(', '), no, from: 'items' };
 
   const subs = (s.sub_items ?? []).map((x) => x.trim()).filter(Boolean);
   if (subs.length > 0) return { name: subs.slice(0, 2).join(', '), no, from: 'sub_items' };

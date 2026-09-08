@@ -39,6 +39,8 @@
     "recalls:analyze": "cross-env NODE_OPTIONS=--use-system-ca tsx scripts/analyze-recall.ts",
     "gpc:load": "cross-env NODE_OPTIONS=--use-system-ca tsx scripts/load-gpc.ts",
     "standards:gpc": "cross-env NODE_OPTIONS=--use-system-ca tsx scripts/tag-standards-gpc.ts",
+    "terms:gpc": "cross-env NODE_OPTIONS=--use-system-ca tsx scripts/assign-term-gpc.ts",
+    "standards:link-tests": "cross-env NODE_OPTIONS=--use-system-ca tsx scripts/link-test-methods.ts",
     "cause:build": "cross-env NODE_OPTIONS=--use-system-ca tsx scripts/build-cause-bridge.ts",
     "scope:suggest": "cross-env NODE_OPTIONS=--use-system-ca tsx scripts/suggest-scope.ts",
     "taxonomy:load": "cross-env NODE_OPTIONS=--use-system-ca tsx scripts/load-taxonomy.ts",

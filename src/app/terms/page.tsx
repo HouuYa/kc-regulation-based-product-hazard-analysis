@@ -43,6 +43,7 @@ interface StandardBrief {
   display_name: string;
   item_name: string | null;
   title_ko: string | null;
+  items: string[] | null;
   sub_items: string[] | null;
   item_group: string;
 }
@@ -60,6 +61,10 @@ interface TermRow {
   source: string | null;
   confidence: number | null;
   brick_code: string | null;
+  /** 배정을 돌렸는가, 어느 계위까지 좁혔는가 (061) */
+  gpc_level: string | null;
+  gpc_checked: string | null;
+  gpc_evidence: string | null;
   brick_title_ko: string | null;
   brick_title_en: string | null;
   class_title: string | null;
@@ -98,17 +103,21 @@ async function load(params: BoardParams) {
     having 1 = 1
       ${only === 'unreviewed' ? db`and count(*) filter (where t.review_status = 'auto_unreviewed') > 0` : db``}
       ${only === 'expert' ? db`and bool_or(t.source = 'EXPERT')` : db``}
-      ${only === 'no_gpc' ? db`and max(g.brick_code) is null` : db``}
+      ${only === 'no_gpc' ? db`and max(g.brick_code) is null and max(g.checked_at) is not null` : db``}
+      ${only === 'gpc_todo' ? db`and max(g.checked_at) is null and max(g.brick_code) is null` : db``}
       ${group ? db`and mode() within group (order by s.item_group) = ${group}` : db``}
   `;
 
   const [[summary], [{ total }], rows, stds] = await Promise.all([
-    db<{ terms: number; unreviewed: number; expert: number; withGpc: number }[]>`
+    db<{ terms: number; unreviewed: number; expert: number; withGpc: number; gpcTried: number }[]>`
       select
         (select count(*)::int from public.scope_term_view)                              as terms,
         (select count(*)::int from public.scope_term_view where unreviewed_count > 0)   as unreviewed,
         (select count(*)::int from public.scope_term_view where has_expert)             as expert,
-        (select count(*)::int from public.scope_term_view where brick_code is not null) as "withGpc"
+        (select count(*)::int from public.scope_term_view where brick_code is not null) as "withGpc",
+        (select count(distinct v.term_key)::int from public.scope_term_view v
+          join public.scope_term_gpc g on g.term_key = v.term_key
+          where g.brick_code is null and g.checked_at is not null)                 as "gpcTried"
     `,
     db<{ total: number }[]>`
       select count(*)::int as total from (
@@ -127,7 +136,8 @@ async function load(params: BoardParams) {
              count(*)::int as standard_count,
              jsonb_agg(jsonb_build_object(
                'id', s.id, 'display_name', s.display_name, 'item_name', s.item_name,
-               'title_ko', s.title_ko, 'sub_items', s.sub_items, 'item_group', s.item_group
+               'title_ko', s.title_ko, 'items', s.items, 'sub_items', s.sub_items,
+               'item_group', s.item_group
              ) order by s.display_name) as standards,
              bool_or(t.source = 'EXPERT') as has_expert,
              count(*) filter (where t.review_status = 'auto_unreviewed')::int as unreviewed_count,
@@ -136,6 +146,9 @@ async function load(params: BoardParams) {
              (array_agg(t.source   order by t.confidence desc nulls last))[1] as source,
              max(t.confidence)::float as confidence,
              max(g.brick_code) as brick_code,
+             max(g.verified_level) as gpc_level,
+             max(g.checked_at)::text as gpc_checked,
+             max(g.evidence) as gpc_evidence,
              max(gb.brick_title_ko)  as brick_title_ko,
              max(gb.brick_title_en)  as brick_title_en,
              max(coalesce(gb.class_title_ko,   gb.class_title_en))   as class_title,
@@ -192,6 +205,15 @@ const SOURCE_NOTE: Record<string, string> = {
   LLM: 'AI가 고른 대응입니다.',
 };
 
+/** GPC 계위 — 위에서 아래로 세그먼트 › 패밀리 › 클래스 › 브릭 */
+const GPC_LEVEL_LABEL: Record<string, string> = {
+  BRICK: '브릭(가장 아래)',
+  CLASS: '클래스',
+  FAMILY: '패밀리',
+  SEGMENT: '세그먼트(가장 위)',
+  NONE: '맞는 것이 없다는 판단',
+};
+
 const CASE_LABEL: Record<string, string> = {
   ACCIDENT: '사고보고서',
   RECALL_DOMESTIC: '국내 리콜',
@@ -243,7 +265,10 @@ export default async function TermsPage({
               { label: '등록된 품목', value: data.summary.terms },
               { label: '담당자 확정', value: data.summary.expert, of: data.summary.terms },
               { label: '검수 대기', value: data.summary.unreviewed, wantsZero: true },
-              { label: 'GPC 연결', value: data.summary.withGpc, of: data.summary.terms },
+              { label: 'GPC 연결', value: data.summary.withGpc, of: data.summary.terms,
+                note: data.summary.gpcTried > 0
+                  ? `${data.summary.gpcTried}종은 배정을 돌렸지만 브릭까지 좁히지 못했습니다 — GPC에 없는 것이 아니라 후보가 갈린 것입니다`
+                  : undefined },
             ]}
           />
 
@@ -314,7 +339,8 @@ export default async function TermsPage({
                 { value: '', label: '전체' },
                 { value: 'unreviewed', label: '검수 대기만' },
                 { value: 'expert', label: '담당자 확정만' },
-                { value: 'no_gpc', label: 'GPC 없는 것만' },
+                { value: 'no_gpc', label: 'GPC 못 좁힌 것만' },
+                { value: 'gpc_todo', label: 'GPC 아직 안 돌린 것만' },
               ],
             }]}
           />
@@ -424,16 +450,28 @@ export default async function TermsPage({
                             </div>
                           )}
                         </>
-                      ) : (
+                      ) : r.gpc_checked ? (
                         /*
-                          "종아리마사지기가 GPC에 없다는 것이 이상한데, 자동 분류가
-                          이상한 것 아니냐"는 지적을 받고 확인한 결과, 분류기가 틀린
-                          것이 아니라 아직 돌린 적이 없었다. GPC는 담당자 엑셀에 있던
-                          33종에만 붙어 있다. 없는 것과 안 한 것은 다르므로 그대로 적는다.
+                          돌렸는데 브릭까지 못 좁힌 경우 (061)
+
+                          "종아리마사지기가 GPC에 없다는 것이 이상하다"는 지적에서 시작해
+                          배정을 실제로 돌렸다. 그런데 브릭까지 좁히지 못한 것도 나온다.
+                          그것을 「아직 안 함」이라고 적으면 처음과 똑같은 잘못을 반복하는
+                          것이다. 어디까지 좁혔는지, 왜 멈췄는지 그대로 적는다.
                         */
                         <span>
-                          GPC 아직 배정 안 함 — 지금 GPC가 붙은 것은 담당자 엑셀에 코드가 적혀
-                          있던 품목뿐입니다. AI가 찾아낸 품목에는 아직 배정을 돌린 적이 없습니다.
+                          GPC 배정을 돌렸지만{' '}
+                          <span className="text-ink-2">
+                            {GPC_LEVEL_LABEL[r.gpc_level ?? 'NONE'] ?? r.gpc_level}
+                          </span>
+                          까지만 좁혔습니다.
+                          {r.gpc_evidence && (
+                            <span className="text-ink-3"> {r.gpc_evidence.slice(0, 160)}</span>
+                          )}
+                        </span>
+                      ) : (
+                        <span>
+                          GPC 아직 배정 안 함 — 배정을 돌린 적이 없는 품목입니다.
                           <span className="text-ink-2"> GPC에 이 품목이 없다는 뜻이 아닙니다.</span>
                         </span>
                       )}

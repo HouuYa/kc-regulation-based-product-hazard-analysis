@@ -52,7 +52,8 @@ interface StandardRow {
   /** 인증구분 — 대분류와 별개의 축이다(058). 기준 하나가 여러 구분에 걸릴 수 있다 */
   cert_types: string[] | null;
   cert_type_source: string | null;
-  /** 이 기준이 걸리는 세부품목. 미검수분이 섞여 있어 화면에서 그렇게 밝힌다 */
+  /** 품목표의 상위 품목·세부품목. 미검수분이 섞여 있어 화면에서 그렇게 밝힌다 */
+  items: string[] | null;
   sub_items: string[] | null;
   /** 품목→기준 대응 건수와 그중 확정된 건수 */
   link_count: number;
@@ -61,6 +62,8 @@ interface StandardRow {
   tagged: number;
   embedded: number;
   test_links: number;
+  /** 이 기준에 따로 있는 시험 조항 수. 연결이 왜 없는지 가르는 열쇠다 */
+  test_clauses: number;
   unresolved: number;
   conditions: number;
 }
@@ -159,7 +162,7 @@ export default async function StandardsPage() {
       select
         s.id, s.display_name, s.title_ko, s.cert_scheme, s.item_name, s.total_pages,
         s.item_group, s.item_group_source, s.cert_types, s.cert_type_source,
-        s.sub_items, s.link_count, s.approved_count,
+        s.items, s.sub_items, s.link_count, s.approved_count,
         count(c.id)::int as clauses,
         count(*) filter (where exists (
           select 1 from public.clause_tag t where t.clause_id = c.id))::int as tagged,
@@ -168,6 +171,8 @@ export default async function StandardsPage() {
           join public.clause fc on fc.id = l.from_clause_id
           where fc.standard_id = s.id and l.link_type = 'TEST_METHOD'
             and l.to_clause_id is not null) as test_links,
+        (select count(*)::int from public.clause c3
+          where c3.standard_id = s.id and c3.clause_role = 'TEST_METHOD') as test_clauses,
         (select count(*)::int from public.clause_link l
           join public.clause fc on fc.id = l.from_clause_id
           where fc.standard_id = s.id and l.to_clause_id is null) as unresolved,
@@ -179,7 +184,7 @@ export default async function StandardsPage() {
       where s.is_current
       group by s.id, s.display_name, s.title_ko, s.cert_scheme, s.item_name,
                s.total_pages, s.item_group, s.item_group_source, s.cert_types,
-               s.cert_type_source, s.sub_items, s.link_count, s.approved_count
+               s.cert_type_source, s.items, s.sub_items, s.link_count, s.approved_count
     `;
 
     // 두 조회는 서로의 결과를 쓰지 않는다. 함께 보내면 느린 쪽만큼만 기다린다(§4.1)
@@ -410,7 +415,7 @@ export default async function StandardsPage() {
                             </span>
                           )}
                           <span className="addr text-[12px] text-ink-2">{r.display_name}</span>
-                          {from === 'sub_items' && (
+                          {(from === 'sub_items' || from === 'items') && (
                             <span className="text-[10px] text-caution">품목표에서 따옴 · 검수 전</span>
                           )}
                         </div>
@@ -471,8 +476,23 @@ export default async function StandardsPage() {
                       <div className="mt-1.5 text-[11px] leading-snug text-caution">
                         {r.tagged === 0 &&
                           '위해요인 코드가 없어 코드로 찾는 방식이 작동하지 않습니다. 뜻이 비슷한 문장을 찾는 방식만 남습니다. '}
-                        {r.test_links === 0 &&
-                          '시험방법 연결이 없습니다. 관련 조항은 찾을 수 있지만 어떤 시험을 의뢰해야 하는지까지는 알려 드리지 못합니다.'}
+                        {/*
+                          「연결이 없다」를 한 문장으로 뭉뚱그리면 안 된다 (2026-09-09)
+
+                          KC 60335 계열은 요건과 시험을 한 조항 안에 함께 적는다
+                          (「…을 초과하여서는 안 된다. 제어장치를 단락하여 시험한다」).
+                          그런 기준에 「어떤 시험을 의뢰해야 하는지 알려 드리지 못합니다」라고
+                          적으면 사실과 다르다 — 조항 자체에 시험이 적혀 있다.
+                          이을 짝이 없는 것과, 짝이 있는데 못 이은 것은 다르다.
+                        */}
+                        {r.test_links === 0 && r.test_clauses < 3 && (
+                          <span className="text-ink-3">
+                            이 기준은 요건과 시험을 한 조항에 함께 적습니다. 따로 이을 시험 조항이
+                            없으니 조항 본문을 그대로 보시면 됩니다.
+                          </span>
+                        )}
+                        {r.test_links === 0 && r.test_clauses >= 3 &&
+                          `시험 조항이 ${r.test_clauses}개 있는데 요건과 이어지지 않았습니다. 관련 조항은 찾을 수 있지만 어떤 시험을 의뢰해야 하는지까지는 알려 드리지 못합니다.`}
                       </div>
                     )}
                   </Row>

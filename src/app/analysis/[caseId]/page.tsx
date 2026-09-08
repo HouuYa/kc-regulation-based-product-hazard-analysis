@@ -177,9 +177,9 @@ async function load(caseId: number) {
   const standards = standardIds.length
     ? await db<{
         display_name: string; item_name: string | null; title_ko: string | null;
-        sub_items: string[] | null; relation: string | null;
+        items: string[] | null; sub_items: string[] | null; relation: string | null;
       }[]>`
-        select s.display_name, s.item_name, s.title_ko, s.sub_items,
+        select s.display_name, s.item_name, s.title_ko, s.items, s.sub_items,
                (select a.relation from public.standard_applicability a
                 where a.standard_id = s.id and a.product_scope_id = ${ev.product_scope_id}
                 limit 1) as relation
