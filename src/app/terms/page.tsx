@@ -178,6 +178,33 @@ async function load(params: BoardParams) {
     사고조사 보고서」). 그런데 화면이 출처를 안 보여 주니 오류처럼 보인다.
     원본으로 가는 길을 놓으면 담당자가 1분 만에 판단할 수 있다.
   */
+  /*
+    브릭이 붙었으면 「그래서 국내에서 무엇인가」까지 보여 준다 (K-GPC, 2026-09-09)
+
+    담당자가 알고 싶은 것은 「10002225」가 아니라 「이건 어린이제품이고 안전확인
+    대상인가」다. 표준 제품분류체계는 브릭에 속성(사용 연령·재질)을 더해 그것을
+    정하는 체계이고, 그 대응표를 우리가 이미 갖고 있다(product_taxonomy).
+    갈래가 여럿이면 좁히지 않고 모두 보여 준다 — 좁히는 것은 사람의 일이다.
+  */
+  interface DomesticRow {
+    brick_code: string; item_group: string; cert_scheme: string; item: string;
+  }
+  const bricks = [...new Set(rows.map((r) => r.brick_code).filter((b): b is string => !!b))];
+  const domesticRows: DomesticRow[] = bricks.length === 0 ? [] : await db<DomesticRow[]>`
+    select distinct brick_code, item_group, cert_scheme, item
+    from public.product_taxonomy
+    where brick_code = any(${bricks}::text[])
+      and nullif(btrim(item_group), '') is not null
+      and nullif(btrim(cert_scheme), '') is not null
+    order by brick_code, item_group, cert_scheme, item
+  `;
+  const domesticByBrick = new Map<string, DomesticRow[]>();
+  for (const d of domesticRows) {
+    const list = domesticByBrick.get(d.brick_code) ?? [];
+    list.push(d);
+    domesticByBrick.set(d.brick_code, list);
+  }
+
   const keys = rows.map((r) => r.term_key);
   const cases = keys.length === 0 ? [] : await db<SourceCase[]>`
     select public.scope_term_key(item_name) as term_key, id, title, item_name, source_type
@@ -195,7 +222,7 @@ async function load(params: BoardParams) {
   return {
     summary, rows, total, page, per,
     standards: stds.map((s) => s.display_name),
-    caseByTerm,
+    caseByTerm, domesticByBrick,
   };
 }
 
@@ -449,6 +476,35 @@ export default async function TermsPage({
                               ].filter(Boolean).join(' › ')}
                             </div>
                           )}
+                          {(() => {
+                            const routes = data.domesticByBrick.get(r.brick_code ?? '') ?? [];
+                            if (routes.length === 0) {
+                              return (
+                                <div className="mt-0.5">
+                                  이 브릭은 담당자 품목표에 없습니다 — 안전관리 대상이 아니라는
+                                  뜻이 아니라, 우리가 가진 대응표에 아직 없다는 뜻입니다.
+                                </div>
+                              );
+                            }
+                            const certs = new Set(routes.map((x) => x.cert_scheme));
+                            return (
+                              <div className="mt-1">
+                                <span className="text-ink-3">국내에서는 </span>
+                                {[...new Map(routes.map((x) =>
+                                  [`${x.item_group}/${x.cert_scheme}`, x])).values()].map((x, i) => (
+                                  <span key={`${x.item_group}-${x.cert_scheme}`}>
+                                    {i > 0 && <span className="text-ink-3"> · </span>}
+                                    <span className="text-ink-2">{x.item_group} {x.cert_scheme}</span>
+                                  </span>
+                                ))}
+                                {certs.size > 1 && (
+                                  <span className="text-caution">
+                                    {' '}— 사용 연령·재질에 따라 갈립니다. 담당자가 확정해야 합니다
+                                  </span>
+                                )}
+                              </div>
+                            );
+                          })()}
                         </>
                       ) : r.gpc_checked ? (
                         /*

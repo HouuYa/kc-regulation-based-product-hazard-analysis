@@ -18,7 +18,9 @@
  * 실제로 null 이 나올 수 없다).
  */
 
-import { findGpcCandidates, DEFAULT_GPC_CANDIDATE_COUNT, type GpcCandidate } from './lookup';
+import {
+  findGpcCandidatesWithQuery, DEFAULT_GPC_CANDIDATE_COUNT, type GpcCandidate,
+} from './lookup';
 import { verifyGpcMatch, type GpcVerification } from './verify';
 
 export { DEFAULT_GPC_CANDIDATE_COUNT };
@@ -26,6 +28,14 @@ export { DEFAULT_GPC_CANDIDATE_COUNT };
 export interface GpcAssignment {
   candidates: GpcCandidate[];
   verification: GpcVerification;
+  /**
+   * 벡터 색인에 실제로 보낸 질의문.
+   *
+   * 협회 워크플로의 `search_strategy_description` 이 말로 적던 「무엇으로
+   * 검색했는가」를 자료로 남기는 자리다. 모델이 적은 설명은 틀릴 수 있지만
+   * 우리가 보낸 질의문은 사실이다 — 검수자가 되짚을 수 있어야 한다.
+   */
+  queryText: string;
 }
 
 const NO_CANDIDATES_VERIFICATION: GpcVerification = {
@@ -54,13 +64,14 @@ export async function findAndVerifyGpc(
   /** 무엇에 붙이는 것인가. AI 호출 기록에 함께 남긴다(054) */
   target: { caseId?: number | null; standardId?: number | null } = {},
 ): Promise<GpcAssignment> {
-  const candidates = await findGpcCandidates(productName, productContext, candidateCount);
+  const { candidates, queryText } =
+    await findGpcCandidatesWithQuery(productName, productContext, candidateCount);
   if (candidates.length === 0) {
-    return { candidates: [], verification: NO_CANDIDATES_VERIFICATION };
+    return { candidates: [], verification: NO_CANDIDATES_VERIFICATION, queryText };
   }
 
   const verification = await verifyGpcMatch(productContext, candidates, target);
   // candidates.length > 0 이므로 verifyGpcMatch() 는 여기서 null 을 반환하지 않는다
   // (그 함수의 null 분기는 candidates.length === 0 일 때뿐이다 — verify.ts 참고).
-  return { candidates, verification: verification ?? NO_CANDIDATES_VERIFICATION };
+  return { candidates, verification: verification ?? NO_CANDIDATES_VERIFICATION, queryText };
 }

@@ -34,7 +34,7 @@
  */
 
 import { getDb, closeDb } from '../src/lib/db';
-import { findAndVerifyGpc } from '../src/lib/gpc/assign';
+import { classifyProduct } from '../src/lib/gpc/classify';
 
 interface TermRow {
   term_key: string;
@@ -94,7 +94,19 @@ async function main() {
     ].filter(Boolean).join('\n');
 
     try {
-      const { verification } = await findAndVerifyGpc(r.term, context);
+      /*
+        공통 진입점을 쓴다 (2026-09-09).
+        전에는 조회+검증만 공유하고 「무엇으로 찾았는지」는 아무 데도 안 남았다.
+        classifyProduct() 는 질의문·후보·국내 안전관리 갈래까지 함께 처리하고
+        판정 이력을 gpc_assignment 에 남긴다 — 배치가 저장 코드를 따로 쓰지 않는다.
+      */
+      const { verification } = await classifyProduct({
+        name: r.term,
+        context,
+        subject: { type: 'TERM', key: r.term_key, label: r.term },
+        // 품목 사전은 코드만 필요하다. 국내 갈래는 화면이 브릭으로 그때그때 되짚는다
+        skipDomestic: true,
+      });
       const level = verification.level ?? 'NONE';
       tally[level] = (tally[level] ?? 0) + 1;
 

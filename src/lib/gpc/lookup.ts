@@ -96,9 +96,28 @@ export async function findGpcCandidates(
   productDescription?: string,
   matchCount = 5,
 ): Promise<GpcCandidate[]> {
+  return (await findGpcCandidatesWithQuery(productName, productDescription, matchCount)).candidates;
+}
+
+/**
+ * 후보와 함께 **무엇으로 찾았는지**(질의문)도 돌려준다.
+ *
+ * 협회 n8n 워크플로(「(GS1) [한국리콜__OECD] OECD GPC RAG」)는 판정 결과에
+ * `search_strategy_description` 이라는 칸을 두고 "무엇으로 검색해서 어떤 후보가
+ * 나왔고 왜 그것을 골랐는지"를 말로 적게 한다. 우리는 「왜 골랐는지」(reasoning)만
+ * 남기고 있었다 — 검수하는 사람이 "그럼 뭘로 찾은 건데"를 되짚을 수 없었다.
+ *
+ * 말로 적게 하는 대신 실제 질의문과 실제 후보 목록을 자료로 남긴다. 모델이 적은
+ * 설명은 틀릴 수 있지만 우리가 보낸 질의문은 사실이기 때문이다.
+ */
+export async function findGpcCandidatesWithQuery(
+  productName: string,
+  productDescription?: string,
+  matchCount = 5,
+): Promise<{ candidates: GpcCandidate[]; queryText: string }> {
   const cfg = gpcConfig();
   const inputText = `${productName}: ${productDescription ?? ''}`.trim();
-  if (!inputText) return [];
+  if (!inputText) return { candidates: [], queryText: '' };
 
   const embedding = await embedForGpc(inputText);
 
@@ -117,7 +136,7 @@ export async function findGpcCandidates(
     throw new Error(`GPC 후보 조회 실패: ${JSON.stringify(rows)}`);
   }
 
-  return rows.map((r, i) => {
+  const candidates = rows.map((r, i) => {
     const c = JSON.parse(r.content) as RawContent;
     return {
       rank: i + 1,
@@ -132,6 +151,8 @@ export async function findGpcCandidates(
       similarity: r.similarity,
     };
   });
+
+  return { candidates, queryText: inputText };
 }
 
 /** 가장 가까운 브릭 하나만 필요할 때 */
