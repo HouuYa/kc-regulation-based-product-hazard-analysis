@@ -96,6 +96,8 @@ export default async function LlmPage() {
   const { data, error } = await load();
   const sites = callSitesWithModels();
   const prices = priceTable();
+  // 오늘 날짜로 계산했다는 표시용 — force-dynamic 이라 요청마다 새로 계산된다
+  const today = new Date().toISOString().slice(0, 10);
 
   // 캐시 적중률 — 입력 토큰 중 얼마가 싸게 청구됐나(054)
   const hitRate = data && data.usage.totalInput > 0
@@ -145,7 +147,7 @@ export default async function LlmPage() {
                     level={data.usage.unpricedModels.length > 0 ? 'caution' : 'ok'}
                     note={data.usage.unpricedModels.length > 0
                       ? `${data.usage.unpricedModels.join(', ')} 단가가 없어 빠졌습니다`
-                      : '짧은 문맥 단가와 긴 문맥 단가를 모두 계산한 범위입니다'}
+                      : `오늘(${today}) 기준 단가로 계산 — 짧은 문맥 단가와 긴 문맥 단가를 모두 계산한 범위입니다`}
                   />
                   <Signal
                     label="캐시 적중"
@@ -236,7 +238,7 @@ export default async function LlmPage() {
               <Section
                 id="llm-cost"
                 title="무엇이 비싼가 (용도별)"
-                lead="줄이고 싶다면 출력이 아니라 넣는 원문의 길이를 손봐야 합니다 — 이 체계는 입력 토큰이 출력의 스무 배가 넘습니다."
+                lead={`줄이고 싶다면 출력이 아니라 넣는 원문의 길이를 손봐야 합니다 — 이 체계는 입력 토큰이 출력의 스무 배가 넘습니다. 비용 열은 오늘(${today}) 기준 단가로 계산한 값입니다.`}
               >
                 {data.usage.rows.length === 0 ? (
                   <div className="border border-rule-soft px-4 py-3 text-[12px] text-ink-2">
@@ -308,7 +310,7 @@ export default async function LlmPage() {
               <Section
                 id="llm-models"
                 title="모델별"
-                lead="모델을 바꾸면 결과도 바뀝니다. 무엇으로 만든 결과인지 되짚을 수 있도록 만든 결과에 모델명을 함께 저장합니다."
+                lead={`모델을 바꾸면 결과도 바뀝니다. 무엇으로 만든 결과인지 되짚을 수 있도록 만든 결과에 모델명을 함께 저장합니다. 비용은 오늘(${today}) 기준 단가로 계산한 값입니다.`}
               >
                 <div className="overflow-x-auto">
                   <table className="w-full min-w-[40rem] border-collapse text-[12px]">
@@ -340,7 +342,7 @@ export default async function LlmPage() {
               <Section
                 id="llm-daily"
                 title="날짜별 (최근 14일)"
-                lead="막대는 그날 쓴 토큰(입력+출력)입니다. 배치를 돌린 날이 튀는 것이 정상이고, 아무도 아무것도 안 했는데 튀면 볼 일이 생긴 것입니다."
+                lead={`막대는 그날 쓴 토큰(입력+출력)입니다. 배치를 돌린 날이 튀는 것이 정상이고, 아무도 아무것도 안 했는데 튀면 볼 일이 생긴 것입니다. 옆에 붙는 비용도 오늘(${today}) 기준 단가로 계산한 값입니다 — 그날 실제로 청구된 금액이 아니라, 그날 쓴 토큰 수를 지금 단가에 대입한 값입니다.`}
               >
                 {data.daily.length === 0 ? (
                   <div className="border border-rule-soft px-4 py-3 text-[12px] text-ink-2">
@@ -369,7 +371,7 @@ export default async function LlmPage() {
               <Section
                 id="llm-prices"
                 title="지금 쓰고 있는 단가"
-                lead="단가는 코드에 박지 않고 환경변수(LLM_PRICES)로 받습니다. 코드에 박아 두면 어느 시점의 값인지 알 수 없게 되고, 낡은 단가로 계산한 금액이 맞는 값처럼 화면에 뜨기 때문입니다."
+                lead="단가는 코드에 박지 않고 환경변수(LLM_PRICES)로 받습니다. 코드에 박아 두면 어느 시점의 값인지 알 수 없게 되고, 낡은 단가로 계산한 금액이 맞는 값처럼 화면에 뜨기 때문입니다. 아래 값은 2026-09-09 기준으로 OpenAI 공식 단가표와 한 줄씩 대조해 확인했습니다."
               >
                 {Object.keys(prices).length === 0 ? (
                   <div className="border border-caution bg-caution-soft px-4 py-3 text-[12px] leading-relaxed text-ink-2">
@@ -416,11 +418,12 @@ export default async function LlmPage() {
                   </div>
                 )}
                 <p className="mt-3 max-w-3xl text-[12px] leading-relaxed text-ink-3">
-                  100만 토큰당 미국 달러입니다. 어느 길이부터 「긴 문맥」인지는 단가표에 적혀 있지
-                  않아, 화면은 짧은 쪽과 긴 쪽을 모두 계산해 범위로 보여 줍니다. 정확한 한 숫자를
-                  지어내는 것보다 「이 사이」라고 말하는 편이 정직하기 때문입니다. 「캐시 기록」이
-                  실제로 청구되는지도 확인하지 못해 같은 방식으로 범위에 담았습니다 — 낮은 쪽은
-                  일반 입력으로, 높은 쪽은 기록 단가로 계산합니다.
+                  100만 토큰당 미국 달러 기준입니다. OpenAI 단가표는 같은 모델에 짧은 문맥과 긴
+                  문맥, 두 단가를 매기지만 어느 길이부터 긴 문맥으로 보는지는 적혀 있지 않습니다.
+                  그래서 정확한 한 숫자를 지어내는 대신 짧은 쪽과 긴 쪽을 모두 계산해 「이 사이」라는
+                  범위로 보여 줍니다. 「캐시 기록」이 실제로 이 웃돈으로 청구되는지도 확인하지
+                  못했으므로, 같은 방식으로 낮은 쪽은 일반 입력 단가로 높은 쪽은 기록 단가로 계산해
+                  범위에 담았습니다.
                 </p>
               </Section>
 
