@@ -11,14 +11,20 @@
  *   어디에 어떤 모양으로 남길지)는 여전히 각자였다. 그래서 「AI 가 품목분류를 어떻게
  *   붙이고 있나」를 한 번에 볼 수 없었고, 새 호출부를 붙일 때마다 같은 조립을 다시 썼다.
  *
- * 이 함수가 하는 다섯 걸음
+ * 이 함수가 하는 여섯 걸음
+ *   0. 이미 신고된 코드가 있으면 그것을 읽고 끝낸다 — AI 를 부르지 않는다  from-registered.ts
  *   1. (사진이 있으면) 사진을 읽어 제품 서술을 얻는다        describe-image.ts
  *   2. 벡터 색인에서 후보를 가져온다 — 질의문을 함께 돌려받는다  lookup.ts
  *   3. 계위를 한 단계씩 내려가며 판정한다                     verify.ts
  *   4. 브릭이 붙었으면 국내 안전관리 갈래로 되짚는다           domestic.ts
  *   5. 무엇으로 찾아 무엇을 골랐는지 이력에 남긴다             gpc_assignment(064)
  *
- * 4번이 이번에 보탠 것이다
+ * 0번은 담당자 지적으로 보탰다 (065)
+ *   "OECD 포털이 보내는 코드는 각 나라들이 등록할 때 사용하는 코드로 신빙성이
+ *   매우 높습니다." 신고된 값을 놔두고 우리가 추정할 이유가 없다. 등록국은 자기
+ *   리콜을 조사한 쪽이고, 우리는 제품명 몇 글자로 짐작하는 쪽이다.
+ *
+ * 4번도 이번에 보탠 것이다
  *   협회 워크플로는 GPC 코드에서 끝난다. 우리는 그 코드가 **국내에서 무엇을
  *   뜻하는지**까지 간다 — 표준 제품분류체계(K-GPC)는 브릭에 속성을 더해
  *   대분류·인증구분·법정 품목을 정하는 체계이고, 그 대응표를 우리가 이미 갖고 있다.
@@ -34,6 +40,8 @@ import { findAndVerifyGpc, DEFAULT_GPC_CANDIDATE_COUNT } from './assign';
 import { lookupDomestic, type DomesticLookup } from './domestic';
 import { describeProductImages, type ProductImage, type ProductImageDescription } from './describe-image';
 import { recordGpcAssignment, type GpcSubject } from './record';
+import { verificationFromRegistered, type RegisteredCodes } from './from-registered';
+import type { GpcSource } from './provenance';
 import type { GpcCandidate } from './lookup';
 import type { GpcVerification } from './verify';
 
@@ -50,12 +58,24 @@ export interface ClassifyInput {
   candidateCount?: number;
   /** 국내 안전관리 되짚기를 건너뛸 때. 기본은 한다 */
   skipDomestic?: boolean;
+  /**
+   * 이미 신고된 코드가 있으면 여기에 준다 — 있으면 AI 를 부르지 않는다.
+   *
+   * 담당자 지적(2026-09-09): "OECD 포털이 보내는 코드는 각 나라들이 등록할 때
+   * 사용하는 코드로 신빙성이 매우 높습니다." 신고된 값을 놔두고 우리가 추정할
+   * 이유가 없다. 값도 시간도 아끼고, 무엇보다 더 나은 답이다.
+   */
+  registered?: RegisteredCodes | null;
+  /** registered 를 쓸 때 그 출처. 기본은 우리 판정(OUR_AI) */
+  source?: GpcSource;
 }
 
 export interface ClassifyResult {
   verification: GpcVerification;
   candidates: GpcCandidate[];
   queryText: string;
+  /** 이 판정이 어디서 왔는가 */
+  source: GpcSource;
   /** 브릭이 붙고 되짚기를 했을 때만 있다 */
   domestic: DomesticLookup | null;
   /** 사진을 읽었을 때만 있다 */
@@ -64,6 +84,52 @@ export interface ClassifyResult {
 
 export async function classifyProduct(input: ClassifyInput): Promise<ClassifyResult> {
   const candidateCount = input.candidateCount ?? DEFAULT_GPC_CANDIDATE_COUNT;
+
+  /*
+    0. 신고된 코드가 있으면 거기서 끝난다 (065)
+
+    등록국이 자기 리콜을 OECD 포털에 올리며 직접 고른 코드다 — 제품을 실제로
+    조사한 쪽이 붙인 값이라 우리 임베딩+LLM 추정보다 낫다. AI 를 부르지 않으므로
+    후보 목록도 질의문도 없고, 이력에는 「신고된 코드를 읽었다」로 남는다.
+
+    카탈로그에서 코드를 못 찾으면(다른 판일 수 있다) null 이 돌아온다. 그때는
+    아래의 평소 경로로 내려가 우리가 붙인다 — 신고 코드가 있다는 이유로 아무것도
+    못 붙인 채 끝내지 않는다.
+  */
+  const registeredSource = input.source ?? 'OUR_AI';
+  if (input.registered && registeredSource !== 'OUR_AI') {
+    const fromRegistered = await verificationFromRegistered(input.registered, registeredSource);
+    if (fromRegistered && fromRegistered.level !== 'NONE') {
+      let domesticFromRegistered: DomesticLookup | null = null;
+      if (!input.skipDomestic && fromRegistered.brickCode) {
+        try {
+          domesticFromRegistered = await lookupDomestic(fromRegistered.brickCode);
+        } catch (e) {
+          console.error('국내 안전관리 되짚기 실패:', e);
+        }
+      }
+      try {
+        await recordGpcAssignment({
+          subject: input.subject,
+          queryText: '',
+          candidates: [],
+          verification: fromRegistered,
+          source: registeredSource,
+          publication: input.registered.publication ?? null,
+        });
+      } catch (e) {
+        console.error('품목분류 이력 기록 실패:', e);
+      }
+      return {
+        verification: fromRegistered,
+        candidates: [],
+        queryText: '',
+        source: registeredSource,
+        domestic: domesticFromRegistered,
+        imageReading: null,
+      };
+    }
+  }
 
   // 1. 사진이 있으면 먼저 읽는다. 공고의 짧은 제품명(「의자」)만으로는
   //    벡터 색인이 엉뚱한 브릭을 물어 오기 때문이다.
@@ -116,10 +182,11 @@ export async function classifyProduct(input: ClassifyInput): Promise<ClassifyRes
       candidates,
       verification,
       imageReading,
+      source: 'OUR_AI',
     });
   } catch (e) {
     console.error('품목분류 이력 기록 실패:', e);
   }
 
-  return { verification, candidates, queryText, domestic, imageReading };
+  return { verification, candidates, queryText, source: 'OUR_AI', domestic, imageReading };
 }

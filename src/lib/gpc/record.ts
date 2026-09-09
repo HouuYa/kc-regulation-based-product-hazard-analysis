@@ -18,6 +18,7 @@ import { getDb } from '../db';
 import type { GpcCandidate } from './lookup';
 import type { GpcVerification } from './verify';
 import type { ProductImageDescription } from './describe-image';
+import type { GpcSource } from './provenance';
 
 export interface GpcSubject {
   /** TERM=품목 용어, STANDARD=안전기준, CASE=사고·리콜, ADHOC=API 로 한 번 물어본 것 */
@@ -34,6 +35,10 @@ export async function recordGpcAssignment(args: {
   candidates: GpcCandidate[];
   verification: GpcVerification;
   imageReading?: ProductImageDescription | null;
+  /** 이 판정이 어디서 왔는가. 신고된 코드를 읽은 것이면 query_text 가 비어 있다(065) */
+  source?: GpcSource;
+  /** 신고서가 밝힌 GPC 판 */
+  publication?: string | null;
 }): Promise<void> {
   const db = getDb();
   const v = args.verification;
@@ -43,14 +48,15 @@ export async function recordGpcAssignment(args: {
       (subject_type, subject_key, subject_label, query_text, candidates,
        level, brick_code, brick_title, class_code, class_title,
        family_code, family_title, segment_code, segment_title,
-       confidence, reasoning, model, image_reading)
+       confidence, reasoning, model, image_reading, source, publication)
     values (
       ${args.subject.type}, ${args.subject.key}, ${args.subject.label ?? null},
       ${args.queryText}, ${db.json(args.candidates as never)},
       ${v.level}, ${v.brickCode}, ${v.brickTitle}, ${v.classCode}, ${v.classTitle},
       ${v.familyCode}, ${v.familyTitle}, ${v.segmentCode}, ${v.segmentTitle},
       ${v.confidenceScore}, ${v.reasoning}, ${v.model},
-      ${args.imageReading ? db.json(args.imageReading as never) : null}
+      ${args.imageReading ? db.json(args.imageReading as never) : null},
+      ${args.source ?? 'OUR_AI'}, ${args.publication ?? null}
     )
   `;
 }

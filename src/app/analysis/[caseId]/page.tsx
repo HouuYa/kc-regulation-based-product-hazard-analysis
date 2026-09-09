@@ -9,6 +9,7 @@ import type { GpcCandidate } from '@/lib/gpc/lookup';
 import type { GpcMatchLevel } from '@/lib/gpc/verify';
 import { estimateCauses, type CauseCandidate } from '@/lib/codebook/cause-bridge';
 import { standardName, shortTitle } from '@/lib/standards/label';
+import { GPC_SOURCE_LABEL, GPC_SOURCE_NOTE, needsReview, type GpcSource } from '@/lib/gpc/provenance';
 import { withEstimatedCauses } from '@/lib/search/estimate-cause';
 import { searchCandidates, type Candidate as SearchCandidate } from '@/lib/search/match';
 import { loadCaseInput, defaultMatchConfig } from '@/lib/search/run';
@@ -105,6 +106,8 @@ interface CaseEventRow {
   scope_name: string | null;
   child_product_check: string; child_product_note: string | null;
   gpc_brick_code: string | null; gpc_candidates: GpcCandidate[] | null;
+  /** 이 코드가 어디서 왔나 (065) — EXPERT · OECD · SOURCE_AI · OUR_AI */
+  gpc_source: string | null;
   gpc_verified_level: GpcMatchLevel | null;
   gpc_verified_segment_code: string | null; gpc_verified_segment_title: string | null;
   gpc_verified_family_code: string | null; gpc_verified_family_title: string | null;
@@ -150,7 +153,7 @@ async function load(caseId: number) {
            e.product_scope_id, e.scope_evidence, e.basis_date::text,
            e.child_product_check, e.child_product_note,
            ps.name as scope_name,
-           e.gpc_brick_code, e.gpc_candidates,
+           e.gpc_brick_code, e.gpc_candidates, e.gpc_source,
            e.gpc_verified_level,
            e.gpc_verified_segment_code, e.gpc_verified_segment_title,
            e.gpc_verified_family_code, e.gpc_verified_family_title,
@@ -831,6 +834,30 @@ export default async function AnalysisPage({
             <div className="grid gap-4 sm:grid-cols-[10rem_1fr]">
               <span className="label">GPC 품목분류 후보</span>
               <div className="text-[13px] leading-relaxed">
+                {/*
+                  코드가 어디서 왔는지 먼저 밝힌다 (065, 담당자 지적)
+
+                  "OECD 포털이 보내는 코드는 각 나라들이 등록할 때 사용하는 코드로
+                  신빙성이 매우 높습니다." 등록국이 신고한 코드와 우리 AI 가 짐작한
+                  코드를 같은 얼굴로 보여 주면 담당자가 무엇을 확인해야 하는지 알 수 없다.
+                */}
+                {ev.gpc_brick_code && ev.gpc_source && (
+                  <div
+                    className={`mb-3 border px-3 py-2 text-[12px] leading-relaxed ${
+                      needsReview(ev.gpc_source)
+                        ? 'border-rule-soft text-ink-2'
+                        : 'border-measure bg-measure-soft text-ink-2'
+                    }`}
+                  >
+                    <span className="addr text-ink">{ev.gpc_brick_code}</span>
+                    <span className="ml-2 font-medium">
+                      {GPC_SOURCE_LABEL[ev.gpc_source as GpcSource] ?? ev.gpc_source}
+                    </span>
+                    <p className="mt-1 text-ink-3">
+                      {GPC_SOURCE_NOTE[ev.gpc_source as GpcSource] ?? ''}
+                    </p>
+                  </div>
+                )}
                 {ev.gpc_verified_level == null ? (
                   <p className="text-[12px] text-caution">
                     AI 검증 전 자료입니다(뜻이 비슷한 순서만 있음) — 순위 전체를 참고해 사람이

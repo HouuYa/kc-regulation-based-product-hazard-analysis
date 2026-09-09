@@ -63,6 +63,22 @@ export interface SourceRecall {
 
   approval_status: string | null;
   classification_confidence: number | null;
+  /*
+    원본이 이미 붙여 둔 품목분류 코드 (065)
+
+    담당자 지적: "OECD 포털이 보내는 segment/family/class/brick 코드는 각 나라들이
+    OECD 포털에 등록할 때 사용하는 코드로 신빙성이 매우 높습니다." 그 코드가 이
+    칸으로 온다. 우리는 이것을 읽지 않고 필요할 때마다 AI 로 다시 붙이고 있었다.
+
+    실측(2026-09-09) 승인·관리대상 2,356건 중 1,904건(81%)에 코드가 있고, 348종
+    중 341종은 브릭이며 나머지는 클래스·패밀리다 — OECD 규약대로 등록한 쪽이
+    좁힌 계위까지만 채운 것이다. 그래서 「브릭 코드」라 부르지 않고 그냥 코드라 한다.
+
+    지금 method 는 전부 'ai_auto' 라 등록국 신고가 아니라 원본 시스템이 붙인
+    값이다. 나중에 등록국 신고 코드가 오면 그때 method 로 갈린다(provenance.ts).
+  */
+  classification_code: string | null;
+  classification_method: string | null;
   injuries_count: number | null;
   has_confirmed_injuries: boolean | null;
 

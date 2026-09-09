@@ -263,6 +263,20 @@ export async function loadRecalls(
         cited_standards: cw.cited.map((c) => c.raw), crosswalk_note: cw.note,
       };
 
+      /*
+        원본이 준 코드와 그 출처 (065)
+
+        코드가 브릭이라는 보장이 없다 — OECD 규약은 등록국이 좁힌 계위까지만
+        채우게 되어 있고, 실측에서도 348종 중 7종이 클래스·패밀리였다. 계위 판정은
+        읽는 쪽(src/lib/gpc/from-registered.ts)이 카탈로그로 한다. 여기서는 원본이
+        준 값을 그대로 옮기기만 한다.
+      */
+      const gpcCode = r.classification_code?.trim() || null;
+      const gpcSource = gpcCode
+        ? (['oecd', 'source', 'registered'].includes((r.classification_method ?? '').toLowerCase())
+            ? 'OECD' : 'SOURCE_AI')
+        : null;
+
       // ── ④ DB 쓰기는 여기서 한 번에 ─────────────────────────────────────────
       const outcome = await db.begin(async (tx) => {
         // 원본층 — 표 전체를 raw 에 통째로 보관한다(§7.1). 파생 컬럼이 늘어도
@@ -275,6 +289,7 @@ export async function loadRecalls(
             hazard_factor_code, hazard_factor_sub, damage_type_primary, damage_type_codes,
             iso5665_severity, approval_status, classification_confidence,
             injuries_count, has_confirmed_injuries, source_row_id,
+            gpc_code, gpc_source,
             raw, fetched_at
           ) values (
             ${r.source}, ${r.guid}, 'OVERSEAS',
@@ -285,6 +300,7 @@ export async function loadRecalls(
             ${r.damage_type_primary}, ${r.damage_type_codes ?? []},
             ${r.iso5665_severity}, ${r.approval_status}, ${r.classification_confidence},
             ${r.injuries_count}, ${r.has_confirmed_injuries}, ${r.id},
+            ${gpcCode}, ${gpcSource},
             ${tx.json(r as never)}, now()
           )
           on conflict (source, guid) do update set
@@ -301,6 +317,7 @@ export async function loadRecalls(
             classification_confidence = excluded.classification_confidence,
             injuries_count = excluded.injuries_count,
             has_confirmed_injuries = excluded.has_confirmed_injuries,
+            gpc_code = excluded.gpc_code, gpc_source = excluded.gpc_source,
             raw = excluded.raw, fetched_at = now()
           returning id
         `;
@@ -348,6 +365,24 @@ export async function loadRecalls(
         const caseId = ev.id;
 
         await tx`update public.recall_cache set case_id = ${caseId} where id = ${cache.id}`;
+
+        /*
+          원본이 준 품목분류 코드를 사건에도 옮긴다 (065)
+
+          담당자 지적으로 시작했다 — "OECD 포털이 보내는 코드는 각 나라들이 등록할 때
+          사용하는 코드로 신빙성이 매우 높습니다." 그 코드가 원본 표에 와 있는데도
+          우리는 읽지 않고 필요할 때마다 AI 로 다시 붙이고 있었다.
+
+          담당자가 확정한 값(gpc_source='EXPERT')은 덮지 않는다. 원본을 다시 받았다는
+          이유로 사람의 판단을 지울 수 없다 — 이 파일의 다른 갱신 규칙과 같다.
+        */
+        if (gpcCode) {
+          await tx`
+            update public.case_event
+            set gpc_brick_code = ${gpcCode}, gpc_source = ${gpcSource}
+            where id = ${caseId} and coalesce(gpc_source, '') <> 'EXPERT'
+          `;
+        }
 
         if (scope) {
           await tx`

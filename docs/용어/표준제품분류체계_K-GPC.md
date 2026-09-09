@@ -82,7 +82,38 @@ K-GPC가 GPC에 더한 축이 **속성**이다. 같은 물건이라도 사용 �
 
 OECD Global Recalls portal은 리콜 건마다 segment·family·class·brick을 함께 싣는다. 설명회 자료의 예(Bugaboo Dragonfly Seat Strollers)에는 segment 71000000 · family 71020000 · class 71020100 · brick 10000793이 붙어 있다.
 
-**그래서 해외 리콜은 원본에 GPC가 있을 수 있고, 우리가 다시 붙일 필요가 없을 수 있다.** 지금 우리 `case_event`에는 `gpc_brick_code` 칸이 있지만 채워진 건이 거의 없다(실측 2026-09-09: 계위가 검증된 사건 7건). 리콜 수집 경로에서 원본의 GPC를 그대로 받아 오는지 확인할 일이 남아 있다.
+**그래서 해외 리콜은 원본에 GPC가 있을 수 있고, 우리가 다시 붙일 필요가 없다.** 확인해 보니 실제로 와 있었다 — 우리 원본 표(Recall Hub `recalls`)의 `classification_code`에 승인·관리대상 2,356건 중 1,904건(81%)이 들어 있었는데, 우리가 읽지 않고 있었다. 라운드 61에서 읽도록 고쳤다.
+
+### 등록 규약 — 좁힌 만큼만 채운다
+
+신고 XML의 실제 모양이다(`docs/OECD리콜등록/supabase/recalls_oecd_staging_rows.sql`의 100건에서 확인).
+
+```xml
+<product_code>
+  <publication>2024-05-01</publication>
+  <brick>10001840</brick>
+</product_code>
+
+<product_code>
+  <publication>2024-05-01</publication>
+  <segment>71000000</segment><family>71020000</family><class>71020100</class>
+</product_code>
+```
+
+태그 분포는 publication 100 · brick 84 · segment 16 · family 14 · class 6이다. **등록국이 좁힌 계위까지만 채우고 그 아래는 비운다.** 우리 계위 모델(BRICK/CLASS/FAMILY/SEGMENT/NONE)과 같은 규약이라 그대로 받아 쓸 수 있다.
+
+그래서 **코드가 8자리 숫자라고 전부 브릭이 아니다.** 실측에서 348종 중 341종은 브릭, 나머지는 클래스·패밀리였다. §2에서 적었듯 브릭 코드는 상위의 접두를 따르지 않으므로 모양으로 계위를 짐작할 수도 없다 — 카탈로그에서 찾아 판정해야 한다(`src/lib/gpc/from-registered.ts`).
+
+### 출처를 함께 적는다
+
+| 출처 | 뜻 | 서열 |
+| --- | --- | --- |
+| `EXPERT` | 담당자가 확정 | 가장 높다 |
+| `OECD` | 등록국이 OECD 포털에 신고 | 매우 높다 |
+| `SOURCE_AI` | 리콜 원본 시스템이 부여(ai_auto) | 참고 |
+| `OUR_AI` | 이 체계가 부여 | 참고 |
+
+낮은 출처가 높은 출처를 덮지 않게 하는 것이 이 칸의 목적이다(`src/lib/gpc/provenance.ts`). 지금 붙어 있는 1,892건은 전부 `SOURCE_AI`다 — 원본의 `classification_method`가 전부 `ai_auto`라서, 등록국 신고값은 아직 받는 경로가 없다.
 
 ## 6. 유관기관이 이 코드로 이어진다
 
@@ -105,4 +136,6 @@ OECD Global Recalls portal은 리콜 건마다 segment·family·class·brick을 
 | 제품 사진 판독 | `src/lib/gpc/describe-image.ts` |
 | 위 넷을 잇는 공통 진입점 | `src/lib/gpc/classify.ts` |
 | 판정 이력 기록 | `src/lib/gpc/record.ts` · 표 `public.gpc_assignment` |
+| 신고된 코드 읽기 (AI 안 부름) | `src/lib/gpc/from-registered.ts` |
+| 출처와 서열 | `src/lib/gpc/provenance.ts` |
 | 밖에서 부르는 창구 | `POST /api/gpc/classify` |
