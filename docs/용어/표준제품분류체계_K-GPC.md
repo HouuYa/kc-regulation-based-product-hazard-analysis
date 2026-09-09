@@ -8,7 +8,25 @@ related: [docs/전체_프로세스와_용어.md, docs/스키마.md]
 
 # 표준 제품분류체계 (K-GPC)
 
-원자료는 같은 폴더의 `표준 제품분류체계 설명 K-GPC _CKIM-20250310(1).pdf`(국가기술표준원 제품안전정책과 설명회, 2025-03-14)와 `산업통상자원부 국가기술표준원 소관 품목의 제품분류표준 가이드_250120.pdf`, `제품분류표준 시스템 사용자를 위한 활용 가이드라인_250120.pdf`이다. 이 문서는 그중 우리 체계가 실제로 쓰는 부분만 옮긴 것이다.
+## 0. 이 문서의 출처
+
+여기 적은 것은 모두 아래 자료나 실측에서 온 것이다. 추측은 넣지 않았고, 확인하지 못한 것은 「확인 필요」라고 적었다.
+
+| 무엇 | 어디서 왔나 | 확인일 |
+| --- | --- | --- |
+| GPC와 K-GPC의 차이, 계층 넷, 속성(베개·신발 사례), 유관기관 연계 | `표준 제품분류체계 설명 K-GPC _CKIM-20250310(1).pdf` — 국가기술표준원 제품안전정책과 김창용 연구관, 설명회 자료 2025-03-14 | 2026-09-09 |
+| 적용·등록·활용 규칙 (이 문서에는 요지만) | `산업통상자원부 국가기술표준원 소관 품목의 제품분류표준 가이드_250120.pdf`, `제품분류표준 시스템 사용자를 위한 활용 가이드라인_250120.pdf` | — |
+| 품목↔브릭 대응표 행수·갈래 | 우리 DB `public.product_taxonomy` 실측. 원자료는 협회 「품목별 세분류 매칭 DB」 | 2026-09-09 |
+| OECD 신고 XML의 `product_code` 모양과 태그 분포 | `docs/OECD리콜등록/supabase/recalls_oecd_staging_rows.sql` 안의 신고 XML 100건을 직접 셈 | 2026-09-09 |
+| 리콜 원본이 주는 코드의 건수·계위 분포 | Recall Hub `recalls` 표 실측(승인·관리대상 2,356건) | 2026-09-09 |
+| 코드의 출처를 `OECD`로 정한 것 | **담당자 판단.** 우리 관찰은 달랐다 — §5 「출처를 함께 적는다」에 관찰과 판단을 나란히 적었다 | 2026-09-09 |
+
+OECD 등록 안내 페이지 주소는 담당자가 알려 준 것이고 `docs/용어/OECD Global recalls site.txt`에 남아 있다.
+
+- <https://globalrecalls.oecd.org/#/admin/import-documentation>
+- <https://globalrecalls.oecd.org/#/admin/import-documentation?section=product-codes>
+
+**이 페이지는 자바스크립트로 그리는 화면이라 본문을 그대로 받지 못했다**(2026-09-09 확인. 주소만 받으면 빈 껍데기가 온다). 그래서 규약은 안내 문서 대신 **실제로 오간 신고 XML 100건**에서 확인했다 — §5의 태그 분포가 그것이다. 안내 문서를 직접 읽을 수 있게 되면 그 내용과 대조해 볼 일이 남아 있다.
 
 ## 1. GPC와 표준 제품분류체계는 같은 것이 아니다
 
@@ -113,7 +131,24 @@ OECD Global Recalls portal은 리콜 건마다 segment·family·class·brick을 
 | `SOURCE_AI` | 리콜 원본 시스템이 부여(ai_auto) | 참고 |
 | `OUR_AI` | 이 체계가 부여 | 참고 |
 
-낮은 출처가 높은 출처를 덮지 않게 하는 것이 이 칸의 목적이다(`src/lib/gpc/provenance.ts`). 지금 붙어 있는 1,892건은 전부 `SOURCE_AI`다 — 원본의 `classification_method`가 전부 `ai_auto`라서, 등록국 신고값은 아직 받는 경로가 없다.
+낮은 출처가 높은 출처를 덮지 않게 하는 것이 이 칸의 목적이다(`src/lib/gpc/provenance.ts`).
+
+**지금 붙어 있는 1,892건은 `OECD`로 넣었다. 담당자 판단이다.** 근거는 "OECD 포털이 보내는 segment/family/class/brick 코드는 각 나라들이 OECD 포털에 등록할 때 사용하는 코드로 신빙성이 매우 높습니다"이고, 자료의 유통 경로를 아는 쪽의 판단이므로 따랐다.
+
+**다만 우리가 관찰한 것은 달랐고, 그것도 함께 남긴다.** 나중에 이 값을 의심할 일이 생기면 되짚을 수 있어야 하기 때문이다(실측 2026-09-09, 승인·관리대상 2,356건).
+
+| 관찰 | 값 |
+| --- | --- |
+| `classification_method` | 전부 `ai_auto`. 다른 값 0건 |
+| `classification_confidence` | 0.75 같은 값이 붙어 있음 — 사람이나 규정이 정한 코드에는 보통 확신도가 없다 |
+| `source_url` | 전부 각국 리콜 사이트. OECD 포털(globalrecalls.oecd.org) 주소 **0건** |
+| `raw_data` | `_extract` 구조가 있음 — 페이지에서 긁어 온 흔적 |
+
+출처별 주소는 FR `rappel.conso.gouv.fr` 177 · EU `ec.europa.eu` 918 · EN `www.gov.uk` 278 · GE `www.baua.de` 255 · US_CPSC `www.cpsc.gov` 250 · CN `www.samrdprc.org.cn` 180 · AU 81 · NZ 78 · CA 67 · JP_RECALLPLUS 37 · JP_METI 32 · US_NHTSA 3이다.
+
+이 관찰만 보면 「각국 사이트에서 긁어 온 뒤 원본 시스템이 스스로 붙인 코드」로 읽힌다. 판단과 관찰이 다르므로 판단을 따르되 관찰을 지우지 않았다. 되돌리는 SQL과 확인 방법은 마이그레이션 `066_gpc_source_oecd.sql` 주석에 적어 두었다.
+
+**확인이 필요한 것** — 원본 시스템(Recall Hub)이 OECD 신고값과 자체 분류를 따로 보관하는지. 나눠 준다면 추정이 필요 없어진다. 코드는 이미 그렇게 갈릴 수 있게 짜여 있다(`src/lib/recall/load.ts`).
 
 ## 6. 유관기관이 이 코드로 이어진다
 

@@ -272,10 +272,23 @@ export async function loadRecalls(
         준 값을 그대로 옮기기만 한다.
       */
       const gpcCode = r.classification_code?.trim() || null;
-      const gpcSource = gpcCode
-        ? (['oecd', 'source', 'registered'].includes((r.classification_method ?? '').toLowerCase())
-            ? 'OECD' : 'SOURCE_AI')
-        : null;
+      /*
+        출처는 OECD 로 넣는다 — 담당자 판단이다 (066)
+
+        "OECD 포털이 보내는 segment/family/class/brick 코드는 각 나라들이 OECD 포털에
+        등록할 때 사용하는 코드로 신빙성이 매우 높습니다." 자료의 유통 경로를 아는
+        쪽의 판단이므로 따른다.
+
+        우리가 관찰한 것은 달랐다는 사실도 남긴다 — classification_method 가 전부
+        'ai_auto' 였고 confidence 가 붙어 있었으며 source_url 은 전부 각국 리콜
+        사이트였다(OECD 포털 주소 0건). 관찰만 보면 원본 시스템이 스스로 붙인
+        값으로 읽힌다. 판단과 관찰이 다르므로 판단을 따르되 관찰을 지우지 않는다.
+        자세한 실측은 마이그레이션 066 주석에 있다.
+
+        원본이 나중에 신고값과 자체 분류를 나눠 주면 이 자리를 method 로 갈라
+        되돌리면 된다.
+      */
+      const gpcSource = gpcCode ? 'OECD' : null;
 
       // ── ④ DB 쓰기는 여기서 한 번에 ─────────────────────────────────────────
       const outcome = await db.begin(async (tx) => {
