@@ -1,0 +1,50 @@
+# site/ 폴더를 GitHub Pages로 배포한다
+#
+# 왜 별도 폴더인가
+#   site/ 는 이 저장소의 Next.js 앱(src/)과 무관한 정적 소개페이지다.
+#   같은 저장소 안에서도 배포 산출물을 완전히 분리해 두면, 앱 쪽 배포(Netlify)와
+#   서로 건드리지 않는다.
+#
+# 왜 저장소가 Private인데 배포하는가
+#   GitHub Pages로 나가는 산출물은 저장소 visibility와 무관하게 URL을 아는
+#   누구나 볼 수 있다. site/ 에는 공개해도 되는 현황 요약만 담기로 하고 진행한다
+#   (다른 파일은 이 워크플로가 건드리지 않는다).
+#
+# 왜 gh-pages 브랜치를 안 쓰는가
+#   빌드 산출물을 담을 별도 브랜치를 만들지 않고, main 브랜치의 site/ 폴더를
+#   GitHub Actions가 그대로 Pages 아티팩트로 올린다. 브랜치가 하나 줄어든다.
+
+name: 소개페이지 배포
+
+on:
+  push:
+    branches: [main]
+    paths: [site/**]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+      - id: deployment
+        uses: actions/deploy-pages@v4

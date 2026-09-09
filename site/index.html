@@ -1,0 +1,747 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found]){display:none!important}</style></head><body>
+<title>제품위해 심층분석 구축 현황</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=IBM+Plex+Sans+KR:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+
+<style>
+  /* ── 색 ────────────────────────────────────────────────────────────────
+     회색에 청록을 아주 조금 섞었다. 이 체계의 화면과 설계문서의 도식이
+     이미 #0f6e68(측정)과 #8a6a1f(주의)를 쓰고 있어 그것을 그대로 잇는다. */
+  :root {
+    color-scheme: light;
+    --paper:        #F5F7F6;
+    --surface:      #FFFFFF;
+    --ink:          #131C1A;
+    --ink-2:        #45524E;
+    --ink-3:        #78847F;
+    --rule:         #DAE1DE;
+    --rule-soft:    #E9EEEC;
+    --measure:      #0F6E68;
+    --measure-soft: #E4EFED;
+    --caution:      #8A6A1F;
+    --caution-soft: #F6EFDD;
+    --halt:         #96302E;
+    --halt-soft:    #F6E7E5;
+
+    --f-display: "Gowun Batang", "Nanum Myeongjo", "Apple SD Gothic Neo", serif;
+    --f-body: "IBM Plex Sans KR", "Malgun Gothic", "Apple SD Gothic Neo", system-ui, sans-serif;
+    --f-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Consolas, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --paper:        #0E1312;
+      --surface:      #151B19;
+      --ink:          #E5EBE8;
+      --ink-2:        #A6B2AE;
+      --ink-3:        #77837F;
+      --rule:         #253029;
+      --rule-soft:    #1C2422;
+      --measure:      #52B5AD;
+      --measure-soft: #10302D;
+      --caution:      #CB9C3E;
+      --caution-soft: #2A2415;
+      --halt:         #D97C77;
+      --halt-soft:    #2C1A19;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --paper:        #0E1312;
+    --surface:      #151B19;
+    --ink:          #E5EBE8;
+    --ink-2:        #A6B2AE;
+    --ink-3:        #77837F;
+    --rule:         #253029;
+    --rule-soft:    #1C2422;
+    --measure:      #52B5AD;
+    --measure-soft: #10302D;
+    --caution:      #CB9C3E;
+    --caution-soft: #2A2415;
+    --halt:         #D97C77;
+    --halt-soft:    #2C1A19;
+  }
+
+  /* ── 바탕 ─────────────────────────────────────────────────────────── */
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--f-body);
+    font-size: 15px;
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+  .page { max-width: 62rem; margin: 0 auto; padding: 3rem 1.5rem 6rem; }
+  @media (min-width: 60rem) { .page { padding: 4.5rem 3rem 8rem; } }
+
+  h1, h2, h3 { font-family: var(--f-display); font-weight: 700; text-wrap: balance; margin: 0; }
+  p { margin: 0; }
+  a { color: var(--measure); text-underline-offset: 3px; text-decoration-thickness: 1px; }
+  a:focus-visible, summary:focus-visible {
+    outline: 2px solid var(--measure); outline-offset: 3px; border-radius: 2px;
+  }
+
+  .mono { font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
+  .label {
+    font-family: var(--f-mono); font-size: 10.5px; letter-spacing: 0.13em;
+    text-transform: uppercase; color: var(--ink-3);
+  }
+
+  /* ── 표제 ─────────────────────────────────────────────────────────── */
+  .masthead { border-top: 3px solid var(--measure); padding-top: 1.25rem; }
+  .masthead .kicker {
+    display: flex; flex-wrap: wrap; gap: 0.35rem 1.25rem;
+    font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--ink-3);
+  }
+  .masthead h1 {
+    margin-top: 0.9rem; font-size: clamp(1.9rem, 5vw, 3rem); line-height: 1.22;
+    letter-spacing: -0.015em;
+  }
+  .masthead .standfirst {
+    margin-top: 1.1rem; max-width: 40ch; font-size: 1.0625rem; color: var(--ink-2);
+  }
+  .masthead .meta {
+    margin-top: 1.75rem; padding-top: 1rem; border-top: 1px solid var(--rule);
+    display: flex; flex-wrap: wrap; gap: 0.4rem 2rem;
+    font-family: var(--f-mono); font-size: 11.5px; color: var(--ink-3);
+  }
+
+  /* ── 탭 ──────────────────────────────────────────────────────────── */
+  .tabs {
+    position: sticky; top: 0; z-index: 1; background: var(--paper);
+    display: flex; flex-wrap: nowrap; gap: 0.25rem 1.5rem; overflow-x: auto;
+    margin-top: 2.5rem; padding: 0.75rem 0; border-bottom: 1px solid var(--rule);
+    -ms-overflow-style: none; scrollbar-width: none;
+  }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab {
+    appearance: none; background: none; border: none; flex: 0 0 auto;
+    padding: 0.4rem 0 0.7rem; margin-bottom: -1px;
+    font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--ink-3); cursor: pointer;
+    white-space: nowrap; border-bottom: 2px solid transparent;
+  }
+  .tab:hover { color: var(--ink-2); }
+  .tab[aria-selected="true"] { color: var(--measure); border-bottom-color: var(--measure); }
+  .tab:focus-visible { outline: 2px solid var(--measure); outline-offset: 2px; border-radius: 2px; }
+
+  /* ── 절 ──────────────────────────────────────────────────────────── */
+  .tabpanel { margin-top: 2.25rem; }
+  .tabpanel[hidden] { display: none; }
+  .tabpanel:focus { outline: none; }
+  .sec-head { display: grid; gap: 0.5rem; margin-bottom: 1.75rem; }
+  @media (min-width: 52rem) {
+    .sec-head { grid-template-columns: 7.5rem minmax(0, 1fr); gap: 0 2rem; align-items: baseline; }
+  }
+  .sec-head h2 { font-size: 1.5rem; line-height: 1.35; letter-spacing: -0.01em; }
+  .sec-head .lede { grid-column: 2; margin-top: 0.6rem; max-width: 60ch; color: var(--ink-2); }
+  @media (max-width: 51.99rem) { .sec-head .lede { grid-column: 1; } }
+
+  .prose { max-width: 62ch; display: grid; gap: 1rem; color: var(--ink-2); }
+  .prose strong { color: var(--ink); font-weight: 600; }
+
+  /* ── 계기판 ──────────────────────────────────────────────────────── */
+  .gauges {
+    display: grid; gap: 1px; background: var(--rule);
+    border: 1px solid var(--rule); grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  @media (min-width: 40rem) { .gauges { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+  .gauge { background: var(--surface); padding: 1.1rem 1.15rem 1.25rem; }
+  .gauge .n {
+    font-family: var(--f-mono); font-variant-numeric: tabular-nums;
+    font-size: 1.75rem; line-height: 1.1; letter-spacing: -0.02em; color: var(--ink);
+  }
+  .gauge .n .unit { font-size: 0.8rem; color: var(--ink-3); margin-left: 0.15rem; }
+  .gauge .k { margin-top: 0.45rem; font-size: 13px; font-weight: 500; }
+  .gauge .sub { margin-top: 0.2rem; font-size: 11.5px; line-height: 1.5; color: var(--ink-3); }
+
+  /* ── 흐름 ────────────────────────────────────────────────────────── */
+  .flowwrap { overflow-x: auto; padding-bottom: 0.5rem; }
+  .flow { display: flex; align-items: stretch; min-width: max-content; }
+  .step {
+    width: 10.5rem; border: 1px solid var(--rule); background: var(--surface);
+    padding: 0.7rem 0.8rem 0.85rem;
+  }
+  .step.human { border-color: var(--measure); background: var(--measure-soft); }
+  .step .no { font-family: var(--f-mono); font-size: 10.5px; color: var(--ink-3); }
+  .step .nm { margin-top: 0.15rem; font-size: 13px; font-weight: 600; line-height: 1.35; }
+  .step .by {
+    margin-top: 0.4rem; display: inline-block; font-family: var(--f-mono);
+    font-size: 9.5px; letter-spacing: 0.08em; padding: 0.05rem 0.3rem;
+    border: 1px solid currentColor;
+  }
+  .step.human .by { color: var(--measure); }
+  .step.auto .by { color: var(--ink-3); }
+  .step .st { margin-top: 0.5rem; font-family: var(--f-mono); font-size: 11px; color: var(--ink-2); }
+  .arrow { display: flex; align-items: center; padding: 0 0.4rem; color: var(--ink-3); }
+
+  /* ── 병목 ────────────────────────────────────────────────────────── */
+  .blocks { display: grid; gap: 0; border-top: 1px solid var(--rule); }
+  .block {
+    display: grid; gap: 0.35rem 1.25rem; padding: 1.05rem 0 1.15rem;
+    border-bottom: 1px solid var(--rule-soft);
+    grid-template-columns: minmax(0, 1fr);
+  }
+  @media (min-width: 48rem) {
+    .block { grid-template-columns: 1.6rem minmax(0, 15rem) minmax(0, 1fr) 7.5rem; align-items: baseline; }
+  }
+  .block .rank { font-family: var(--f-mono); font-size: 12px; color: var(--ink-3); }
+  .block .what { font-weight: 600; font-size: 14.5px; }
+  .block .why { font-size: 13px; color: var(--ink-2); line-height: 1.6; }
+  .block .fig { font-family: var(--f-mono); font-variant-numeric: tabular-nums; font-size: 13px; }
+  @media (min-width: 48rem) { .block .fig { text-align: right; } }
+  .bar { margin-top: 0.4rem; height: 3px; background: var(--rule-soft); }
+  .bar > i { display: block; height: 100%; background: var(--halt); }
+  .bar.warn > i { background: var(--caution); }
+  .bar.ok > i { background: var(--measure); }
+
+  /* ── 표 ──────────────────────────────────────────────────────────── */
+  .tablewrap { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; min-width: 34rem; font-size: 14px; }
+  th, td { text-align: left; padding: 0.7rem 0.9rem 0.7rem 0; border-bottom: 1px solid var(--rule-soft); vertical-align: top; }
+  th { font-family: var(--f-mono); font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-3); font-weight: 400; border-bottom-color: var(--rule); }
+  td.num { font-family: var(--f-mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  td strong { font-weight: 600; color: var(--ink); }
+
+  /* ── 산출물 ──────────────────────────────────────────────────────── */
+  .outs { display: grid; gap: 1px; background: var(--rule); border: 1px solid var(--rule); }
+  @media (min-width: 52rem) { .outs { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  .out { background: var(--surface); padding: 1.3rem 1.25rem 1.4rem; display: grid; align-content: start; gap: 0.55rem; }
+  .out .idx { font-family: var(--f-mono); font-size: 12px; color: var(--measure); }
+  .out h3 { font-size: 1.1rem; }
+  .out p { font-size: 13.5px; color: var(--ink-2); line-height: 1.65; }
+  .out .state {
+    margin-top: 0.35rem; font-family: var(--f-mono); font-size: 11.5px;
+    padding-top: 0.6rem; border-top: 1px solid var(--rule-soft);
+  }
+  .state.on { color: var(--measure); }
+  .state.part { color: var(--caution); }
+  .state.off { color: var(--halt); }
+
+  /* ── 인용 ────────────────────────────────────────────────────────── */
+  blockquote {
+    margin: 0; padding: 1.15rem 1.35rem; background: var(--surface);
+    border-left: 3px solid var(--measure); font-size: 14px; line-height: 1.8; color: var(--ink-2);
+  }
+  blockquote .cite { display: block; margin-bottom: 0.6rem; font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.08em; color: var(--ink-3); }
+
+  .note {
+    border: 1px solid var(--caution); background: var(--caution-soft);
+    padding: 1.1rem 1.3rem; font-size: 14px; line-height: 1.7; color: var(--ink-2);
+    max-width: 62ch;
+  }
+  .note b { color: var(--caution); font-weight: 600; }
+
+  footer {
+    margin-top: 5rem; padding-top: 1.25rem; border-top: 1px solid var(--rule);
+    font-size: 12.5px; color: var(--ink-3); display: grid; gap: 0.4rem;
+  }
+</style>
+
+<div class="page">
+
+  <header class="masthead">
+    <div class="kicker">
+      <span>KC안전기준 기반 제품위해 심층분석 체계</span>
+      <span>구축 현황 브리핑</span>
+    </div>
+    <h1>기준을 읽는 일을 사람이<br>혼자 하지 않게 만드는 중</h1>
+    <p class="standfirst">
+      사고보고서와 해외 리콜이 들어왔을 때, <strong>어떤 KC안전기준 조항을 확인해야 하는지</strong>와
+      <strong>그 근거가 무엇인지</strong>를 담당자에게 제시하는 체계입니다. 판정은 하지 않습니다.
+    </p>
+    <div class="meta">
+      <span>기준일 2026-09-09</span>
+      <span>대상 부서 · 유관기관</span>
+      <span>수치는 모두 실측</span>
+    </div>
+  </header>
+
+  <nav class="tabs" role="tablist" aria-label="섹션">
+    <button class="tab" role="tab" id="tab-1" data-target="panel-1" aria-controls="panel-1" aria-selected="false">무엇을 하나</button>
+    <button class="tab" role="tab" id="tab-2" data-target="panel-2" aria-controls="panel-2" aria-selected="false">일이 도는 순서</button>
+    <button class="tab" role="tab" id="tab-3" data-target="panel-3" aria-controls="panel-3" aria-selected="false">지금 막힌 곳</button>
+    <button class="tab" role="tab" id="tab-4" data-target="panel-4" aria-controls="panel-4" aria-selected="false">산출물</button>
+    <button class="tab" role="tab" id="tab-5" data-target="panel-5" aria-controls="panel-5" aria-selected="false">가르는 기준</button>
+    <button class="tab" role="tab" id="tab-6" data-target="panel-6" aria-controls="panel-6" aria-selected="false">분류 두 축</button>
+    <button class="tab" role="tab" id="tab-7" data-target="panel-7" aria-controls="panel-7" aria-selected="false">법적 근거</button>
+    <button class="tab" role="tab" id="tab-8" data-target="panel-8" aria-controls="panel-8" aria-selected="false">이번 분기</button>
+  </nav>
+
+  <!-- ────────────────────────────────────────────────────────────── -->
+  <section class="tabpanel" id="panel-1" role="tabpanel" aria-labelledby="tab-1" tabindex="0" hidden>
+    <div class="sec-head">
+      <div class="label">무엇을 하나</div>
+      <div>
+        <h2>입구는 둘, 엔진은 하나</h2>
+        <p class="lede">
+          제품사고와 해외 리콜은 서로 다른 경로로 들어오지만, 안전기준과 대조하는 작업은 같습니다.
+          두 자료가 <strong>같은 위해요인 언어(HF·DT 코드)</strong>로 기술되므로, 한쪽에서 쌓인 판단이
+          다른 쪽의 근거가 됩니다.
+        </p>
+      </div>
+    </div>
+
+    <div class="prose" style="margin-bottom:2rem">
+      <p>
+        사고조사 담당자는 지금도 시험 의뢰 항목을 정할 때 해당 품목의 안전기준 원문을 직접 찾아
+        읽습니다. 이 판단은 개별 경험에 의존하고, <strong>품목이 낯설수록 누락 위험이 커집니다.</strong>
+        안전기준 담당자가 품목별로 나뉘어 있어 자기 품목군 밖은 잘 모른다는 사정도 같은 문제입니다.
+      </p>
+      <p>
+        이 체계는 안전기준 조항 하나하나에 「왜 위험한가(HF)」와 「어떤 피해가 나는가(DT)」를 붙여
+        <strong>증상으로 조항을 찾을 수 있는 색인</strong>을 만듭니다. 의학 교과서 뒤에 붙는 증상별
+        색인과 같은 역할입니다.
+      </p>
+    </div>
+
+    <div class="gauges">
+      <div class="gauge">
+        <div class="n">76<span class="unit">종</span></div>
+        <div class="k">적재된 안전기준</div>
+        <div class="sub">전기용품 43 · 생활용품 17 · 어린이제품 16</div>
+      </div>
+      <div class="gauge">
+        <div class="n">13,501<span class="unit">개</span></div>
+        <div class="k">조항</div>
+        <div class="sub">그중 요건 조항 6,392개가 코드 부여 대상</div>
+      </div>
+      <div class="gauge">
+        <div class="n">2,342<span class="unit">건</span></div>
+        <div class="k">해외 리콜</div>
+        <div class="sub">협회가 승인·분류를 마친 건을 매일 받아 옵니다</div>
+      </div>
+      <div class="gauge">
+        <div class="n">71<span class="unit">건</span></div>
+        <div class="k">사고조사보고서</div>
+        <div class="sub">PDF에서 글자를 뽑아 사건으로 만든 것</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ────────────────────────────────────────────────────────────── -->
+  <section class="tabpanel" id="panel-2" role="tabpanel" aria-labelledby="tab-2" tabindex="0" hidden>
+    <div class="sec-head">
+      <div class="label">일이 도는 순서</div>
+      <div>
+        <h2>여섯 걸음 중 사람이 하는 것은 넷</h2>
+        <p class="lede">
+          나머지는 데이터베이스 안에서 스스로 돕니다. 사람이 손대야 통과하는 걸음에만
+          「사람」 표를 붙였습니다. 상자 안의 숫자가 지금 상태입니다.
+        </p>
+      </div>
+    </div>
+
+    <div class="flowwrap">
+      <div class="flow">
+        <div class="step auto">
+          <div class="no">1</div>
+          <div class="nm">기준 적재 · 조항 분해</div>
+          <span class="by">자동</span>
+          <div class="st">76종 · 13,501개</div>
+        </div>
+        <div class="arrow" aria-hidden="true">→</div>
+        <div class="step auto">
+          <div class="no">2</div>
+          <div class="nm">위해요인 코드 부여</div>
+          <span class="by">자동</span>
+          <div class="st">6,392 / 6,392</div>
+        </div>
+        <div class="arrow" aria-hidden="true">→</div>
+        <div class="step human">
+          <div class="no">3</div>
+          <div class="nm">코드 검수</div>
+          <span class="by">사람</span>
+          <div class="st">0 / 15,319</div>
+        </div>
+        <div class="arrow" aria-hidden="true">→</div>
+        <div class="step human">
+          <div class="no">4</div>
+          <div class="nm">품목 사전 검수</div>
+          <span class="by">사람</span>
+          <div class="st">30 / 440</div>
+        </div>
+        <div class="arrow" aria-hidden="true">→</div>
+        <div class="step human">
+          <div class="no">5</div>
+          <div class="nm">분석 실행</div>
+          <span class="by">사람</span>
+          <div class="st">9 / 2,413</div>
+        </div>
+        <div class="arrow" aria-hidden="true">→</div>
+        <div class="step human">
+          <div class="no">6</div>
+          <div class="nm">채택 · 반려</div>
+          <span class="by">사람</span>
+          <div class="st">0건 기록</div>
+        </div>
+      </div>
+    </div>
+
+    <p class="prose" style="margin-top:1.5rem">
+      3번 걸음이 열려야 근거등급 A가 나오고, 4번이 열려야 리콜에서 기준까지 가는 길이 이어집니다.
+      <strong>AI가 대신할 수 없는 자리</strong>입니다 — 대응이 틀리면 그 품목으로 이어지는 모든
+      사고·리콜에 엉뚱한 기준의 시험이 근거로 제시되고, 그럴듯한 오답은 나중에 걸러내기가
+      특히 어렵습니다.
+    </p>
+  </section>
+
+  <!-- ────────────────────────────────────────────────────────────── -->
+  <section class="tabpanel" id="panel-3" role="tabpanel" aria-labelledby="tab-3" tabindex="0" hidden>
+    <div class="sec-head">
+      <div class="label">지금 막힌 곳</div>
+      <div>
+        <h2>다섯 자리, 앞의 하나가 뒤를 푼다</h2>
+        <p class="lede">
+          막대는 아직 처리되지 않은 비율입니다. 위에서부터 손대는 것이 가장 빠릅니다.
+        </p>
+      </div>
+    </div>
+
+    <div class="blocks">
+      <div class="block">
+        <div class="rank mono">1</div>
+        <div>
+          <div class="what">사고보고서 원문 확인</div>
+          <div class="bar"><i style="width:93%"></i></div>
+        </div>
+        <div class="why">
+          PDF에서 뽑은 글자가 원본과 맞는지 사람이 봐야 다음으로 갑니다. 표가 뭉개졌는지는
+          기계가 알 수 없습니다. <strong>66건이 여기서 멈춰 분석 자체가 시작되지 않았습니다.</strong>
+          클릭 66번이면 풀리고, 그것이 아래 4·5번을 함께 밀어 줍니다.
+        </div>
+        <div class="fig">5 / 71<br><span style="color:var(--ink-3)">7%</span></div>
+      </div>
+
+      <div class="block">
+        <div class="rank mono">2</div>
+        <div>
+          <div class="what">국내 유통 확인</div>
+          <div class="bar"><i style="width:100%"></i></div>
+        </div>
+        <div class="why">
+          해외 리콜 제품이 국내에도 유통됐는지 확인하는 일입니다. 확인되면
+          <strong>제품안전기본법 제13조 제3항의 보고 의무</strong>가 걸린 사안인지 근거를 갖고
+          판단할 수 있습니다. 온라인 쇼핑몰 모니터링이 필요한 별도 과제입니다.
+        </div>
+        <div class="fig">0 / 2,342<br><span style="color:var(--ink-3)">0%</span></div>
+      </div>
+
+      <div class="block">
+        <div class="rank mono">3</div>
+        <div>
+          <div class="what">조항 코드 검수</div>
+          <div class="bar warn"><i style="width:100%"></i></div>
+        </div>
+        <div class="why">
+          AI가 붙인 코드를 사람이 확정해야 근거등급 A로 제시되고 「확정분만 사용」을 켤 수 있습니다.
+          이번에 검수 화면을 <strong>대분류별로 나누고 판단할 거리가 없는 3,399건을 뒤로 미뤄</strong>
+          실제로 볼 것이 3,001건으로 줄었습니다.
+        </div>
+        <div class="fig">0 / 15,319<br><span style="color:var(--ink-3)">0%</span></div>
+      </div>
+
+      <div class="block">
+        <div class="rank mono">4</div>
+        <div>
+          <div class="what">품목 사전 검수</div>
+          <div class="bar warn"><i style="width:93%"></i></div>
+        </div>
+        <div class="why">
+          「전기요 → KC 60335-2-17」처럼 서류의 제품명을 기준으로 잇는 표입니다. 확정하면
+          다음부터 AI를 부르지 않고 공짜로 걸립니다 —
+          <strong>사전을 채우는 일이 곧 비용을 줄이는 일</strong>입니다.
+        </div>
+        <div class="fig">30 / 440<br><span style="color:var(--ink-3)">7%</span></div>
+      </div>
+
+      <div class="block">
+        <div class="rank mono">5</div>
+        <div>
+          <div class="what">담당자 채택 · 반려</div>
+          <div class="bar warn"><i style="width:100%"></i></div>
+        </div>
+        <div class="why">
+          제시된 조항을 시험항목으로 채택할지 정하는 기록입니다. 이것이 쌓여야
+          세 번째 산출물(기준 개선 요인)이 만들어지고, 이 체계의 정확도를 잴 근거도 생깁니다.
+        </div>
+        <div class="fig">0건<br><span style="color:var(--ink-3)">—</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ────────────────────────────────────────────────────────────── -->
+  <section class="tabpanel" id="panel-4" role="tabpanel" aria-labelledby="tab-4" tabindex="0" hidden>
+    <div class="sec-head">
+      <div class="label">산출물</div>
+      <div>
+        <h2>세 가지, 그중 둘은 건별</h2>
+        <p class="lede">
+          앞의 둘은 사건이 들어올 때마다 나오고, 세 번째는 앞의 둘의 판단 기록이 쌓인 뒤에 나옵니다.
+        </p>
+      </div>
+    </div>
+
+    <div class="outs">
+      <div class="out">
+        <div class="idx">①</div>
+        <h3>시험항목 후보</h3>
+        <p>이 사건과 관련될 수 있는 기준 조항과 그 시험방법·허용치. 사고원인 규명에 씁니다.</p>
+        <div class="state part">동작 확인 · 시험 연결 확대 필요</div>
+      </div>
+      <div class="out">
+        <div class="idx">②</div>
+        <h3>인증 · 표시 확인항목</h3>
+        <p>시험이 아니라 법령을 보면 판정되는 것. 인증·표시 의무 위반은 불량이 아니라 불법입니다.</p>
+        <div class="state part">조항 구분 완료 · 화면 미완</div>
+      </div>
+      <div class="out">
+        <div class="idx">③</div>
+        <h3>기준 개선 요인</h3>
+        <p>사고·리콜은 반복되는데 대응할 조항이 없는 자리, 그리고 국내외 기준 수준 차이.</p>
+        <div class="state off">채택 기록 0건 — 아직 비어 있음</div>
+      </div>
+    </div>
+
+    <div class="prose" style="margin-top:2rem">
+      <p>
+        ①이 실제로 맞는 답을 내는지 한 건으로 확인했습니다. <strong>가습기 화재 사고</strong>
+        (물 부족 시 자동 전원 차단 미작동)를 넣었더니 1순위 후보가
+        <span class="mono">KC 60335-1</span> 「19.4 이상운전 — 온도제한 제어장치 단락」이었고,
+        그 사고의 실제 조사 방법이 <strong>이상운전 시험</strong>이었습니다.
+      </p>
+    </div>
+  </section>
+
+  <!-- ────────────────────────────────────────────────────────────── -->
+  <section class="tabpanel" id="panel-5" role="tabpanel" aria-labelledby="tab-5" tabindex="0" hidden>
+    <div class="sec-head">
+      <div class="label">가르는 기준</div>
+      <div>
+        <h2>불량과 불법을 먼저 나눈다</h2>
+        <p class="lede">
+          이 갈림이 산출물을 나눕니다. 표시사항이 KC안전기준 문서 <em>안에</em> 적혀 있더라도,
+          그것을 지키지 않은 것은 표시 의무 위반이므로 <strong>불법</strong>입니다.
+        </p>
+      </div>
+    </div>
+
+    <div class="tablewrap">
+      <table>
+        <thead>
+          <tr><th></th><th>불량</th><th>불법</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>무엇인가</strong></td>
+            <td>안전기준의 기능·성능에 불합격</td>
+            <td>법령이 정한 의무 위반<br>(인증 · 표시 · 부품변경 재인증)</td>
+          </tr>
+          <tr>
+            <td><strong>어떻게 아나</strong></td>
+            <td>시험을 해야 안다</td>
+            <td>법령을 보면 판정된다</td>
+          </tr>
+          <tr>
+            <td><strong>산출물</strong></td>
+            <td>시험항목</td>
+            <td>인증 · 표시 확인항목</td>
+          </tr>
+          <tr>
+            <td><strong>데이터에서</strong></td>
+            <td class="mono">clause_role = REQUIREMENT</td>
+            <td class="mono">clause_role = MARKING</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ────────────────────────────────────────────────────────────── -->
+  <section class="tabpanel" id="panel-6" role="tabpanel" aria-labelledby="tab-6" tabindex="0" hidden>
+    <div class="sec-head">
+      <div class="label">분류 두 축</div>
+      <div>
+        <h2>대분류와 인증구분은 별개다</h2>
+        <p class="lede">
+          서로를 결정하지 않습니다. 같은 전기용품 안에도 안전인증 품목과 공급자적합성확인 품목이
+          함께 있고, 기준 하나가 여러 구분에 걸리기도 합니다.
+        </p>
+      </div>
+    </div>
+
+    <div class="tablewrap">
+      <table>
+        <thead>
+          <tr><th>인증구분</th><th>팔기 전에 무엇을 거치나</th><th class="num">품목표</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>안전인증</strong></td><td>인증기관의 제품시험과 공장심사를 받는다</td><td class="num">305행</td></tr>
+          <tr><td><strong>안전확인</strong></td><td>지정시험기관 성적서를 받아 신고한다</td><td class="num">719행</td></tr>
+          <tr><td><strong>공급자적합성확인</strong></td><td>제조·수입자가 스스로 확인하고 자료를 보관한다</td><td class="num">807행</td></tr>
+          <tr><td><strong>안전기준준수</strong></td><td>기준만 지키면 되고 별도 절차는 없다</td><td class="num">313행</td></tr>
+          <tr><td><strong>안전성검사</strong></td><td>사용 중인 제품을 주기적으로 검사받는다</td><td class="num">4행</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="prose" style="margin-top:1.5rem">
+      두 축을 한 칸에 담고 있던 데이터를 이번에 나눴습니다. 근거는 담당자 품목표
+      <span class="mono">안전기준목록조사 취합(전기 생활 어린이).xlsx</span>이고, 여기에 두 축이
+      이미 따로 들어 있었습니다.
+    </p>
+  </section>
+
+  <!-- ────────────────────────────────────────────────────────────── -->
+  <section class="tabpanel" id="panel-7" role="tabpanel" aria-labelledby="tab-7" tabindex="0" hidden>
+    <div class="sec-head">
+      <div class="label">법적 근거</div>
+      <div>
+        <h2>해외 리콜이 국내 유통 확인으로 이어지는 이유</h2>
+        <p class="lede">
+          해외 리콜과 국내 유통 제품을 대조해 두면, 보고 의무가 발생한 사안인지를
+          명확한 근거를 갖고 확인하고 안전조치를 판단할 수 있습니다.
+        </p>
+      </div>
+    </div>
+
+    <blockquote>
+      <span class="cite">제품안전기본법 제13조 제3항</span>
+      사업자는 시중에 유통시킨 제품과 동일한 제품에 대하여 외국에서 위해성을 이유로 다음 각 호의
+      어느 하나에 해당하는 조치를 한 경우 또는 외국의 다른 사업자가 해당 조치를 한 사실을 알게 된
+      경우에는 대통령령으로 정하는 바에 따라 해당 제품의 소관 중앙행정기관의 장에게
+      <strong>즉시 보고</strong>하여야 한다.<br>
+      1. 외국 정부로부터 수거등의 권고 또는 명령을 받고 수거등의 조치를 한 경우<br>
+      2. 자발적으로 수거등의 조치를 한 경우
+    </blockquote>
+
+    <div class="note" style="margin-top:1.5rem">
+      <b>이 체계가 하는 데까지</b> — 해외 리콜을 받아 두고, 건마다 국내 유통 확인 상태를 기록하는
+      칸과 화면까지입니다. 실제로 대형 온라인 쇼핑몰에서 동일·유사 제품을 찾아내는 일은
+      규모가 다른 별도 과제이며, 유관기관 협의가 필요합니다.
+    </div>
+  </section>
+
+  <!-- ────────────────────────────────────────────────────────────── -->
+  <section class="tabpanel" id="panel-8" role="tabpanel" aria-labelledby="tab-8" tabindex="0" hidden>
+    <div class="sec-head">
+      <div class="label">이번 분기</div>
+      <div>
+        <h2>고친 것과 남은 것</h2>
+      </div>
+    </div>
+
+    <div class="tablewrap">
+      <table>
+        <thead>
+          <tr><th>항목</th><th>전</th><th>후</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>시험방법 연결</strong><br><span style="color:var(--ink-3);font-size:13px">요건 조항에서 시험 조항으로</span></td>
+            <td class="num">644건<br><span style="color:var(--ink-3)">연결 0인 기준 33종</span></td>
+            <td class="num">751건<br><span style="color:var(--ink-3)">연결 0인 기준 28종</span></td>
+          </tr>
+          <tr>
+            <td><strong>안전기준 명칭</strong><br><span style="color:var(--ink-3);font-size:13px">번호만으로는 검수할 수 없다</span></td>
+            <td class="num">5종 명칭 없음</td>
+            <td class="num">0종<br><span style="color:var(--ink-3)">원문에서 확인해 채움</span></td>
+          </tr>
+          <tr>
+            <td><strong>AI 호출 비용</strong><br><span style="color:var(--ink-3);font-size:13px">같은 앞부분을 다시 보낼 때</span></td>
+            <td class="num">캐시 적중 0%<br><span style="color:var(--ink-3)">웃돈만 지불</span></td>
+            <td class="num">99.9%<br><span style="color:var(--ink-3)">해당 구간 1/10 단가</span></td>
+          </tr>
+          <tr>
+            <td><strong>품목 → GPC 배정</strong><br><span style="color:var(--ink-3);font-size:13px">사고와 리콜을 같은 품목군으로 묶기 위해</span></td>
+            <td class="num">33종<br><span style="color:var(--ink-3)">담당자 엑셀에 있던 것뿐</span></td>
+            <td class="num">171종<br><span style="color:var(--ink-3)">269종은 돌렸으나<br>브릭까지 못 좁힘</span></td>
+          </tr>
+          <tr>
+            <td><strong>해외 리콜의 품목분류</strong><br><span style="color:var(--ink-3);font-size:13px">원본이 이미 준 코드를 읽는다</span></td>
+            <td class="num">7건<br><span style="color:var(--ink-3)">우리가 붙인 것만</span></td>
+            <td class="num">1,892건<br><span style="color:var(--ink-3)">등록된 코드를 읽어<br>AI 호출 없이</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="prose" style="margin-top:2rem">
+      <p>
+        다섯 번째 줄은 방향이 반대다. 해외 리콜에는 <strong>각국이 OECD 포털에 등록할 때
+        쓴 품목분류 코드가 이미 붙어 있다.</strong> 원본 자료에 와 있는데도 우리가 읽지 않고
+        필요할 때마다 다시 붙이고 있었다. 이제 그대로 읽는다 — 등록국은 그 리콜을 조사한
+        쪽이고, AI 호출도 들지 않는다.
+      </p>
+      <p>
+        네 번째 줄은 담당자가 「종아리마사지기가 GPC에 없다는 게 이상하다」고 짚은 데서
+        시작했습니다. 확인해 보니 분류기가 틀린 것이 아니라 <strong>한 번도 돌린 적이 없었습니다.</strong>
+        400종에 배정을 돌려 132종이 브릭까지 붙었고, 종아리마사지기는
+        <span class="mono">10000759 개인용 온열·마사지용품</span>으로 들어갔습니다.
+        나머지는 「GPC에 없다」가 아니라 「후보가 갈려 더 좁히지 못했다」이며,
+        화면이 그 둘을 구별해 말합니다.
+      </p>
+      <p><strong>남은 것</strong></p>
+      <p>
+        ① 검수 인력과 시간 — 위 다섯 병목 중 넷은 사람이 눌러야만 풀립니다.
+        ② 국내 유통 확인의 자료원 — 대형 온라인 쇼핑몰 모니터링 체계에 대한 유관기관 협의.
+        ③ 시험방법 연결 — KC 60335 계열은 요건과 시험을 한 조항에 함께 적어 이을 짝이 없습니다.
+        그 계열에는 「연결이 없다」가 아니라 「조항 본문이 곧 시험」이라고 화면이 말하도록 고쳤습니다.
+      </p>
+    </div>
+  </section>
+
+  <footer>
+    <div>수치는 2026-09-09 데이터베이스 실측입니다. 이후 검수가 진행되면 달라집니다.</div>
+    <div>이 체계는 위반 여부를 판정하지 않습니다. 관련될 수 있는 조항과 근거를 제시하고, 확인 여부는 담당자가 정합니다.</div>
+  </footer>
+
+</div>
+
+<script>
+(function () {
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('.tab'));
+  var panels = Array.prototype.slice.call(document.querySelectorAll('.tabpanel'));
+
+  function activate(id, moveFocus) {
+    if (!document.getElementById(id)) return;
+    tabs.forEach(function (t) {
+      var on = t.getAttribute('data-target') === id;
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+      t.tabIndex = on ? 0 : -1;
+    });
+    panels.forEach(function (p) { p.hidden = p.id !== id; });
+    if (moveFocus) {
+      var panel = document.getElementById(id);
+      if (panel) panel.focus({ preventScroll: true });
+    }
+  }
+
+  tabs.forEach(function (t, i) {
+    t.addEventListener('click', function () {
+      activate(t.getAttribute('data-target'), false);
+      history.replaceState(null, '', '#' + t.getAttribute('data-target'));
+    });
+    t.addEventListener('keydown', function (e) {
+      var dir = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+      if (!dir) return;
+      e.preventDefault();
+      var next = tabs[(i + dir + tabs.length) % tabs.length];
+      next.focus();
+      activate(next.getAttribute('data-target'), false);
+      history.replaceState(null, '', '#' + next.getAttribute('data-target'));
+    });
+  });
+
+  var initial = (location.hash || '').slice(1);
+  if (!initial || !document.getElementById(initial)) {
+    initial = panels.length ? panels[0].id : null;
+  }
+  if (initial) activate(initial, false);
+})();
+</script>
+
+</body></html>
