@@ -65,7 +65,7 @@ async function setTelegram() {
   }
   await put('telegram_bot_token', token);
 
-  // 기본값은 docs/n8nErrorTrigger/Error Trigger.json 이 쓰던 대화 번호다.
+  // 기본값은 docs/raw/n8nErrorTrigger/Error Trigger.json 이 쓰던 대화 번호다.
   // 다른 대화로 받고 싶으면 .env.local 에 TELEGRAM_CHAT_ID 를 넣으면 된다.
   await put('telegram_chat_id', optional('TELEGRAM_CHAT_ID', '5185533472'));
 }

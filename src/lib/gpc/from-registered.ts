@@ -10,7 +10,7 @@
  *   값도 시간도 낭비였다.
  *
  * OECD 등록 규약 (원자료로 확인)
- *   docs/OECD리콜등록/supabase/recalls_oecd_staging_rows.sql 안의 신고 XML 100건에서
+ *   docs/raw/OECD리콜등록/supabase/recalls_oecd_staging_rows.sql 안의 신고 XML 100건에서
  *   product_code 블록의 실제 모양을 셌다.
  *
  *     <product_code>
@@ -30,7 +30,7 @@
  *
  * 계위를 코드 모양으로 짐작하지 않는다
  *   브릭 코드는 상위 코드의 접두를 따르지 않는다(청소제품 47100000 아래의
- *   석회제거제가 10000442 다 — docs/용어/표준제품분류체계_K-GPC.md §2).
+ *   석회제거제가 10000442 다 — docs/wiki/개념/GPC/표준제품분류체계_K-GPC.md §2).
  *   그래서 「8자리 중 뒤 네 자리가 0이면 패밀리」 같은 규칙을 쓸 수 없다.
  *   우리 카탈로그(gpc_brick)에서 그 코드가 어느 칸에 있는지 찾아 판정한다.
  *

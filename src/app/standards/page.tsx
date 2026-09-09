@@ -336,7 +336,7 @@ export default async function StandardsPage() {
               품목명 옆에{' '}
               <span className="text-caution">품목표에서 따옴 · 검수 전</span> 이 붙은 것은,
               담당자 품목표를 AI 가 이어 붙인 뒤 아직 아무도 확인하지 않은 이름입니다.
-              근거 자료는 docs/제품안전법제도/안전기준목록조사 취합(전기 생활 어린이).xlsx 입니다.
+              근거 자료는 docs/raw/제품안전법제도/안전기준목록조사 취합(전기 생활 어린이).xlsx 입니다.
             </p>
           </div>
         </details>

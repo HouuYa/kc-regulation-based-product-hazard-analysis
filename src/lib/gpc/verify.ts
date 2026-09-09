@@ -8,7 +8,7 @@
  * Brick→Class→Family→Segment 단계적 하향 (라운드 11 보강)
  *   처음엔 "Brick이 명확히 맞으면 확정, 아니면 NONE" 이분법으로 만들었는데,
  *   담당자가 이 협회의 실제 운영 파이프라인(해외리콜 OECD 일일 처리 —
- *   docs/OECD리콜등록/(GS1) [한국리콜__OECD] OECD GPC RAG.json,
+ *   docs/raw/OECD리콜등록/(GS1) [한국리콜__OECD] OECD GPC RAG.json,
  *   recalls_oecd_staging.assignedGpc{Brick,Class,Family,Segment}Code)을
  *   짚어 줬다. 그 파이프라인은 oecd_gpc_202405 를 그대로 쓰되(우리와 동일
  *   데이터), Brick이 후보와 명확히 일치하지 않으면 포기하지 않고 후보의

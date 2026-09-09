@@ -13,7 +13,7 @@
  *   변별력은 없지만 조건에는 명시해 둔다).
  *
  * 화면의 「관리 대상」이 korea_relevance 다 (2026-09-07 확인)
- *   Recall Hub 관리자 화면(docs/해외리콜수집/recall-hub-admin화면.png)에는 「승인」과
+ *   Recall Hub 관리자 화면(docs/raw/해외리콜수집/recall-hub-admin화면.png)에는 「승인」과
  *   「관리 대상」이 **서로 다른 칸**으로 있다. 승인은 승인/반려 배지이고, 관리 대상은
  *   켜고 끄는 토글이다. 코드에서는 각각 approval_status 와 korea_relevance 인데,
  *   이름만 봐서는 「관리 대상」인 줄 알 수 없어 "그 조건이 걸려 있느냐"는 물음이

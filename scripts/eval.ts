@@ -24,7 +24,7 @@
  *   없다. 재현율의 분모가 시스템 출력에 의존하므로 재현율이 늘 부풀려진다.
  *
  *   그래서 두 경로를 모두 지원하되 기본은 v0.7 을 따른다.
- *     --source expert  docs/eval/answer-key.json (전문가가 시스템 결과 보기 전에 작성)
+ *     --source expert  docs/raw/eval/answer-key.json (전문가가 시스템 결과 보기 전에 작성)
  *     --source review  review_log (운영 로그. 사후 개선용이며 정확도 근거로 쓰지 않는다)
  *   review 로 낸 수치에는 경고를 붙여 출력한다.
  */
@@ -65,7 +65,7 @@ const onlyRows = (() => {
   return i >= 0 && process.argv[i + 1] ? process.argv[i + 1].split(',').map((x) => x.trim()) : null;
 })();
 
-const ANSWER_KEY = join(import.meta.dirname, '..', 'docs', 'eval', 'answer-key.json');
+const ANSWER_KEY = join(import.meta.dirname, '..', 'docs', 'raw', 'eval', 'answer-key.json');
 
 function argValue(name: string): string | null {
   const i = process.argv.indexOf(name);
@@ -411,7 +411,7 @@ async function main() {
     console.log('정답지로 쓰는 것을 평가 설계 오류로 지목했습니다 — 시스템이 제시하지 않은');
     console.log('조항은 정답에 들어갈 수 없어 재현율이 늘 부풀려지기 때문입니다.');
     console.log('');
-    console.log('docs/eval/answer-key.example.json 을 복사해 answer-key.json 으로 채우세요.');
+    console.log('docs/raw/eval/answer-key.example.json 을 복사해 answer-key.json 으로 채우세요.');
     process.exitCode = 1;
     return;
   }

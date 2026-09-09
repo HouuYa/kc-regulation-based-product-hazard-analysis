@@ -27,7 +27,7 @@ import { getDb, closeDb } from '../src/lib/db';
 
 const ROOT = join(import.meta.dirname, '..');
 const XLSX = join(ROOT, '사고조사보고서', '__사고조사 건별 결함조사 항목 목록화_전달용.xlsx');
-const OUT = join(ROOT, 'docs', 'eval', 'answer-key.json');
+const OUT = join(ROOT, 'docs', 'raw', 'eval', 'answer-key.json');
 
 /* ── xlsx 읽기 ─────────────────────────────────────────────────────────── */
 
@@ -208,7 +208,7 @@ async function main() {
     });
   }
 
-  mkdirSync(join(ROOT, 'docs', 'eval'), { recursive: true });
+  mkdirSync(join(ROOT, 'docs', 'raw', 'eval'), { recursive: true });
   writeFileSync(OUT, JSON.stringify(out, null, 2), 'utf8');
 
   console.log(`엑셀 자료 행           ${data.length}`);

@@ -140,7 +140,7 @@ async function withGeneralPart(standardIds: number[]): Promise<number[]> {
  *
  * 어린이제품인지는 지어내지 않고 이미 확정된 법정 품목 정보로만 판정한다. 색상·
  * 포장·광고 같은 가이드라인의 결정요소는 제품 실물을 봐야 하는 사람의 판단이다
- * (docs/제품안전법제도/어린이제품_가이드라인.md).
+ * (docs/wiki/개념/법령제도/어린이제품_가이드라인.md).
  *
  * item_name 이 비어 있는 기준(전기용품 43종)을 반드시 걸러야 한다 —
  * scope_term_key 는 null·빈 문자열을 모두 '' 로 만들기 때문에, 걸러내지 않으면

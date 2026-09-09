@@ -14,11 +14,11 @@ import { getDb, closeDb } from '../src/lib/db';
 import { searchCandidates } from '../src/lib/search/match';
 import { loadCaseInput, defaultMatchConfig } from '../src/lib/search/run';
 
-const OUT = join(import.meta.dirname, '..', 'docs', '분석', '2026-09-05_시험항목_비교');
+const OUT = join(import.meta.dirname, '..', 'docs', 'raw', '분석', '2026-09-05_시험항목_비교');
 
 async function main() {
   const db = getDb();
-  const key = JSON.parse(readFileSync('docs/eval/answer-key.json', 'utf8')) as
+  const key = JSON.parse(readFileSync('docs/raw/eval/answer-key.json', 'utf8')) as
     { cases: Array<{ caseId: number; note?: string; expected: Array<{ standard: string; marker: string }> }> };
   const cfg = { ...defaultMatchConfig(), useRerank: false };
 

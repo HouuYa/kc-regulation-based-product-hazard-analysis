@@ -40,7 +40,7 @@
  *     임베딩 인덱스 자체의 한계다.
  *
  *     그래서 이 협회가 실제로 운영 중인 해외리콜 OECD 파이프라인
- *     (docs/OECD리콜등록/(GS1) [한국리콜__OECD] OECD GPC RAG.json,
+ *     (docs/raw/OECD리콜등록/(GS1) [한국리콜__OECD] OECD GPC RAG.json,
  *     recalls_oecd_staging 저장)의 패턴을 그대로 재사용하기로 했다 — 그
  *     파이프라인도 같은 oecd_gpc_202405/match_documents_202405 를 쓰지만,
  *     Brick이 후보와 명확히 안 맞으면 NONE으로 포기하지 않고 Class→Family→

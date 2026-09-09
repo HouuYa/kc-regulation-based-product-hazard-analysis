@@ -4,6 +4,7 @@ updated: 2026-09-09
 description: 국표원 표준 제품분류체계(K-GPC)가 GS1 GPC와 무엇이 다른지, 브릭 하나가 왜 여러 인증구분으로 갈리는지, 우리 데이터의 어느 표가 그 대응표인지
 status: active
 related: [docs/전체_프로세스와_용어.md, docs/스키마.md]
+sources: [docs/raw/용어/]
 ---
 
 # 표준 제품분류체계 (K-GPC)
@@ -17,11 +18,11 @@ related: [docs/전체_프로세스와_용어.md, docs/스키마.md]
 | GPC와 K-GPC의 차이, 계층 넷, 속성(베개·신발 사례), 유관기관 연계 | `표준 제품분류체계 설명 K-GPC _CKIM-20250310(1).pdf` — 국가기술표준원 제품안전정책과 김창용 연구관, 설명회 자료 2025-03-14 | 2026-09-09 |
 | 적용·등록·활용 규칙 (이 문서에는 요지만) | `산업통상자원부 국가기술표준원 소관 품목의 제품분류표준 가이드_250120.pdf`, `제품분류표준 시스템 사용자를 위한 활용 가이드라인_250120.pdf` | — |
 | 품목↔브릭 대응표 행수·갈래 | 우리 DB `public.product_taxonomy` 실측. 원자료는 협회 「품목별 세분류 매칭 DB」 | 2026-09-09 |
-| OECD 신고 XML의 `product_code` 모양과 태그 분포 | `docs/OECD리콜등록/supabase/recalls_oecd_staging_rows.sql` 안의 신고 XML 100건을 직접 셈 | 2026-09-09 |
+| OECD 신고 XML의 `product_code` 모양과 태그 분포 | `docs/raw/OECD리콜등록/supabase/recalls_oecd_staging_rows.sql` 안의 신고 XML 100건을 직접 셈 | 2026-09-09 |
 | 리콜 원본이 주는 코드의 건수·계위 분포 | Recall Hub `recalls` 표 실측(승인·관리대상 2,356건) | 2026-09-09 |
 | 코드의 출처를 `OECD`로 정한 것 | **담당자 판단.** 우리 관찰은 달랐다 — §5 「출처를 함께 적는다」에 관찰과 판단을 나란히 적었다 | 2026-09-09 |
 
-OECD 등록 안내 페이지 주소는 담당자가 알려 준 것이고 `docs/용어/OECD Global recalls site.txt`에 남아 있다.
+OECD 등록 안내 페이지 주소는 담당자가 알려 준 것이고 `docs/raw/용어/OECD Global recalls site.txt`에 남아 있다.
 
 - <https://globalrecalls.oecd.org/#/admin/import-documentation>
 - <https://globalrecalls.oecd.org/#/admin/import-documentation?section=product-codes>
@@ -104,7 +105,7 @@ OECD Global Recalls portal은 리콜 건마다 segment·family·class·brick을 
 
 ### 등록 규약 — 좁힌 만큼만 채운다
 
-신고 XML의 실제 모양이다(`docs/OECD리콜등록/supabase/recalls_oecd_staging_rows.sql`의 100건에서 확인).
+신고 XML의 실제 모양이다(`docs/raw/OECD리콜등록/supabase/recalls_oecd_staging_rows.sql`의 100건에서 확인).
 
 ```xml
 <product_code>

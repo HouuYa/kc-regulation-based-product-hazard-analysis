@@ -30,7 +30,7 @@ next-env.d.ts
  *.hwpx
 
 # 전문가 정답셋 — 실제 사건 정보를 담을 수 있다. 예시 파일만 커밋한다
-docs/eval/answer-key.json
+docs/raw/eval/answer-key.json
 
 # ---------------------------------------------------------------
 # 로컬 산출물
