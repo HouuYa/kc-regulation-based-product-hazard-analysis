@@ -20,6 +20,8 @@ import type { LlmPurpose } from './client';
 
 export interface CallSite {
   purpose: LlmPurpose;
+  /** 여섯 걸음 흐름(site/index.html) 기준의 묶음. 흐름 밖의 사전 준비 작업은 '사전 관리', 여러 걸음에 걸치면 '공통' */
+  stage: '기준 적재' | '위해요인 코드 부여' | '품목 확정' | '분석 실행' | '사전 관리' | '공통';
   /** 담당자에게 보일 이름 */
   name: string;
   /** 언제 도나 */
@@ -42,7 +44,21 @@ export interface CallSite {
 
 export const CALL_SITES: CallSite[] = [
   {
+    purpose: 'gpc_verify',
+    stage: '기준 적재',
+    name: 'GPC 계위 검증',
+    when: '기준에 품목분류를 붙일 때',
+    goal: '벡터 검색이 물어온 GPC 후보 중 맞는 계층을 고른다',
+    modelEnv: 'OPENAI_RERANK_MODEL',
+    schema: 'gpc_verification',
+    enumLock: 'Brick·Class·Family·Segment 코드 + NONE 을 enum 으로 고정',
+    evidence: 'reasoning (어느 계층까지 왜 내려갔는지)',
+    storedAt: 'standard.gpc_verification (JSON)',
+    screen: '안전기준',
+  },
+  {
     purpose: 'tagging',
+    stage: '위해요인 코드 부여',
     name: '위해요인 코드 부여',
     when: '사고보고서·리콜을 사건으로 만들 때 · 조항을 적재할 때',
     goal: '서술에 맞는 HF(위해요인)·DT(사고유형) 코드를 고른다',
@@ -55,6 +71,7 @@ export const CALL_SITES: CallSite[] = [
   },
   {
     purpose: 'vision',
+    stage: '위해요인 코드 부여',
     name: '사고 사진 분석',
     when: '사진이 붙은 사고보고서를 적재할 때',
     goal: '사진마다 무엇이 보이는지, 사고와 관련된 사진인지 가른다',
@@ -66,31 +83,8 @@ export const CALL_SITES: CallSite[] = [
     screen: '사고보고서',
   },
   {
-    purpose: 'rerank',
-    name: '조항 재채점',
-    when: '분석 실행 — 후보 조항의 순위를 다시 매길 때',
-    goal: '사건과 조항이 실제로 맞는지 0~1 로 매기고 이유를 적는다',
-    modelEnv: 'OPENAI_RERANK_MODEL',
-    schema: 'rerank_scores',
-    enumLock: '후보 조항 id 를 enum 으로 고정 — 후보 밖 조항이 나올 수 없다',
-    evidence: 'reason (후보마다 한 줄)',
-    storedAt: 'match_result.rerank_reason',
-    screen: '분석 결과',
-  },
-  {
-    purpose: 'hyde',
-    name: '가상 조항 생성 (HyDE)',
-    when: '분석 실행 — 의미 검색 질의를 다듬을 때',
-    goal: '사고 서술로 「답에 해당할 법한 조항」을 지어내 질의로 쓴다',
-    modelEnv: 'OPENAI_RERANK_MODEL',
-    schema: 'hypothetical_clause',
-    enumLock: '없음 — 지어내는 것이 목적이라 고정할 대상이 없다',
-    evidence: '지어낸 문단 자체',
-    storedAt: 'match_run.hyde_text',
-    screen: '아직 보여 주지 않는다 (기준 원문으로 오해할 수 있어서)',
-  },
-  {
     purpose: 'scope_semantic',
+    stage: '품목 확정',
     name: '적용범위 의미검색',
     when: '품목 확정 — 사전에 없는 품목',
     goal: '적용범위 원문과 뜻으로 견주어 기준 하나를 고르거나 NONE',
@@ -103,6 +97,7 @@ export const CALL_SITES: CallSite[] = [
   },
   {
     purpose: 'scope_filter',
+    stage: '품목 확정',
     name: '적용범위 후보 거르기',
     when: '품목 확정 — 원문검색이 둘 이상 물어 왔을 때',
     goal: '넓게 걸린 후보에서 실제로 적용되는 것만 남긴다',
@@ -114,7 +109,34 @@ export const CALL_SITES: CallSite[] = [
     screen: '사고보고서 · 리콜',
   },
   {
+    purpose: 'rerank',
+    stage: '분석 실행',
+    name: '조항 재채점',
+    when: '분석 실행 — 후보 조항의 순위를 다시 매길 때',
+    goal: '사건과 조항이 실제로 맞는지 0~1 로 매기고 이유를 적는다',
+    modelEnv: 'OPENAI_RERANK_MODEL',
+    schema: 'rerank_scores',
+    enumLock: '후보 조항 id 를 enum 으로 고정 — 후보 밖 조항이 나올 수 없다',
+    evidence: 'reason (후보마다 한 줄)',
+    storedAt: 'match_result.rerank_reason',
+    screen: '분석 결과',
+  },
+  {
+    purpose: 'hyde',
+    stage: '분석 실행',
+    name: '가상 조항 생성 (HyDE)',
+    when: '분석 실행 — 의미 검색 질의를 다듬을 때',
+    goal: '사고 서술로 「답에 해당할 법한 조항」을 지어내 질의로 쓴다',
+    modelEnv: 'OPENAI_RERANK_MODEL',
+    schema: 'hypothetical_clause',
+    enumLock: '없음 — 지어내는 것이 목적이라 고정할 대상이 없다',
+    evidence: '지어낸 문단 자체',
+    storedAt: 'match_run.hyde_text',
+    screen: '아직 보여 주지 않는다 (기준 원문으로 오해할 수 있어서)',
+  },
+  {
     purpose: 'scope_suggest',
+    stage: '사전 관리',
     name: '품목 기준 제안',
     when: '용어 사전 채우기 (`npm run scope:suggest`)',
     goal: '품목명에 맞는 기준을 목록에서 고른다',
@@ -126,19 +148,8 @@ export const CALL_SITES: CallSite[] = [
     screen: '품목 용어 사전',
   },
   {
-    purpose: 'gpc_verify',
-    name: 'GPC 계위 검증',
-    when: '기준에 품목분류를 붙일 때',
-    goal: '벡터 검색이 물어온 GPC 후보 중 맞는 계층을 고른다',
-    modelEnv: 'OPENAI_RERANK_MODEL',
-    schema: 'gpc_verification',
-    enumLock: 'Brick·Class·Family·Segment 코드 + NONE 을 enum 으로 고정',
-    evidence: 'reasoning (어느 계층까지 왜 내려갔는지)',
-    storedAt: 'standard.gpc_verification (JSON)',
-    screen: '안전기준',
-  },
-  {
     purpose: 'alias',
+    stage: '사전 관리',
     name: '검색어(별칭) 생성',
     when: '검색어 사전 — 「AI로 검색어 더 만들기」',
     goal: '법정 품목을 사람들이 부르는 일상어를 만든다',
@@ -151,6 +162,7 @@ export const CALL_SITES: CallSite[] = [
   },
   {
     purpose: 'taxonomy_link',
+    stage: '사전 관리',
     name: '법정 품목 → 기준 잇기',
     when: '대응표를 만들 때 (`npm run taxonomy:link`)',
     goal: '법정 품목에 맞는 안전기준을 후보에서 고른다',
@@ -163,6 +175,7 @@ export const CALL_SITES: CallSite[] = [
   },
   {
     purpose: 'embedding',
+    stage: '공통',
     name: '임베딩',
     when: '조항·사건·적용범위를 뜻으로 견주려고',
     goal: '문장을 1536차원 벡터로 옮긴다',

@@ -187,12 +187,13 @@ export default async function LlmPage() {
               <Section
                 id="llm-sites"
                 title="AI를 부르는 자리"
-                lead="이 표는 코드에서 옵니다(src/lib/llm/catalog.ts). 손으로 적은 표는 코드가 바뀌면 조용히 틀리기 때문입니다. 모델 이름은 지금 이 배포에 설정된 값입니다."
+                lead="이 표는 코드에서 옵니다(src/lib/llm/catalog.ts). 손으로 적은 표는 코드가 바뀌면 조용히 틀리기 때문입니다. 모델 이름은 지금 이 배포에 설정된 값입니다. 「단계」는 소개페이지의 여섯 걸음 흐름 기준이고, 그 흐름 밖에서 사전을 미리 채워 두는 배치 작업은 「사전 관리」로 묶었습니다."
               >
                 <div className="overflow-x-auto">
-                  <table className="w-full min-w-[64rem] border-collapse text-[12px]">
+                  <table className="w-full min-w-[68rem] border-collapse text-[12px]">
                     <thead>
                       <tr className="border-b border-rule text-left text-ink-3">
+                        <th className="py-2 pr-4 font-normal">단계</th>
                         <th className="py-2 pr-4 font-normal">무엇을 묻나</th>
                         <th className="py-2 pr-4 font-normal">언제</th>
                         <th className="py-2 pr-4 font-normal">모델</th>
@@ -204,6 +205,7 @@ export default async function LlmPage() {
                     <tbody>
                       {sites.map((s) => (
                         <tr key={s.purpose} className="border-b border-rule-soft align-top">
+                          <td className="py-2 pr-4 text-ink-3">{s.stage}</td>
                           <td className="py-2 pr-4">
                             <div className="text-ink">{s.name}</div>
                             <div className="mt-0.5 text-[11px] leading-snug text-ink-3">{s.goal}</div>
@@ -371,7 +373,7 @@ export default async function LlmPage() {
               <Section
                 id="llm-prices"
                 title="지금 쓰고 있는 단가"
-                lead="단가는 코드에 박지 않고 환경변수(LLM_PRICES)로 받습니다. 코드에 박아 두면 어느 시점의 값인지 알 수 없게 되고, 낡은 단가로 계산한 금액이 맞는 값처럼 화면에 뜨기 때문입니다. 아래 값은 2026-09-09 기준으로 OpenAI 공식 단가표와 한 줄씩 대조해 확인했습니다."
+                lead="단가는 코드에 박지 않고 환경변수(LLM_PRICES)로 받습니다. 코드에 박아 두면 어느 시점의 값인지 알 수 없게 되고, 낡은 단가로 계산한 금액이 맞는 값처럼 화면에 뜨기 때문입니다. 아래 값은 2026-09-11 기준으로 OpenAI 공식 단가표와 한 줄씩 대조해 재확인했습니다(2026-09-08에 확인한 값과 같습니다)."
               >
                 {Object.keys(prices).length === 0 ? (
                   <div className="border border-caution bg-caution-soft px-4 py-3 text-[12px] leading-relaxed text-ink-2">
@@ -423,7 +425,29 @@ export default async function LlmPage() {
                   그래서 정확한 한 숫자를 지어내는 대신 짧은 쪽과 긴 쪽을 모두 계산해 「이 사이」라는
                   범위로 보여 줍니다. 「캐시 기록」이 실제로 이 웃돈으로 청구되는지도 확인하지
                   못했으므로, 같은 방식으로 낮은 쪽은 일반 입력 단가로 높은 쪽은 기록 단가로 계산해
-                  범위에 담았습니다.
+                  범위에 담았습니다. 이 화면은 실제 청구서가 아니라 토큰 수에 단가를 곱한
+                  참고용 추정치입니다.
+                </p>
+                <p className="mt-2 max-w-3xl text-[11px] leading-relaxed text-ink-3">
+                  참고한 원문 —{' '}
+                  <a
+                    href="https://developers.openai.com/api/docs/pricing"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="underline underline-offset-2 hover:text-measure"
+                  >
+                    developers.openai.com/api/docs/pricing
+                  </a>{' '}
+                  (생성 모델 단가) ·{' '}
+                  <a
+                    href="https://developers.openai.com/api/docs/guides/embeddings"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="underline underline-offset-2 hover:text-measure"
+                  >
+                    developers.openai.com/api/docs/guides/embeddings
+                  </a>{' '}
+                  (임베딩 모델 안내)
                 </p>
               </Section>
 
