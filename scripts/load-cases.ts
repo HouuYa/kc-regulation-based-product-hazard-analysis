@@ -24,10 +24,9 @@ import { readdirSync, readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { join } from 'node:path';
 import { getDb, closeDb } from '../src/lib/db';
-import { extractPdf, extractPhotos, type ExtractedPhoto } from '../src/lib/cases/extract-pdf';
+import { extractPdf } from '../src/lib/cases/extract-pdf';
+import { storeExtractedPhotos, analyzeStoredPhotos } from '../src/lib/cases/process-photos';
 import { putOriginal } from '../src/lib/supabase/server';
-import { analyzePhotos } from '../src/lib/llm/vision';
-import { findAndVerifyGpc, DEFAULT_GPC_CANDIDATE_COUNT } from '../src/lib/gpc/assign';
 import { extractItemName } from '../src/lib/cases/item-name';
 
 const CASES_DIR = join(import.meta.dirname, '..', '사고조사보고서');
@@ -41,6 +40,11 @@ function argValue(name: string): string | null {
  * 첨부 사진을 추출·보관·분석하고, 증거 사진에서 뽑은 제품 서술로 GPC 코드까지
  * 조회한다(2026-09-02). 실패해도 사건 적재 자체는 막지 않는다 — 텍스트만으로도
  * 이미 유효한 사건이고, 사진 분석은 보강 정보다.
+ *
+ * 실제 로직은 src/lib/cases/process-photos.ts 하나로 옮겼다(068) — 웹 업로드도
+ * 같은 저장 단계가 필요해지면서, 이 스크립트에만 있던 로직을 두 진입점이
+ * 함께 쓰게 했다(CLAUDE.md §9). 이 스크립트는 로컬에서만 돌고 시간 제한이
+ * 없으므로 저장과 분석을 이어서 부른다 — 웹 업로드는 분석을 배치로 미룬다.
  */
 async function processPhotos(
   db: ReturnType<typeof getDb>,
@@ -49,99 +53,18 @@ async function processPhotos(
   itemName: string | null,
   title: string,
 ): Promise<string> {
-  const photos = await extractPhotos(new Uint8Array(bytes));
-  if (photos.length === 0) return '';
+  const stored = await storeExtractedPhotos(db, sourceFileId, new Uint8Array(bytes));
+  if (stored.extracted === 0) return '';
 
-  const stored: Array<ExtractedPhoto & { storagePath: string | null }> = [];
-  for (const p of photos) {
-    const photoHash = createHash('sha256').update(p.jpeg).digest('hex');
-    let storagePath: string | null = null;
-    try {
-      storagePath = await putOriginal('accident-photo', photoHash, `p${p.pageNumber}.jpg`, p.jpeg, 'image/jpeg');
-    } catch (e) {
-      console.warn(`  경고: 사진 보관 실패 (p${p.pageNumber}): ${e instanceof Error ? e.message : e}`);
-    }
-    stored.push({ ...p, storagePath });
-  }
-
-  let vision: Awaited<ReturnType<typeof analyzePhotos>> | null = null;
+  let analyzed = { analyzed: 0, gpcApplied: false };
   try {
-    vision = await analyzePhotos(photos, { itemName, title });
+    analyzed = await analyzeStoredPhotos(db, sourceFileId, { itemName, title });
   } catch (e) {
     console.warn(`  경고: 사진 분석 실패: ${e instanceof Error ? e.message : e}`);
   }
 
-  const byPage = new Map(vision?.photos.map((p) => [p.pageNumber, p]) ?? []);
-  for (const p of stored) {
-    if (!p.storagePath) continue;
-    const a = byPage.get(p.pageNumber);
-    await db`
-      insert into public.source_file_image
-        (source_file_id, page_number, storage_path, width, height, byte_size,
-         is_relevant_photo, description, hazard_note, vision_model, analyzed_at)
-      values (
-        ${sourceFileId}, ${p.pageNumber}, ${p.storagePath}, ${p.width}, ${p.height}, ${p.jpeg.byteLength},
-        ${a?.isRelevantPhoto ?? null}, ${a?.description ?? null}, ${a?.hazardNote ?? null},
-        ${vision?.model ?? null}, ${vision ? new Date().toISOString() : null}
-      )
-      on conflict (source_file_id, page_number, storage_path) do nothing
-    `;
-  }
-
-  let gpcNote = '';
-  if (vision?.productDescription) {
-    try {
-      // 조회+검증은 standard(scripts/tag-standards-gpc.ts)와 findAndVerifyGpc() 를
-      // 공유한다(라운드 12) — 예전엔 후보 5개 중 1위를 검증 없이 확정했는데, 이제는
-      // KC기준 쪽과 같은 Brick→Class→Family→Segment 단계적 검증을 거친다.
-      const context = [
-        `품목명: ${itemName ?? title}`,
-        `사고 제목: ${title}`,
-        `제품 설명(사고사진 분석): ${vision.productDescription}`,
-      ].join('\n');
-      const { candidates, verification } = await findAndVerifyGpc(
-        itemName ?? title,
-        context,
-        DEFAULT_GPC_CANDIDATE_COUNT,
-      );
-      const top = candidates[0] ?? null;
-
-      await db`
-        update public.case_event
-        set gpc_brick_code            = ${top?.brickCode ?? null},
-            gpc_candidates            = ${db.json(candidates as never)},
-            gpc_verified_level        = ${verification.level},
-            gpc_verified_segment_code  = ${verification.segmentCode},
-            gpc_verified_segment_title = ${verification.segmentTitle},
-            gpc_verified_family_code  = ${verification.familyCode},
-            gpc_verified_family_title  = ${verification.familyTitle},
-            gpc_verified_class_code   = ${verification.classCode},
-            gpc_verified_class_title   = ${verification.classTitle},
-            gpc_verified_brick_code   = ${verification.brickCode},
-            gpc_verified_brick_title   = ${verification.brickTitle},
-            gpc_verification          = ${db.json(verification as never)}
-        where source_file_id = ${sourceFileId}
-      `;
-
-      gpcNote =
-        verification.level === 'NONE'
-          ? ` · GPC 후보 ${candidates.length}개, 검증 결과 NONE(맞는 후보 없음)`
-          : ` · GPC 후보 ${candidates.length}개, 검증 ${verification.level} ${
-              { BRICK: verification.brickCode, CLASS: verification.classCode, FAMILY: verification.familyCode, SEGMENT: verification.segmentCode }[
-                verification.level
-              ]
-            }(${
-              { BRICK: verification.brickTitle, CLASS: verification.classTitle, FAMILY: verification.familyTitle, SEGMENT: verification.segmentTitle }[
-                verification.level
-              ]
-            }) 확신 ${verification.confidenceScore}`;
-    } catch (e) {
-      console.warn(`  경고: GPC 조회 실패: ${e instanceof Error ? e.message : e}`);
-    }
-  }
-
-  const relevant = vision?.photos.filter((p) => p.isRelevantPhoto).length ?? 0;
-  return `\n           사진 ${photos.length}장 추출 · 증거사진 판정 ${relevant}장${gpcNote}`;
+  const gpcNote = analyzed.gpcApplied ? ' · GPC 조회 완료(case_event 참고)' : '';
+  return `\n           사진 ${stored.extracted}장 추출 · 저장 ${stored.stored}장 · 분석 ${analyzed.analyzed}장${gpcNote}`;
 }
 
 async function loadOne(filename: string, force: boolean): Promise<string> {

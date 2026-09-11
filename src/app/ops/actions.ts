@@ -100,9 +100,10 @@ export async function sendCustomMessage(
 /**
  * 정기 작업을 기다리지 않고 지금 부른다
  *
- * 리콜 수집과 기준 확인은 하루 한 번 새벽에 돈다. 새 자료가 들어온 것을 아는데
- * 내일까지 기다릴 이유는 없으므로 버튼도 함께 둔다. 여러 번 눌러도 안전하다
- * (같은 자료를 다시 넣지 않는다).
+ * 정기 작업은 이제(028) 2~5분마다 조금씩 도는 구간 방식이지만, 그래도 한
+ * 바퀴(recalls-fetch는 약 26.7시간)를 다 돌아야 특정 구간이 잡힌다. 지금 막
+ * 들어온 자료를 그만큼 기다릴 이유는 없으므로 버튼도 함께 둔다. 여러 번
+ * 눌러도 안전하다(같은 자료를 다시 넣지 않는다).
  */
 export async function runJobNow(
   _prev: string | null,
@@ -113,7 +114,10 @@ export async function runJobNow(
 
   const label = job === 'recalls-fetch' ? '리콜 수집' : '안전기준 폴더 확인';
   try {
-    await getDb()`select public.run_job(${job})`;
+    // run_job(job)을 인자 없이 부르면 리콜 수집이 기본 limit=20으로 돌아
+    // 034가 실측한 30초 제한을 항상 넘겨 504가 난다(067). run_job_now는
+    // recalls-fetch에 cron과 같은 안전한 구간(limit=3)을 강제한다.
+    await getDb()`select public.run_job_now(${job})`;
     revalidatePath('/ops');
     return `${label}을(를) 요청했습니다. 결과는 몇 분 안에 「최근 처리」에 나타납니다.`;
   } catch (e) {
@@ -141,6 +145,30 @@ export async function toggleAutoTagging(
     return on
       ? '켰습니다. 1분마다 스스로 이어서 하고, 다 끝나면 저절로 꺼지면서 텔레그램으로 알려 드립니다. 이 화면을 닫아도 계속 돕니다.'
       : '껐습니다. 지금까지 처리한 것은 그대로 남습니다.';
+  } catch (e) {
+    return `바꾸지 못했습니다 — ${e instanceof Error ? e.message : e}`;
+  }
+}
+
+/**
+ * 사고사진 비전 분석 자동 실행 켜고 끄기 (068)
+ *
+ * toggleAutoTagging과 같은 이유로 cron 작업 자체를 켜고 끈다 — 상태를 따로
+ * 저장하면 "화면은 켜졌다는데 실제로는 안 도는" 어긋남이 생길 수 있다.
+ * 다만 이쪽은 "다 끝나면 스스로 꺼짐"이 없다 — 사고사진은 연 50건 안팎이라
+ * 계속 켜 둬도 남은 것이 없으면 그냥 아무 일도 안 하고 넘어간다.
+ */
+export async function togglePhotoVision(
+  _prev: string | null,
+  formData: FormData,
+): Promise<string> {
+  const on = String(formData.get('on')) === 'true';
+  try {
+    await getDb()`select public.set_photo_vision(${on})`;
+    revalidatePath('/ops');
+    return on
+      ? '켰습니다. 1분마다 아직 분석하지 않은 사진이 있는지 확인해 처리합니다.'
+      : '껐습니다. 지금까지 분석한 것은 그대로 남습니다.';
   } catch (e) {
     return `바꾸지 못했습니다 — ${e instanceof Error ? e.message : e}`;
   }

@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { DoneBanner, FlowChart } from '@/components/Panel';
 import { ActionForm } from '@/components/ActionForm';
 import { getDb } from '@/lib/db';
+import { getSignedUrl } from '@/lib/supabase/server';
 import { standardsForCase } from '@/lib/cases/resolve-scope';
 import { EvidenceStrip, type EvidenceLevel, type MatchPath } from '@/components/EvidenceStrip';
 import { PageToc, type TocItem } from '@/components/PageToc';
@@ -101,7 +102,7 @@ function groupResults(rows: ResultRow[]): Array<{
 
 interface CaseEventRow {
   id: number; title: string | null; narrative: string; item_name: string | null;
-  source_type: string; occurred_on: string | null;
+  source_type: string; occurred_on: string | null; source_file_id: number | null;
   product_scope_id: number | null; scope_evidence: string | null; basis_date: string | null;
   scope_name: string | null;
   child_product_check: string; child_product_note: string | null;
@@ -150,6 +151,7 @@ async function load(caseId: number) {
 
   const [ev] = await db<CaseEventRow[]>`
     select e.id, e.title, e.narrative, e.item_name, e.source_type, e.occurred_on::text,
+           e.source_file_id,
            e.product_scope_id, e.scope_evidence, e.basis_date::text,
            e.child_product_check, e.child_product_note,
            ps.name as scope_name,
@@ -165,6 +167,33 @@ async function load(caseId: number) {
     where e.id = ${caseId}
   `;
   if (!ev) return null;
+
+  /*
+    사고사진 (068) — 원본 PDF 는 개인정보 때문에 저장소에 없으므로, 미리 뽑아
+    Storage 에 저장해 둔 사진만 보여 준다(process-photos.ts). 버킷이 비공개라
+    서명 URL을 서버에서 만들어 넘긴다 — service_role 키는 화면 밖으로 안 나간다.
+  */
+  const photos = ev.source_file_id
+    ? await (async () => {
+        const rows = await db<{
+          id: number; page_number: number; storage_path: string;
+          is_relevant_photo: boolean | null; description: string | null;
+          hazard_note: string | null; analyzed_at: string | null;
+        }[]>`
+          select id, page_number, storage_path, is_relevant_photo, description,
+                 hazard_note, analyzed_at::text
+          from public.source_file_image
+          where source_file_id = ${ev.source_file_id}
+          order by page_number
+        `;
+        return Promise.all(
+          rows.map(async (r) => ({
+            ...r,
+            url: await getSignedUrl(r.storage_path).catch(() => null),
+          })),
+        );
+      })()
+    : [];
 
   // 이 사건에 적용되는 기준. 품목 확정의 결과이자 검색 범위 그 자체다(v0.7 §3.2).
   // 명령줄 분석과 같은 함수를 쓴다 — 화면과 실제 검색 범위가 어긋나면 안 된다.
@@ -276,7 +305,7 @@ async function load(caseId: number) {
       `
     : [];
 
-  return { ev, tags, run, results, standards, recall };
+  return { ev, tags, run, results, standards, recall, photos };
 }
 
 /**
@@ -596,7 +625,7 @@ export default async function AnalysisPage({
     );
   }
 
-  const { ev, tags, run, results, standards, recall } = data;
+  const { ev, tags, run, results, standards, recall, photos } = data;
   const shortlist = results.slice(0, SHORTLIST);
   const rest = results.slice(SHORTLIST);
   const hfUnresolved = tags.length > 0
@@ -693,6 +722,50 @@ export default async function AnalysisPage({
             {ev.narrative}
           </p>
         </details>
+
+        {/*
+          사고사진 (068) — 텍스트만으로는 원인을 못 찾은 사건에서 실제로 단서가
+          여기 있었다(실측: 전기방석 사건, 텍스트는 "시험 적합"뿐이었지만 사진에는
+          전선 피복 손상이 보였다). 아직 비전 분석 전이면(analyzed_at null)
+          "분석 대기"만 표시한다 — /ops 에서 켜야 도는 배치 작업이다.
+        */}
+        {photos.length > 0 && (
+          <details className="mt-3 max-w-2xl">
+            <summary className="cursor-pointer list-none text-[11px] text-ink-3 hover:text-ink">
+              첨부 사진 {photos.length}장 보기
+            </summary>
+            <div className="mt-2 grid grid-cols-2 gap-3 sm:grid-cols-3">
+              {photos.map((p) => (
+                <div key={p.id} className="border border-rule-soft p-2">
+                  {p.url ? (
+                    // eslint-disable-next-line @next/next/no-img-element -- 서명 URL은 매 렌더 새로 발급돼 next/image 캐시와 안 맞는다
+                    <img src={p.url} alt={`${p.page_number}쪽 사진`} className="w-full object-contain" />
+                  ) : (
+                    <div className="flex h-24 items-center justify-center text-[11px] text-ink-3">
+                      이미지를 불러오지 못했습니다
+                    </div>
+                  )}
+                  <div className="mt-1.5 text-[11px] text-ink-3">{p.page_number}쪽</div>
+                  {p.analyzed_at ? (
+                    <>
+                      {p.is_relevant_photo === false && (
+                        <div className="text-[11px] text-ink-3">장식·서식 이미지로 판정됨</div>
+                      )}
+                      {p.description && (
+                        <p className="mt-1 text-[11px] leading-relaxed text-ink-2">{p.description}</p>
+                      )}
+                      {p.hazard_note && (
+                        <p className="mt-1 text-[11px] leading-relaxed text-caution">⚠ {p.hazard_note}</p>
+                      )}
+                    </>
+                  ) : (
+                    <div className="mt-1 text-[11px] text-ink-3">분석 대기 중</div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </details>
+        )}
 
         <div className="mt-4 flex flex-wrap items-center gap-1.5">
           <span className="label mr-1">붙은 코드</span>

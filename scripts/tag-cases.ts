@@ -40,6 +40,49 @@ interface CaseRow {
   narrative: string;
   item_name: string | null;
   extracted_text: string | null;
+  source_file_id: number | null;
+}
+
+/**
+ * 사진에서 찾은 위해요인 단서를 사건 서술 뒤에 붙인다 (068)
+ *
+ * 텍스트만 코드화하면 "시험 적합"으로만 끝나 원인을 못 찾는 사건이 있다 —
+ * 실측(전기방석 사건, source_file 103): 원문은 "시험 항목 모두 적합"뿐이라
+ * HF.UNKNOWN 으로 끝났지만, 사진에는 "전선 피복이 끊긴 듯한 틈과 노출 구간"이
+ * 보였다. 068에서 사진 비전 분석(source_file_image.hazard_note)을 붙였으니
+ * 코드화 모델도 그것을 함께 보게 한다.
+ *
+ * evidence_span 무결성에 대한 타협
+ *   이 체계는 evidence_span이 "원문에서 그대로 인용한 구간"이어야 한다고
+ *   못박아 왔다(docs/AI_사용_관리.md §3). 사진 관찰은 AI(비전 모델)가 만든
+ *   문장이지 원문이 아니므로, 코드화 모델이 거기서 evidence_span을 뽑으면 그
+ *   전제가 흔들린다. 스키마에 별도 필수 필드를 만들지 않는 한 완전히 막을
+ *   방법은 없어, 블록을 "원문 인용이 아니다"로 분명히 표시해 두는 것으로
+ *   타협한다 — 검수하는 사람이 evidence_span이 이 블록에서 왔는지 원문에서
+ *   왔는지 최소한 구분할 수는 있어야 한다.
+ *
+ * 아직 비전 분석이 안 끝난 사건(job-photo-vision 이 꺼져 있거나 순서가
+ * 아직 안 왔을 때)은 hazard_note 가 전부 null 이라 빈 문자열을 돌려주고,
+ * 코드화는 전과 같이 서술만으로 진행된다 — 실패가 아니라 자연스러운 대기 상태다.
+ */
+async function photoHazardContext(
+  db: ReturnType<typeof getDb>,
+  sourceFileId: number | null,
+): Promise<{ text: string; count: number }> {
+  if (!sourceFileId) return { text: '', count: 0 };
+  const rows = await db<{ page_number: number; hazard_note: string }[]>`
+    select page_number, hazard_note
+    from public.source_file_image
+    where source_file_id = ${sourceFileId}
+      and hazard_note is not null and length(btrim(hazard_note)) > 0
+    order by page_number
+  `;
+  if (rows.length === 0) return { text: '', count: 0 };
+  const lines = rows.map((r) => `- ${r.page_number}쪽: ${r.hazard_note}`).join('\n');
+  return {
+    text: `\n\n[AI가 첨부 사진에서 관찰한 것 — 원문 인용이 아니라 비전 분석 결과다]\n${lines}`,
+    count: rows.length,
+  };
 }
 
 async function main() {
@@ -52,7 +95,7 @@ async function main() {
   const variant = tuning().searchTextVariant as SearchTextVariant;
 
   const rows = await db<CaseRow[]>`
-    select e.id, e.title, e.narrative, e.item_name, f.extracted_text
+    select e.id, e.title, e.narrative, e.item_name, f.extracted_text, e.source_file_id
     from public.case_event e
     left join public.source_file f on f.id = e.source_file_id
     where not exists (select 1 from public.case_tag t where t.case_id = e.id)
@@ -110,11 +153,13 @@ async function main() {
       // ── 2단계: 코드화 ────────────────────────────────────────────────
       // 품목이 미확정이어도 코드는 붙인다. 코드가 있어야 나중에 품목이 확정됐을 때
       // 바로 분석할 수 있고, 트랙 B 통계에도 쓰인다.
+      const photo = await photoHazardContext(db, c.source_file_id);
       const result = await tagCase(
-        { itemName, title: c.title, narrative: c.narrative.slice(0, 12000) },
+        { itemName, title: c.title, narrative: c.narrative.slice(0, 12000) + photo.text },
         snapshot,
         c.id,
       );
+      if (photo.count > 0) console.log(`     사진 관찰 ${photo.count}건을 함께 검토했습니다`);
 
       const tagRows = toTagRows(result);
       const hf = tagRows.filter((t) => t.axis === 'HF').map((t) => t.code);

@@ -7,9 +7,10 @@ import { PageToc, type TocItem } from '@/components/PageToc';
 import { usageSummary, PURPOSE_LABEL, type UsageSummary } from '@/lib/llm/usage';
 import { CALL_SITES } from '@/lib/llm/catalog';
 import { formatCost } from '@/lib/llm/pricing';
+import { countPendingPhotoVision } from '@/lib/cases/photo-vision-run';
 import {
   runEmbedTick, retryParked, sendTestAlert,
-  sendCustomMessage, runJobNow, toggleAutoTagging, resetTagFailures,
+  sendCustomMessage, runJobNow, toggleAutoTagging, togglePhotoVision, resetTagFailures,
 } from './actions';
 
 export const dynamic = 'force-dynamic';
@@ -93,6 +94,9 @@ interface Data {
   /** 세 번 연속 실패해 자동 대상에서 빠진 조항. 남은 건수와 절대 합치지 않는다(029) */
   stalledTagging: number;
   autoTagging: boolean;
+  /** 아직 비전 분석하지 않은 사진이 딸린 사고보고서 건수 (068) */
+  pendingPhotoVision: number;
+  photoVisionOn: boolean;
   embeddedToday: number;
   jobsConfigured: boolean;
   /*
@@ -173,6 +177,10 @@ const JOB_INFO: Record<string, JobInfo> = {
   'job-tag-chunk': {
     what: '위해요인 코드를 이어서 부여한다 (켜 뒀을 때만)',
     why: 'AI 를 불러 조항에 위해요인 코드를 붙입니다. 돈이 드는 작업이라 기본은 꺼져 있고, 아래 「지금 하기」에서 켤 수 있습니다.',
+  },
+  'job-photo-vision': {
+    what: '사고사진을 비전 분석한다 (켜 뒀을 때만)',
+    why: 'AI로 사고보고서 첨부 사진을 봐서 무엇이 보이는지, 위해요인과 관련될 만한 손상이 있는지 적고, 증거 사진에서 뽑은 제품 서술로 GPC 품목분류까지 조회합니다(068). 웹 업로드가 사진을 추출·저장까지는 자동으로 하고, 이 AI 분석만 돈이 들어 기본은 꺼져 있습니다.',
   },
 };
 
@@ -279,6 +287,8 @@ async function load(): Promise<{ data: Data | null; error: string | null }> {
     `;
 
     const [at] = await db<{ on: boolean }[]>`select public.auto_tagging_on() as on`;
+    const [pv] = await db<{ on: boolean }[]>`select public.photo_vision_on() as on`;
+    const pendingPhotoVision = await countPendingPhotoVision();
 
     const [j] = await db<{ ok: boolean }[]>`
       select (exists (select 1 from vault.decrypted_secrets where name = 'jobs_token')
@@ -335,7 +345,8 @@ async function load(): Promise<{ data: Data | null; error: string | null }> {
         ops, embed, jobs, runs, parkedRows, cronFailures, alerts,
         recovery, usage,
         taggable: t.n, stalledTagging: t.stalled,
-        autoTagging: at.on, embeddedToday: e.n, jobsConfigured: j.ok,
+        autoTagging: at.on, pendingPhotoVision, photoVisionOn: pv.on,
+        embeddedToday: e.n, jobsConfigured: j.ok,
         noMaterialClause, noMaterialCase, alertStat,
       },
       error: null,
@@ -816,6 +827,58 @@ export default async function OpsPage() {
                   </div>
                 </div>
               )}
+            </div>
+
+            {/*
+              사고사진 비전 분석 — 068. 위 코드 부여와 같은 성격(돈이 드는 LLM
+              호출, 기본 꺼짐)이지만 연 50건 안팎이라 가볍게 둔다 — 비용 견적·
+              소요 시간 추정·3연속실패 추적까지는 붙이지 않는다(코드 부여는
+              5,884건 규모라 그런 장치가 필요했다).
+            */}
+            <div className="mt-5 border border-caution bg-caution-soft px-4 py-3">
+              <div className="text-[13px] font-semibold text-caution">
+                사고사진 비전 분석 — 비용이 드는 작업
+              </div>
+
+              {data.pendingPhotoVision === 0 ? (
+                <p className="mt-1.5 text-[12px] text-ink-2">
+                  아직 비전 분석하지 않은 사진이 없습니다.
+                </p>
+              ) : (
+                <p className="mt-1.5 text-[12px] leading-relaxed text-ink-2">
+                  웹 업로드가 추출·저장까지 마치고 분석을 기다리는 사고보고서가{' '}
+                  <span className="addr tnum text-ink">
+                    {data.pendingPhotoVision.toLocaleString()}건
+                  </span>{' '}
+                  있습니다. 사진에서 손상 흔적 같은 단서를 찾고, 제품 서술로 GPC
+                  품목분류까지 조회합니다.
+                </p>
+              )}
+
+              <div className="mt-3">
+                {data.photoVisionOn ? (
+                  <ActionForm
+                    action={togglePhotoVision}
+                    hidden={{ on: 'false' }}
+                    label="멈추기"
+                    pendingLabel="멈추는 중…"
+                    className="border border-rule bg-surface px-4 py-2 text-[13px] hover:bg-rule-soft"
+                  />
+                ) : (
+                  <ActionForm
+                    action={togglePhotoVision}
+                    hidden={{ on: 'true' }}
+                    label="자동 실행 켜기"
+                    pendingLabel="켜는 중…"
+                    className="border border-caution bg-caution px-4 py-2 text-[13px] font-medium text-white hover:opacity-85"
+                  />
+                )}
+              </div>
+              <p className="mt-2 text-[11px] leading-relaxed text-ink-3">
+                {data.photoVisionOn
+                  ? '켜져 있습니다 — 1분마다 남은 것이 있는지 확인해 처리합니다.'
+                  : '꺼져 있습니다. 켜 두면 1분마다 스스로 이어서 하고, 언제든 멈출 수 있습니다.'}
+              </p>
             </div>
           </Section>
 

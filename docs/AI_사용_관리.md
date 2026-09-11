@@ -84,7 +84,7 @@ related: [README.md, docs/전체_프로세스와_용어.md]
 | 무엇을 묻나 | 근거 필드 | 어디에 남나 | 화면에서 보이나 |
 | --- | --- | --- | --- |
 | 코드 부여 | `evidence_span` (필수) | `case_tag` · `clause_tag` | 보인다 — 원문의 어느 구간인지 |
-| 사진 분석 | `description` · `hazard_note` | `source_file.photo_analysis` (JSON) | 보인다 (`/accidents`) |
+| 사진 분석 | `description` · `hazard_note` | `source_file_image`(사진마다 한 행) | 보인다 (`/analysis`, 068 전에는 저장만 되고 보는 화면이 없었다) |
 | 조항 재채점 | `reason` | `match_result.rerank_reason` | 보인다 — 후보마다 한 줄 |
 | 적용범위 의미검색 | `reasoning` | `scope_term.evidence` · `case_event.scope_evidence` | 보인다 |
 | 적용범위 후보 거르기 | `reasoning` | `case_event.scope_evidence` | 보인다 |

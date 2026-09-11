@@ -4,6 +4,7 @@ import { createHash } from 'node:crypto';
 import { revalidatePath } from 'next/cache';
 import { getDb } from '@/lib/db';
 import { extractPdf } from '@/lib/cases/extract-pdf';
+import { storeExtractedPhotos } from '@/lib/cases/process-photos';
 import { putOriginal } from '@/lib/supabase/server';
 
 /**
@@ -130,6 +131,16 @@ export async function uploadAccidentPdfs(formData: FormData): Promise<void> {
             select 1 from public.case_event where source_file_id = ${sf.id}
           )
         `;
+
+        // 사진은 추출·저장만 여기서 한다(068). LLM 호출(비전 분석)은 사진이
+        // 많은 보고서에서 배포 환경의 요청 시간 제한(~30초)을 넘길 수 있어
+        // job-photo-vision 배치가 따로 맡는다 — 위 원본 PDF 보관과 달리 이건
+        // 실패해도 업로드 자체는 막지 않는다(보강 정보이지 필수 정보가 아니다).
+        try {
+          await storeExtractedPhotos(db, sf.id, bytes);
+        } catch (e) {
+          console.warn(`사진 추출 실패 (${file.name}): ${e instanceof Error ? e.message : e}`);
+        }
       }
     } catch {
       // 한 건이 실패해도 나머지는 진행한다 (§8.1)

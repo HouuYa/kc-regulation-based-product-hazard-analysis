@@ -68,3 +68,33 @@ export async function putOriginal(
   if (error) throw new Error(`원본 보관 실패 (${filename}): ${error.message}`);
   return path;
 }
+
+/**
+ * 보관해 둔 원본을 다시 가져온다 (068).
+ *
+ * 사고사진 비전 분석을 업로드 요청과 분리하면서 생겼다 — 사진은 업로드 시점에
+ * Storage 에 저장만 해 두고, 비전 분석은 나중에 배치가 따로 돈다. 그때 다시
+ * 보낼 사진 bytes 가 필요한데, 원본 PDF 를 다시 열 이유는 없다 — 이미 뽑아 둔
+ * JPEG 을 그대로 내려받는다.
+ */
+export async function getOriginal(path: string): Promise<Buffer> {
+  const { data, error } = await getStorageClient().storage.from(ORIGINAL_BUCKET).download(path);
+  if (error) throw new Error(`원본을 가져오지 못했습니다 (${path}): ${error.message}`);
+  return Buffer.from(await data.arrayBuffer());
+}
+
+/**
+ * 브라우저가 직접 열 수 있는 임시 URL을 발급한다 (068).
+ *
+ * 버킷이 비공개라 service_role 키 없이는 못 연다. 화면(사고 사진 보기)은
+ * 브라우저에서 바로 img 태그로 열어야 하므로, 서버에서 짧게 유효한 서명 URL을
+ * 만들어 그 주소만 화면에 넘긴다 — service_role 키 자체는 서버 밖으로 나가지
+ * 않는다.
+ */
+export async function getSignedUrl(path: string, expiresInSeconds = 3600): Promise<string> {
+  const { data, error } = await getStorageClient()
+    .storage.from(ORIGINAL_BUCKET)
+    .createSignedUrl(path, expiresInSeconds);
+  if (error) throw new Error(`서명 URL 발급 실패 (${path}): ${error.message}`);
+  return data.signedUrl;
+}

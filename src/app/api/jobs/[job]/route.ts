@@ -3,6 +3,7 @@ import { getDb } from '@/lib/db';
 import { loadRecalls } from '@/lib/recall/load';
 import { syncStandardsFolder } from '@/lib/standards/sync';
 import { runTagging, countTaggable, countStalledTagging } from '@/lib/standards/tag-run';
+import { runPhotoVisionChunk } from '@/lib/cases/photo-vision-run';
 import { boundedInt } from '@/lib/env';
 
 export const dynamic = 'force-dynamic';
@@ -13,13 +14,17 @@ export const maxDuration = 60;
  *
  * 담당자 질문이 출발점이다. 조사해 보니 스크립트마다 답이 달랐다.
  *
- *   리콜 수집      로컬 파일 없음, 외부 표만 읽음 → 자동으로 돌려도 된다
- *   기준 폴더 동기화 KC안전기준/ 가 저장소에 있음     → 자동으로 돌려도 된다
- *   조항 코드 부여  로컬 파일 없음이지만 돈이 든다   → 사람이 눌러야 한다
- *   사고보고서 적재 원본 PDF 가 개인정보라 저장소에 없음 → 로컬에서만 가능
- *   정확도 평가    사람이 손으로 채운 정답지가 필요   → 로컬에서만 가능
+ *   리콜 수집        로컬 파일 없음, 외부 표만 읽음    → 자동으로 돌려도 된다
+ *   기준 폴더 동기화 KC안전기준/ 가 저장소에 있음      → 자동으로 돌려도 된다
+ *   조항 코드 부여   로컬 파일 없음이지만 돈이 든다    → 사람이 눌러야 한다
+ *   사고사진 비전 분석 원본은 웹 업로드가 이미 Storage에 올려 둠, 돈이 든다 → 사람이 눌러야 한다(068)
+ *   사고보고서 적재  원본 PDF 가 개인정보라 저장소에 없음 → 로컬에서만 가능
+ *   정확도 평가      사람이 손으로 채운 정답지가 필요   → 로컬에서만 가능
  *
- * 그래서 앞의 셋만 여기에 노출한다. 뒤의 둘은 클라우드에 올릴 재료 자체가 없다.
+ * 그래서 앞의 넷만 여기에 노출한다. 뒤의 둘은 클라우드에 올릴 재료 자체가 없다.
+ * 사고사진 비전 분석(photo-vision)은 원본 PDF 자체가 아니라 웹 업로드가 이미
+ * Storage에 저장해 둔 JPEG만 필요하므로(process-photos.ts) 여기에 넣을 수 있다 —
+ * 조항 코드 부여와 같은 이유로 기본은 꺼져 있다.
  *
  * 왜 pg_cron 이 이 라우트를 부르는가 (Edge Function 이 아니라)
  *   라운드 17에서 임베딩 자동화를 pg_cron + pg_net 으로 만들어 두었고 잘 돌고 있다.
@@ -34,9 +39,9 @@ export const maxDuration = 60;
  *   "미설정이면 통과"로 두면 대량 쓰기 작업이 인터넷에 열린 채로 있게 된다.
  */
 
-type JobName = 'recalls-fetch' | 'standards-sync' | 'tag-chunk';
+type JobName = 'recalls-fetch' | 'standards-sync' | 'tag-chunk' | 'photo-vision';
 
-const JOBS: JobName[] = ['recalls-fetch', 'standards-sync', 'tag-chunk'];
+const JOBS: JobName[] = ['recalls-fetch', 'standards-sync', 'tag-chunk', 'photo-vision'];
 
 /**
  * 코드 부여 한 번에 쓸 시간.
@@ -66,6 +71,17 @@ const TAG_TIME_BUDGET_MS = 12_000;
  * 남긴 건은 다음 차례가 같은 구간을 다시 훑을 때 처리된다.
  */
 const RECALL_TIME_BUDGET_MS = 15_000;
+
+/**
+ * 사고사진 비전 분석 한 번에 쓸 시간 (068)
+ *
+ * 보고서 한 건의 비전 호출은 사진 수에 비례해 늘어난다 — 실측 자료(2026-09-04
+ * 적재분)에서 가장 사진이 많던 보고서는 4장이었지만 15장 넘는 보고서도 있다.
+ * 안전한 쪽으로 recalls-fetch 와 같은 예산을 쓴다 — 시간 안에 끝난 보고서까지만
+ * 반영하고 나머지는 다음 차례로 넘긴다(runPhotoVisionChunk 가 보고서 단위로
+ * 끊으므로 한 보고서가 반쯤 분석된 채 남지는 않는다).
+ */
+const PHOTO_VISION_TIME_BUDGET_MS = 15_000;
 
 /**
  * 자동 실행일 때만 동시 처리를 올린다.
@@ -150,6 +166,19 @@ export async function POST(req: Request, ctx: { params: Promise<{ job: string }>
         job, ok: true, elapsedMs: Date.now() - started,
         offset, limit, clamped: lim.clamped || off.clamped,
         added, updated, failed, total: results.length,
+      });
+    }
+
+    if (job === 'photo-vision') {
+      // 담당자가 /ops 에서 켜야 돈다(068) — job-tag-chunk 와 같은 이유로
+      // 기본은 꺼짐이다(026: "돈 안 드는 것만 자동"). 이 작업은 offset 이 아니라
+      // 시간 예산 안에서 아직 분석하지 않은 보고서를 순서대로 처리한다 —
+      // recalls-fetch 처럼 주소로 받은 값을 그대로 믿지 않는다(067에서 겪은 문제).
+      const r = await runPhotoVisionChunk({ timeBudgetMs: PHOTO_VISION_TIME_BUDGET_MS });
+      return NextResponse.json({
+        job, ok: true, elapsedMs: Date.now() - started,
+        processedFiles: r.processedFiles, analyzed: r.analyzedPhotos,
+        stoppedEarly: r.stoppedEarly, errors: r.errors.slice(0, 5),
       });
     }
 
