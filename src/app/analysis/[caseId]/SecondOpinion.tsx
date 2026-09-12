@@ -18,9 +18,20 @@
  *   화면을 보고 시험을 의뢰한다.
  */
 
+import Link from 'next/link';
 import { ActionForm } from '@/components/ActionForm';
 import { loadSecondOpinion, type SecondOpinionView, type FindingRow } from '@/lib/second-opinion/load';
 import { runSecondOpinionAction, recordFindingReview } from './actions';
+
+/** 라벨 하나 + 숫자 하나. 문장 대신 이 모양으로 늘어놓는다(개조식) */
+function Stat({ label, value }: { label: string; value: string }) {
+  return (
+    <span className="inline-flex items-baseline gap-1">
+      <span className="text-ink-3">{label}</span>
+      <span className="addr tnum font-medium text-ink">{value}</span>
+    </span>
+  );
+}
 
 const ITEM_LABEL: Record<string, string> = {
   TEST_PERFORMED: '수행한 시험',
@@ -72,10 +83,8 @@ export async function InvestigationSummary({ caseId }: { caseId: number }) {
             <>
               <p className="text-ink-2">아직 병행 점검을 하지 않았습니다.</p>
               <p className="mt-1.5 max-w-2xl text-[12px] leading-relaxed text-ink-3">
-                보고서가 어떤 시험을 했고 무엇이라고 결론 내렸는지를 원문에서 뽑아,
-                이 품목에 적용되는 안전기준 전체와 견줍니다. 사고조사보고서는 수행한
-                시험을 스스로 적어 두므로(71건 중 70건), 그 목록과 기준을 견주면
-                「시험하지 않은 구간」이 나옵니다.
+                원문에서 수행 시험·결론 추출 → 적용 안전기준 전체와 대조 → 시험하지 않은
+                구간 도출. (사고조사보고서 71건 중 70건이 수행 시험을 스스로 기재)
               </p>
               <div className="mt-3">
                 <ActionForm
@@ -114,18 +123,22 @@ export async function InvestigationSummary({ caseId }: { caseId: number }) {
                 ))}
               </ul>
 
-              <p className="mt-3 text-[12px] leading-relaxed text-ink-2">
-                이 품목에 적용되는 안전기준은 {view.standardCount}종이고 성능요건은{' '}
-                {view.requirementSectionCount}개 절({view.requirementClauseCount}개 조항)입니다.
-                보고서가 시험한 것은 {view.performedTestCount}건입니다.
+              <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-[12px]">
+                <Stat label="적용 기준" value={`${view.standardCount}종`} />
+                <Stat
+                  label="성능요건"
+                  value={`${view.requirementSectionCount}개 절 (${view.requirementClauseCount}개 조항)`}
+                />
+                <Stat label="시험" value={`${view.performedTestCount}건`} />
                 {view.unmappedTestCount > 0 && (
-                  <>
-                    {' '}그중 {view.unmappedTestCount}건은 기준의 조항 제목에 맞추지 못했습니다 —
-                    <strong className="font-medium"> 시험을 안 한 것이 아니라 우리가 못 맞힌 것</strong>이므로
-                    아래 공백 목록에 넣지 않았습니다.
-                  </>
+                  <Stat label="미매칭" value={`${view.unmappedTestCount}건`} />
                 )}
-              </p>
+              </div>
+              {view.unmappedTestCount > 0 && (
+                <p className="mt-1 text-[11px] leading-relaxed text-ink-3">
+                  미매칭 — 시험을 안 한 게 아니라 기준 조항 제목에 못 맞춘 것. 공백 목록 제외.
+                </p>
+              )}
 
               <div className="addr mt-2 text-[11px] text-ink-3">
                 {view.startedAt.slice(0, 16)} · {view.extractModel}
@@ -183,7 +196,7 @@ function FindingList({
   findings, caseId, tone,
 }: { findings: FindingRow[]; caseId: number; tone: 'test' | 'legal' | 'ref' }) {
   const border =
-    tone === 'test' ? 'border-l-measure' : tone === 'legal' ? 'border-l-amber-500' : 'border-l-rule';
+    tone === 'test' ? 'border-l-measure' : tone === 'legal' ? 'border-l-caution' : 'border-l-rule';
 
   return (
     <ul className="mt-2 space-y-2">
@@ -198,12 +211,22 @@ function FindingList({
               </span>
             )}
             {f.refCaseId && (
-              <span className="addr mr-2 text-[12px] text-ink-2">
+              <Link
+                href={`/analysis/${f.refCaseId}`}
+                className="addr mr-2 text-[12px] text-measure underline underline-offset-2 hover:opacity-80"
+              >
                 {f.refTitle ?? `사건 ${f.refCaseId}`}
-              </span>
+              </Link>
             )}
             {f.hfCode && !f.sectionMarker && !f.refCaseId && (
               <span className="addr mr-2 text-[12px] text-ink-2">{f.hfCode}</span>
+            )}
+            {f.refCaseId && (f.hfCode || f.dtCode) && (
+              <span className="addr mr-2 text-[11px] text-ink-3">
+                {f.dtCode && `DT ${f.dtCode}`}
+                {f.dtCode && f.hfCode && ' · '}
+                {f.hfCode && `HF ${f.hfCode}`}
+              </span>
             )}
           </div>
           <p className="mt-0.5 text-[12px] leading-relaxed text-ink-2">{f.rationale}</p>
@@ -235,11 +258,9 @@ export async function SecondOpinionFindings({ caseId }: { caseId: number }) {
   return (
     <section id="analysis-second-opinion" className="mt-10 scroll-mt-8 border-t border-rule pt-6">
       <h2 className="text-[15px] font-semibold">병행 점검 소견</h2>
-      <p className="mt-1 max-w-3xl text-[12px] leading-relaxed text-ink-3">
-        위 목록은 이 사고의 <strong className="font-medium">피해유형</strong>으로 찾은 조항입니다.
-        아래는 보고서가 <strong className="font-medium">시험하지 않은 구간</strong>과 국내·해외
-        리콜에서 온 참고 자료입니다. 위 목록을 대신하지 않습니다 — 성격이 다른 두 번째 목록입니다.
-        어느 것도 확정이 아니며, 판단은 품목을 아는 담당자가 합니다.
+      <p className="mt-1 text-[11px] leading-relaxed text-ink-3">
+        위 기본 목록(피해유형 기준 조항)과는 다른 두 번째 참고 자료 — 시험 공백 ·
+        인증·표시 · 리콜 사례. 전부 미확정, 판단은 담당자.
       </p>
 
       <div className="mt-5 space-y-6">
@@ -247,11 +268,13 @@ export async function SecondOpinionFindings({ caseId }: { caseId: number }) {
           <h3 className="text-[13px] font-semibold">
             시험 범위 공백 {gap.length}건 — 시험항목 후보
           </h3>
-          <p className="mt-0.5 text-[12px] leading-relaxed text-ink-2">
-            보고서는 {view.performedTestCount}건을 시험했고, 이 품목의 성능요건은{' '}
-            {view.requirementSectionCount}개 절입니다. 그중 이 사고와 닿는데 시험하지 않은 것입니다.
-            <strong className="font-medium"> 「전부 시험하라」는 뜻이 아닙니다</strong> — 닿는 정도가
-            높은 순으로 {gap.length}개만 추렸습니다.
+          <div className="mt-0.5 flex flex-wrap gap-x-4 gap-y-1 text-[12px]">
+            <Stat label="시험" value={`${view.performedTestCount}건`} />
+            <Stat label="성능요건" value={`${view.requirementSectionCount}개 절`} />
+            <Stat label="공백 후보" value={`${gap.length}개`} />
+          </div>
+          <p className="mt-1 text-[11px] leading-relaxed text-ink-3">
+            전부 시험하라는 뜻 아님 — 이 사고와 닿는 정도가 높은 순으로만 추림.
           </p>
           {gap.length === 0 ? (
             <p className="mt-2 text-[12px] text-ink-3">
@@ -269,9 +292,8 @@ export async function SecondOpinionFindings({ caseId }: { caseId: number }) {
             <h3 className="text-[13px] font-semibold">
               인증·표시 확인항목 {legal.length}건
             </h3>
-            <p className="mt-0.5 text-[12px] leading-relaxed text-ink-2">
-              <strong className="font-medium">시험으로 확인하는 것이 아닙니다.</strong>{' '}
-              법령이 정한 의무를 지켰는지는 법령을 보면 판정됩니다. 시험의뢰 목록에 넣지 마십시오.
+            <p className="mt-0.5 text-[11px] leading-relaxed text-ink-3">
+              시험 항목 아님 — 법령 확인 사항. 시험의뢰 목록 제외.
             </p>
             <FindingList findings={legal} caseId={caseId} tone="legal" />
           </div>
@@ -280,9 +302,8 @@ export async function SecondOpinionFindings({ caseId }: { caseId: number }) {
         {policy.length > 0 && (
           <div>
             <h3 className="text-[13px] font-semibold">기준 사각지대 {policy.length}건</h3>
-            <p className="mt-0.5 text-[12px] leading-relaxed text-ink-2">
-              시험도 인증 위반도 아니라 <strong className="font-medium">기준 체계 자체의 빈틈</strong>일
-              수 있다는 신호입니다. 전문가가 확인하기 전에는 정책 판단 자료로 쓰지 않습니다.
+            <p className="mt-0.5 text-[11px] leading-relaxed text-ink-3">
+              시험·인증 위반 아님 — 기준 체계 빈틈 신호. 전문가 확인 전 정책자료 미사용.
             </p>
             <FindingList findings={policy} caseId={caseId} tone="ref" />
           </div>
@@ -290,16 +311,26 @@ export async function SecondOpinionFindings({ caseId }: { caseId: number }) {
 
         <div>
           <h3 className="text-[13px] font-semibold">리콜 교차 근거 {stat.length + cases.length}건</h3>
-          <p className="mt-0.5 text-[12px] leading-relaxed text-ink-2">
-            {view.scopeEvidence ?? '국내·해외 리콜에서 이 피해유형에 실제로 따라온 원인과 닮은 사례입니다.'}
-            {' '}통계는 방향을 주고 사례는 그 방향이 실제로 일어난 적이 있음을 보입니다.
-            어느 쪽도 이 사고의 원인이라는 뜻은 아닙니다.
-          </p>
+          {stat.length + cases.length > 0 ? (
+            <>
+              <div className="mt-0.5 flex flex-wrap gap-x-4 gap-y-1 text-[12px]">
+                {stat[0]?.sampleSize != null && (
+                  <Stat label="비교 표본" value={`해외 리콜 ${stat[0].sampleSize}건`} />
+                )}
+                <Stat label="원인 후보" value={`${stat.length}개`} />
+                <Stat label="닮은 사례" value={`${cases.length}건`} />
+              </div>
+              <p className="mt-1 text-[11px] leading-relaxed text-ink-3">
+                통계는 방향, 사례는 실제 발생 — 원인 확정 아님.
+              </p>
+            </>
+          ) : (
+            <p className="mt-0.5 text-[12px] leading-relaxed text-ink-3">
+              {view.scopeEvidence ?? '닮은 리콜이나 통계 근거를 찾지 못했습니다.'}
+            </p>
+          )}
           {stat.length > 0 && <FindingList findings={stat} caseId={caseId} tone="ref" />}
           {cases.length > 0 && <FindingList findings={cases} caseId={caseId} tone="ref" />}
-          {stat.length + cases.length === 0 && (
-            <p className="mt-2 text-[12px] text-ink-3">닮은 리콜이나 통계 근거를 찾지 못했습니다.</p>
-          )}
         </div>
       </div>
     </section>

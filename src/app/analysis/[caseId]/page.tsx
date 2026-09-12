@@ -833,8 +833,8 @@ export default async function AnalysisPage({
               <div className="border border-caution bg-caution-soft px-3 py-2 text-[12px] leading-relaxed text-caution">
                 <strong className="font-semibold">품목 미확정 (SCOPE_UNRESOLVED)</strong>
                 <p className="mt-1">
-                  적용할 기준을 정하지 못해 분석을 실행하지 않습니다. 전 품목을 뒤지면 다른
-                  제품의 시험이 섞이기 때문입니다. 품목을 등록한 뒤 다시 실행하세요.
+                  적용 기준 미확정 — 분석 미실행 (전 품목 검색 시 다른 제품 시험 혼입).
+                  품목 등록 후 재실행.
                 </p>
               </div>
             )}
@@ -954,9 +954,7 @@ export default async function AnalysisPage({
                 ) : ev.gpc_verified_level === 'NONE' ? (
                   <div className="border border-caution bg-caution-soft px-3 py-2 text-[12px] leading-relaxed text-caution">
                     <strong className="font-semibold">LLM 검증: 맞는 후보 없음</strong>
-                    <p className="mt-1">
-                      후보 안에 확실히 일치하는 코드가 없다고 판단했습니다. 담당자 확인이 필요합니다.
-                    </p>
+                    <p className="mt-1">확실히 일치하는 코드 없음 — 담당자 확인 필요.</p>
                     {ev.gpc_verification?.reasoning && (
                       <p className="mt-1 text-ink-2">{ev.gpc_verification.reasoning}</p>
                     )}
@@ -1159,9 +1157,8 @@ export default async function AnalysisPage({
           */}
           {run.rerank_status === 'failed' && (
             <p className="mt-2 border border-caution bg-caution-soft px-3 py-2 text-[11px] leading-relaxed text-caution">
-              순서를 다시 매기는 단계가 실패했습니다. 아래 목록은 검색 점수 순서 그대로이며,
-              재채점 점수는 비어 있습니다 — 관련성이 낮아서가 아니라 채점을 하지 못한 것입니다.
-              분석을 다시 실행하면 재채점이 붙습니다.
+              재채점 실패 — 아래 목록은 검색 점수 순서 그대로, 재채점 점수 공란
+              (관련성 낮음이 아니라 채점 실패). 재실행 시 재채점 재시도.
             </p>
           )}
 
@@ -1235,22 +1232,21 @@ export default async function AnalysisPage({
           {results.length === 0 ? (
             <section className="mt-6 border-t border-rule pt-5">
               <p className="text-[13px] text-ink-2">
-                후보가 없습니다. 이것이 곧 &ldquo;기준에 조항이 없다&rdquo;는 뜻은 아닙니다.
+                후보 0건 — &ldquo;기준에 조항 없음&rdquo;을 뜻하지 않음.
               </p>
               <p className="mt-2 max-w-2xl text-[12px] leading-relaxed text-ink-3">
-                품목·기준이 확정되지 않았거나, 조항에 아직 위해요인 코드가 붙지 않았거나, 시험방법 연결이
-                없어서일 수 있습니다. 개요 화면에서 준비 상태를 먼저 확인하세요.
+                가능한 원인: 품목·기준 미확정 / 조항에 위해요인 코드 미부여 / 시험방법 연결 없음.
+                개요 화면에서 준비 상태 먼저 확인.
               </p>
             </section>
           ) : (
             <>
               {hfUnresolved && (
                 <div className="mt-4 border border-caution bg-caution-soft px-4 py-3 text-[12px] leading-relaxed text-caution">
-                  <strong className="font-semibold">이 사건은 원인이 확정되지 않았습니다.</strong>
+                  <strong className="font-semibold">원인 미확정</strong>
                   <p className="mt-1">
-                    조사에서 결함이 확인되지 않았거나 보고서에 원인 서술이 없는 경우입니다.
-                    아래 후보는 피해유형·어휘·의미만으로 넓게 건진 것이어서 코드 근거가 없습니다.
-                    특정 시험을 단정하지 마시고 직접 검토해 주세요.
+                    결함 미확인 또는 보고서에 원인 서술 없음 — 아래 후보는 피해유형·어휘·의미로만
+                    넓게 건진 것, 코드 근거 없음. 특정 시험 단정 금지, 직접 검토 필요.
                   </p>
                 </div>
               )}

@@ -30,6 +30,7 @@ export interface FindingRow {
   sectionTitle: string | null;
   testMethodMarker: string | null;
   hfCode: string | null;
+  dtCode: string | null;
   causeRoute: string | null;
   refCaseId: number | null;
   refTitle: string | null;
@@ -111,7 +112,7 @@ export async function loadSecondOpinion(caseId: number): Promise<SecondOpinionVi
     id: string; finding_type: string; output_kind: string; rank: number | null;
     standard_name: string | null; section_marker: string | null; part: string | null;
     section_title: string | null; test_method_marker: string | null;
-    hf_code: string | null; cause_route: string | null;
+    hf_code: string | null; dt_code: string | null; cause_route: string | null;
     ref_case_id: string | null; ref_title: string | null;
     similarity: string | null; support: number | null; confidence: string | null;
     lift: string | null; sample_size: number | null;
@@ -126,7 +127,7 @@ export async function loadSecondOpinion(caseId: number): Promise<SecondOpinionVi
           and coalesce(c.part, '') = coalesce(f.part, '')
         limit 1) as section_title,
       (select c.marker from public.clause c where c.id = f.test_method_clause_id) as test_method_marker,
-      f.hf_code, f.cause_route,
+      f.hf_code, f.dt_code, f.cause_route,
       f.ref_case_id, r.title as ref_title,
       f.similarity::text, f.support, f.confidence::text, f.lift::text, f.sample_size,
       f.rationale, f.needs_expert_confirm,
@@ -174,6 +175,7 @@ export async function loadSecondOpinion(caseId: number): Promise<SecondOpinionVi
       sectionTitle: f.section_title,
       testMethodMarker: f.test_method_marker,
       hfCode: f.hf_code,
+      dtCode: f.dt_code,
       causeRoute: f.cause_route,
       refCaseId: f.ref_case_id == null ? null : Number(f.ref_case_id),
       refTitle: f.ref_title,
