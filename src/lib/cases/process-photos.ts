@@ -22,7 +22,8 @@ import { createHash } from 'node:crypto';
 import { getDb } from '../db';
 import { extractPhotos } from './extract-pdf';
 import { putOriginal, getOriginal } from '../supabase/server';
-import { analyzePhotos } from '../llm/vision';
+import { analyzePhotos, type VisionPromptVariant } from '../llm/vision';
+import { tuning } from '../env';
 import { findAndVerifyGpc, DEFAULT_GPC_CANDIDATE_COUNT } from '../gpc/assign';
 
 type Db = ReturnType<typeof getDb>;
@@ -84,16 +85,26 @@ export interface AnalyzePhotosResult {
  *
  * 사진 bytes 는 다시 뽑지 않는다 — storeExtractedPhotos 가 이미 Storage 에
  * 올려 둔 JPEG 을 그대로 내려받는다.
+ *
+ * @param opts.variant  'A'(현행) / 'B'(측정값·부품구성 확장, 라운드 71~72).
+ *   생략하면 tuning().visionPromptVariant(기본 A)를 따른다 — 배치 자동 실행이
+ *   조용히 B로 바뀌는 일이 없게 호출자가 명시하지 않는 한 기본값을 그대로 쓴다.
+ * @param opts.forceReanalyze  이미 분석된 사진도 다시 분석한다. 대조군 비교
+ *   (같은 사진을 A/B 로 각각 돌려 재료가 실제로 소견을 바꾸는지 보는 것)에 쓴다.
+ *   기본 배치 흐름(analyzed_at is null)에는 켜지 않는다.
  */
 export async function analyzeStoredPhotos(
   db: Db,
   sourceFileId: number,
   context: { itemName: string | null; title: string | null },
+  opts: { variant?: VisionPromptVariant; forceReanalyze?: boolean } = {},
 ): Promise<AnalyzePhotosResult> {
+  const variant = opts.variant ?? (tuning().visionPromptVariant as VisionPromptVariant);
   const pending = await db<PendingRow[]>`
     select id, page_number, storage_path, width, height
     from public.source_file_image
-    where source_file_id = ${sourceFileId} and analyzed_at is null
+    where source_file_id = ${sourceFileId}
+      ${opts.forceReanalyze ? db`` : db`and analyzed_at is null`}
     order by page_number
   `;
   if (pending.length === 0) return { analyzed: 0, gpcApplied: false };
@@ -107,18 +118,21 @@ export async function analyzeStoredPhotos(
     })),
   );
 
-  const vision = await analyzePhotos(photos, context);
+  const vision = await analyzePhotos(photos, context, variant);
 
   const byPage = new Map(vision.photos.map((p) => [p.pageNumber, p]));
   for (const row of pending) {
     const a = byPage.get(row.page_number);
     await db`
       update public.source_file_image
-      set is_relevant_photo = ${a?.isRelevantPhoto ?? null},
-          description        = ${a?.description ?? null},
-          hazard_note        = ${a?.hazardNote ?? null},
-          vision_model       = ${vision.model},
-          analyzed_at        = now()
+      set is_relevant_photo    = ${a?.isRelevantPhoto ?? null},
+          description           = ${a?.description ?? null},
+          hazard_note           = ${a?.hazardNote ?? null},
+          measurements          = ${db.json((a?.measurements ?? []) as never)},
+          components            = ${a?.components ?? []},
+          vision_prompt_variant = ${vision.variant},
+          vision_model          = ${vision.model},
+          analyzed_at           = now()
       where id = ${row.id}
     `;
   }

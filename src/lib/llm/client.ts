@@ -56,6 +56,7 @@ export interface CallUsage {
  */
 export type LlmPurpose =
   | 'tagging'        // 사건·조항에 HF·DT 코드 부여
+  | 'second_opinion' // 사고보고서가 수행한 시험·동일성 결론 추출 (병행 점검)
   | 'vision'         // 사고보고서 첨부 사진 분석
   | 'rerank'         // 조항 후보 재채점
   | 'hyde'           // 가상 조항 생성

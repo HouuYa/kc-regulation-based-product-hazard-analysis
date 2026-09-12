@@ -3,6 +3,7 @@
 import { revalidatePath } from 'next/cache';
 import { getDb } from '@/lib/db';
 import { runAnalysis } from '@/lib/search/run';
+import { runSecondOpinion } from '@/lib/second-opinion/run';
 import { NOT_READY_LABEL, NOT_READY_ACTION } from '@/lib/search/readiness';
 import type { Decision } from './review-options';
 
@@ -31,6 +32,74 @@ export async function recordReview(formData: FormData): Promise<void> {
     values (${matchResultId}, ${decision},
             ${decision === 'REJECTED' ? rejectReason : null},
             ${note}, ${'담당자'})
+  `;
+
+  revalidatePath(`/analysis/${caseId}`);
+}
+
+/**
+ * 병행 점검 실행 — 화면 버튼 (070)
+ *
+ * 기본 분석(runAnalysisAction)과 따로 두는 이유
+ *   이 둘은 성격이 다르다. 기본 분석은 "이 피해유형을 다루는 조항"을 찾고,
+ *   병행 점검은 "보고서가 시험하지 않은 구간"을 찾는다. 한 버튼으로 묶으면
+ *   담당자가 두 목록의 성격 차이를 알 수 없게 되고, 무엇보다 병행 점검이
+ *   기본 목록을 덮어쓰는 것처럼 읽힌다 — 04-1 §8 이 금지한 것이다.
+ *
+ * 로직은 src/lib/second-opinion/run.ts 에 있다. 명령줄과 같은 함수다.
+ */
+export async function runSecondOpinionAction(
+  _prev: string | null,
+  formData: FormData,
+): Promise<string> {
+  const caseId = Number(formData.get('caseId'));
+  if (!caseId) return '사건을 찾지 못했습니다.';
+
+  let message: string;
+  try {
+    const o = await runSecondOpinion(caseId);
+    if (o.skipped) {
+      message = `병행 점검을 하지 않았습니다 — ${o.skipped}`;
+    } else if (o.standardIds.length === 0) {
+      // 분모가 없으면 "시험하지 않은 구간"이 성립하지 않는다. 리콜 근거는 나왔을 수 있다
+      message =
+        '적용할 안전기준을 정하지 못해 시험 범위 공백은 내지 못했습니다. ' +
+        '품목을 먼저 확정해야 합니다. ' +
+        (o.recall?.similar.length ? `닮은 리콜 ${o.recall.similar.length}건은 찾았습니다.` : '');
+    } else {
+      const unmapped = o.matches.filter((m) => !m.mapped).length;
+      message =
+        `병행 점검했습니다 — 보고서가 시험한 것은 ${o.matches.length}건이고, ` +
+        `이 품목의 요건은 ${o.gap?.requirementSectionCount ?? 0}개 절입니다. ` +
+        `그중 이 사고와 닿는데 시험하지 않은 것 ${o.gap?.sections.length ?? 0}개를 찾았습니다.` +
+        (unmapped > 0 ? ` (시험명 ${unmapped}건은 조항에 맞추지 못했습니다)` : '');
+    }
+  } catch (e) {
+    console.error(`병행 점검 실패 (사건 ${caseId}):`, e);
+    message = `병행 점검에 실패했습니다 — ${e instanceof Error ? e.message : e}`;
+  }
+
+  revalidatePath(`/analysis/${caseId}`);
+  return message;
+}
+
+/**
+ * 소견에 대한 담당자 판정 (070)
+ *
+ * review_log 와 같은 모양으로 쌓는다. 시험 범위 공백은 정답지가 없으므로
+ * ─ 정답셋 47건은 "보고서가 실제로 수행한 시험"이라 공백은 정의상 그 밖이다 ─
+ * 이 표에 쌓이는 채택률이 이 계층의 유일한 성적표다.
+ */
+export async function recordFindingReview(formData: FormData): Promise<void> {
+  const findingId = Number(formData.get('findingId'));
+  const decision = String(formData.get('decision'));
+  const caseId = String(formData.get('caseId'));
+  if (!findingId || !['ACCEPTED', 'HOLD', 'REJECTED'].includes(decision)) return;
+
+  await getDb()`
+    insert into public.second_opinion_review (finding_id, decision, note, reviewer)
+    values (${findingId}, ${decision},
+            ${(formData.get('note') as string | null) || null}, ${'담당자'})
   `;
 
   revalidatePath(`/analysis/${caseId}`);

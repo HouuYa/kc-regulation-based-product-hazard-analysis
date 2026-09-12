@@ -36,12 +36,8 @@
  */
 
 import { getDb, closeDb } from '../src/lib/db';
-
-/** 두루뭉술해서 짝을 지을 수 없는 제목 */
-const STOP = new Set([
-  '시험방법', '검사방법', '시험', '검사', '일반', '일반사항', '일반조건',
-  '정의', '용어의 정의', '적용범위', '기타', '표시', '시험의 일반조건',
-]);
+// 규칙은 src/lib 로 옮겼다 — 병행 점검(070)이 같은 규칙으로 시험명을 조항에 맞춘다
+import { STOP_TITLES as STOP, normTitle as norm, prefixMatch } from '../src/lib/standards/title-match';
 
 interface Row {
   sid: number;
@@ -51,23 +47,6 @@ interface Row {
   role: string;
   title: string;
   part: string | null;
-}
-
-function norm(t: string | null): string {
-  if (!t) return '';
-  return t
-    .replace(/\([^)]*\)/g, ' ')
-    .replace(/[^가-힣A-Za-z0-9]+/g, ' ')
-    .trim();
-}
-
-/** 짧은 쪽이 긴 쪽의 앞머리이고 낱말 경계에서 끊기면 그 공통 제목을 돌려준다 */
-function prefixMatch(a: string, b: string): string | null {
-  const [s, l] = a.length <= b.length ? [a, b] : [b, a];
-  if (s.length < 4) return null;
-  if (!l.startsWith(s)) return null;
-  if (l.length > s.length && l[s.length] !== ' ') return null;
-  return s;
 }
 
 async function main() {

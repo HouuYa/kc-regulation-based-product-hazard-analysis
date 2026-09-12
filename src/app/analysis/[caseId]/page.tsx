@@ -15,6 +15,7 @@ import { withEstimatedCauses } from '@/lib/search/estimate-cause';
 import { searchCandidates, type Candidate as SearchCandidate } from '@/lib/search/match';
 import { loadCaseInput, defaultMatchConfig } from '@/lib/search/run';
 import { recordReview, runAnalysisAction, setChildProductCheck } from './actions';
+import { InvestigationSummary, SecondOpinionFindings } from './SecondOpinion';
 import { REJECT_REASONS } from './review-options';
 
 export const dynamic = 'force-dynamic';
@@ -123,11 +124,16 @@ const GPC_LEVEL_LABEL: Record<Exclude<GpcMatchLevel, 'NONE'>, string> = {
 
 const ANALYSIS_TOC: TocItem[] = [
   { id: 'analysis-case', label: '사건 요약' },
+  { id: 'analysis-investigation', label: '보고서가 한 일' },
   { id: 'analysis-scope', label: '품목·적용기준' },
   { id: 'analysis-gpc', label: 'GPC 품목분류' },
   { id: 'analysis-recall', label: '해외 리콜 근거' },
   { id: 'analysis-results', label: '관련될 수 있는 조항' },
+  { id: 'analysis-second-opinion', label: '병행 점검 소견' },
 ];
+
+/** 사고보고서에만 붙는 구역 — 리콜은 원인이 이미 적혀 있어 병행 점검 대상이 아니다 */
+const ACCIDENT_TOC_IDS = new Set(['analysis-investigation', 'analysis-second-opinion']);
 
 /** gpc_verified_level 이 가리키는 계층의 코드·제목을 뽑는다 — 계층 아래는 항상 NULL 이다(verify.ts 참고) */
 function gpcVerifiedCodeTitle(ev: CaseEventRow): { code: string; title: string | null } | null {
@@ -783,6 +789,15 @@ export default async function AnalysisPage({
         </div>
       </header>
 
+      {/*
+        보고서가 한 일 (070) — 사고보고서에만 붙는다.
+
+        사건 요약 바로 아래에 두는 이유: 담당자가 "이 보고서가 무엇을 했는지"를
+        먼저 봐야 그 아래 목록들의 성격을 읽을 수 있다. 「적합」이라는 결론도
+        시험한 범위 안에서만 적합이라는 것이 이 구역에서 드러난다.
+      */}
+      {ev.source_type === 'ACCIDENT' && <InvestigationSummary caseId={ev.id} />}
+
       {/* 품목·적용기준 — 검색보다 먼저 결정되는 것이므로 후보 목록보다 위에 둔다 */}
       <section id="analysis-scope" className="mt-6 scroll-mt-8 border-t border-rule pt-5">
         <div className="grid gap-4 sm:grid-cols-[10rem_1fr]">
@@ -1265,8 +1280,19 @@ export default async function AnalysisPage({
           )}
         </>
       )}
+
+      {/*
+        병행 점검 소견 (070) — 기본 조항 목록 **아래**에 둔다.
+
+        위에 두면 기본 목록을 덮어쓰는 것처럼 읽힌다. 04-1 §8 의 실측이 그 반대를
+        말한다 — 원인 다리를 기본 검색에 자동 반영했더니 재현율이 16.2%→13.1% 로
+        떨어졌고, 결론은 "자동으로 켜지 말고 담당자 손에 쥐여 줘라" 였다.
+      */}
+      {ev.source_type === 'ACCIDENT' && <SecondOpinionFindings caseId={ev.id} />}
       </div>
-      <PageToc items={ANALYSIS_TOC} />
+      <PageToc items={ANALYSIS_TOC.filter(
+        (t) => ev.source_type === 'ACCIDENT' || !ACCIDENT_TOC_IDS.has(t.id),
+      )} />
       </div>
     </div>
   );

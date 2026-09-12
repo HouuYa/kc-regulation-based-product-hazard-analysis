@@ -145,6 +145,40 @@ export function tuning() {
     /** 코드 일치 가산 폭(결정항목 10) */
     weightCode: optionalNumber('RRF_WEIGHT_CODE', 0.5, { min: 0, max: 10 }),
     weightCodePartial: optionalNumber('RRF_WEIGHT_CODE_PARTIAL', 0.2, { min: 0, max: 10 }),
+
+    /*
+      병행 점검(2차 소견) 스위치 (070)
+
+      갈리는 지점을 임의로 판정하지 않고 실측으로 비교할 수 있게 둔다. 이미
+      SEARCH_TEXT_VARIANT·TAGGING_BULK_REPEAT 가 같은 방식으로 되어 있다.
+    */
+    /**
+     * 보고서가 한 일을 무엇으로 뽑을 것인가.
+     *
+     * REGEX 는 공짜 기준선이다. 라운드 69 가 정규식만으로 동일성 결론을 세다가
+     * "…부품이 동일함" 을 상이로 뒤집어 세는 실수를 했는데, 그 실수를 다시 겪지
+     * 않으려면 LLM 과 정규식을 견줄 수 있어야 한다.
+     */
+    secondOpinionExtract: optional('SECOND_OPINION_EXTRACT', 'LLM'),
+    /** 시험 범위 공백을 절 단위로 볼 것인가 조항 단위로 볼 것인가 */
+    secondOpinionGapScope: optional('SECOND_OPINION_GAP_SCOPE', 'SECTION'),
+    /** 닮은 리콜을 무엇으로 찾을 것인가 — VECTOR / GPC / BOTH */
+    secondOpinionRecallMatch: optional('SECOND_OPINION_RECALL_MATCH', 'BOTH'),
+    /** 사건당 공백 제안 상한. 담당자가 읽는 양이 곧 이 계층의 값어치다 */
+    secondOpinionGapLimit: optionalNumber('SECOND_OPINION_GAP_LIMIT', 10, { min: 1, max: 100, integer: true }),
+
+    /**
+     * 사고사진 비전 프롬프트 — A(현행, 손상만) / B(측정값·부품구성까지 넓힘)
+     *
+     * 라운드 69가 진단한 것: 사진의 다수가 손상 사진이 아니라 온도그래프·전력계
+     * 화면·내부 기판 같은 시험 측정 자료인데, 프롬프트가 "손상·탄 흔적·파손·변형"
+     * 으로 좁혀 놔서 그 재료가 버려지고 있었다. 다만 라운드 68~69가 이미 확인한
+     * 것 — 사진 단서를 원인 코드화(tag-cases.ts)에 얹는 것은 효과가 없었다
+     * (대조군을 빼도 같은 코드가 나왔다). 그래서 B는 tag-cases.ts 쪽을 바꾸지
+     * 않고, 병행 점검(second-opinion)의 시험 범위 공백·문턱값 판단에만 재료를
+     * 보탠다. 기본값을 A로 두어 기존 호출 비용·결과가 조용히 바뀌지 않게 한다.
+     */
+    visionPromptVariant: optional('VISION_PROMPT_VARIANT', 'A'),
   };
 }
 
