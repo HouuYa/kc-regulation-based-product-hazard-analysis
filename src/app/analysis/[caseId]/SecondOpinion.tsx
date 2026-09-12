@@ -36,11 +36,25 @@ function Stat({ label, value }: { label: string; value: string }) {
 const ITEM_LABEL: Record<string, string> = {
   TEST_PERFORMED: '수행한 시험',
   IDENTITY_CHECK: '동일성 확인',
-  CONCLUSION: '결론',
-  NON_TARGET: '결론 (비대상)',
+  CONCLUSION: '보고서 결론',
+  NON_TARGET: '보고서 결론 (비대상)',
   MEASUREMENT: '측정값',
   MARKING_NOTE: '표시 관련',
 };
+
+/**
+ * verdict 배지 앞에 "판정: "을 붙일지 — 결론 행에서만 붙인다.
+ *
+ * 수행한 시험 행은 "유해화학물질 분석 [적합]" 처럼 이름 바로 옆이라 그 자체로
+ * "이 시험 결과가 적합"으로 읽힌다. 그런데 결론 행은 "보고서 결론 · 사고원인
+ * 서술 없음 [부적합]" 처럼 옆에 또 다른 낱말(원인 서술 여부)이 있어서, 부적합이
+ * 무엇을 가리키는지(시험 결과인지, 원인 서술 여부인지) 헷갈린다는 지적을 받았다.
+ * "판정: " 을 붙여 이 verdict 가 보고서가 스스로 내린 결론(적합/부적합/원인미상/
+ * 비대상/기타)이라는 것을 바로 옆에서 밝힌다.
+ */
+function verdictLabel(itemType: string, verdict: string): string {
+  return itemType === 'CONCLUSION' || itemType === 'NON_TARGET' ? `판정: ${verdict}` : verdict;
+}
 
 /**
  * PHOTO 출처는 verified=false 라도 "찾지 못했다"고 말하지 않는다.
@@ -77,7 +91,7 @@ export async function InvestigationSummary({ caseId }: { caseId: number }) {
   return (
     <section id="analysis-investigation" className="mt-4 scroll-mt-8 border-t border-rule pt-5">
       <div className="grid gap-4 sm:grid-cols-[10rem_1fr]">
-        <span className="label">보고서가 한 일</span>
+        <span className="label">보고서 기재 내용 분석</span>
         <div className="text-[13px] leading-relaxed">
           {!view ? (
             <>
@@ -109,7 +123,7 @@ export async function InvestigationSummary({ caseId }: { caseId: number }) {
                       <span className="font-medium">{it.label}</span>
                       {it.verdict && (
                         <span className="addr border border-rule px-1.5 py-0.5 text-[11px] text-ink-2">
-                          {it.verdict}
+                          {verdictLabel(it.itemType, it.verdict)}
                         </span>
                       )}
                       {it.valueNum != null && (
@@ -244,6 +258,59 @@ function FindingList({
   );
 }
 
+const QUEUE_LABEL: Record<string, string> = {
+  TEST_GAP: '시험 공백',
+  LEGAL_SIGNAL: '인증·표시',
+  STANDARD_GAP: '기준 사각지대',
+};
+
+/** RECALL_EVIDENCE 는 유사 사례·위해 원인 둘로 갈리므로 따로 판정한다(074) */
+function queueLabel(f: FindingRow): string {
+  if (f.findingType === 'RECALL_EVIDENCE') return f.refCaseId ? '유사 사례' : '위해 원인';
+  return QUEUE_LABEL[f.findingType] ?? f.findingType;
+}
+
+/**
+ * 구역 3 — 병행 점검 미판정 큐. 검토 탭 전용(073).
+ *
+ * SecondOpinionFindings 와 같은 데이터를 다르게 그린다 — rationale 긴 설명을
+ * 빼고 라벨 한 줄 + 판정 버튼만 남겨, 빠르게 훑어 판정하는 용도다. 자세한
+ * 근거는 인사이트 탭의 SecondOpinionFindings 에서 읽는다.
+ */
+export async function SecondOpinionReviewQueue({ caseId }: { caseId: number }) {
+  const view = await loadSecondOpinion(caseId);
+  if (!view) return null;
+  const pending = view.findings.filter((f) => !f.decision);
+  if (pending.length === 0) return null;
+
+  return (
+    <section id="analysis-second-opinion-queue" className="mt-10 scroll-mt-8 border-t border-rule pt-6">
+      <h2 className="text-[15px] font-semibold">병행 점검 미판정 {pending.length}건</h2>
+      <p className="mt-1 text-[11px] leading-relaxed text-ink-3">
+        시험 공백·인증표시·리콜 정보 등 병행 점검 후보 중 아직 판정하지 않은 것.
+        자세한 근거는 인사이트 탭에서.
+      </p>
+      <ul className="mt-3 space-y-1.5">
+        {pending.map((f) => (
+          <li key={f.id} className="flex flex-wrap items-center gap-2 border-b border-rule/50 py-2">
+            <span className="addr shrink-0 text-[11px] text-ink-3">
+              {queueLabel(f)}
+            </span>
+            <span className="text-[12px] font-medium">
+              {f.sectionMarker
+                ? `${f.standardName ?? ''} 절 ${f.sectionMarker}`
+                : f.refTitle ?? (f.refCaseId ? `사건 ${f.refCaseId}` : f.hfCode ?? '')}
+            </span>
+            <div className="ml-auto">
+              <ReviewButtons finding={f} caseId={caseId} />
+            </div>
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
+}
+
 /** 구역 2 — 병행 점검 소견. 기본 조항 목록 아래에 놓인다 */
 export async function SecondOpinionFindings({ caseId }: { caseId: number }) {
   const view: SecondOpinionView | null = await loadSecondOpinion(caseId);
@@ -310,27 +377,48 @@ export async function SecondOpinionFindings({ caseId }: { caseId: number }) {
         )}
 
         <div>
-          <h3 className="text-[13px] font-semibold">리콜 교차 근거 {stat.length + cases.length}건</h3>
-          {stat.length + cases.length > 0 ? (
-            <>
-              <div className="mt-0.5 flex flex-wrap gap-x-4 gap-y-1 text-[12px]">
-                {stat[0]?.sampleSize != null && (
-                  <Stat label="비교 표본" value={`해외 리콜 ${stat[0].sampleSize}건`} />
-                )}
-                <Stat label="원인 후보" value={`${stat.length}개`} />
-                <Stat label="닮은 사례" value={`${cases.length}건`} />
-              </div>
-              <p className="mt-1 text-[11px] leading-relaxed text-ink-3">
-                통계는 방향, 사례는 실제 발생 — 원인 확정 아님.
-              </p>
-            </>
-          ) : (
-            <p className="mt-0.5 text-[12px] leading-relaxed text-ink-3">
-              {view.scopeEvidence ?? '닮은 리콜이나 통계 근거를 찾지 못했습니다.'}
+          <h3 className="text-[13px] font-semibold">
+            리콜 정보와 교차 분석 {stat.length + cases.length}건
+          </h3>
+          <p className="mt-0.5 text-[11px] leading-relaxed text-ink-3">
+            국내·해외 리콜 자료와 견준 참고 정보 — 유사 사례와 위해 원인 두 갈래.
+            원인 확정 아님, 판단은 담당자.
+          </p>
+
+          <div className="mt-3">
+            <h4 className="text-[12px] font-semibold text-ink-2">유사 사례 {cases.length}건</h4>
+            <p className="mt-0.5 text-[11px] leading-relaxed text-ink-3">
+              품목·GPC 분류가 닮은 리콜 — 실제로 일어난 적이 있음을 보임.
             </p>
-          )}
-          {stat.length > 0 && <FindingList findings={stat} caseId={caseId} tone="ref" />}
-          {cases.length > 0 && <FindingList findings={cases} caseId={caseId} tone="ref" />}
+            {cases.length > 0 ? (
+              <FindingList findings={cases} caseId={caseId} tone="ref" />
+            ) : (
+              <p className="mt-1 text-[12px] text-ink-3">닮은 리콜 사례를 찾지 못했습니다.</p>
+            )}
+          </div>
+
+          <div className="mt-4">
+            <h4 className="text-[12px] font-semibold text-ink-2">위해 원인 {stat.length}건</h4>
+            <p className="mt-0.5 text-[11px] leading-relaxed text-ink-3">
+              같은 피해유형에 해외 리콜에서 흔히 같이 붙는 원인 — 방향만 제시, 이 사고의
+              원인이라는 뜻 아님.
+            </p>
+            {stat.length > 0 ? (
+              <>
+                <div className="mt-1 flex flex-wrap gap-x-4 gap-y-1 text-[12px]">
+                  {stat[0]?.sampleSize != null && (
+                    <Stat label="비교 표본" value={`해외 리콜 ${stat[0].sampleSize}건`} />
+                  )}
+                  <Stat label="원인 후보" value={`${stat.length}개`} />
+                </div>
+                <FindingList findings={stat} caseId={caseId} tone="ref" />
+              </>
+            ) : (
+              <p className="mt-1 text-[12px] text-ink-3">
+                {view.scopeEvidence ?? '통계 근거를 찾지 못했습니다.'}
+              </p>
+            )}
+          </div>
         </div>
       </div>
     </section>

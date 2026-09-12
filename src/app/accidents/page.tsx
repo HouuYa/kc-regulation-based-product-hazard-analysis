@@ -11,6 +11,7 @@ import { uploadAccidentPdfs, confirmCase } from './actions';
 import { ActionForm } from '@/components/ActionForm';
 import { AutoRefresh } from '@/components/AutoRefresh';
 import { PageToc, type TocItem } from '@/components/PageToc';
+import { Tabs } from '@/components/Tabs';
 import { runAnalysisAction } from '@/app/analysis/[caseId]/actions';
 
 export const dynamic = 'force-dynamic';
@@ -309,7 +310,12 @@ export default async function AccidentsPage({
       {error && <ConnectionError error={error} />}
 
       {data && (
+        <Tabs
+          tabs={[{ id: 'status', label: '현황' }, { id: 'todo', label: '처리할 것' }]}
+          defaultTab="todo"
+        >
         <>
+          {/* 현황 탭 — 집계·설명 등 읽기 전용 (073) */}
           <div id="accidents-status" className="scroll-mt-8">
           <StatusBar
             items={[
@@ -341,31 +347,6 @@ export default async function AccidentsPage({
             ]}
           />
           </div>
-
-          <details id="accidents-upload" className="mt-10 scroll-mt-8 border border-rule bg-surface px-5 py-4">
-            <summary className="cursor-pointer text-[13px] font-medium">
-              사고보고서 올리기
-            </summary>
-            <form action={uploadAccidentPdfs} className="mt-3">
-              <p className="text-[12px] leading-relaxed text-ink-3">
-                여러 건을 한 번에 올릴 수 있습니다. 한 건이 실패해도 나머지는 계속 처리합니다.
-                같은 파일을 다시 올리면 건너뜁니다. 주민등록번호·연락처처럼 개인정보로 보이는
-                값이 발견되면 그 파일은 AI 처리로 넘기지 않습니다.
-              </p>
-              <div className="mt-3 flex flex-wrap items-center gap-3">
-                <input
-                  id="files" name="files" type="file" accept="application/pdf" multiple required
-                  className="text-[12px] file:mr-3 file:border file:border-rule file:bg-paper file:px-3 file:py-1.5 file:text-[12px] file:text-ink"
-                />
-                <button
-                  type="submit"
-                  className="border border-measure bg-measure px-4 py-2 text-[13px] font-medium text-white hover:opacity-85"
-                >
-                  올리기
-                </button>
-              </div>
-            </form>
-          </details>
 
           {/* 올린 뒤 무슨 일이 일어나는가 (담당자 요청, 2026-09-09) */}
           <details className="mt-4 border border-rule-soft">
@@ -407,6 +388,33 @@ export default async function AccidentsPage({
               label="의미 검색 준비가 진행 중입니다 — 숫자가 저절로 갱신됩니다"
             />
           </div>
+        </>
+        <>
+          {/* 처리할 것 탭 — 업로드·찾기·행별 작업 (073) */}
+          <details id="accidents-upload" className="mt-2 scroll-mt-8 border border-rule bg-surface px-5 py-4">
+            <summary className="cursor-pointer text-[13px] font-medium">
+              사고보고서 올리기
+            </summary>
+            <form action={uploadAccidentPdfs} className="mt-3">
+              <p className="text-[12px] leading-relaxed text-ink-3">
+                여러 건을 한 번에 올릴 수 있습니다. 한 건이 실패해도 나머지는 계속 처리합니다.
+                같은 파일을 다시 올리면 건너뜁니다. 주민등록번호·연락처처럼 개인정보로 보이는
+                값이 발견되면 그 파일은 AI 처리로 넘기지 않습니다.
+              </p>
+              <div className="mt-3 flex flex-wrap items-center gap-3">
+                <input
+                  id="files" name="files" type="file" accept="application/pdf" multiple required
+                  className="text-[12px] file:mr-3 file:border file:border-rule file:bg-paper file:px-3 file:py-1.5 file:text-[12px] file:text-ink"
+                />
+                <button
+                  type="submit"
+                  className="border border-measure bg-measure px-4 py-2 text-[13px] font-medium text-white hover:opacity-85"
+                >
+                  올리기
+                </button>
+              </div>
+            </form>
+          </details>
 
           <BoardToolbar
             basePath="/accidents"
@@ -574,6 +582,7 @@ export default async function AccidentsPage({
             </section>
           )}
         </>
+        </Tabs>
       )}
 
       <TermsNote />

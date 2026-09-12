@@ -386,7 +386,7 @@ function buildItems(
 
   rows.push({
     item_type: e.conclusion.is_non_target ? 'NON_TARGET' : 'CONCLUSION',
-    label: e.conclusion.states_cause ? '원인 서술 있음' : '원인 서술 없음',
+    label: e.conclusion.states_cause ? '사고원인 서술 있음' : '사고원인 서술 없음',
     normalized: null,
     verdict: e.conclusion.verdict,
     value_num: null, unit: null,

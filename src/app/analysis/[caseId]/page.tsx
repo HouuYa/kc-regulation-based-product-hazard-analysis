@@ -6,6 +6,8 @@ import { getSignedUrl } from '@/lib/supabase/server';
 import { standardsForCase } from '@/lib/cases/resolve-scope';
 import { EvidenceStrip, type EvidenceLevel, type MatchPath } from '@/components/EvidenceStrip';
 import { PageToc, type TocItem } from '@/components/PageToc';
+import { Tabs } from '@/components/Tabs';
+import { ExternalLinkPreview } from '@/components/ExternalLinkPreview';
 import type { GpcCandidate } from '@/lib/gpc/lookup';
 import type { GpcMatchLevel } from '@/lib/gpc/verify';
 import { estimateCauses, type CauseCandidate } from '@/lib/codebook/cause-bridge';
@@ -15,7 +17,7 @@ import { withEstimatedCauses } from '@/lib/search/estimate-cause';
 import { searchCandidates, type Candidate as SearchCandidate } from '@/lib/search/match';
 import { loadCaseInput, defaultMatchConfig } from '@/lib/search/run';
 import { recordReview, runAnalysisAction, setChildProductCheck } from './actions';
-import { InvestigationSummary, SecondOpinionFindings } from './SecondOpinion';
+import { InvestigationSummary, SecondOpinionFindings, SecondOpinionReviewQueue } from './SecondOpinion';
 import { REJECT_REASONS } from './review-options';
 
 export const dynamic = 'force-dynamic';
@@ -122,18 +124,27 @@ const GPC_LEVEL_LABEL: Record<Exclude<GpcMatchLevel, 'NONE'>, string> = {
   BRICK: 'Brick', CLASS: 'Class', FAMILY: 'Family', SEGMENT: 'Segment',
 };
 
+/**
+ * 목차 순서는 화면의 실제 배치를 따른다(073의 검토/인사이트 탭 순서 그대로) —
+ * 공통 → 검토 탭 → 인사이트 탭. `tab` 이 있는 항목은 클릭 시 PageToc 가 먼저
+ * 그 탭으로 바꾼 뒤 스크롤한다(074, 숨은 탭 안 섹션으로 가는 목차가 고장난
+ * 것처럼 보인다는 지적을 고친 자리).
+ */
 const ANALYSIS_TOC: TocItem[] = [
   { id: 'analysis-case', label: '사건 요약' },
-  { id: 'analysis-investigation', label: '보고서가 한 일' },
   { id: 'analysis-scope', label: '품목·적용기준' },
-  { id: 'analysis-gpc', label: 'GPC 품목분류' },
-  { id: 'analysis-recall', label: '해외 리콜 근거' },
-  { id: 'analysis-results', label: '관련될 수 있는 조항' },
-  { id: 'analysis-second-opinion', label: '병행 점검 소견' },
+  { id: 'analysis-results', label: '관련될 수 있는 조항', tab: 'review' },
+  { id: 'analysis-second-opinion-queue', label: '병행 점검 미판정', tab: 'review' },
+  { id: 'analysis-investigation', label: '보고서 기재 내용 분석', tab: 'insight' },
+  { id: 'analysis-gpc', label: 'GPC 품목분류', tab: 'insight' },
+  { id: 'analysis-recall', label: '해외 리콜 근거', tab: 'insight' },
+  { id: 'analysis-second-opinion', label: '병행 점검 소견', tab: 'insight' },
 ];
 
 /** 사고보고서에만 붙는 구역 — 리콜은 원인이 이미 적혀 있어 병행 점검 대상이 아니다 */
-const ACCIDENT_TOC_IDS = new Set(['analysis-investigation', 'analysis-second-opinion']);
+const ACCIDENT_TOC_IDS = new Set([
+  'analysis-second-opinion-queue', 'analysis-investigation', 'analysis-second-opinion',
+]);
 
 /** gpc_verified_level 이 가리키는 계층의 코드·제목을 뽑는다 — 계층 아래는 항상 NULL 이다(verify.ts 참고) */
 function gpcVerifiedCodeTitle(ev: CaseEventRow): { code: string; title: string | null } | null {
@@ -487,6 +498,8 @@ function CausePicker({
 }: { caseId: number; candidates: CauseCandidate[]; picked: string[] }) {
   return (
     <form method="get" action={`/analysis/${caseId}`} className="mt-4 border border-rule px-4 py-3.5">
+      {/* GET 폼이라 주소줄의 다른 값은 안 실린다 — 탭이 검토로 되돌아가지 않게 직접 실어 둔다 */}
+      <input type="hidden" name="tab" value="review" />
       <div className="label">원인 후보 — 같은 피해가 난 다른 사건에서는 무엇이 원인이었나</div>
       <p className="mt-1.5 max-w-3xl text-[12px] leading-relaxed text-ink-3">
         해외 리콜 자료에서 같은 피해가 난 사건의 원인을 세어 본 것입니다. 이 사건의 원인이라는
@@ -789,15 +802,6 @@ export default async function AnalysisPage({
         </div>
       </header>
 
-      {/*
-        보고서가 한 일 (070) — 사고보고서에만 붙는다.
-
-        사건 요약 바로 아래에 두는 이유: 담당자가 "이 보고서가 무엇을 했는지"를
-        먼저 봐야 그 아래 목록들의 성격을 읽을 수 있다. 「적합」이라는 결론도
-        시험한 범위 안에서만 적합이라는 것이 이 구역에서 드러난다.
-      */}
-      {ev.source_type === 'ACCIDENT' && <InvestigationSummary caseId={ev.id} />}
-
       {/* 품목·적용기준 — 검색보다 먼저 결정되는 것이므로 후보 목록보다 위에 둔다 */}
       <section id="analysis-scope" className="mt-6 scroll-mt-8 border-t border-rule pt-5">
         <div className="grid gap-4 sm:grid-cols-[10rem_1fr]">
@@ -912,168 +916,23 @@ export default async function AnalysisPage({
         </div>
       </section>
 
-      {/* GPC(GS1 국제 품목분류) 후보 — 사고사진 비전 분석에서 뽑은 제품 서술로 조회한 것.
-          라운드 12부터 standard 와 같은 방식(findAndVerifyGpc)으로 LLM 1차 검증을 거친다.
-          검증됐어도 확정으로 단정하지 않는다 — 이 화면의 "판정하지 않는다" 원칙은 그대로다. */}
-      {ev.gpc_candidates && ev.gpc_candidates.length > 0 && (() => {
-        const verified = gpcVerifiedCodeTitle(ev);
-        return (
-          <section id="analysis-gpc" className="mt-4 scroll-mt-8 border-t border-rule pt-5">
-            <div className="grid gap-4 sm:grid-cols-[10rem_1fr]">
-              <span className="label">GPC 품목분류 후보</span>
-              <div className="text-[13px] leading-relaxed">
-                {/*
-                  코드가 어디서 왔는지 먼저 밝힌다 (065, 담당자 지적)
+      {/*
+        검토 탭 / 인사이트 탭 (073)
 
-                  "OECD 포털이 보내는 코드는 각 나라들이 등록할 때 사용하는 코드로
-                  신빙성이 매우 높습니다." 등록국이 신고한 코드와 우리 AI 가 짐작한
-                  코드를 같은 얼굴로 보여 주면 담당자가 무엇을 확인해야 하는지 알 수 없다.
-                */}
-                {ev.gpc_brick_code && ev.gpc_source && (
-                  <div
-                    className={`mb-3 border px-3 py-2 text-[12px] leading-relaxed ${
-                      needsReview(ev.gpc_source)
-                        ? 'border-rule-soft text-ink-2'
-                        : 'border-measure bg-measure-soft text-ink-2'
-                    }`}
-                  >
-                    <span className="addr text-ink">{ev.gpc_brick_code}</span>
-                    <span className="ml-2 font-medium">
-                      {GPC_SOURCE_LABEL[ev.gpc_source as GpcSource] ?? ev.gpc_source}
-                    </span>
-                    <p className="mt-1 text-ink-3">
-                      {GPC_SOURCE_NOTE[ev.gpc_source as GpcSource] ?? ''}
-                    </p>
-                  </div>
-                )}
-                {ev.gpc_verified_level == null ? (
-                  <p className="text-[12px] text-caution">
-                    AI 검증 전 자료입니다(뜻이 비슷한 순서만 있음) — 순위 전체를 참고해 사람이
-                    확인하세요.
-                  </p>
-                ) : ev.gpc_verified_level === 'NONE' ? (
-                  <div className="border border-caution bg-caution-soft px-3 py-2 text-[12px] leading-relaxed text-caution">
-                    <strong className="font-semibold">LLM 검증: 맞는 후보 없음</strong>
-                    <p className="mt-1">확실히 일치하는 코드 없음 — 담당자 확인 필요.</p>
-                    {ev.gpc_verification?.reasoning && (
-                      <p className="mt-1 text-ink-2">{ev.gpc_verification.reasoning}</p>
-                    )}
-                  </div>
-                ) : (
-                  <div className="border border-measure bg-measure-soft/40 px-3 py-2 text-[12px] leading-relaxed">
-                    <strong className="font-semibold text-measure">
-                      LLM 검증({GPC_LEVEL_LABEL[ev.gpc_verified_level]})
-                    </strong>{' '}
-                    <span className="addr">{verified?.code}</span> {verified?.title}
-                    {ev.gpc_verification && ` · 확신 ${ev.gpc_verification.confidenceScore}`}
-                    {ev.gpc_verified_level !== 'BRICK' && (
-                      <span className="ml-1 text-ink-3">
-                        (정확한 Brick은 후보에 없어 상위 계층까지만 확인됨)
-                      </span>
-                    )}
-                    {ev.gpc_verification?.reasoning && (
-                      <p className="mt-1 text-ink-2">{ev.gpc_verification.reasoning}</p>
-                    )}
-                  </div>
-                )}
-                <p className="mt-2 text-[12px] text-ink-3">
-                  아래 순위는 LLM이 1차 검증한 결과를 포함합니다. 최종 판단은 담당자가 합니다.
-                </p>
-                <ul className="mt-2 space-y-1">
-                  {ev.gpc_candidates.map((c) => {
-                    const isVerifiedBrick =
-                      ev.gpc_verified_level === 'BRICK' && c.brickCode === ev.gpc_verified_brick_code;
-                    const isEmbeddingTop1 = c.brickCode === ev.gpc_brick_code;
-                    return (
-                      <li
-                        key={c.rank}
-                        className={`flex flex-wrap items-baseline gap-x-2 gap-y-0.5 px-2 py-1 text-[12px] ${
-                          isVerifiedBrick
-                            ? 'border border-measure text-measure'
-                            : isEmbeddingTop1
-                              ? 'border border-rule text-ink-2'
-                              : 'text-ink-2'
-                        }`}
-                      >
-                        <span className="addr tnum text-ink-3">{c.rank}위</span>
-                        <span className="addr">{c.brickCode}</span>
-                        <span className="font-medium">{c.brickTitle}</span>
-                        {isVerifiedBrick && (
-                          <span className="text-[10px] font-medium text-measure">검증 확정</span>
-                        )}
-                        {isEmbeddingTop1 && !isVerifiedBrick && (
-                          <span className="text-[10px] text-ink-3">유사도 1위</span>
-                        )}
-                        <span className="text-ink-3">
-                          {c.segmentTitle} &gt; {c.familyTitle} &gt; {c.classTitle}
-                        </span>
-                        <span className="addr tnum ml-auto text-ink-3">{c.similarity.toFixed(3)}</span>
-                      </li>
-                    );
-                  })}
-                </ul>
-              </div>
-            </div>
-          </section>
-        );
-      })()}
-
-      {/* 트랙 B — 해외 리콜에만 있는 것들 */}
-      {recall && (
-        <section id="analysis-recall" className="mt-4 scroll-mt-8 border-t border-rule pt-5">
-          <div className="grid gap-4 sm:grid-cols-[10rem_1fr]">
-            <span className="label">해외 리콜</span>
-            <div className="text-[13px] leading-relaxed">
-              <div className="addr text-[12px] text-ink-2">
-                {recall.source} {recall.guid}
-                {recall.recall_country && ` · ${recall.recall_country}`}
-                {recall.detail_url && (
-                  <>
-                    {' · '}
-                    <a href={recall.detail_url} target="_blank" rel="noreferrer"
-                       className="text-measure underline">원문</a>
-                  </>
-                )}
-              </div>
-              {recall.hazard_type && <p className="mt-1">{recall.hazard_type}</p>}
-
-              <div className="mt-3">
-                <span className="label">리콜한 나라가 든 근거</span>
-                {recall.cited_standards.length === 0 ? (
-                  <p className="mt-1 text-[12px] text-ink-2">
-                    공고에 어떤 표준을 위반했는지 적혀 있지 않습니다. 해외 리콜 열에 일곱은
-                    이렇습니다. 그래서 우리 기준과 견줘 볼 수가 없습니다.
-                  </p>
-                ) : (
-                  <div className="mt-1 flex flex-wrap gap-1.5">
-                    {recall.cited_standards.map((s) => (
-                      <span key={s} className="addr border border-rule px-1.5 py-0.5 text-[11px] text-ink-2">{s}</span>
-                    ))}
-                    <span className="text-[11px] text-ink-3">
-                      {recall.matched_standard_ids.length > 0
-                        ? `· 우리 기준 ${recall.matched_standard_ids.length}건과 번호가 같습니다`
-                        : '· 우리 기준과 번호 매기는 방식이 달라 사람이 봐야 합니다'}
-                    </span>
-                  </div>
-                )}
-              </div>
-
-              <div className="mt-3">
-                <span className="label">국내에도 풀렸는가</span>
-                <p className="mt-1 text-[12px] leading-relaxed text-ink-2">
-                  {recall.domestic_check === 'DISTRIBUTED' ? '국내에도 풀린 것으로 확인됐습니다.'
-                    : recall.domestic_check === 'NOT_DISTRIBUTED' ? '국내에는 풀리지 않았습니다.'
-                    : recall.domestic_check === 'UNKNOWN' ? '확인했지만 알아내지 못했습니다.'
-                    : '아직 확인하지 않았습니다. 담당자가 직접 확인해 주셔야 합니다.'}
-                  {' '}같은 제품이 국내에도 풀린 것으로 확인되면, 「제품안전기본법」 제13조
-                  제3항에 따라 사업자가 곧바로 보고해야 하는지 따져 봐야 합니다.
-                  이 시스템은 국내에 풀렸는지를 스스로 짐작하지 않습니다.
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-      )}
+        검토 = 채택·반려 등 버튼으로 결정을 남기는 화면(관련될 수 있는 조항,
+        병행 점검 미판정 큐, 원인 후보 고르기, CSV 내려받기).
+        인사이트 = 읽기 전용 참고자료(보고서가 한 일, GPC 후보, 해외 리콜 근거,
+        병행 점검 소견 전체). 겹치는 지점(병행 점검 판정)은 데이터는 하나이고
+        화면만 둘이다 — 인사이트 탭엔 전체 설명과 함께, 검토 탭엔 미판정만
+        간단히 큐로 둔다. 설계 근거는
+        docs/화면_구조_개편_검토_인사이트_분리_2026-09-12.md 를 본다.
+      */}
+      <Tabs
+        tabs={[{ id: 'review', label: '검토' }, { id: 'insight', label: '인사이트' }]}
+        defaultTab="review"
+      >
+      <>
+      {ev.source_type === 'ACCIDENT' && <SecondOpinionReviewQueue caseId={ev.id} />}
 
       {!run ? (
         <section id="analysis-results" className="mt-10 scroll-mt-8 border-t border-rule pt-6">
@@ -1277,6 +1136,176 @@ export default async function AnalysisPage({
         </>
       )}
 
+      </>
+      <>
+      {ev.source_type === 'ACCIDENT' && <InvestigationSummary caseId={ev.id} />}
+
+      {/* GPC(GS1 국제 품목분류) 후보 — 사고사진 비전 분석에서 뽑은 제품 서술로 조회한 것.
+          라운드 12부터 standard 와 같은 방식(findAndVerifyGpc)으로 LLM 1차 검증을 거친다.
+          검증됐어도 확정으로 단정하지 않는다 — 이 화면의 "판정하지 않는다" 원칙은 그대로다. */}
+      {ev.gpc_candidates && ev.gpc_candidates.length > 0 && (() => {
+        const verified = gpcVerifiedCodeTitle(ev);
+        return (
+          <section id="analysis-gpc" className="mt-4 scroll-mt-8 border-t border-rule pt-5">
+            <div className="grid gap-4 sm:grid-cols-[10rem_1fr]">
+              <span className="label">GPC 품목분류 후보</span>
+              <div className="text-[13px] leading-relaxed">
+                {/*
+                  코드가 어디서 왔는지 먼저 밝힌다 (065, 담당자 지적)
+
+                  "OECD 포털이 보내는 코드는 각 나라들이 등록할 때 사용하는 코드로
+                  신빙성이 매우 높습니다." 등록국이 신고한 코드와 우리 AI 가 짐작한
+                  코드를 같은 얼굴로 보여 주면 담당자가 무엇을 확인해야 하는지 알 수 없다.
+                */}
+                {ev.gpc_brick_code && ev.gpc_source && (
+                  <div
+                    className={`mb-3 border px-3 py-2 text-[12px] leading-relaxed ${
+                      needsReview(ev.gpc_source)
+                        ? 'border-rule-soft text-ink-2'
+                        : 'border-measure bg-measure-soft text-ink-2'
+                    }`}
+                  >
+                    <span className="addr text-ink">{ev.gpc_brick_code}</span>
+                    <span className="ml-2 font-medium">
+                      {GPC_SOURCE_LABEL[ev.gpc_source as GpcSource] ?? ev.gpc_source}
+                    </span>
+                    <p className="mt-1 text-ink-3">
+                      {GPC_SOURCE_NOTE[ev.gpc_source as GpcSource] ?? ''}
+                    </p>
+                  </div>
+                )}
+                {ev.gpc_verified_level == null ? (
+                  <p className="text-[12px] text-caution">
+                    AI 검증 전 자료입니다(뜻이 비슷한 순서만 있음) — 순위 전체를 참고해 사람이
+                    확인하세요.
+                  </p>
+                ) : ev.gpc_verified_level === 'NONE' ? (
+                  <div className="border border-caution bg-caution-soft px-3 py-2 text-[12px] leading-relaxed text-caution">
+                    <strong className="font-semibold">LLM 검증: 맞는 후보 없음</strong>
+                    <p className="mt-1">확실히 일치하는 코드 없음 — 담당자 확인 필요.</p>
+                    {ev.gpc_verification?.reasoning && (
+                      <p className="mt-1 text-ink-2">{ev.gpc_verification.reasoning}</p>
+                    )}
+                  </div>
+                ) : (
+                  <div className="border border-measure bg-measure-soft/40 px-3 py-2 text-[12px] leading-relaxed">
+                    <strong className="font-semibold text-measure">
+                      LLM 검증({GPC_LEVEL_LABEL[ev.gpc_verified_level]})
+                    </strong>{' '}
+                    <span className="addr">{verified?.code}</span> {verified?.title}
+                    {ev.gpc_verification && ` · 확신 ${ev.gpc_verification.confidenceScore}`}
+                    {ev.gpc_verified_level !== 'BRICK' && (
+                      <span className="ml-1 text-ink-3">
+                        (정확한 Brick은 후보에 없어 상위 계층까지만 확인됨)
+                      </span>
+                    )}
+                    {ev.gpc_verification?.reasoning && (
+                      <p className="mt-1 text-ink-2">{ev.gpc_verification.reasoning}</p>
+                    )}
+                  </div>
+                )}
+                <p className="mt-2 text-[12px] text-ink-3">
+                  아래 순위는 LLM이 1차 검증한 결과를 포함합니다. 최종 판단은 담당자가 합니다.
+                </p>
+                <ul className="mt-2 space-y-1">
+                  {ev.gpc_candidates.map((c) => {
+                    const isVerifiedBrick =
+                      ev.gpc_verified_level === 'BRICK' && c.brickCode === ev.gpc_verified_brick_code;
+                    const isEmbeddingTop1 = c.brickCode === ev.gpc_brick_code;
+                    return (
+                      <li
+                        key={c.rank}
+                        className={`flex flex-wrap items-baseline gap-x-2 gap-y-0.5 px-2 py-1 text-[12px] ${
+                          isVerifiedBrick
+                            ? 'border border-measure text-measure'
+                            : isEmbeddingTop1
+                              ? 'border border-rule text-ink-2'
+                              : 'text-ink-2'
+                        }`}
+                      >
+                        <span className="addr tnum text-ink-3">{c.rank}위</span>
+                        <span className="addr">{c.brickCode}</span>
+                        <span className="font-medium">{c.brickTitle}</span>
+                        {isVerifiedBrick && (
+                          <span className="text-[10px] font-medium text-measure">검증 확정</span>
+                        )}
+                        {isEmbeddingTop1 && !isVerifiedBrick && (
+                          <span className="text-[10px] text-ink-3">유사도 1위</span>
+                        )}
+                        <span className="text-ink-3">
+                          {c.segmentTitle} &gt; {c.familyTitle} &gt; {c.classTitle}
+                        </span>
+                        <span className="addr tnum ml-auto text-ink-3">{c.similarity.toFixed(3)}</span>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            </div>
+          </section>
+        );
+      })()}
+
+      {/* 트랙 B — 해외 리콜에만 있는 것들 */}
+      {recall && (
+        <section id="analysis-recall" className="mt-4 scroll-mt-8 border-t border-rule pt-5">
+          <div className="grid gap-4 sm:grid-cols-[10rem_1fr]">
+            <span className="label">해외 리콜</span>
+            <div className="text-[13px] leading-relaxed">
+              <div className="addr text-[12px] text-ink-2">
+                {recall.source} {recall.guid}
+                {recall.recall_country && ` · ${recall.recall_country}`}
+                {recall.detail_url && (
+                  <>
+                    {' · '}
+                    <ExternalLinkPreview
+                      href={recall.detail_url}
+                      label="원문 보기"
+                      className="text-measure underline underline-offset-2"
+                    />
+                  </>
+                )}
+              </div>
+              {recall.hazard_type && <p className="mt-1">{recall.hazard_type}</p>}
+
+              <div className="mt-3">
+                <span className="label">리콜한 나라가 든 근거</span>
+                {recall.cited_standards.length === 0 ? (
+                  <p className="mt-1 text-[12px] text-ink-2">
+                    공고에 어떤 표준을 위반했는지 적혀 있지 않습니다. 해외 리콜 열에 일곱은
+                    이렇습니다. 그래서 우리 기준과 견줘 볼 수가 없습니다.
+                  </p>
+                ) : (
+                  <div className="mt-1 flex flex-wrap gap-1.5">
+                    {recall.cited_standards.map((s) => (
+                      <span key={s} className="addr border border-rule px-1.5 py-0.5 text-[11px] text-ink-2">{s}</span>
+                    ))}
+                    <span className="text-[11px] text-ink-3">
+                      {recall.matched_standard_ids.length > 0
+                        ? `· 우리 기준 ${recall.matched_standard_ids.length}건과 번호가 같습니다`
+                        : '· 우리 기준과 번호 매기는 방식이 달라 사람이 봐야 합니다'}
+                    </span>
+                  </div>
+                )}
+              </div>
+
+              <div className="mt-3">
+                <span className="label">국내에도 풀렸는가</span>
+                <p className="mt-1 text-[12px] leading-relaxed text-ink-2">
+                  {recall.domestic_check === 'DISTRIBUTED' ? '국내에도 풀린 것으로 확인됐습니다.'
+                    : recall.domestic_check === 'NOT_DISTRIBUTED' ? '국내에는 풀리지 않았습니다.'
+                    : recall.domestic_check === 'UNKNOWN' ? '확인했지만 알아내지 못했습니다.'
+                    : '아직 확인하지 않았습니다. 담당자가 직접 확인해 주셔야 합니다.'}
+                  {' '}같은 제품이 국내에도 풀린 것으로 확인되면, 「제품안전기본법」 제13조
+                  제3항에 따라 사업자가 곧바로 보고해야 하는지 따져 봐야 합니다.
+                  이 시스템은 국내에 풀렸는지를 스스로 짐작하지 않습니다.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
       {/*
         병행 점검 소견 (070) — 기본 조항 목록 **아래**에 둔다.
 
@@ -1285,6 +1314,8 @@ export default async function AnalysisPage({
         떨어졌고, 결론은 "자동으로 켜지 말고 담당자 손에 쥐여 줘라" 였다.
       */}
       {ev.source_type === 'ACCIDENT' && <SecondOpinionFindings caseId={ev.id} />}
+      </>
+      </Tabs>
       </div>
       <PageToc items={ANALYSIS_TOC.filter(
         (t) => ev.source_type === 'ACCIDENT' || !ACCIDENT_TOC_IDS.has(t.id),

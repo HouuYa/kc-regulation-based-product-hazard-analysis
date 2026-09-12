@@ -8,6 +8,8 @@ import {
 import { ActionForm } from '@/components/ActionForm';
 import { AutoRefresh } from '@/components/AutoRefresh';
 import { PageToc, type TocItem } from '@/components/PageToc';
+import { Tabs } from '@/components/Tabs';
+import { ExternalLinkPreview } from '@/components/ExternalLinkPreview';
 import { runAnalysisAction } from '@/app/analysis/[caseId]/actions';
 import { GROUP_ORDER } from '@/lib/standards/label';
 
@@ -257,7 +259,12 @@ export default async function RecallsPage({
       {error && <ConnectionError error={error} />}
 
       {data && (
+        <Tabs
+          tabs={[{ id: 'status', label: '현황' }, { id: 'todo', label: '처리할 것' }]}
+          defaultTab="todo"
+        >
         <>
+          {/* 현황 탭 — 집계 등 읽기 전용 (073) */}
           <div id="recalls-status" className="scroll-mt-8">
           <StatusBar
             items={[
@@ -293,7 +300,9 @@ export default async function RecallsPage({
               label="의미 검색 준비가 진행 중입니다 — 숫자가 저절로 갱신됩니다"
             />
           </div>
-
+        </>
+        <>
+          {/* 처리할 것 탭 — 찾기·행별 작업 (073) */}
           <BoardToolbar
             basePath="/recalls"
             params={params}
@@ -410,14 +419,11 @@ export default async function RecallsPage({
                           {r.run_count > 0 ? `관련 조항 후보 ${r.last_results ?? 0}건` : '아직 분석하지 않음'}
                         </span>
                         {r.detail_url && (
-                          <a
+                          <ExternalLinkPreview
                             href={r.detail_url}
-                            target="_blank"
-                            rel="noreferrer noopener"
+                            label="원본 공고"
                             className="text-[11px] text-ink-3 underline underline-offset-2 hover:text-ink"
-                          >
-                            원본 공고
-                          </a>
+                          />
                         )}
                       </div>
                     )}
@@ -432,6 +438,7 @@ export default async function RecallsPage({
             </section>
           )}
         </>
+        </Tabs>
       )}
 
       <TermsNote />
