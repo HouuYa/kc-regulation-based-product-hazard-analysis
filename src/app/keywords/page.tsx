@@ -526,7 +526,12 @@ export default async function KeywordsPage({
             <p className="mt-1.5 text-[12px] text-ink-3">
               담당자가 넣은 것은 바로 확정 상태가 됩니다.
             </p>
-            <form action={addKeyword as unknown as string} className="mt-3 flex flex-wrap gap-2">
+            <ActionForm
+              action={addKeyword}
+              label="넣기"
+              pendingLabel="넣는 중…"
+              className="border border-rule px-3 py-1.5 text-[12px] hover:bg-rule-soft"
+            >
               <select name="itemGroup" className="border border-rule bg-surface px-2 py-1.5 text-[13px]">
                 <option value="전기용품">전기용품</option>
                 <option value="생활용품">생활용품</option>
@@ -536,10 +541,7 @@ export default async function KeywordsPage({
                      className="border border-rule bg-surface px-3 py-1.5 text-[13px]" />
               <input name="keyword" placeholder="검색어(일상 용어)" required
                      className="border border-rule bg-surface px-3 py-1.5 text-[13px]" />
-              <button type="submit" className="border border-rule px-3 py-1.5 text-[12px] hover:bg-rule-soft">
-                넣기
-              </button>
-            </form>
+            </ActionForm>
           </section>
 
           {/* ── 내보내기 · 가져오기 ────────────────────────── */}

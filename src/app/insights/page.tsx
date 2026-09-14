@@ -181,8 +181,6 @@ export default async function InsightsPage() {
 
   return (
     <div className="mx-auto max-w-6xl px-6 py-10 lg:px-10 lg:py-14">
-      <div className="grid gap-10 xl:grid-cols-[minmax(0,1fr)_10rem]">
-        <div>
           <PageHead
             label="산출물 3"
             title="KC안전기준 개선 요인"
@@ -390,9 +388,7 @@ export default async function InsightsPage() {
               </p>
             </>
           )}
-        </div>
-        <PageToc items={TOC} />
-      </div>
+      <PageToc items={TOC} />
     </div>
   );
 }

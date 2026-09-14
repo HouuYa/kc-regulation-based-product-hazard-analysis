@@ -30,35 +30,31 @@ export function PageSkeleton({
 }) {
   return (
     <div className="mx-auto max-w-6xl px-6 py-10 lg:px-10 lg:py-14">
-      <div className="grid gap-10 xl:grid-cols-[minmax(0,1fr)_10rem]">
-        <div>
-          <PageHead label={label} title={title} lead={lead} workflow={workflow} />
+      <PageHead label={label} title={title} lead={lead} workflow={workflow} />
 
-          <p className="mt-8 text-[12px] text-ink-3" role="status" aria-live="polite">
-            불러오는 중입니다…
-          </p>
+      <p className="mt-8 text-[12px] text-ink-3" role="status" aria-live="polite">
+        불러오는 중입니다…
+      </p>
 
-          {/* 요약 숫자 자리 */}
-          <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
-            {Array.from({ length: 4 }, (_, i) => (
-              <div key={i} className="border border-rule-soft px-3 py-4">
-                <div className="h-2.5 w-14 animate-pulse bg-rule-soft" />
-                <div className="mt-2.5 h-4 w-10 animate-pulse bg-rule-soft" />
-              </div>
-            ))}
+      {/* 요약 숫자 자리 */}
+      <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
+        {Array.from({ length: 4 }, (_, i) => (
+          <div key={i} className="border border-rule-soft px-3 py-4">
+            <div className="h-2.5 w-14 animate-pulse bg-rule-soft" />
+            <div className="mt-2.5 h-4 w-10 animate-pulse bg-rule-soft" />
           </div>
+        ))}
+      </div>
 
-          {/* 목록 자리 */}
-          <div className="mt-8 border-t border-rule-soft">
-            {Array.from({ length: rows }, (_, i) => (
-              <div key={i} className="flex items-center gap-4 border-b border-rule-soft py-3.5">
-                <div className="h-2.5 w-1/3 animate-pulse bg-rule-soft" />
-                <div className="h-2.5 w-16 animate-pulse bg-rule-soft" />
-                <div className="ml-auto h-2.5 w-12 animate-pulse bg-rule-soft" />
-              </div>
-            ))}
+      {/* 목록 자리 */}
+      <div className="mt-8 border-t border-rule-soft">
+        {Array.from({ length: rows }, (_, i) => (
+          <div key={i} className="flex items-center gap-4 border-b border-rule-soft py-3.5">
+            <div className="h-2.5 w-1/3 animate-pulse bg-rule-soft" />
+            <div className="h-2.5 w-16 animate-pulse bg-rule-soft" />
+            <div className="ml-auto h-2.5 w-12 animate-pulse bg-rule-soft" />
           </div>
-        </div>
+        ))}
       </div>
     </div>
   );

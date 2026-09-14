@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
+import { SideNav } from '@/components/SideNav';
+import { StageProvider } from '@/components/StageContext';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -8,79 +9,13 @@ export const metadata: Metadata = {
 };
 
 /**
- * 좌측 레일은 장식이 아니라 업무 그 자체다.
+ * 업무 흐름 레일은 기본은 숨기고 ☰ 아이콘으로 연다 (2026-09-14, 와이어프레임 3a)
  *
- * 무엇이 바뀌었나 (담당자 요청)
- *   전에는 「1 안전기준 / 2 위해요인 코드 / 3 사건 / 4 분석」이었다. 두 가지를 고쳤다.
- *
- *   위해요인 코드를 아래로 내렸다 — 그것은 업무 단계가 아니라 참고 문서다.
- *   코드북은 조회만 하는 대상이고 담당자가 그 화면에서 할 일이 없다.
- *
- *   사건·분석을 사고보고서와 리콜로 나눴다 — 둘은 들어오는 경로도 봐야 할 숫자도
- *   다르다. 사고보고서는 사람이 PDF 를 올리고 원문을 확인해야 하고, 리콜은 외부 표에서
- *   자동으로 들어오며 코드까지 붙어 온다. 한 통에 담으면 어느 쪽이 밀렸는지 알 수 없다.
- *   등록과 분석을 따로 두지 않고 한 화면에 합친 것은, 담당자가 "사고보고서 + KC안전기준
- *   연계 분석"을 하나의 일로 인식하기 때문이다.
+ * 전에는 이 레일이 항상 화면에 붙어 있었다(넓은 화면 sticky, 좁은 화면 상단
+ * 가로줄). "좌·우 메뉴가 이중 내비게이션처럼 느껴진다"는 지적에 따라, 본문이
+ * 전체 폭을 쓰고 레일은 필요할 때만 여는 오버레이로 옮겼다. 실제 목록·상태·
+ * 토글 로직은 클라이언트 컴포넌트여야 해서 `SideNav` 로 옮겼다.
  */
-/**
- * 🤖 는 그 화면에서 AI 가 관여한다는 표시다 (2026-09-07)
- *
- * 장식이 아니라 경고에 가깝다. AI 가 손댄 결과는 **사람이 한 번 확인해야 하는 것**
- * 이라는 뜻이고, 이 체계의 산출물이 판정이 아니라 후보인 이유이기도 하다.
- * 어디에 무엇이 얼마나 쓰이는지는 운영 화면의 「🤖 AI 사용과 비용」에 있다.
- */
-const AI_NOTE = 'AI가 관여하는 화면입니다 — 결과는 후보이고, 확정은 담당자가 합니다';
-
-const STAGES = [
-  { no: '1', href: '/standards', label: '안전기준',   sub: '조항·시험 적재',   ai: true },
-  { no: '2', href: '/accidents', label: '사고보고서', sub: '등록·현황·분석',   ai: true },
-  { no: '3', href: '/recalls',   label: '리콜',       sub: '수집·현황·분석',   ai: true },
-];
-
-/**
- * 흐름 아래는 세 묶음으로 나눈다 (2026-09-08, 담당자 요청)
- *
- * 전에는 번호 없는 것 다섯이 한 줄로 이어져 있었다. 성격이 제각각인데 생김새가
- * 같으니, 「KC안전기준 개선 요인」(산출물)과 「운영」(시스템)이 같은 무게로 보였다.
- * AI 화면을 새로 만들면서 그 자리를 정해야 했고, 이 참에 묶음을 나눴다.
- *
- *   산출물   1~3 이 쌓여야 숫자가 생기는 결과물
- *   사전·참고 무엇을 기준으로 삼는가 — 담당자가 채우고 고치는 자료
- *   시스템    지금 제대로 돌고 있는가 · AI 를 어디에 쓰고 얼마가 드는가
- *
- * 묶음 안의 순서는 담당자가 손대는 빈도를 따른다(2026-09-05 요청). 시스템 묶음은
- * 평소 할 일이 없어 맨 아래다.
- */
-const GROUPS: Array<{
-  title: string;
-  items: Array<{ href: string; label: string; sub: string; ai?: boolean }>;
-}> = [
-  {
-    title: '산출물',
-    items: [
-      // 여기는 쌓인 것을 세기만 하므로 AI 를 부르지 않는다
-      { href: '/insights', label: 'KC안전기준 개선 요인', sub: '사각지대·국내외 대조·시험항목' },
-    ],
-  },
-  {
-    title: '사전 · 참고',
-    items: [
-      // 두 사전은 한 흐름이다 — 일상어를 법정 품목으로 옮긴 뒤(검색어), 그 품목의 기준을 정한다(용어)
-      { href: '/keywords', label: '품목 검색어 사전', sub: '일상어 → 법정 품목', ai: true },
-      { href: '/terms',    label: '품목 용어 사전',   sub: '품목 → 적용기준',    ai: true },
-      { href: '/codebook', label: '위해요인 코드',    sub: '참고 문서' },
-    ],
-  },
-  {
-    title: '시스템',
-    items: [
-      // AI 는 운영과 성격이 다르다 — 상태 점검이 아니라 관리 대상이라 화면을 따로 뒀다(2026-09-08)
-      { href: '/llm', label: 'AI 사용과 비용', sub: '자리·모델·단가', ai: true },
-      { href: '/ops', label: '운영',           sub: '상태·알림·접속 관리' },
-    ],
-  },
-];
-
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ko">
@@ -93,133 +28,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body>
-        <div className="min-h-screen lg:grid lg:grid-cols-[15rem_minmax(0,1fr)]">
-          {/*
-            넓은 화면에서는 레일을 화면에 붙여 둔다 (담당자 지적:
-            "좌측메뉴가 페이지 스크롤 다운하면 올라가 버리네요")
-
-            목록이 수천 건이라 한참 내려가면 메뉴가 화면 밖으로 사라져,
-            다른 화면으로 가려면 맨 위까지 되올라와야 했다.
-
-            self-start 가 필요한 이유: 부모가 flex 라 기본값(stretch)으로 늘어나면
-            sticky 가 붙을 여백이 없어 아무 효과가 없다. 높이를 내용만큼만 잡아야
-            비로소 붙는다. 레일이 화면보다 길어질 때를 대비해 안쪽 스크롤도 준다.
-          */}
-          <nav className="border-b border-rule bg-surface lg:sticky lg:top-0 lg:h-screen lg:overflow-y-auto lg:border-r lg:border-b-0">
-            <div className="border-b border-rule-soft px-5 py-5">
-              <Link href="/" className="block">
-                <div className="label">국가기술표준원</div>
-                <div className="mt-1 text-[15px] leading-tight font-semibold tracking-tight">
-                  KC안전기준
-                  <br />
-                  제품위해 분석
-                </div>
-              </Link>
-            </div>
-
-            {/*
-              좁은 화면에서는 가로로 눕힌다.
-              세로로 쌓으면 단계 4개 + 운영이 화면 위쪽 250px 가량을 먹어, 정작 봐야 할
-              본문이 스크롤 아래로 밀린다. 텔레그램 알림을 받고 휴대전화로 운영 화면을
-              여는 경로가 실제로 생겼으므로(023) 이 낭비를 두고 볼 이유가 없다.
-              넓은 화면에서는 원래대로 세로 레일이다.
-            */}
-            <div className="flex items-stretch overflow-x-auto px-2 py-3 lg:block lg:py-4">
-              {/* 묶음 이름은 넓은 화면에서만. 좁은 화면에서는 항목이 밀린다 */}
-              <div className="label hidden px-3 pb-1 lg:block">업무 흐름</div>
-              <ol className="flex lg:block">
-                {STAGES.map((s) => (
-                  <li key={s.href} className="shrink-0">
-                    <Link
-                      href={s.href}
-                      className="group flex items-baseline gap-3 rounded-sm px-3 py-2.5 transition-colors hover:bg-measure-soft"
-                    >
-                      <span className="addr text-[11px] text-ink-3 group-hover:text-measure">
-                        {s.no}
-                      </span>
-                      <span className="min-w-0">
-                        <span className="block text-[13px] font-medium whitespace-nowrap">
-                          {s.label}
-                          {s.ai && (
-                            <span aria-label={AI_NOTE} title={AI_NOTE} className="ml-1">
-                              🤖
-                            </span>
-                          )}
-                        </span>
-                        <span className="block text-[11px] whitespace-nowrap text-ink-3">
-                          {s.sub}
-                        </span>
-                      </span>
-                    </Link>
-                  </li>
-                ))}
-              </ol>
-
-              {/*
-                운영과 참고 문서는 업무 흐름 위에 있지 않다 — 자료가 흐르는 순서(1~3)가
-                아니라 "그 흐름이 지금 돌고 있는가"와 "무엇을 기준으로 삼는가"를 보는
-                자리다. 그래서 번호를 주지 않고 선 하나를 사이에 둔다. 번호가 의미를
-                담고 있으므로 아무 데나 4를 붙이면 그 의미가 깨진다.
-              */}
-              {GROUPS.map((g) => (
-                <div
-                  key={g.title}
-                  className="ml-2 flex shrink-0 border-l border-rule-soft pl-2 lg:mt-3 lg:ml-0 lg:block lg:border-t lg:border-l-0 lg:pt-3 lg:pl-0"
-                >
-                  {/*
-                    묶음 이름은 넓은 화면에서만 보인다. 좁은 화면에서는 메뉴가 가로로
-                    눕는데, 거기에 제목까지 끼면 정작 항목이 화면 밖으로 밀린다.
-                  */}
-                  <div className="label hidden px-3 pb-1 lg:block">{g.title}</div>
-                  <ul className="flex lg:block">
-                    {g.items.map((a) => (
-                      <li key={a.href} className="shrink-0">
-                        <Link
-                          href={a.href}
-                          className="group block rounded-sm px-3 py-2.5 transition-colors hover:bg-measure-soft"
-                        >
-                          <span className="block text-[13px] font-medium whitespace-nowrap group-hover:text-measure">
-                            {a.label}
-                            {a.ai && (
-                              <span aria-label={AI_NOTE} title={AI_NOTE} className="ml-1">
-                                🤖
-                              </span>
-                            )}
-                          </span>
-                          <span className="block text-[11px] whitespace-nowrap text-ink-3">
-                            {a.sub}
-                          </span>
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </div>
-
-            {/* 이 도구의 성격을 화면에 상주시킨다. 담당자가 결과를 판정으로 읽지 않도록. */}
-            <div className="mx-5 mb-5 hidden border-t border-rule-soft pt-4 lg:block">
-              <p className="text-[11px] leading-relaxed text-ink-3">
-                이 시스템은 위반 여부를 판정하지 않습니다. 관련될 수 있는 조항과 그 근거를
-                제시하고, 확인 여부는 담당자가 정합니다.
-              </p>
-              {/*
-                🤖 가 무슨 뜻인지 화면에 적어 둔다. 표시만 있고 뜻을 어디에도 안 적으면
-                장식으로 읽히는데, 이것은 "이 화면의 결과는 후보"라는 경고에 가깝다.
-              */}
-              <p className="mt-3 text-[11px] leading-relaxed text-ink-3">
-                🤖 표시는 그 화면에서 AI가 관여한다는 뜻입니다. 어디에 어떤 모델을 쓰고 얼마가
-                드는지는{' '}
-                <Link href="/llm" className="underline decoration-rule underline-offset-2 hover:text-measure">
-                  AI 사용과 비용
-                </Link>
-                에 있습니다.
-              </p>
-            </div>
-          </nav>
-
-          <main id="top" className="min-w-0">{children}</main>
-        </div>
+        <StageProvider>
+          <SideNav />
+          <main id="top" className="min-h-screen min-w-0">{children}</main>
+        </StageProvider>
       </body>
     </html>
   );

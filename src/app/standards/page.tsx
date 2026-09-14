@@ -198,8 +198,6 @@ export default async function StandardsPage() {
 
   return (
     <div className="mx-auto max-w-6xl px-6 py-10 lg:px-10 lg:py-14">
-      <div className="grid gap-10 xl:grid-cols-[minmax(0,1fr)_10rem]">
-      <div>
       <PageHead
         label="1 · 안전기준"
         title="들여온 기준과 준비 상태"
@@ -504,9 +502,7 @@ export default async function StandardsPage() {
       })}
 
       <TermsNote />
-      </div>
       <PageToc items={STANDARDS_TOC} />
-      </div>
     </div>
   );
 }

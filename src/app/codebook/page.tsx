@@ -171,8 +171,6 @@ export default async function CodebookPage() {
 
   return (
     <div className="mx-auto max-w-6xl px-6 py-10 lg:px-10 lg:py-14">
-      <div className="grid gap-10 xl:grid-cols-[minmax(0,1fr)_10rem]">
-      <div>
       <PageHead
         label="참고 · 위해요인 코드"
         title={version ? `코드북 ${version.version}` : '위해요인 코드북'}
@@ -518,9 +516,7 @@ export default async function CodebookPage() {
 
 
       <TermsNote />
-      </div>
       <PageToc items={CODEBOOK_TOC} />
-      </div>
     </div>
   );
 }

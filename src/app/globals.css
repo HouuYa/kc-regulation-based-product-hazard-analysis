@@ -90,36 +90,12 @@ body {
 
 a { color: inherit; }
 
-.page-toc {
-  position: relative;
-  margin-top: 2.5rem;
-}
-
-.page-toc-mobile {
-  border-top: 1px solid var(--color-rule);
-  border-bottom: 1px solid var(--color-rule);
-  padding: 0.75rem 0;
-}
-
-.page-toc-mobile summary {
-  cursor: pointer;
-  color: var(--color-ink-2);
-  font-size: 0.75rem;
-}
-
-.page-toc-desktop { display: none; }
-
-@media (min-width: 1280px) {
-  .page-toc {
-    position: sticky;
-    top: 2rem;
-    align-self: start;
-    margin-top: 0;
-  }
-
-  .page-toc-mobile { display: none; }
-  .page-toc-desktop { display: block; }
-}
+/*
+  .page-toc* 규칙은 2026-09-14 에 지웠다 — PageToc 가 sticky 사이드바 +
+  <details> 아코디언 방식에서 좌측 SideNav 와 같은 오버레이 패널로 바뀌면서
+  (와이어프레임 3a), 레이아웃은 이제 컴포넌트 안의 Tailwind 클래스가 전부
+  맡는다.
+*/
 
 :focus-visible {
   outline: 2px solid var(--color-measure);

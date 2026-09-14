@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 
 export interface TocItem {
@@ -14,10 +14,30 @@ export interface TocItem {
    * 보인다(074, 담당자 지적). 먼저 그 탭으로 바꾼 뒤에 스크롤한다.
    */
   tab?: string;
+  /**
+   * 바로 위 항목의 하위 구역이면 true (2026-09-14, 담당자 지적)
+   *
+   * 한 구역이 성격이 다른 여러 하위 구역을 담고 있으면(예: 병행 점검 소견 —
+   * 시험 공백·관련 리콜 등) 목차에서 상위 항목 하나로만 보여서 지금 스크롤이
+   * 그 구역의 어디쯤인지 안 보인다는 지적을 받았다. 들여쓰기만 준 하위 항목을
+   * 바로 아래에 추가해 목차가 실제 스크롤 위치와 더 자주 맞아떨어지게 한다.
+   */
+  indent?: boolean;
 }
 
+/**
+ * 이 페이지 목차 — 기본은 숨기고 ≡ 아이콘으로 연다 (2026-09-14, 와이어프레임 3a)
+ *
+ * 전에는 넓은 화면에서 sticky 로 항상 붙어 있었고, 좁은 화면에서는 접힌
+ * <details> 였다. "좌·우 메뉴가 이중 내비게이션처럼 보인다"는 지적에 따라
+ * 화면 크기와 무관하게 오버레이 패널 하나로 통일한다 — 좌측 SideNav 와 같은
+ * 규칙(기본 숨김·아이콘으로 열기·바깥 클릭이나 Esc 로 닫기·상태를 저장하지
+ * 않음)을 오른쪽에도 그대로 적용한다.
+ */
 export function PageToc({ items, tabParam = 'tab' }: { items: TocItem[]; tabParam?: string }) {
+  const [open, setOpen] = useState(false);
   const [activeId, setActiveId] = useState(items[0]?.id ?? '');
+  const panelRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -44,11 +64,30 @@ export function PageToc({ items, tabParam = 'tab' }: { items: TocItem[]; tabPara
     return () => observer.disconnect();
   }, [items]);
 
+  // 바깥을 누르거나 Esc 를 누르면 닫는다 — SideNav 와 같은 규칙
+  useEffect(() => {
+    if (!open) return;
+    const onPointerDown = (e: MouseEvent) => {
+      if (panelRef.current && !panelRef.current.contains(e.target as Node)) setOpen(false);
+    };
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setOpen(false);
+    };
+    document.addEventListener('mousedown', onPointerDown);
+    document.addEventListener('keydown', onKeyDown);
+    return () => {
+      document.removeEventListener('mousedown', onPointerDown);
+      document.removeEventListener('keydown', onKeyDown);
+    };
+  }, [open]);
+
   if (items.length === 0) return null;
 
   function goTo(item: TocItem) {
     const el = document.getElementById(item.id);
     const needsTabSwitch = item.tab && searchParams.get(tabParam) !== item.tab;
+
+    setOpen(false);
 
     if (needsTabSwitch) {
       const params = new URLSearchParams(searchParams.toString());
@@ -67,16 +106,30 @@ export function PageToc({ items, tabParam = 'tab' }: { items: TocItem[]; tabPara
   }
 
   return (
-    <aside className="page-toc" aria-label="현재 페이지 목차">
-      <details className="page-toc-mobile">
-        <summary>현재 페이지 목차</summary>
-        <TocLinks items={items} activeId={activeId} onGoTo={goTo} />
-      </details>
-      <div className="page-toc-desktop">
+    <>
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        aria-label={open ? '이 페이지 목차 닫기' : '이 페이지 목차 열기'}
+        aria-expanded={open}
+        className="fixed top-3 right-3 z-40 flex h-9 w-9 items-center justify-center border border-rule bg-surface text-[16px] leading-none shadow-sm hover:bg-measure-soft"
+      >
+        ≡
+      </button>
+
+      {open && <div className="fixed inset-0 z-30 bg-ink/30" aria-hidden="true" />}
+
+      <div
+        ref={panelRef}
+        aria-label="현재 페이지 목차"
+        className={`fixed inset-y-0 right-0 z-40 w-64 overflow-y-auto border-l border-rule bg-surface px-4 py-5 shadow-lg transition-transform duration-150 ease-out ${
+          open ? 'translate-x-0' : 'translate-x-full'
+        }`}
+      >
         <div className="label">이 페이지</div>
         <TocLinks items={items} activeId={activeId} onGoTo={goTo} />
       </div>
-    </aside>
+    </>
   );
 }
 
@@ -92,6 +145,8 @@ function TocLinks({
               href={`#${item.id}`}
               onClick={(e) => { e.preventDefault(); onGoTo(item); }}
               className={`block py-1 text-[11px] leading-snug transition-colors hover:text-measure ${
+                item.indent ? 'pl-3' : ''
+              } ${
                 activeId === item.id ? 'border-l-2 border-measure -ml-[14px] pl-3 text-measure' : 'text-ink-3'
               }`}
             >

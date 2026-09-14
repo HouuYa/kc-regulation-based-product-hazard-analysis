@@ -108,8 +108,6 @@ export default async function LlmPage() {
 
   return (
     <div className="mx-auto max-w-6xl px-6 py-10 lg:px-10 lg:py-14">
-      <div className="grid gap-10 xl:grid-cols-[minmax(0,1fr)_10rem]">
-        <div>
           <PageHead
             label="🤖 AI 사용"
             title="어디에 어떤 모델을 쓰고, 얼마가 드는가"
@@ -478,8 +476,14 @@ export default async function LlmPage() {
                           <td className="py-2 pr-4 text-right tabular-nums text-ink-2">{n(c.inputTokens)}</td>
                           <td className="py-2 pr-4 text-right tabular-nums text-ink-2">{n(c.outputTokens)}</td>
                           <td className="py-2 text-ink-3">
+                            {/* 새 창으로 연다(2026-09-14) — 비용 표를 보다가 그 사건만 잠깐 확인하는 용도다 */}
                             {c.caseId !== null && (
-                              <Link href={`/analysis/${c.caseId}`} className="underline underline-offset-2 hover:text-measure">
+                              <Link
+                                href={`/analysis/${c.caseId}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="underline underline-offset-2 hover:text-measure"
+                              >
                                 사건 {c.caseId}
                               </Link>
                             )}
@@ -498,10 +502,8 @@ export default async function LlmPage() {
               </Section>
             </>
           )}
-        </div>
 
-        <PageToc items={TOC} />
-      </div>
+      <PageToc items={TOC} />
     </div>
   );
 }

@@ -33,9 +33,26 @@ export interface UploadReport {
   caseId?: number;
 }
 
-export async function uploadAccidentPdfs(formData: FormData): Promise<void> {
+/**
+ * 처리중 표시를 위해 문장을 돌려준다 (ActionForm 으로 교체, 2026-09-14)
+ *
+ * 전에는 `Promise<void>` 라서 여러 건을 올리는 동안(추출·개인정보 검사·Storage
+ * 보관이 순서대로 도는 무거운 작업) 버튼이 반응하는지 알 수 없었다. 파일별로
+ * 무슨 일이 있었는지(올림·중복·개인정보 차단·오류) 세어서 한 문장으로 돌려준다.
+ */
+export async function uploadAccidentPdfs(
+  _prev: string | null,
+  formData: FormData,
+): Promise<string> {
   const files = formData.getAll('files').filter((f): f is File => f instanceof File && f.size > 0);
+  if (files.length === 0) return '올릴 파일을 골라 주세요.';
+
   const db = getDb();
+  let ok = 0;
+  let duplicate = 0;
+  let piiBlocked = 0;
+  let scanned = 0;
+  let failed = 0;
 
   for (const file of files) {
     try {
@@ -48,7 +65,7 @@ export async function uploadAccidentPdfs(formData: FormData): Promise<void> {
       `;
       // 보관에 실패해 남아 있는 기록이면 같은 파일을 다시 올려 보관만 다시 시도한다.
       // 이 갈래가 없으면 중복으로 걸러져, 버킷을 고친 뒤에도 되살릴 방법이 없다.
-      if (dup && dup.storage_path) continue;
+      if (dup && dup.storage_path) { duplicate++; continue; }
 
       const extracted = await extractPdf(bytes);
 
@@ -87,6 +104,7 @@ export async function uploadAccidentPdfs(formData: FormData): Promise<void> {
           on conflict (kind, sha256) do update
             set error_reason = excluded.error_reason, status = 'error'
         `;
+        failed++;
         continue;
       }
 
@@ -141,14 +159,29 @@ export async function uploadAccidentPdfs(formData: FormData): Promise<void> {
         } catch (e) {
           console.warn(`사진 추출 실패 (${file.name}): ${e instanceof Error ? e.message : e}`);
         }
+        ok++;
+      } else if (blocked) {
+        piiBlocked++;
+      } else {
+        scanned++;
       }
     } catch {
       // 한 건이 실패해도 나머지는 진행한다 (§8.1)
+      failed++;
       continue;
     }
   }
 
   revalidatePath('/accidents');
+
+  const parts = [
+    ok > 0 && `올림 ${ok}건`,
+    duplicate > 0 && `이미 있어 건너뜀 ${duplicate}건`,
+    piiBlocked > 0 && `개인정보 발견으로 막힘 ${piiBlocked}건`,
+    scanned > 0 && `스캔본(OCR 필요)이라 막힘 ${scanned}건`,
+    failed > 0 && `오류 ${failed}건`,
+  ].filter(Boolean);
+  return `${files.length}건 중 ${parts.join(' · ')}.`;
 }
 
 /**
