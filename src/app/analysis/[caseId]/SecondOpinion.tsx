@@ -18,8 +18,8 @@
  *   화면을 보고 시험을 의뢰한다.
  */
 
-import Link from 'next/link';
 import { ActionForm } from '@/components/ActionForm';
+import { ExternalLinkPreview } from '@/components/ExternalLinkPreview';
 import { loadSecondOpinion, type SecondOpinionView, type FindingRow } from '@/lib/second-opinion/load';
 import { runSecondOpinionAction, recordFindingReview } from './actions';
 
@@ -178,31 +178,113 @@ export async function InvestigationSummary({ caseId }: { caseId: number }) {
   );
 }
 
+/**
+ * 판정 버튼 문구·생김새 (2026-09-14, 담당자 지적)
+ *
+ * "확인해 볼 만함/보류/해당 없음 버튼은 클릭하는 것이죠? 클릭을 하라는
+ * 것인지 잘 드러나지 않습니다" — 전에는 폭 좁은 옅은 회색 테두리(px-2
+ * py-0.5, text-[11px])라 이 화면의 다른 결정 버튼(채택/반려 등, px-3
+ * py-1.5)보다 훨씬 작고 수수해서 눌러야 하는 자리로 안 보였다. 크기를
+ * 다른 결정 버튼과 맞추고, 셋을 서로 다른 색으로 갈라 지금 어떤 판정이
+ * 가능한지 한눈에 들어오게 했다.
+ *
+ * "확인해 볼 만함"이란 낱말도 어감이 이상하다는 지적을 받아 "확인 필요"로
+ * 줄였다 — actions.ts 의 완료 문구("판정했습니다 — …")도 같이 맞춘다.
+ */
+const FINDING_DECISION_BUTTON_LABEL: Record<'ACCEPTED' | 'HOLD' | 'REJECTED', string> = {
+  ACCEPTED: '확인 필요', HOLD: '보류', REJECTED: '해당 없음',
+};
+
+const FINDING_DECISION_BUTTON_CLASS: Record<'ACCEPTED' | 'HOLD' | 'REJECTED', string> = {
+  ACCEPTED: 'border border-measure px-3 py-1.5 text-[12px] font-medium text-measure hover:bg-measure-soft',
+  HOLD: 'border border-caution px-3 py-1.5 text-[12px] font-medium text-caution hover:bg-caution-soft',
+  REJECTED: 'border border-rule px-3 py-1.5 text-[12px] text-ink-2 hover:bg-rule-soft',
+};
+
 function ReviewButtons({ finding, caseId }: { finding: FindingRow; caseId: number }) {
   if (finding.decision) {
     return (
       <span className="addr text-[11px] text-ink-3">
-        판정함 · {finding.decision === 'ACCEPTED' ? '확인해 볼 만함'
-          : finding.decision === 'HOLD' ? '보류' : '해당 없음'}
+        판정함 · {FINDING_DECISION_BUTTON_LABEL[finding.decision as 'ACCEPTED' | 'HOLD' | 'REJECTED'] ?? finding.decision}
       </span>
     );
   }
   return (
-    <div className="flex flex-wrap gap-1.5">
-      {(['ACCEPTED', 'HOLD', 'REJECTED'] as const).map((d) => (
-        <form key={d} action={recordFindingReview}>
-          <input type="hidden" name="findingId" value={finding.id} />
-          <input type="hidden" name="caseId" value={caseId} />
-          <input type="hidden" name="decision" value={d} />
-          <button
-            type="submit"
-            className="border border-rule px-2 py-0.5 text-[11px] text-ink-2 hover:bg-paper-2"
-          >
-            {d === 'ACCEPTED' ? '확인해 볼 만함' : d === 'HOLD' ? '보류' : '해당 없음'}
-          </button>
-        </form>
-      ))}
-    </div>
+    <ActionForm
+      action={recordFindingReview}
+      hidden={{ findingId: finding.id, caseId }}
+      buttonField="decision"
+      buttons={(['ACCEPTED', 'HOLD', 'REJECTED'] as const).map((d) => ({
+        value: d,
+        label: FINDING_DECISION_BUTTON_LABEL[d],
+        pendingLabel: '처리 중…',
+        className: FINDING_DECISION_BUTTON_CLASS[d],
+      }))}
+    />
+  );
+}
+
+/**
+ * 관련 리콜 한 건
+ *
+ * 리콜 개요(표+사진)를 목록에 항상 펼쳐 두면 여덟 건이면 카드도 여덟 개가
+ * 늘어서 화면이 길어진다(2026-09-14, 담당자 지적 — 스크린샷으로 그 카드를
+ * 짚으며 "보일 필요가 없다"). "관련 리콜" 자리를 누르면 같은 개요를 화면 안
+ * 창(모달, 아래 ExternalLinkPreview)으로 볼 수 있으므로, 목록에는 한 줄
+ * 참조만 남기고 개요는 누를 때만 보여준다.
+ */
+function FindingItem({
+  f, caseId, border,
+}: { f: FindingRow; caseId: number; border: string }) {
+  return (
+    <li className={`border-l-2 ${border} pl-3`}>
+      <div className="text-[13px] leading-relaxed">
+        {f.sectionMarker && (
+          <span className="addr mr-2 text-[12px] text-ink-2">
+            {f.standardName} 절 {f.sectionMarker}
+            {f.part ? ` [${f.part}]` : ''}
+            {f.sectionTitle ? ` 「${f.sectionTitle}」` : ''}
+          </span>
+        )}
+        {f.refCaseId && (
+          /*
+            화면 안 창(모달)으로 연다 (2026-09-14, 담당자 지적: "2 리콜 메뉴의
+            원본보기처럼 창을 내부에 띄워서 병행으로 보면서 검토")
+
+            처음엔 새 탭으로 열었는데, 담당자가 원한 것은 "새 탭"이 아니라
+            "지금 화면을 떠나지 않고 같이 보는 것"이었다. 리콜 원문 보기와
+            같은 컴포넌트(ExternalLinkPreview)를 그대로 쓴다 — 다만 대상이
+            우리 서버의 페이지라 iframe 삽입이 막힐 일이 없으므로
+            `internal`로 그 안내 문구만 뺀다.
+          */
+          <ExternalLinkPreview
+            href={`/analysis/${f.refCaseId}`}
+            label={f.refTitle ?? `사건 ${f.refCaseId}`}
+            internal
+            className="addr mr-2 text-[12px] text-measure underline underline-offset-2 hover:opacity-80"
+          />
+        )}
+        {f.hfCode && !f.sectionMarker && !f.refCaseId && (
+          <span className="addr mr-2 text-[12px] text-ink-2">{f.hfCode}</span>
+        )}
+        {f.refCaseId && (f.hfCode || f.dtCode) && (
+          <span className="addr mr-2 text-[11px] text-ink-3">
+            {f.dtCode && `DT ${f.dtCode}`}
+            {f.dtCode && f.hfCode && ' · '}
+            {f.hfCode && `HF ${f.hfCode}`}
+          </span>
+        )}
+      </div>
+      <p className="mt-0.5 text-[12px] leading-relaxed text-ink-2">{f.rationale}</p>
+      {f.testMethodMarker && (
+        <p className="mt-0.5 text-[12px] text-ink-2">
+          이 요건을 확인하는 시험방법 조항: {f.testMethodMarker}
+        </p>
+      )}
+      <div className="mt-1.5">
+        <ReviewButtons finding={f} caseId={caseId} />
+      </div>
+    </li>
   );
 }
 
@@ -215,98 +297,82 @@ function FindingList({
   return (
     <ul className="mt-2 space-y-2">
       {findings.map((f) => (
-        <li key={f.id} className={`border-l-2 ${border} pl-3`}>
-          <div className="text-[13px] leading-relaxed">
-            {f.sectionMarker && (
-              <span className="addr mr-2 text-[12px] text-ink-2">
-                {f.standardName} 절 {f.sectionMarker}
-                {f.part ? ` [${f.part}]` : ''}
-                {f.sectionTitle ? ` 「${f.sectionTitle}」` : ''}
-              </span>
-            )}
-            {f.refCaseId && (
-              <Link
-                href={`/analysis/${f.refCaseId}`}
-                className="addr mr-2 text-[12px] text-measure underline underline-offset-2 hover:opacity-80"
-              >
-                {f.refTitle ?? `사건 ${f.refCaseId}`}
-              </Link>
-            )}
-            {f.hfCode && !f.sectionMarker && !f.refCaseId && (
-              <span className="addr mr-2 text-[12px] text-ink-2">{f.hfCode}</span>
-            )}
-            {f.refCaseId && (f.hfCode || f.dtCode) && (
-              <span className="addr mr-2 text-[11px] text-ink-3">
-                {f.dtCode && `DT ${f.dtCode}`}
-                {f.dtCode && f.hfCode && ' · '}
-                {f.hfCode && `HF ${f.hfCode}`}
-              </span>
-            )}
-          </div>
-          <p className="mt-0.5 text-[12px] leading-relaxed text-ink-2">{f.rationale}</p>
-          {f.testMethodMarker && (
-            <p className="mt-0.5 text-[12px] text-ink-2">
-              이 요건을 확인하는 시험방법 조항: {f.testMethodMarker}
-            </p>
-          )}
-          <div className="mt-1.5">
-            <ReviewButtons finding={f} caseId={caseId} />
-          </div>
-        </li>
+        <FindingItem key={f.id} f={f} caseId={caseId} border={border} />
       ))}
     </ul>
   );
 }
 
-const QUEUE_LABEL: Record<string, string> = {
-  TEST_GAP: '시험 공백',
-  LEGAL_SIGNAL: '인증·표시',
-  STANDARD_GAP: '기준 사각지대',
-};
+/**
+ * 병행 점검 후보를 다섯 갈래로 나눈다 (2026-09-14, 담당자 요청)
+ *
+ * "병행 점검 미판정 20건을 시험 공백·위해 원인·유사 사례·인증·표시 등으로
+ * 분류해 보여 달라" — 전에는 20건이 라벨 한 줄만 붙인 채 평평하게 늘어서
+ * 있어서, 그중 무엇이 몇 건인지 훑어보려면 하나씩 다 읽어야 했다.
+ *
+ * `SecondOpinionReviewQueue`(검토 화면 목차용 개수 계산, `analysis/[caseId]/page.tsx`)와
+ * `SecondOpinionFindings`(인사이트 화면)가 이 순서·경계를 그대로 따른다 —
+ * 한쪽만 고치면 두 화면이 갈리므로 여기 한 벌만 둔다(CLAUDE.md §9).
+ */
+export const QUEUE_GROUPS: Array<{
+  id: string; label: string; match: (f: FindingRow) => boolean;
+}> = [
+  { id: 'gap', label: '시험 공백', match: (f) => f.findingType === 'TEST_GAP' },
+  { id: 'legal', label: '인증·표시', match: (f) => f.outputKind === 'CERT_MARKING_CHECK' },
+  { id: 'policy', label: '기준 사각지대', match: (f) => f.outputKind === 'POLICY_SIGNAL' },
+  { id: 'cases', label: '유사 사례', match: (f) => f.findingType === 'RECALL_EVIDENCE' && !!f.refCaseId },
+  { id: 'stat', label: '위해 원인', match: (f) => f.findingType === 'RECALL_EVIDENCE' && !f.refCaseId },
+];
 
-/** RECALL_EVIDENCE 는 유사 사례·위해 원인 둘로 갈리므로 따로 판정한다(074) */
-function queueLabel(f: FindingRow): string {
-  if (f.findingType === 'RECALL_EVIDENCE') return f.refCaseId ? '유사 사례' : '위해 원인';
-  return QUEUE_LABEL[f.findingType] ?? f.findingType;
+/** 미판정 소견을 위 다섯 갈래로 나눈다. 후보가 없는 갈래는 뺀다(빈 제목을 안 만든다) */
+export function groupPendingFindings(pending: FindingRow[]) {
+  return QUEUE_GROUPS
+    .map((g) => ({ ...g, items: pending.filter(g.match) }))
+    .filter((g) => g.items.length > 0);
 }
 
 /**
- * 구역 3 — 병행 점검 미판정 큐. 검토 탭 전용(073).
+ * 구역 3 — 병행 점검 미판정 큐. 검토 화면 전용(073).
  *
  * SecondOpinionFindings 와 같은 데이터를 다르게 그린다 — rationale 긴 설명을
  * 빼고 라벨 한 줄 + 판정 버튼만 남겨, 빠르게 훑어 판정하는 용도다. 자세한
- * 근거는 인사이트 탭의 SecondOpinionFindings 에서 읽는다.
+ * 근거는 인사이트 화면의 SecondOpinionFindings 에서 읽는다.
  */
 export async function SecondOpinionReviewQueue({ caseId }: { caseId: number }) {
   const view = await loadSecondOpinion(caseId);
   if (!view) return null;
   const pending = view.findings.filter((f) => !f.decision);
   if (pending.length === 0) return null;
+  const groups = groupPendingFindings(pending);
 
   return (
     <section id="analysis-second-opinion-queue" className="mt-10 scroll-mt-8 border-t border-rule pt-6">
       <h2 className="text-[15px] font-semibold">병행 점검 미판정 {pending.length}건</h2>
       <p className="mt-1 text-[11px] leading-relaxed text-ink-3">
         시험 공백·인증표시·리콜 정보 등 병행 점검 후보 중 아직 판정하지 않은 것.
-        자세한 근거는 인사이트 탭에서.
+        자세한 근거는 인사이트 화면에서.
       </p>
-      <ul className="mt-3 space-y-1.5">
-        {pending.map((f) => (
-          <li key={f.id} className="flex flex-wrap items-center gap-2 border-b border-rule/50 py-2">
-            <span className="addr shrink-0 text-[11px] text-ink-3">
-              {queueLabel(f)}
-            </span>
-            <span className="text-[12px] font-medium">
-              {f.sectionMarker
-                ? `${f.standardName ?? ''} 절 ${f.sectionMarker}`
-                : f.refTitle ?? (f.refCaseId ? `사건 ${f.refCaseId}` : f.hfCode ?? '')}
-            </span>
-            <div className="ml-auto">
-              <ReviewButtons finding={f} caseId={caseId} />
-            </div>
-          </li>
+      <div className="mt-4 space-y-5">
+        {groups.map((g) => (
+          <div key={g.id} id={`analysis-second-opinion-queue-${g.id}`} className="scroll-mt-8">
+            <h3 className="text-[13px] font-semibold">{g.label} {g.items.length}건</h3>
+            <ul className="mt-2 space-y-1.5">
+              {g.items.map((f) => (
+                <li key={f.id} className="flex flex-wrap items-center gap-2 border-b border-rule/50 py-2">
+                  <span className="text-[12px] font-medium">
+                    {f.sectionMarker
+                      ? `${f.standardName ?? ''} 절 ${f.sectionMarker}`
+                      : f.refTitle ?? (f.refCaseId ? `사건 ${f.refCaseId}` : f.hfCode ?? '')}
+                  </span>
+                  <div className="ml-auto">
+                    <ReviewButtons finding={f} caseId={caseId} />
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
         ))}
-      </ul>
+      </div>
     </section>
   );
 }
@@ -320,7 +386,23 @@ export async function SecondOpinionFindings({ caseId }: { caseId: number }) {
   const legal = view.findings.filter((f) => f.outputKind === 'CERT_MARKING_CHECK');
   const policy = view.findings.filter((f) => f.outputKind === 'POLICY_SIGNAL');
   const stat = view.findings.filter((f) => f.findingType === 'RECALL_EVIDENCE' && !f.refCaseId);
-  const cases = view.findings.filter((f) => f.findingType === 'RECALL_EVIDENCE' && f.refCaseId);
+  /*
+    같은 리콜 사건을 가리키는 소견이 여러 번 쌓여 있을 수 있다 (2026-09-14 실물
+    확인) — "다시 점검"을 반복하면 옛 소견을 지우지 않고 새로 더하기만 해서,
+    사건 하나에 refCaseId 가 같은 행이 6개까지 쌓인 사례를 봤다(사건 4639,
+    닮은 리콜 8건이 각각 6번씩 = 48행). 그 자체는 이번에 고칠 자리가 아니지만
+    (다시 점검의 누적 정책은 별도 판단이 필요하다), 같은 리콜을 가리키는 "확인해
+    볼 만함/보류/해당 없음" 판정 버튼이 여섯 벌씩 늘어서면 담당자가 어느 것을
+    이미 판정했는지도 헷갈리므로, 화면에 표시할 목록만 refCaseId 로 한 건씩
+    추린다 — 저장된 행 자체는 그대로 둔다.
+  */
+  const casesByRef = new Map<number, FindingRow>();
+  for (const f of view.findings) {
+    if (f.findingType === 'RECALL_EVIDENCE' && f.refCaseId && !casesByRef.has(f.refCaseId)) {
+      casesByRef.set(f.refCaseId, f);
+    }
+  }
+  const cases = [...casesByRef.values()];
 
   return (
     <section id="analysis-second-opinion" className="mt-10 scroll-mt-8 border-t border-rule pt-6">
@@ -331,7 +413,7 @@ export async function SecondOpinionFindings({ caseId }: { caseId: number }) {
       </p>
 
       <div className="mt-5 space-y-6">
-        <div>
+        <div id="analysis-second-opinion-gap" className="scroll-mt-8">
           <h3 className="text-[13px] font-semibold">
             시험 범위 공백 {gap.length}건 — 시험항목 후보
           </h3>
@@ -376,7 +458,7 @@ export async function SecondOpinionFindings({ caseId }: { caseId: number }) {
           </div>
         )}
 
-        <div>
+        <div id="analysis-second-opinion-recall" className="scroll-mt-8">
           <h3 className="text-[13px] font-semibold">
             리콜 정보와 교차 분석 {stat.length + cases.length}건
           </h3>

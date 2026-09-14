@@ -453,8 +453,6 @@ export default async function OpsPage() {
 
   return (
     <div className="mx-auto max-w-6xl px-6 py-10 lg:px-10 lg:py-14">
-      <div className="grid gap-10 xl:grid-cols-[minmax(0,1fr)_10rem]">
-      <div>
       <PageHead
         label="운영"
         title="시스템이 지금 제대로 돌고 있는가"
@@ -1009,8 +1007,11 @@ export default async function OpsPage() {
                       <div className="label pb-1">사고보고서 · 리콜</div>
                       {data.noMaterialCase.map((c) => (
                         <div key={c.id} className="border-t border-rule-soft py-1.5">
+                          {/* 새 창으로 연다(2026-09-14) — 운영 화면을 보던 자리를 잃지 않게 */}
                           <Link
                             href={`/analysis/${c.id}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
                             className="underline decoration-rule underline-offset-2 hover:text-measure"
                           >
                             {TARGET_LABEL[c.source_type === 'ACCIDENT' ? 'accident' : 'recall']} #{c.id}
@@ -1242,9 +1243,7 @@ export default async function OpsPage() {
           <TermsNote />
         </>
       )}
-      </div>
       <PageToc items={OPS_TOC} />
-      </div>
     </div>
   );
 }

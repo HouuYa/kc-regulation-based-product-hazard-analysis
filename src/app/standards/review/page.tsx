@@ -393,9 +393,13 @@ export default async function ReviewPage({
                       pendingLabel="확정하는 중…"
                       className="border border-measure bg-measure px-4 py-2 text-[13px] font-medium text-white hover:opacity-85"
                     />
-                    <form action={reviewClause as unknown as (fd: FormData) => void} className="flex flex-wrap items-center gap-2">
-                      <input type="hidden" name="clauseId" value={c.id} />
-                      <input type="hidden" name="toStatus" value="rejected" />
+                    <ActionForm
+                      action={reviewClause}
+                      hidden={{ clauseId: c.id, toStatus: 'rejected' }}
+                      label="반려"
+                      pendingLabel="반려하는 중…"
+                      className="border border-rule bg-surface px-4 py-2 text-[13px] hover:bg-rule-soft"
+                    >
                       <select
                         name="rejectReason"
                         required
@@ -412,13 +416,7 @@ export default async function ReviewPage({
                           </option>
                         ))}
                       </select>
-                      <button
-                        type="submit"
-                        className="border border-rule bg-surface px-4 py-2 text-[13px] hover:bg-rule-soft"
-                      >
-                        반려
-                      </button>
-                    </form>
+                    </ActionForm>
                   </div>
                 </article>
               ))}

@@ -425,8 +425,11 @@ export default async function TermsPage({
                           {sources.map((c, i) => (
                             <span key={c.id}>
                               {i > 0 && ' · '}
+                              {/* 새 창으로 연다(2026-09-14) — 용어 검수를 계속하면서 근거 서류만 잠깐 확인하는 용도다 */}
                               <Link
                                 href={`/analysis/${c.id}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
                                 className="underline decoration-rule underline-offset-2 hover:text-measure"
                               >
                                 {CASE_LABEL[c.source_type] ?? c.source_type} #{c.id}
@@ -602,7 +605,12 @@ export default async function TermsPage({
             <p className="text-[12px] leading-relaxed text-ink-2">
               사전에 없는 품목을 넣습니다. 담당자가 넣은 것은 바로 확정 상태가 됩니다.
             </p>
-            <form action={addTerm as unknown as (fd: FormData) => void} className="mt-3 flex flex-wrap items-center gap-2">
+            <ActionForm
+              action={addTerm}
+              label="추가"
+              pendingLabel="추가하는 중…"
+              className="border border-measure bg-measure px-4 py-2 text-[13px] font-medium text-white hover:opacity-85"
+            >
               <input
                 type="text" name="term" required placeholder="품목명 (예: 전기요)"
                 className="min-w-[10rem] border border-rule bg-surface px-3 py-2 text-[13px]"
@@ -618,10 +626,7 @@ export default async function TermsPage({
                 type="text" name="reviewer" placeholder="작성자 (선택)"
                 className="w-28 border border-rule bg-surface px-3 py-2 text-[13px]"
               />
-              <button type="submit" className="border border-measure bg-measure px-4 py-2 text-[13px] font-medium text-white hover:opacity-85">
-                추가
-              </button>
-            </form>
+            </ActionForm>
           </section>
 
           {/* ── 외부 시스템에 제공 ───────────────────────────── */}

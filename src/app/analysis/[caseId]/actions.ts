@@ -5,7 +5,7 @@ import { getDb } from '@/lib/db';
 import { runAnalysis } from '@/lib/search/run';
 import { runSecondOpinion } from '@/lib/second-opinion/run';
 import { NOT_READY_LABEL, NOT_READY_ACTION } from '@/lib/search/readiness';
-import type { Decision } from './review-options';
+import { REJECT_REASONS, type Decision } from './review-options';
 
 /**
  * 담당자 판단 기록 (설계문서 §7.2)
@@ -17,15 +17,23 @@ import type { Decision } from './review-options';
  * 덮어쓰지 않고 쌓는다 (§7.1 판단층)
  *   판단을 바꾸면 새 행이 들어간다. 언제 무엇을 왜 바꿨는지가 남아야
  *   나중에 "그때는 왜 그렇게 판단했는가"를 되짚을 수 있다.
+ *
+ * 문장을 돌려준다 (ActionForm 으로 교체, 2026-09-14)
+ *   전에는 결과를 아무 데도 알리지 않는 `Promise<void>` 라서, 채택·반려 버튼을
+ *   눌러도 화면이 반응하는지 알 수 없었다. ActionForm 이 쓰는 다른 액션들과
+ *   같은 모양(prev, formData) => Promise<string> 으로 맞춘다.
  */
-export async function recordReview(formData: FormData): Promise<void> {
+export async function recordReview(
+  _prev: string | null,
+  formData: FormData,
+): Promise<string> {
   const matchResultId = Number(formData.get('matchResultId'));
   const decision = String(formData.get('decision')) as Decision;
   const rejectReason = (formData.get('rejectReason') as string | null) || null;
   const note = (formData.get('note') as string | null) || null;
   const caseId = String(formData.get('caseId'));
 
-  if (!matchResultId || !decision) return;
+  if (!matchResultId || !decision) return '조항을 찾지 못했습니다.';
 
   await getDb()`
     insert into public.review_log (match_result_id, decision, reject_reason, note, reviewer)
@@ -35,6 +43,13 @@ export async function recordReview(formData: FormData): Promise<void> {
   `;
 
   revalidatePath(`/analysis/${caseId}`);
+
+  if (decision === 'ADOPTED') return '채택으로 기록했습니다.';
+  if (decision === 'REJECTED') {
+    const label = REJECT_REASONS.find((r) => r.value === rejectReason)?.label;
+    return `반려로 기록했습니다${label ? ` — ${label}` : ''}.`;
+  }
+  return '수정으로 기록했습니다.';
 }
 
 /**
@@ -90,11 +105,22 @@ export async function runSecondOpinionAction(
  * ─ 정답셋 47건은 "보고서가 실제로 수행한 시험"이라 공백은 정의상 그 밖이다 ─
  * 이 표에 쌓이는 채택률이 이 계층의 유일한 성적표다.
  */
-export async function recordFindingReview(formData: FormData): Promise<void> {
+const FINDING_DECISION_LABEL: Record<string, string> = {
+  ACCEPTED: '확인 필요',
+  HOLD: '보류',
+  REJECTED: '해당 없음',
+};
+
+export async function recordFindingReview(
+  _prev: string | null,
+  formData: FormData,
+): Promise<string> {
   const findingId = Number(formData.get('findingId'));
   const decision = String(formData.get('decision'));
   const caseId = String(formData.get('caseId'));
-  if (!findingId || !['ACCEPTED', 'HOLD', 'REJECTED'].includes(decision)) return;
+  if (!findingId || !['ACCEPTED', 'HOLD', 'REJECTED'].includes(decision)) {
+    return '소견을 찾지 못했습니다.';
+  }
 
   await getDb()`
     insert into public.second_opinion_review (finding_id, decision, note, reviewer)
@@ -103,6 +129,7 @@ export async function recordFindingReview(formData: FormData): Promise<void> {
   `;
 
   revalidatePath(`/analysis/${caseId}`);
+  return `판정했습니다 — ${FINDING_DECISION_LABEL[decision]}.`;
 }
 
 /**
@@ -189,13 +216,23 @@ export async function runAnalysisAction(
  *   무엇을 보고 그렇게 정했는지가 남지 않으면 다음 사람이 다시 판정해야 한다.
  *   비워 두어도 저장은 되지만, 화면이 근거 칸을 늘 보여 준다.
  */
-export async function setChildProductCheck(formData: FormData): Promise<void> {
+const CHILD_CHECK_DONE_LABEL: Record<string, string> = {
+  UNCHECKED: '확인을 취소했습니다.',
+  CHILD: '어린이제품으로 확정했습니다.',
+  NOT_CHILD: '어린이제품이 아닌 것으로 확정했습니다.',
+  UNKNOWN: '확인했지만 알아내지 못한 것으로 기록했습니다.',
+};
+
+export async function setChildProductCheck(
+  _prev: string | null,
+  formData: FormData,
+): Promise<string> {
   const caseId = Number(formData.get('caseId'));
   const value = String(formData.get('value') ?? '');
   const note = (formData.get('note') as string | null)?.trim() || null;
 
   const allowed = ['UNCHECKED', 'CHILD', 'NOT_CHILD', 'UNKNOWN'];
-  if (!caseId || !allowed.includes(value)) return;
+  if (!caseId || !allowed.includes(value)) return '알 수 없는 값입니다.';
 
   await getDb()`
     update public.case_event
@@ -206,4 +243,5 @@ export async function setChildProductCheck(formData: FormData): Promise<void> {
   `;
 
   revalidatePath(`/analysis/${caseId}`);
+  return CHILD_CHECK_DONE_LABEL[value];
 }
