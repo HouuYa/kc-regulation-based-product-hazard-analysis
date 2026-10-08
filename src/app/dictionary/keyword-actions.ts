@@ -30,7 +30,7 @@ export async function reviewKeyword(_prev: string | null, formData: FormData): P
       where id = ${id} and review_status is distinct from ${to}
       returning keyword
     `;
-    revalidatePath('/keywords');
+    revalidatePath('/dictionary');
     if (!r) return '이미 같은 상태였습니다.';
     return to === 'approved'
       ? `"${r.keyword}" 을 확정했습니다.`
@@ -58,7 +58,7 @@ export async function reviewTarget(_prev: string | null, formData: FormData): Pr
         returning 1
       ) select count(*)::int n from upd
     `;
-    revalidatePath('/keywords');
+    revalidatePath('/dictionary');
     return r.n === 0 ? '바뀐 것이 없습니다.' : `AI 제안 ${r.n}개를 ${to === 'approved' ? '확정' : '반려'}했습니다.`;
   } catch (e) {
     console.error(`품목 단위 검수 실패 (${target}):`, e);
@@ -86,7 +86,7 @@ export async function addKeyword(_prev: string | null, formData: FormData): Prom
       do nothing
       returning id
     `;
-    revalidatePath('/keywords');
+    revalidatePath('/dictionary');
     return r ? `"${keyword}" 을 넣었습니다.` : '이미 있는 검색어입니다.';
   } catch (e) {
     console.error('별칭 추가 실패:', e);
@@ -101,7 +101,7 @@ export async function deleteKeyword(_prev: string | null, formData: FormData): P
     const [r] = await getDb()<{ keyword: string }[]>`
       delete from public.item_keyword where id = ${id} returning keyword
     `;
-    revalidatePath('/keywords');
+    revalidatePath('/dictionary');
     return r ? `"${r.keyword}" 을 지웠습니다.` : '이미 없습니다.';
   } catch (e) {
     console.error(`별칭 삭제 실패 (${id}):`, e);
@@ -126,7 +126,7 @@ export async function suggestForTarget(_prev: string | null, formData: FormData)
     const out = await suggestAliases([target]);
     if (out.length === 0) return 'AI 가 검색어를 만들지 못했습니다.';
     const saved = await saveAliases(out);
-    revalidatePath('/keywords');
+    revalidatePath('/dictionary');
     return saved === 0
       ? '새로 더할 검색어가 없었습니다 — 이미 다 들어 있습니다.'
       : `AI 가 검색어 ${saved}개를 제안했습니다. 확인 후 확정해 주세요.`;
@@ -150,7 +150,7 @@ export async function previewImport(csv: string): Promise<{ rows: KeywordPreview
 export async function applyImport(csv: string): Promise<string> {
   try {
     const n = await applyKeywordsCsv(csv);
-    revalidatePath('/keywords');
+    revalidatePath('/dictionary');
     return n === 0 ? '바뀐 것이 없습니다.' : `${n}건을 반영했습니다.`;
   } catch (e) {
     console.error('별칭 사전 가져오기 실패:', e);
@@ -181,7 +181,7 @@ export async function reviewLink(_prev: string | null, formData: FormData): Prom
         and x.review_status is distinct from ${to}
       returning coalesce(x.sub_item, x.item, '') || ' → ' || s.display_name as name
     `;
-    revalidatePath('/keywords');
+    revalidatePath('/dictionary');
     if (!r) return '이미 같은 상태였습니다.';
     return to === 'approved'
       ? `확정했습니다 — ${r.name}. 이제 이 품목은 이 기준으로 분석됩니다.`

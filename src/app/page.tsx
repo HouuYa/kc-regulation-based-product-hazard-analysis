@@ -1,203 +1,191 @@
+import Link from 'next/link';
 import { getDb } from '@/lib/db';
+import { classifiedSql } from '@/lib/cases/classified';
 import { ConnectionError, PageHead, TermsNote } from '@/components/Panel';
-import { StatusBar } from '@/components/StatusBar';
 
 export const dynamic = 'force-dynamic';
 
 /**
- * 개요 — "지금 어디까지 준비됐는가"
+ * 홈 — 역할별 입구 (05_02 P3-7, 2026-10-07)
  *
- * 이 화면이 답해야 하는 질문은 하나다. 분석을 돌릴 수 있는 상태인가?
- * 설계문서가 매칭 전에 확인하라고 한 것들(v0.7 §7.1 3단계 "데이터 완전성 확인")을
- * 담당자가 매번 SQL 로 세지 않아도 되게 한다.
+ * 전에는 "분석을 시작할 수 있는 상태인가"를 묻는 지표 12개가 이 화면의 전부였다.
+ * 그 질문을 갖는 사람은 관리자뿐이고, 지표 8개는 안전기준 화면과 겹쳤다. 사고조사·
+ * 리콜·KC기준 담당자와 정책담당자는 첫 화면에서 할 일을 찾을 수 없었다.
  *
- * 코드가 붙지 않은 조항이 있으면 검색 결과 0건이 "기준에 없다"가 아니라
- * "아직 준비가 안 됐다"는 뜻이 된다. 그 구분을 못 하면 데이터 누락을
- * 정책 신호로 오인한다(v0.7 §7.8). 그래서 이 숫자들을 첫 화면에 둔다.
+ * 이제 첫 질문은 "당신은 누구이고, 지금 무엇을 하면 되나"다. 카드마다 그 사람의
+ * 할 일 숫자 한두 개와 들어갈 화면을 단다. 준비 상태 지표는 관리 콘솔(진척 현황)로 옮겼다.
  *
- * 분모를 조심해서 고른다 (라운드 18·19에서 두 번 고친 자리)
- *   처음에는 "임베딩 498 / 13,501" 이었다. 96%가 밀린 것처럼 보였지만 사실은
- *   나머지가 아직 코드 부여 전이라 준비할 재료가 없는 상태였다.
- *   그다음에는 "코드 부여 498 / 13,501" 이 남았는데, 이것도 틀렸다 — 코드를 붙이는
- *   대상은 요건 조항뿐이고(v0.7 §5.3) 정의·적용범위·시험방법은 애초에 대상이 아니다.
- *   분모는 언제나 "할 수 있는 것"이어야 숫자가 사실을 말한다.
+ * 숫자의 분모를 함께 적는다 — "0건"이 "할 일 없음"인지 "아직 시작 안 함"인지 갈리게
+ * 하는 것이 이 체계의 원칙이다(v0.7 §7.8).
  */
 
-interface Status {
-  standards: number;
-  clauses: number;
-  clausesTagged: number;
-  clausesTaggable: number;
-  clausesEmbedded: number;
-  clausesEmbeddable: number;
-  testConditions: number;
-  testMethodLinks: number;
-  unresolvedLinks: number;
-  codebookVersion: string | null;
-  codebookCodes: number;
+interface Counts {
   accidents: number;
+  accUnconfirmed: number;
+  accPendingCases: number;
   recalls: number;
-  analyzed: number;
+  recUnscoped: number;
+  recUnchecked: number;
+  clausesUnreviewed: number;
+  linksUnreviewed: number;
+  policyCases: number;
   reviews: number;
+  parked: number;
+  cronFailed24h: number;
 }
 
-async function loadStatus(): Promise<{ status: Status | null; error: string | null }> {
+async function loadCounts(): Promise<Counts> {
+  const [row] = await getDb()<Counts[]>`
+    select
+      (select count(*)::int from public.case_event where source_type = 'ACCIDENT') as accidents,
+      (select count(*)::int from public.case_event
+        where source_type = 'ACCIDENT' and not is_confirmed)                       as "accUnconfirmed",
+      -- 분석했는데 판정하지 않은 후보가 남은 사고 (analysis/[caseId]/page.tsx 의 「다음 사건」과 같은 정의)
+      (select count(distinct r.case_id)::int from public.match_run r
+        join public.case_event e on e.id = r.case_id
+        join public.match_result mr on mr.run_id = r.id
+        where e.source_type = 'ACCIDENT'
+          and not exists (select 1 from public.review_log rl where rl.match_result_id = mr.id)) as "accPendingCases",
+      (select count(*)::int from public.case_event
+        where source_type in ('RECALL_OVERSEAS', 'RECALL_DOMESTIC'))               as recalls,
+      -- 품목이 정말 비어 있는 리콜만 — 정의는 lib/cases/classified.ts 한 곳(2026-10-07)
+      (select count(*)::int from public.case_event e
+        where e.source_type in ('RECALL_OVERSEAS', 'RECALL_DOMESTIC')
+          and not ${classifiedSql('e')})                                           as "recUnscoped",
+      (select count(*)::int from public.recall_cache
+        where coalesce(domestic_check, 'UNCHECKED') = 'UNCHECKED')                 as "recUnchecked",
+      (select count(distinct clause_id)::int from public.clause_tag
+        where review_status = 'auto_unreviewed')                                   as "clausesUnreviewed",
+      (select count(*)::int from public.taxonomy_standard
+        where review_status = 'auto_unreviewed')                                   as "linksUnreviewed",
+      (select count(distinct case_id)::int from public.second_opinion_finding
+        where output_kind = 'POLICY_SIGNAL')                                       as "policyCases",
+      (select count(*)::int from public.review_log)                                as reviews,
+      (select parked from public.ops_status)                                       as parked,
+      (select cron_failed_24h from public.ops_status)                              as "cronFailed24h"
+  `;
+  return row;
+}
+
+function Card({
+  who, does, href, cta, items,
+}: {
+  who: string;
+  does: string;
+  href: string;
+  cta: string;
+  items: Array<{ label: string; value: string; href?: string; warn?: boolean }>;
+}) {
+  return (
+    <section className="flex flex-col border border-rule bg-surface px-5 py-4">
+      <div className="label">{who}</div>
+      <p className="mt-1 text-[13px] leading-relaxed text-ink-2">{does}</p>
+      <ul className="mt-3 space-y-1.5">
+        {items.map((i) => (
+          <li key={i.label} className="flex items-baseline justify-between gap-3 border-t border-rule-soft pt-1.5 text-[12px]">
+            {i.href ? (
+              <Link href={i.href} className="text-ink-2 underline decoration-rule underline-offset-2 hover:text-measure">{i.label}</Link>
+            ) : (
+              <span className="text-ink-2">{i.label}</span>
+            )}
+            <span className={`addr tnum ${i.warn ? 'text-caution' : 'text-ink'}`}>{i.value}</span>
+          </li>
+        ))}
+      </ul>
+      <Link
+        href={href}
+        className="mt-4 self-start border border-measure px-3 py-1.5 text-[12px] font-medium text-measure hover:bg-measure-soft"
+      >
+        {cta} →
+      </Link>
+    </section>
+  );
+}
+
+const n = (v: number) => v.toLocaleString();
+
+export default async function HomePage() {
+  let c: Counts | null = null;
+  let error: string | null = null;
   try {
-    const db = getDb();
-    const [row] = await db<Status[]>`
-      select
-        (select count(*)::int from public.standard where is_current)             as standards,
-        (select count(*)::int from public.clause)                                as clauses,
-        -- 분자는 분모 안에서 센다 — 요건이 아닌 조항에 붙은 코드까지 세면
-        -- 6,400 / 6,392 처럼 100%를 넘는 값이 뜬다 (2026-09-09)
-        (select count(distinct t.clause_id)::int from public.clause_tag t
-          join public.clause c on c.id = t.clause_id
-          where c.clause_role = 'REQUIREMENT'
-            and length(btrim(c.body)) >= 15)                                      as "clausesTagged",
-        -- 코드를 붙이는 대상은 요건 조항뿐이다 (v0.7 §5.3)
-        (select count(*)::int from public.clause c
-          join public.standard s on s.id = c.standard_id
-          where s.is_current and c.clause_role = 'REQUIREMENT'
-            and length(btrim(c.body)) >= 15)                                     as "clausesTaggable",
-        (select count(*)::int from public.clause where embedding is not null)    as "clausesEmbedded",
-        (select count(*)::int from public.clause
-          where search_text is not null and length(btrim(search_text)) > 0)      as "clausesEmbeddable",
-        (select count(*)::int from public.test_condition)                        as "testConditions",
-        (select count(*)::int from public.clause_link
-          where link_type = 'TEST_METHOD' and to_clause_id is not null)          as "testMethodLinks",
-        (select count(*)::int from public.clause_link where to_clause_id is null) as "unresolvedLinks",
-        (select version from codebook.version where status = 'active')            as "codebookVersion",
-        (select count(*)::int from codebook.hazard_factor hf
-          join codebook.version v on v.id = hf.version_id and v.status = 'active') as "codebookCodes",
-        (select count(*)::int from public.case_event where source_type = 'ACCIDENT') as accidents,
-        (select count(*)::int from public.case_event
-          where source_type in ('RECALL_DOMESTIC', 'RECALL_OVERSEAS'))            as recalls,
-        (select count(distinct case_id)::int from public.match_run)               as analyzed,
-        (select count(*)::int from public.review_log)                             as reviews
-    `;
-    return { status: row, error: null };
+    c = await loadCounts();
   } catch (e) {
     // 화면에는 원인을 뿌리지 않으므로(ConnectionError) 서버 기록에는 반드시 남긴다
-    console.error('개요 화면 데이터 조회 실패:', e);
-    return { status: null, error: e instanceof Error ? e.message : String(e) };
+    console.error('홈 화면 조회 실패:', e);
+    error = e instanceof Error ? e.message : String(e);
   }
-}
 
-export default async function OverviewPage() {
-  const { status, error } = await loadStatus();
+  const adminOk = c != null && c.parked === 0 && c.cronFailed24h === 0;
 
   return (
-    <div className="mx-auto max-w-5xl px-6 py-10 lg:px-10 lg:py-14">
+    <div className="mx-auto max-w-6xl px-6 py-10 lg:px-10 lg:py-14">
       <PageHead
-        label="개요"
-        title="분석을 시작할 수 있는 상태인가"
-        lead="먼저 준비 상태를 보고, 다음에 확인할 자료와 검토 결과를 엽니다."
-        /*
-          전체 업무 흐름 (담당자 요청, 2026-09-09)
-          이 화면은 개별 일을 하는 자리가 아니라 「어디까지 왔나」를 보는 자리다.
-          그래서 흐름도가 곧 이 화면의 본문이고, 각 상자가 그 일을 하는 화면으로 간다.
-        */
-        workflow={status ? [
-          { label: '안전기준 들여오기', href: '/standards', note: `${status.standards}종`, state: 'done' },
-          { label: '품목 잇기', who: '사람', href: '/terms', note: '용어 사전', state: 'done' },
-          {
-            label: '사고·리콜 들어옴',
-            href: '/accidents',
-            note: `사고 ${status.accidents} · 리콜 ${status.recalls.toLocaleString()}`,
-            state: 'done',
-          },
-          {
-            label: '분석',
-            who: '사람',
-            href: '/recalls',
-            note: `${status.analyzed.toLocaleString()}건 실행`,
-            state: 'here',
-          },
-          {
-            label: '검수·채택',
-            who: '사람',
-            note: `${status.reviews.toLocaleString()}건 기록`,
-            state: 'todo',
-          },
-          { label: '산출물 3종', href: '/insights', note: '시험항목·확인항목·개선요인', state: 'todo' },
-        ] : undefined}
+        label="KC안전기준 제품위해 분석"
+        title="맡은 일을 고르세요"
+        lead="사고·리콜이 들어오면 관련될 수 있는 안전기준 조항을 찾아 드립니다. 위반 여부를 판정하지 않습니다 — 확인과 판단은 담당자가 합니다."
       />
 
       {error && <ConnectionError error={error} />}
 
-      {status && (
-        <>
-          <StatusBar
+      {c && (
+        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <Card
+            who="사고조사 담당자"
+            does="사고보고서 원문을 확인하고, 관련될 수 있는 조항을 채택·반려합니다."
+            href="/accidents"
+            cta="사고조사"
             items={[
-              { label: '안전기준', value: status.standards, href: '/standards', note: '적재된 기준 문서' },
-              { label: '조항', value: status.clauses, href: '/standards', note: '검색이 걸리는 가장 작은 덩어리' },
+              { label: '원문 확인 대기', value: `${n(c.accUnconfirmed)} / ${n(c.accidents)}`, warn: c.accUnconfirmed > 0 },
+              { label: '판정이 남은 사고', value: `${n(c.accPendingCases)}건`, warn: c.accPendingCases > 0 },
+            ]}
+          />
+          <Card
+            who="리콜정보 분석자"
+            does="1단계로 국내와 관계있는지 가리고, 2단계로 관련 조항을 찾습니다."
+            href="/recalls"
+            cta="리콜 분석"
+            items={[
+              { label: '품목 미분류 (자동 판정·원본 분류 모두 없음)', value: `${n(c.recUnscoped)} / ${n(c.recalls)}`, href: '/recalls?scope=unset', warn: c.recUnscoped > 0 },
+              { label: '국내 유통 미확인', value: `${n(c.recUnchecked)} / ${n(c.recalls)}`, href: '/recalls?check=UNCHECKED', warn: c.recUnchecked > 0 },
+            ]}
+          />
+          <Card
+            who="KC안전기준 담당자"
+            does="조항에 붙은 위해요인 코드와 품목→기준 대응을 확정합니다."
+            href="/standards/review"
+            cta="코드 검수"
+            items={[
+              { label: '코드 검수 대기 조항', value: `${n(c.clausesUnreviewed)}건`, href: '/standards/review', warn: c.clausesUnreviewed > 0 },
+              { label: '품목→기준 대응 검수 대기', value: `${n(c.linksUnreviewed)}건`, href: '/dictionary?tab=link', warn: c.linksUnreviewed > 0 },
+            ]}
+          />
+          <Card
+            who="정책담당자"
+            does="위해 분포와 불량·불법 비중, 기준 사각지대 후보를 봅니다. 숫자마다 어디까지 확인된 것인지 함께 적습니다."
+            href="/policy"
+            cta="정책 현황판"
+            items={[
+              { label: '사각지대 신호가 나온 사고', value: `${n(c.policyCases)}건` },
+              { label: '담당자 검토 기록', value: `${n(c.reviews)}건`, warn: c.reviews === 0 },
+            ]}
+          />
+          <Card
+            who="시스템 관리운영자"
+            does="자동 작업·알림·AI 비용과 자료 준비 진척을 봅니다."
+            href="/admin"
+            cta="관리 콘솔"
+            items={[
               {
-                label: '위해요인 코드', value: status.clausesTagged, of: status.clausesTaggable,
-                href: '/standards',
-                note: '오른쪽 수는 코드를 붙이는 요건 조항만 센 것입니다. 정의·적용범위·시험방법에는 코드를 붙이지 않습니다',
-              },
-              {
-                label: '의미 검색 준비', value: status.clausesEmbedded, of: status.clausesEmbeddable,
-                href: '/ops',
-                note: '뜻으로 찾으려면 검색용 문장이 먼저 있어야 합니다. 오른쪽 수는 그 문장이 있는 조항입니다. 새 자료는 1분 안에 저절로 준비됩니다',
-              },
-              {
-                label: '시험방법 연결', value: status.testMethodLinks, href: '/standards',
-                note: '이 요건을 어느 시험으로 확인하는지 이어 둔 것입니다. 없으면 조항을 찾아도 시험까지 이어지지 않습니다',
-              },
-              {
-                label: '시험 항목·허용치', value: status.testConditions, href: '/standards',
-                note: '기준 표에서 뽑아낸 수치',
-              },
-              {
-                label: '다른 기준 참조', value: status.unresolvedLinks, href: '/standards',
-                note: '가리키는 조항이 이 문서가 아니라 다른 기준에 있습니다',
-              },
-              {
-                label: '위해요인 코드북', value: status.codebookCodes, href: '/codebook',
-                note: status.codebookVersion ? `${status.codebookVersion} 판` : '적재되지 않음',
+                label: '시스템 상태',
+                value: adminOk ? '이상 없음' : `확인 필요 (보류 ${c.parked} · 실패 ${c.cronFailed24h})`,
+                warn: !adminOk,
               },
             ]}
           />
-
-          <StatusBar
-            items={[
-              { label: '사고보고서', value: status.accidents, href: '/accidents', note: '올려서 글자 확인까지 마친 사고' },
-              { label: '리콜', value: status.recalls, href: '/recalls', note: '해외·국내 리콜' },
-              {
-                label: '분석한 사건', value: status.analyzed,
-                note: '관련될 수 있는 조항을 찾아 순위까지 매긴 사건',
-              },
-              {
-                label: '담당자 판단', value: status.reviews,
-                note: '채택하거나 반려한 기록입니다. 이 기록으로 정확도를 잽니다',
-              },
-            ]}
-          />
-
-          {status.clauses === 0 && (
-            <section className="mt-12 border-t border-rule pt-6">
-              <div className="label">다음 할 일</div>
-              <ol className="mt-3 space-y-2 text-[13px] text-ink-2">
-                <li>
-                  <code className="addr text-ink">npm run codebook:load -- --activate</code>
-                  <span className="ml-2 text-ink-3">위해요인 코드북을 적재합니다</span>
-                </li>
-                <li>
-                  <code className="addr text-ink">npm run standards:load</code>
-                  <span className="ml-2 text-ink-3">안전기준 조항을 적재합니다</span>
-                </li>
-                <li>
-                  <code className="addr text-ink">npm run tag</code>
-                  <span className="ml-2 text-ink-3">조항에 위해요인 코드를 붙입니다</span>
-                </li>
-              </ol>
-            </section>
-          )}
-
-          <TermsNote />
-        </>
+        </div>
       )}
+
+      <TermsNote />
     </div>
   );
 }

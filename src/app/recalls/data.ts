@@ -1,5 +1,7 @@
 import { getDb } from '@/lib/db';
 import { parseBoard, type BoardParams } from '@/components/Board';
+import { MANUAL_SCOPE_PREFIX } from '@/lib/cases/manual-scope';
+import { classifiedSql } from '@/lib/cases/classified';
 
 /**
  * 리콜 화면 — 현황/처리할 것 두 페이지가 함께 쓰는 조회·상수 (2026-09-14)
@@ -16,7 +18,15 @@ export interface Summary {
   embedded: number;
   analyzed: number;
   uncheckedDistribution: number;
+  /**
+   * 품목이 분류된 리콜 — 정의는 lib/cases/classified.ts 한 곳 (2026-10-07)
+   * 담당자 지정·자동 품목 판정·원본 GPC 중 하나라도 있으면 1단계 검토 대상이 아니다.
+   */
+  scoped: number;
 }
+
+/** 원본 분류로 쳐도 되는 출처 — gpc/provenance.ts 의 needsReview 가 아닌 것과 같다 */
+const TRUSTED_GPC = ['EXPERT', 'OECD'];
 
 export interface RecallRow {
   id: number;
@@ -37,6 +47,15 @@ export interface RecallRow {
   last_results: number | null;
   /** 대분류 — 전기용품·생활용품·어린이제품. 사전에 없는 이름이면 null(화면에서 「기타」) */
   item_group: string | null;
+  product_scope_id: number | null;
+  scope_name: string | null;
+  /** 담당자가 직접 정한 품목인가 (lib/cases/manual-scope.ts) */
+  scope_manual: boolean | null;
+  /** 원본 DB 가 보낸 품목분류(GPC 브릭). 출처가 EXPERT·OECD 일 때만 채운다 */
+  gpc_brick_code: string | null;
+  gpc_title: string | null;
+  /** 자동 품목 판정의 근거(load.ts·tag-cases). 있으면 적용 기준까지 찾은 것이다 */
+  scope_evidence: string | null;
 }
 
 export const DISTRIBUTION_LABEL: Record<string, string> = {
@@ -61,6 +80,8 @@ export async function load(params: BoardParams) {
   const origin = params.origin ?? '';
   const check = params.check ?? '';
   const group = params.group ?? '';
+  // 품목이 정해졌는가 — 1단계는 미정부터, 2단계는 정해진 것부터 본다(05_02 P3-1)
+  const scope = params.scope ?? '';
 
   const summaryQuery = db<Summary[]>`
     select
@@ -78,7 +99,10 @@ export async function load(params: BoardParams) {
         join public.case_event e on e.id = r.case_id
         where e.source_type in ('RECALL_OVERSEAS', 'RECALL_DOMESTIC'))                    as analyzed,
       (select count(*)::int from public.recall_cache
-        where coalesce(domestic_check, 'UNCHECKED') = 'UNCHECKED')                        as "uncheckedDistribution"
+        where coalesce(domestic_check, 'UNCHECKED') = 'UNCHECKED')                        as "uncheckedDistribution",
+      (select count(*)::int from public.case_event e
+        where e.source_type in ('RECALL_OVERSEAS', 'RECALL_DOMESTIC')
+          and ${classifiedSql('e')})                                                      as scoped
   `;
 
   /*
@@ -100,10 +124,13 @@ export async function load(params: BoardParams) {
       ${check ? db`and coalesce(rc.domestic_check, 'UNCHECKED') = ${check}` : db``}
       ${group === '기타' ? db`and cg.item_group is null` : db``}
       ${group && group !== '기타' ? db`and cg.item_group = ${group}` : db``}
+      ${scope === 'unset' ? db`and not ${classifiedSql('e')}` : db``}
+      ${scope === 'set' ? db`and ${classifiedSql('e')}` : db``}
   `;
 
   const from = db`
     from public.recall_cache rc
+    left join public.case_event e on e.id = rc.case_id
     left join public.case_event_group cg on cg.case_id = rc.case_id
   `;
 
@@ -123,10 +150,17 @@ export async function load(params: BoardParams) {
       coalesce((select count(*)::int from public.match_run r where r.case_id = rc.case_id), 0) as run_count,
       (select r.result_count from public.match_run r
         where r.case_id = rc.case_id order by r.started_at desc limit 1) as last_results,
-      cg.item_group
+      cg.item_group,
+      e.product_scope_id::int, ps.name as scope_name,
+      (e.scope_evidence like ${MANUAL_SCOPE_PREFIX + '%'}) as scope_manual,
+      case when e.gpc_source = any(${TRUSTED_GPC}) then e.gpc_brick_code end as gpc_brick_code,
+      case when e.gpc_source = any(${TRUSTED_GPC}) then gb.brick_title_ko end as gpc_title,
+      e.scope_evidence
     from public.recall_cache rc
     left join public.case_event e on e.id = rc.case_id
     left join public.case_event_group cg on cg.case_id = rc.case_id
+    left join public.product_scope ps on ps.id = e.product_scope_id
+    left join public.gpc_brick gb on gb.brick_code = e.gpc_brick_code
     ${where}
     order by ${db.unsafe(orderBy)} ${db.unsafe(dir)} nulls last, rc.id desc
     limit ${per} offset ${offset}

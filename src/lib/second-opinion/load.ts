@@ -66,7 +66,7 @@ export interface SecondOpinionView {
 
 /*
   `cache()` 로 감싼다 (2026-09-14) — 검토 화면(page.tsx, 병행 점검 미판정
-  목차용)과 SecondOpinionReviewQueue·InvestigationSummary·SecondOpinionFindings
+  목차용)과 InvestigationSummary·SecondOpinionFindings
   가 전부 같은 사건의 병행 점검 결과를 부른다. 감싸지 않으면 같은 요청 안에서
   DB 를 여러 번 왕복한다 — analysis/[caseId]/data.ts 의 load() 에 쓴 것과
   같은 이유다.

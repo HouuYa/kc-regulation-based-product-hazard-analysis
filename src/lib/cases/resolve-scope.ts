@@ -5,12 +5,17 @@
  * v0.7 이 한 문장으로 정리했다 — "위해요인 코드가 같아도 제품이 다르면 관련 시험이
  * 다르다." 코드로 먼저 검색하면 유아용 의자 사고에 전기다리미 조항이 섞인다.
  *
- * 두 경로로 찾는다.
- *   1) 등록된 품목 이름·별칭과 맞춰 본다 (어린이제품 33종)
- *   2) 못 찾으면 각 기준의 적용범위 원문을 한국어 전문검색으로 뒤진다
- *      KC 60335 계열은 파일명에 품목이 없어 1)로는 절대 찾을 수 없다.
+ * 찾는 순서 (2026-10-07 갱신 — 처음 쓸 때는 아래 3)·4) 두 경로뿐이었다)
+ *   0) 용어 사전(scope_term)   1) 검색어 사전 → 법정 품목   2) 원본 GPC → 법정 품목
+ *   3) 등록된 품목 이름·별칭 (어린이제품 33종)
+ *   4) 각 기준의 적용범위 원문을 한국어 전문검색으로 뒤진다
+ *      KC 60335 계열은 파일명에 품목이 없어 3)으로는 절대 찾을 수 없다.
  *      대신 적용범위가 "직물용 전기 스티머", "전기 튀김기, 전기 프라이팬" 처럼
  *      정확히 적고 있다.
+ *   5) 적용범위 의미 검색(scope-semantic.ts, LLM)
+ *   2)는 standardsForCase() 에서만 본다(사건에 원본 GPC 가 있을 때). 담당자가 정한 품목
+ *   (product_scope_id, manual-scope.ts)은 그 모두보다 먼저다.
+ *   「분류됨」을 세는 정의는 classified.ts 한 곳에 있다.
  *
  * 못 찾으면 null 을 돌려준다. 억지로 고르지 않는다 — v0.7 은 품목이 불명확하면
  * 전 품목 검색을 자동 실행하지 말고 SCOPE_UNRESOLVED 로 보내라고 명시했다.
@@ -18,6 +23,8 @@
 
 import { getDb } from '../db';
 import { resolveScopeSemantically, filterScopeCandidates } from './scope-semantic';
+import { needsReview } from '../gpc/provenance';
+import { lookupDomestic } from '../gpc/domestic';
 
 export interface ResolvedScope {
   productScopeId: number | null;
@@ -27,7 +34,61 @@ export interface ResolvedScope {
   standardCount: number;
   /** 왜 이 품목·기준으로 봤는가. 화면과 감사에 그대로 쓴다 */
   evidence: string;
-  method: '용어 사전' | '검색어 사전' | '품목명 일치' | '별칭 일치' | '적용범위 검색' | '적용범위 의미 검색';
+  method: '용어 사전' | '검색어 사전' | '품목명 일치' | '별칭 일치' | '적용범위 검색' | '적용범위 의미 검색' | '원본 품목분류';
+}
+
+/**
+ * 원본 DB 가 보내 준 품목분류(GPC 브릭)로 적용 기준을 찾는다 (2026-10-07)
+ *
+ * 담당자 요청: "해외 리콜에서 제품분류된 것은 DB에서 받은 그대로 사용"
+ *   해외 리콜 1,939건에는 원본(Recall Hub·OECD 포털)이 붙인 GPC 브릭 코드가 와 있고,
+ *   그중 1,820건이 법정 품목표(product_taxonomy)의 브릭과 바로 맞는다. 그런데 품목을
+ *   정할 때 이 코드를 보지 않고 제품명 글자로만 다시 맞춰 보고 있었다 — 받은 분류를
+ *   놔두고 추정한 셈이다(065 에서 GPC 를 두고 겪은 것과 같은 실수).
+ *
+ * 브릭 → 국내 갈래는 새로 짜지 않고 lookupDomestic()(gpc/domestic.ts)을 쓴다
+ *   그 파일이 "브릭만으로는 기준을 고르지 않는다 — 속성(연령·재질)에 따라 대분류·
+ *   인증구분이 갈린다"는 원칙을 이미 적어 두었다. 그래서 갈래가 **하나**일 때만 쓴다
+ *   (대분류·인증구분이 갈리지 않고, 법정 품목도 하나). 갈리면 고르지 않는다 —
+ *   좁히는 것은 사람의 일이다(어린이제품 확정 칸·품목 지정).
+ *   법정 품목 → 기준은 검색어 사전 경로와 같은 규칙이다: 기준 품목명이 같은 것,
+ *   또는 **확정된** 대응표만 쓴다.
+ *   실측(2026-10-07): 이 규칙으로 해외 리콜 447건이 적용 기준까지 닿는다.
+ */
+export async function resolveByGpcBrick(brickCode: string): Promise<ResolvedScope | null> {
+  const db = getDb();
+  const dom = await lookupDomestic(brickCode);
+  const items = new Set(dom.routes.map((r) => `${r.itemGroup}|${r.item}|${r.subItem ?? ''}`));
+  if (dom.groupsSplit || dom.certsSplit || items.size !== 1) return null;
+  const t = dom.routes[0];
+  const target = t.subItem ?? t.item;
+
+  const hits = await db<{ id: number; display_name: string }[]>`
+    select distinct s.id, s.display_name from public.standard s
+    where s.is_current and s.item_name is not null
+      and public.scope_term_key(s.item_name) in (
+            public.scope_term_key(${t.item}),
+            public.scope_term_key(${t.subItem ?? ''}))
+    union
+    select distinct s.id, s.display_name from public.taxonomy_standard x
+    join public.standard s on s.id = x.standard_id and s.is_current
+    where x.item_group = ${t.itemGroup} and ${target} in (x.item, x.sub_item)
+      and x.review_status = 'approved'
+    order by display_name
+  `;
+  if (hits.length === 0) return null;
+
+  const { ids, note } = await withCompanions(hits.map((h) => Number(h.id)));
+  return {
+    productScopeId: null,
+    scopeName: target,
+    standardIds: ids,
+    standardCount: ids.length,
+    evidence:
+      `원본 품목분류 — GPC ${brickCode}${dom.brickTitle ? ` ${dom.brickTitle}` : ''} → 법정 품목 "${target}" → ` +
+      hits.map((h) => h.display_name).join(', ') + note,
+    method: '원본 품목분류',
+  };
 }
 
 /** "전지_보조배터리" → ["전지", "보조배터리"] 처럼 후보를 넓힌다 */
@@ -531,8 +592,9 @@ export async function standardsForCase(caseId: number): Promise<number[]> {
 
   const [ev] = await db<{
     product_scope_id: number | null; item_name: string | null; child_product_check: string;
+    gpc_brick_code: string | null; gpc_source: string | null;
   }[]>`
-    select product_scope_id, item_name, child_product_check
+    select product_scope_id, item_name, child_product_check, gpc_brick_code, gpc_source
     from public.case_event where id = ${caseId}
   `;
   if (!ev) return [];
@@ -546,6 +608,18 @@ export async function standardsForCase(caseId: number): Promise<number[]> {
       where a.product_scope_id = ${ev.product_scope_id} and s.is_current
     `;
     return applyOverride((await withCompanions(rows.map((r) => Number(r.id)))).ids);
+  }
+
+  /*
+    원본 DB 가 보낸 품목분류를 그대로 쓴다 (2026-10-07, resolveByGpcBrick 참고)
+
+    담당자가 정한 품목(위 product_scope_id) 다음, 제품명 글자로 다시 맞춰 보는 것보다
+    먼저다 — 받은 분류가 있는데 추정을 앞세울 이유가 없다. 출처가 담당자 확정이거나
+    등록국 신고(needsReview 가 아닌 것)일 때만 쓴다. 우리 AI 가 붙인 코드는 쓰지 않는다.
+  */
+  if (ev.gpc_brick_code && !needsReview(ev.gpc_source)) {
+    const viaGpc = await resolveByGpcBrick(ev.gpc_brick_code);
+    if (viaGpc) return applyOverride(viaGpc.standardIds);
   }
 
   // 품목이 등록되지 않은 전기용품 등 — 적용범위 검색으로 그때그때 찾는다

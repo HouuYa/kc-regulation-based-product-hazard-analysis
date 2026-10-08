@@ -26,7 +26,7 @@ export async function previewImport(csv: string): Promise<PreviewResult> {
 export async function applyImport(csv: string): Promise<string> {
   try {
     const n = await applyTermsCsv(csv, null);
-    revalidatePath('/terms');
+    revalidatePath('/dictionary');
     return n === 0 ? '바뀐 것이 없습니다.' : `${n}건을 반영했습니다.`;
   } catch (e) {
     console.error('용어 사전 가져오기 실패:', e);

@@ -128,6 +128,48 @@ export function sliceForExtraction(narrative: string): string {
   return out;
 }
 
+/**
+ * 조사 전에 알 수 있는 부분만 남긴다 — 「사고 사전 검토」의 조사 전 조건 (06_02 P0-1)
+ *
+ * 왜 필요한가
+ *   접수 양식은 결과 보고서와 같고, 조사 전에는 「조사 확인 내용·분석 결과」 칸이
+ *   비어 있다(담당자 결정, 2026-10-08). 끝난 보고서에서 그 칸을 가리면 「조사 전」
+ *   문제가 되고, 실제로 한 시험·결과가 정답이 된다. 가리지 않고 재면 정답을 보고 푼
+ *   숫자가 나온다(06_01 §2).
+ *
+ * 왜 locateSections() 의 첫 구역에서 자르지 않는가
+ *   양식 머리의 담당자 칸에 「동일성 확인 ㅇㅇㅇ」이 적혀 있어서, IDENTITY 앵커가 거기
+ *   걸리면 제품정보·사고경위까지 잘려 나간다. 그래서 결과 칸의 **제목**만 기준으로 삼는다.
+ *   양식은 두 판이 섞여 있다(새 판은 「사고경위」 칸, 옛 판은 「3. 조사 경위」 안에 경위) —
+ *   두 판 모두 「4. 조사 확인 내용」부터가 결과다.
+ *
+ * 못 자르면 null — 억지로 자르지 않는다. 그 보고서는 평가에서 뺀다.
+ *
+ * 요약 첫 장이 없는 긴 본문형 양식도 있다(실측 2건, 5576·5602). 거기서는 결과 칸 제목이
+ * 본문 끝 무렵에야 나와서, 자르면 결론까지 거의 통째로 남는다(5602: 5,082자 중 5,037자).
+ * 남는 쪽이 원문의 절반을 넘으면 자르지 못한 것으로 본다 — 요약 첫 장이 있는 양식은
+ * 실측 최대가 1,200자 안쪽이다.
+ */
+const RESULT_HEADINGS = [
+  /조사\s?확인\s?내용/,
+  /조사\s?대상\s?:/,
+  /조사\s?방법/,
+  /동일성\s?확인\s?결과/,
+  /원인의?\s?분석\s?결과/,
+  /결함\s?조사\s?결과/,
+];
+
+export function intakePortion(narrative: string): { text: string; cutAt: number } | null {
+  let cutAt = -1;
+  for (const re of RESULT_HEADINGS) {
+    const m = re.exec(narrative);
+    if (m && (cutAt < 0 || m.index < cutAt)) cutAt = m.index;
+  }
+  if (cutAt <= 0) return null;
+  if (cutAt > narrative.length / 2) return null;
+  return { text: narrative.slice(0, cutAt).trimEnd(), cutAt };
+}
+
 /** 어느 종류의 구역을 찾았는지 — run 기록과 화면 설명에 쓴다 */
 export function sectionKinds(narrative: string): SectionKind[] {
   return [...new Set(locateSections(narrative).map((s) => s.kind))];

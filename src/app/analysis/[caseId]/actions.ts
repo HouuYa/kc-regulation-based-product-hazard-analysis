@@ -5,6 +5,7 @@ import { getDb } from '@/lib/db';
 import { runAnalysis } from '@/lib/search/run';
 import { runSecondOpinion } from '@/lib/second-opinion/run';
 import { NOT_READY_LABEL, NOT_READY_ACTION } from '@/lib/search/readiness';
+import { setManualScope } from '@/lib/cases/manual-scope';
 import { REJECT_REASONS, type Decision } from './review-options';
 
 /**
@@ -244,4 +245,28 @@ export async function setChildProductCheck(
 
   revalidatePath(`/analysis/${caseId}`);
   return CHILD_CHECK_DONE_LABEL[value];
+}
+
+/**
+ * 품목(적용 기준 세트)을 담당자가 정한다 (05_02 P1-2)
+ *
+ * 이유와 "배치가 덮지 않는다"는 규칙은 lib/cases/manual-scope.ts 에 있다.
+ * 정한 뒤에는 분석을 다시 돌려야 결과가 새 기준으로 바뀐다 — 자동으로 돌리지 않는
+ * 것은 분석이 비용이 드는 일이고, 사람이 누르는 자리가 이미 바로 아래에 있기 때문이다.
+ */
+export async function setCaseScope(_prev: string | null, formData: FormData): Promise<string> {
+  const caseId = Number(formData.get('caseId'));
+  const raw = String(formData.get('scopeId') ?? '');
+  const scopeId = raw === '' ? null : Number(raw);
+  const note = (formData.get('note') as string | null)?.trim() || null;
+  if (!caseId || (scopeId != null && !Number.isInteger(scopeId))) return '알 수 없는 값입니다.';
+
+  await setManualScope(caseId, scopeId, note);
+
+  revalidatePath(`/analysis/${caseId}`);
+  revalidatePath('/recalls');
+  revalidatePath('/accidents');
+  return scopeId == null
+    ? '담당자 지정을 풀었습니다. 다음 수집 때 자동으로 다시 정합니다.'
+    : '품목을 정했습니다. 「분석 실행」을 눌러야 결과가 새 기준으로 바뀝니다.';
 }

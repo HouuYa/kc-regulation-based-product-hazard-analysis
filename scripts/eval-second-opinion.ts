@@ -2,6 +2,7 @@
  * 병행 점검 판정 지표 (070)
  *
  *   npm run eval:second-opinion
+ *   npm run eval:second-opinion -- --group 전기용품   대분류 하나만 (06_02 P0-2)
  *
  * 왜 npm run eval 로 재지 않는가 — 이것이 이 계층 평가의 핵심이다
  *   정답셋 47건(docs/raw/eval/answer-key.json)은 scripts/build-answer-key.ts 가
@@ -41,6 +42,12 @@ function line(label: string, value: string, verdict?: string) {
 
 async function main() {
   const db = getDb();
+  // 대분류 하나만 볼 때 — 분야별로 완성해 가므로 그 분야의 기준선이 따로 필요하다(06_01)
+  const gi = process.argv.indexOf('--group');
+  const group = gi > 0 ? process.argv[gi + 1] : null;
+  const inGroup = group
+    ? db`and case_id in (select case_id from public.case_event_group where item_group = ${group})`
+    : db``;
 
   // 사건마다 가장 최근 실행 하나만 본다 — 여러 번 돌리면 쌓이므로
   const runs = await db<{
@@ -56,6 +63,7 @@ async function main() {
       gap_section_count, dropped_span_count, extract_agreement,
       coalesce(array_length(standard_ids, 1), 0) as standard_count
     from public.second_opinion_run
+    where true ${inGroup}
     order by case_id, started_at desc
   `;
 
@@ -70,6 +78,7 @@ async function main() {
     select count(*)::int n,
            count(*) filter (where narrative ~ '조사 ?방법')::int as with_method
     from public.case_event where source_type = 'ACCIDENT'
+      ${group ? db`and id in (select case_id from public.case_event_group where item_group = ${group})` : db``}
   `;
 
   const items = await db<{
@@ -86,7 +95,7 @@ async function main() {
   `;
 
   console.log('');
-  console.log('═══ 병행 점검 판정 지표 ═══════════════════════════════════════');
+  console.log(`═══ 병행 점검 판정 지표${group ? ` — ${group}만` : ''} ═══════════════════════════════════════`);
   console.log('');
   console.log(`실행한 사건 ${runs.length}건 / 사고보고서 전체 ${totalAccidents.n}건` +
     ` (「조사 방법」 줄이 있는 것 ${totalAccidents.with_method}건)`);
@@ -116,6 +125,7 @@ async function main() {
     select e.id, (regexp_match(e.narrative, '조사 ?방법[^\n]{0,80}'))[1] as method_line
     from public.case_event e
     where e.source_type = 'ACCIDENT' and e.narrative ~ '조사 ?방법'
+      ${group ? db`and e.id in (select case_id from public.case_event_group where item_group = ${group})` : db``}
       and e.id not in (
         select distinct i.case_id from public.case_investigation_item i
         where i.run_id = any(${runIds}) and i.item_type = 'TEST_PERFORMED'
@@ -209,9 +219,18 @@ async function main() {
   console.log('');
   console.log('5. 지키는 선 (기계 증명)');
 
+  /*
+    정규 경로가 붙인 태그는 빼고 센다 (2026-10-08)
+    전에는 병행 점검 첫 실행 뒤에 생긴 case_tag 를 모두 셌다. 그런데 리콜 수집(ADMIN-…)과
+    사고 코드 부여(L2-…)는 그 뒤로도 정상적으로 태그를 붙인다. 그래서 108건이 「샜다」로
+    떴지만 실제로는 리콜 105건·사고 정규 부여 3건이었다. 선 1 이 막으려는 것은 병행 점검의
+    추정이 확정 태그로 들어가는 것이므로, 사고보고서에서 정규 경로가 아닌 태그만 센다.
+  */
   const [tagLeak] = await db<{ n: number }[]>`
-    select count(*)::int n from public.case_tag
-    where created_at >= (select min(started_at) from public.second_opinion_run)
+    select count(*)::int n from public.case_tag t
+    join public.case_event e on e.id = t.case_id and e.source_type = 'ACCIDENT'
+    where t.created_at >= (select min(started_at) from public.second_opinion_run)
+      and t.tagging_version not like 'L2-%' and t.tagging_version not like 'ADMIN-%'
   `;
   line('병행 점검 이후 생긴 case_tag', `${tagLeak.n}건`,
     tagLeak.n === 0 ? '✓ 0건 — 선 1 지킴' : '✗ 추정이 확정 태그로 샜다');

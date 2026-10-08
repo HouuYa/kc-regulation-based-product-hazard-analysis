@@ -3,10 +3,9 @@ import { PageHead, ConnectionError, EmptyState, TermsNote, DoneBanner } from '@/
 import { BoardToolbar, BoardPager, BoardTabs, SortHeader, type BoardParams } from '@/components/Board';
 import { FILE_STATUS_LABEL } from '@/lib/terms';
 import { GROUP_ORDER } from '@/lib/standards/label';
-import { uploadAccidentPdfs, confirmCase } from './actions';
+import { uploadAccidentPdfs } from './actions';
 import { ActionForm } from '@/components/ActionForm';
 import { PageToc, type TocItem } from '@/components/PageToc';
-import { ScreenSwitch } from '@/components/ScreenSwitch';
 import { runAnalysisAction } from '@/app/analysis/[caseId]/actions';
 import { load, UPLOAD_STEPS, stepOf, when } from './data';
 
@@ -50,7 +49,7 @@ export default async function AccidentsPage({
   return (
     <div className="mx-auto max-w-6xl px-6 py-10 lg:px-10 lg:py-14">
       <PageHead
-        label="2 · 사고보고서"
+        label="업무 · 사고조사"
         title="사고보고서와 안전기준 연계 분석"
         lead="PDF를 올리고 원문을 확인하면, 사고와 관련될 수 있는 안전기준 조항을 찾습니다."
         /* 여섯 걸음의 이름과 뜻은 UPLOAD_STEPS 에 한 벌만 둔다 */
@@ -68,7 +67,7 @@ export default async function AccidentsPage({
             state: data.summary.confirmed < data.summary.cases ? 'here' : 'done',
           },
           {
-            label: '코드·검색 준비',
+            label: '코드·의미 검색 준비',
             note: `${data.summary.embedded} / ${data.summary.cases}`,
             state: data.summary.embedded < data.summary.cases ? 'here' : 'done',
           },
@@ -86,13 +85,6 @@ export default async function AccidentsPage({
             state: 'todo',
           },
         ] : undefined}
-      />
-
-      <ScreenSwitch
-        options={[
-          { href: '/accidents', label: '처리할 것' },
-          { href: '/accidents/status', label: '현황' },
-        ]}
       />
 
       <DoneBanner message={done} />
@@ -182,7 +174,7 @@ export default async function AccidentsPage({
                       {r.item_group ?? '기타'}
                     </span>
                     {' · '}
-                    {r.page_count ?? '—'}쪽 · 뽑아낸 글자 {(r.extracted_chars ?? 0).toLocaleString()}자
+                    {r.page_count ?? '—'}쪽
                     {/*
                       원본 미보관은 이제 중립적인 상태가 아니다 (02 설계서 §3.3)
 
@@ -198,11 +190,6 @@ export default async function AccidentsPage({
                       <span className="text-caution"> · 원본 미보관 — 원문 역추적 불가</span>
                     )}
                     {r.tag_count > 0 && ` · 위해요인 코드 ${r.tag_count}`}
-                    {r.embedded
-                      ? ' · 의미 검색 준비됨'
-                      : r.embedding_pending
-                        ? ' · 의미 검색 준비 중…'
-                        : ''}
                   </div>
 
                   {/*
@@ -232,17 +219,6 @@ export default async function AccidentsPage({
                     </p>
                   )}
 
-                  {r.preview && (
-                    <details className="mt-2.5">
-                      <summary className="cursor-pointer text-[12px] text-ink-3 hover:text-ink">
-                        뽑아낸 원문 확인
-                      </summary>
-                      <pre className="mt-1.5 max-h-56 overflow-auto border border-rule bg-surface px-3 py-2 text-[11px] leading-relaxed whitespace-pre-wrap text-ink-2">
-                        {r.preview}
-                      </pre>
-                    </details>
-                  )}
-
                   {r.case_id && (
                     <div className="mt-2.5 flex flex-wrap items-center gap-3">
                       {r.is_confirmed ? (
@@ -268,18 +244,16 @@ export default async function AccidentsPage({
                           </span>
                         </>
                       ) : (
-                        <>
-                          <ActionForm
-                            action={confirmCase}
-                            hidden={{ caseId: r.case_id }}
-                            label="원문을 확인했습니다 — 분석 대상으로"
-                            pendingLabel="처리하는 중…"
-                            className="border border-rule px-3 py-1.5 text-[12px] hover:bg-rule-soft"
-                          />
-                          <span className="text-[11px] text-ink-3">
-                            위 「뽑아낸 원문 확인」을 펼쳐 표가 뭉개지지 않았는지 보고 눌러 주세요
-                          </span>
-                        </>
+                        /*
+                          확인은 원본과 나란히 보는 화면에서만 한다 (05_02 P1-3) — 420자
+                          미리보기만 보고 누르던 버튼을 목록에서 뺐다.
+                        */
+                        <Link
+                          href={`/accidents/confirm/${r.id}`}
+                          className="border border-measure px-3 py-1.5 text-[12px] text-measure hover:bg-measure-soft"
+                        >
+                          원문 확인하기 (원본과 나란히) →
+                        </Link>
                       )}
                     </div>
                   )}

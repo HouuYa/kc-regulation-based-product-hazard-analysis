@@ -30,7 +30,6 @@ export interface FileRow {
   status: string;
   error_reason: string | null;
   storage_path: string | null;
-  preview: string | null;
   uploaded_at: string;
   case_id: number | null;
   is_confirmed: boolean | null;
@@ -84,7 +83,7 @@ export function stepOf(r: FileRow): { step: number; next: string; blocked: boole
     return {
       step: 3,
       blocked: false,
-      next: '「뽑아낸 원문 확인」을 펼쳐 표가 뭉개지지 않았는지 보고, 아래 단추를 눌러 주세요. 여기서 멈춰 있으면 다음 단계가 시작되지 않습니다.',
+      next: '「원문 확인하기」에서 원본과 나란히 보고, 표가 뭉개지지 않았으면 확인을 눌러 주세요. 여기서 멈춰 있으면 다음 단계가 시작되지 않습니다.',
     };
   }
   if (!r.embedded || r.tag_count === 0) {
@@ -161,7 +160,6 @@ export async function load(params: BoardParams) {
     select
       f.id, f.filename, f.page_count, f.extracted_chars, f.status, f.error_reason,
       f.storage_path, f.uploaded_at::text,
-      left(f.extracted_text, 420) as preview,
       e.id as case_id, e.is_confirmed,
       (e.embedding is not null) as embedded,
       exists (select 1 from public.embed_queue q

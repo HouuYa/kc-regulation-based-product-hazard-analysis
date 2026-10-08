@@ -168,8 +168,12 @@ export async function analyzeStoredPhotos(
             gpc_verified_class_title   = ${verification.classTitle},
             gpc_verified_brick_code    = ${verification.brickCode},
             gpc_verified_brick_title   = ${verification.brickTitle},
-            gpc_verification           = ${db.json(verification as never)}
+            gpc_verification           = ${db.json(verification as never)},
+            -- 출처를 남긴다(gpc/provenance.ts). 비워 두면 검수 화면이 「확인할 값인가」를 못 말한다
+            gpc_source                 = 'OUR_AI'
         where source_file_id = ${sourceFileId}
+          -- 담당자 확정·등록국 신고·원본 시스템 값은 이 체계 AI 가 덮지 않는다(서열: provenance.ts)
+          and coalesce(gpc_source, 'OUR_AI') = 'OUR_AI'
       `;
       gpcApplied = true;
     } catch (e) {

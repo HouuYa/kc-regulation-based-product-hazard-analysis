@@ -30,8 +30,20 @@ interface Migration {
   path: string;
   sql: string;
   sha256: string;
+  /** 같은 내용을 CRLF 로 저장했을 때의 해시 — 장부에 이 값으로 남은 기록도 "적용됨"으로 본다 */
+  sha256Crlf: string;
 }
 
+const sha = (s: string) => createHash('sha256').update(s).digest('hex');
+
+/**
+ * 해시는 줄바꿈을 LF 로 맞춘 뒤 잰다 (2026-10-07)
+ *
+ * 장부에는 CRLF 로 적용된 기록 40건과 LF 로 적용된 기록 35건이 섞여 있었다.
+ * 줄바꿈만 다른데 "내용이 바뀌었다"며 그 40건을 다시 실행하려 했다 — 9월 8일에
+ * 실제로 옛 파일(025~034)이 다시 돌아 035 의 run_job_at 을 덮어썼고, 자동 재시도가
+ * 한 달 동안 멈췄다(071 참고). 줄바꿈 차이는 내용 변경이 아니다.
+ */
 function collect(): Migration[] {
   const out: Migration[] = [];
   for (const { dir, prefix } of SOURCES) {
@@ -39,11 +51,13 @@ function collect(): Migration[] {
     for (const f of files) {
       const path = join(dir, f);
       const sql = readFileSync(path, 'utf8');
+      const lf = sql.replace(/\r\n/g, '\n');
       out.push({
         name: `${prefix}/${f}`,
         path,
         sql,
-        sha256: createHash('sha256').update(sql).digest('hex'),
+        sha256: sha(lf),
+        sha256Crlf: sha(lf.replace(/\n/g, '\r\n')),
       });
     }
   }
@@ -79,7 +93,7 @@ async function main() {
     let ran = 0;
     for (const m of migrations) {
       const prev = appliedMap.get(m.name);
-      if (prev === m.sha256) {
+      if (prev === m.sha256 || prev === m.sha256Crlf) {
         console.log('건너뜀   ', m.name);
         continue;
       }

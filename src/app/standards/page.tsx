@@ -199,7 +199,7 @@ export default async function StandardsPage() {
   return (
     <div className="mx-auto max-w-6xl px-6 py-10 lg:px-10 lg:py-14">
       <PageHead
-        label="1 · 안전기준"
+        label="업무 · KC기준"
         title="들여온 기준과 준비 상태"
         lead="기준을 확인하고, 조항과 시험방법이 분석에 쓸 수 있는 상태인지 봅니다."
         /*
@@ -216,7 +216,7 @@ export default async function StandardsPage() {
             state: summary.tagged >= summary.taggable ? 'done' : 'here',
           },
           {
-            label: '뜻 검색 준비',
+            label: '의미 검색 준비',
             note: `${summary.embedded.toLocaleString()} / ${summary.embeddable.toLocaleString()}`,
             state: summary.embedded >= summary.embeddable ? 'done' : 'here',
           },
@@ -451,8 +451,8 @@ export default async function StandardsPage() {
                         {shown.length === 0 && (
                           <div className="mt-1 text-[11px] text-caution">
                             품목 대응이 없습니다 —{' '}
-                            <Link href="/terms" className="underline decoration-rule underline-offset-2">
-                              품목 용어 사전
+                            <Link href="/dictionary?tab=term" className="underline decoration-rule underline-offset-2">
+                              품목 판정 사전
                             </Link>
                             에서 이어 주면 이 기준이 분석에 걸립니다.
                           </div>

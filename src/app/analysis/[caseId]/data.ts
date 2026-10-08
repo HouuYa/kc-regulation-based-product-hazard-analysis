@@ -237,7 +237,7 @@ export const load = cache(async (caseId: number) => {
       `
     : [];
 
-  return { ev, tags, run, results, standards, recall, photos };
+  return { ev, tags, run, results, standards, standardIds, recall, photos };
 });
 
 export type CaseData = NonNullable<Awaited<ReturnType<typeof load>>>;

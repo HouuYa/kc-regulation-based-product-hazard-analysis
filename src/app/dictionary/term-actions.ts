@@ -48,7 +48,7 @@ export async function reviewTerm(
       set review_status = ${to}, reviewed_by = ${reviewer}, reviewed_at = now(), updated_at = now()
       where term_key = ${termKey} and review_status is distinct from ${to}
     `;
-    revalidatePath('/terms');
+    revalidatePath('/dictionary');
     if (r.n === 0) return '이미 같은 상태였습니다.';
     return to === 'approved'
       ? `확정했습니다 — 기준 ${r.n}건. 이제 이 품목은 사전으로 바로 찾습니다.`
@@ -90,7 +90,7 @@ export async function addTerm(
             evidence = excluded.evidence, reviewed_by = excluded.reviewed_by,
             reviewed_at = now()
     `;
-    revalidatePath('/terms');
+    revalidatePath('/dictionary');
     return `추가했습니다 — "${term}" → ${std.display_name}`;
   } catch (e) {
     console.error('용어 추가 실패:', e);
@@ -117,7 +117,7 @@ export async function deleteTerm(
       select count(*)::int as n from d
     `;
     await db`delete from public.scope_term_gpc where term_key = ${termKey}`;
-    revalidatePath('/terms');
+    revalidatePath('/dictionary');
     return r.n === 0 ? '지울 것이 없었습니다.' : `지웠습니다 — 기준 대응 ${r.n}건.`;
   } catch (e) {
     console.error(`용어 삭제 실패 (${termKey}):`, e);

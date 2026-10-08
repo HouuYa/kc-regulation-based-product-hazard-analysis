@@ -4,7 +4,7 @@ import { revalidatePath } from 'next/cache';
 import { getDb } from '@/lib/db';
 
 /**
- * 운영 화면의 조작
+ * 관리 화면(/admin)의 조작
  *
  * 전부 여러 번 눌러도 안전하다(멱등). 자동 작업이 어차피 1분·5분마다 같은 일을
  * 하기 때문에, 이 버튼들은 새 일을 만드는 것이 아니라 다음 차례를 앞당길 뿐이다.
@@ -26,7 +26,7 @@ import { getDb } from '@/lib/db';
 export async function runEmbedTick(): Promise<string> {
   try {
     const [row] = await getDb()<{ r: string }[]>`select public.embed_tick() as r`;
-    revalidatePath('/ops');
+    revalidatePath('/admin');
     return `실행했습니다 — ${row.r}`;
   } catch (e) {
     return `실행에 실패했습니다 — ${e instanceof Error ? e.message : e}`;
@@ -45,7 +45,7 @@ export async function retryParked(): Promise<string> {
     const rows = await getDb()`
       delete from public.embed_queue where status = 'failed' and attempts >= 5
     `;
-    revalidatePath('/ops');
+    revalidatePath('/admin');
     return `보류 ${rows.count}건을 다시 시도하도록 되돌렸습니다. 1분 안에 다시 해 봅니다.`;
   } catch (e) {
     return `되돌리지 못했습니다 — ${e instanceof Error ? e.message : e}`;
@@ -62,7 +62,7 @@ export async function sendTestAlert(): Promise<string> {
         interval '0'
       ) as sent
     `;
-    revalidatePath('/ops');
+    revalidatePath('/admin');
     return row.sent
       ? '보냈습니다. 텔레그램을 확인해 보세요.'
       : '보내지 못했습니다. 텔레그램 봇 토큰이 비밀값 보관함에 없습니다.';
@@ -88,7 +88,7 @@ export async function sendCustomMessage(
     const [row] = await getDb()<{ sent: boolean }[]>`
       select public.ops_notify('담당자 메모', ${text}, interval '0') as sent
     `;
-    revalidatePath('/ops');
+    revalidatePath('/admin');
     return row.sent
       ? '보냈습니다.'
       : '보내지 못했습니다. 텔레그램 봇 토큰이 비밀값 보관함에 없습니다.';
@@ -118,8 +118,8 @@ export async function runJobNow(
     // 034가 실측한 30초 제한을 항상 넘겨 504가 난다(067). run_job_now는
     // recalls-fetch에 cron과 같은 안전한 구간(limit=3)을 강제한다.
     await getDb()`select public.run_job_now(${job})`;
-    revalidatePath('/ops');
-    return `${label}을(를) 요청했습니다. 결과는 몇 분 안에 「최근 처리」에 나타납니다.`;
+    revalidatePath('/admin');
+    return `${label}을(를) 요청했습니다. 결과는 몇 분 안에 「상태·알림」 탭의 「최근 처리」에 나타납니다.`;
   } catch (e) {
     return `요청하지 못했습니다 — ${e instanceof Error ? e.message : e}`;
   }
@@ -141,7 +141,7 @@ export async function toggleAutoTagging(
   const on = String(formData.get('on')) === 'true';
   try {
     await getDb()`select public.set_auto_tagging(${on})`;
-    revalidatePath('/ops');
+    revalidatePath('/admin');
     return on
       ? '켰습니다. 1분마다 스스로 이어서 하고, 다 끝나면 저절로 꺼지면서 텔레그램으로 알려 드립니다. 이 화면을 닫아도 계속 돕니다.'
       : '껐습니다. 지금까지 처리한 것은 그대로 남습니다.';
@@ -165,7 +165,7 @@ export async function togglePhotoVision(
   const on = String(formData.get('on')) === 'true';
   try {
     await getDb()`select public.set_photo_vision(${on})`;
-    revalidatePath('/ops');
+    revalidatePath('/admin');
     return on
       ? '켰습니다. 1분마다 아직 분석하지 않은 사진이 있는지 확인해 처리합니다.'
       : '껐습니다. 지금까지 분석한 것은 그대로 남습니다.';
@@ -188,7 +188,7 @@ export async function resetTagFailures(): Promise<string> {
     const [row] = await getDb()<{ n: number }[]>`
       select public.reset_tag_failures() as n
     `;
-    revalidatePath('/ops');
+    revalidatePath('/admin');
     if (row.n === 0) return '되돌릴 조항이 없습니다.';
     return `${row.n}건을 다시 대상에 넣었습니다. 자동 실행을 켜면 다시 시도합니다.`;
   } catch (e) {

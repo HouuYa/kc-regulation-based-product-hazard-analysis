@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
-import { previewImport, applyImport, type PreviewResult } from './import-actions';
+import { previewImport, applyImport, type PreviewResult } from './term-import-actions';
 
 /**
  * CSV 가져오기 — 무엇이 바뀌는지 먼저 보여 준 뒤에만 적용한다

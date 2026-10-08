@@ -1,0 +1,58 @@
+{
+  "name": "Error Trigger (필터판)",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [-496, 0],
+      "id": "d2ec0bde-9619-4c6f-8e2c-e5eaaa8c7807",
+      "name": "Error Trigger"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 진짜 오류만 보낸다 (2026-10-07, docs/raw/n8nErrorTrigger/Error Trigger.json 의 개선판)\n//\n// 1) '가져올 것이 없다' 계열은 오류가 아니라 정상 결과다 — 보내지 않는다.\n//    실제로 받은 메시지 문구를 보고 BENIGN 목록을 늘린다.\n// 2) 오류 본문에 HTML 이 섞이면(504 쪽 등) 태그를 걷고 300자로 자른다.\n//    parse_mode 를 쓰지 않는 이유도 같다 — < & 가 섞이면 텔레그램이 메시지를 버린다.\nconst BENIGN = [\n  /no (items|data|results|records|rows)( found| returned)?/i,\n  /nothing to (fetch|process|do)/i,\n  /returned no (items|data)/i,\n  /empty (response|result|array)/i,\n  /가져올.*없/,\n  /새로운? .*없습니다/,\n  /조회 결과가? 없/,\n];\nconst out = [];\nfor (const item of $input.all()) {\n  const j = item.json;\n  const e = (j.execution && j.execution.error) || {};\n  const raw = [e.message, e.description].filter(Boolean).join(' / ');\n  if (BENIGN.some((re) => re.test(raw))) continue;\n  const summary = raw.replace(/<[^>]*>/g, ' ').replace(/\\s+/g, ' ').trim().slice(0, 300) || '(오류 문구 없음)';\n  out.push({ json: { ...j, summary, lastNode: (j.execution && j.execution.lastNodeExecuted) || '-', url: (j.execution && j.execution.url) || '' } });\n}\nreturn out;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-320, 0],
+      "id": "0b7c3a52-6a1e-4f0e-9a0f-0d6e2f0c1a71",
+      "name": "진짜 오류만"
+    },
+    {
+      "parameters": {
+        "chatId": "5185533472",
+        "text": "=[n8n 오류] {{ $json.workflow.name }}\n멈춘 단계: {{ $json.lastNode }}\n{{ $json.summary }}\n\n{{ $json.url }}\ndate&Time : {{ $now.format('yyyy-MM-dd HH:mm') }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [-160, 0],
+      "id": "e63a280c-1e40-4d6f-bc26-2b55c828a494",
+      "name": "Telegram(n8n-private)",
+      "webhookId": "2a959f26-ab9d-45f4-af50-c38a2d3f6821",
+      "credentials": {
+        "telegramApi": {
+          "id": "M8CmovVpeqTgPxbf",
+          "name": "Telegram account - private하게 나와 연결"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Error Trigger": {
+      "main": [[{ "node": "진짜 오류만", "type": "main", "index": 0 }]]
+    },
+    "진짜 오류만": {
+      "main": [[{ "node": "Telegram(n8n-private)", "type": "main", "index": 0 }]]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": []
+}

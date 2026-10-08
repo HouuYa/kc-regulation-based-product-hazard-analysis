@@ -39,10 +39,10 @@ export default function ErrorPage({
           다시 시도
         </button>
         <a
-          href="/ops"
+          href="/admin"
           className="border border-rule bg-surface px-4 py-2 text-[13px] hover:bg-measure-soft"
         >
-          운영 화면으로
+          관리 콘솔로
         </a>
       </div>
 

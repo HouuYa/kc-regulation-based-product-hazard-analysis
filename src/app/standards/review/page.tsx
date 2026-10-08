@@ -235,7 +235,7 @@ export default async function ReviewPage({
   return (
     <div className="mx-auto max-w-4xl px-6 py-10 lg:px-10 lg:py-14">
       <PageHead
-        label="1 · 안전기준"
+        label="업무 · KC기준"
         title="조항 위해요인 코드 검수"
         lead="AI가 붙인 코드를 사람이 확인합니다. 확정한 코드만 정식 근거로 쓰입니다."
         workflow={[

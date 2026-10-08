@@ -303,80 +303,6 @@ function FindingList({
   );
 }
 
-/**
- * 병행 점검 후보를 다섯 갈래로 나눈다 (2026-09-14, 담당자 요청)
- *
- * "병행 점검 미판정 20건을 시험 공백·위해 원인·유사 사례·인증·표시 등으로
- * 분류해 보여 달라" — 전에는 20건이 라벨 한 줄만 붙인 채 평평하게 늘어서
- * 있어서, 그중 무엇이 몇 건인지 훑어보려면 하나씩 다 읽어야 했다.
- *
- * `SecondOpinionReviewQueue`(검토 화면 목차용 개수 계산, `analysis/[caseId]/page.tsx`)와
- * `SecondOpinionFindings`(인사이트 화면)가 이 순서·경계를 그대로 따른다 —
- * 한쪽만 고치면 두 화면이 갈리므로 여기 한 벌만 둔다(CLAUDE.md §9).
- */
-export const QUEUE_GROUPS: Array<{
-  id: string; label: string; match: (f: FindingRow) => boolean;
-}> = [
-  { id: 'gap', label: '시험 공백', match: (f) => f.findingType === 'TEST_GAP' },
-  { id: 'legal', label: '인증·표시', match: (f) => f.outputKind === 'CERT_MARKING_CHECK' },
-  { id: 'policy', label: '기준 사각지대', match: (f) => f.outputKind === 'POLICY_SIGNAL' },
-  { id: 'cases', label: '유사 사례', match: (f) => f.findingType === 'RECALL_EVIDENCE' && !!f.refCaseId },
-  { id: 'stat', label: '위해 원인', match: (f) => f.findingType === 'RECALL_EVIDENCE' && !f.refCaseId },
-];
-
-/** 미판정 소견을 위 다섯 갈래로 나눈다. 후보가 없는 갈래는 뺀다(빈 제목을 안 만든다) */
-export function groupPendingFindings(pending: FindingRow[]) {
-  return QUEUE_GROUPS
-    .map((g) => ({ ...g, items: pending.filter(g.match) }))
-    .filter((g) => g.items.length > 0);
-}
-
-/**
- * 구역 3 — 병행 점검 미판정 큐. 검토 화면 전용(073).
- *
- * SecondOpinionFindings 와 같은 데이터를 다르게 그린다 — rationale 긴 설명을
- * 빼고 라벨 한 줄 + 판정 버튼만 남겨, 빠르게 훑어 판정하는 용도다. 자세한
- * 근거는 인사이트 화면의 SecondOpinionFindings 에서 읽는다.
- */
-export async function SecondOpinionReviewQueue({ caseId }: { caseId: number }) {
-  const view = await loadSecondOpinion(caseId);
-  if (!view) return null;
-  const pending = view.findings.filter((f) => !f.decision);
-  if (pending.length === 0) return null;
-  const groups = groupPendingFindings(pending);
-
-  return (
-    <section id="analysis-second-opinion-queue" className="mt-10 scroll-mt-8 border-t border-rule pt-6">
-      <h2 className="text-[15px] font-semibold">병행 점검 미판정 {pending.length}건</h2>
-      <p className="mt-1 text-[11px] leading-relaxed text-ink-3">
-        시험 공백·인증표시·리콜 정보 등 병행 점검 후보 중 아직 판정하지 않은 것.
-        자세한 근거는 인사이트 화면에서.
-      </p>
-      <div className="mt-4 space-y-5">
-        {groups.map((g) => (
-          <div key={g.id} id={`analysis-second-opinion-queue-${g.id}`} className="scroll-mt-8">
-            <h3 className="text-[13px] font-semibold">{g.label} {g.items.length}건</h3>
-            <ul className="mt-2 space-y-1.5">
-              {g.items.map((f) => (
-                <li key={f.id} className="flex flex-wrap items-center gap-2 border-b border-rule/50 py-2">
-                  <span className="text-[12px] font-medium">
-                    {f.sectionMarker
-                      ? `${f.standardName ?? ''} 절 ${f.sectionMarker}`
-                      : f.refTitle ?? (f.refCaseId ? `사건 ${f.refCaseId}` : f.hfCode ?? '')}
-                  </span>
-                  <div className="ml-auto">
-                    <ReviewButtons finding={f} caseId={caseId} />
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
-      </div>
-    </section>
-  );
-}
-
 /** 구역 2 — 병행 점검 소견. 기본 조항 목록 아래에 놓인다 */
 export async function SecondOpinionFindings({ caseId }: { caseId: number }) {
   const view: SecondOpinionView | null = await loadSecondOpinion(caseId);
@@ -406,7 +332,12 @@ export async function SecondOpinionFindings({ caseId }: { caseId: number }) {
 
   return (
     <section id="analysis-second-opinion" className="mt-10 scroll-mt-8 border-t border-rule pt-6">
-      <h2 className="text-[15px] font-semibold">병행 점검 소견</h2>
+      <h2 className="text-[15px] font-semibold">
+        병행 점검 소견
+        <span className="ml-2 text-[12px] font-normal text-ink-3">
+          미판정 {view.findings.filter((f) => !f.decision).length}건
+        </span>
+      </h2>
       <p className="mt-1 text-[11px] leading-relaxed text-ink-3">
         위 기본 목록(피해유형 기준 조항)과는 다른 두 번째 참고 자료 — 시험 공백 ·
         인증·표시 · 리콜 사례. 전부 미확정, 판단은 담당자.
@@ -448,14 +379,21 @@ export async function SecondOpinionFindings({ caseId }: { caseId: number }) {
           </div>
         )}
 
+        {/*
+          기준 사각지대는 접어 둔다 (05_02 P2-2) — 사고조사 담당자가 판정할 몫이 아니라
+          KC기준·정책 담당이 볼 신호다. 그쪽 화면(정책 현황판)에 모아 보여 준다.
+        */}
         {policy.length > 0 && (
-          <div>
-            <h3 className="text-[13px] font-semibold">기준 사각지대 {policy.length}건</h3>
+          <details>
+            <summary className="cursor-pointer text-[13px] font-semibold">
+              기준 사각지대 {policy.length}건
+              <span className="ml-2 text-[11px] font-normal text-ink-3">KC기준·정책 담당이 보는 신호 — 펼쳐 보기</span>
+            </summary>
             <p className="mt-0.5 text-[11px] leading-relaxed text-ink-3">
               시험·인증 위반 아님 — 기준 체계 빈틈 신호. 전문가 확인 전 정책자료 미사용.
             </p>
             <FindingList findings={policy} caseId={caseId} tone="ref" />
-          </div>
+          </details>
         )}
 
         <div id="analysis-second-opinion-recall" className="scroll-mt-8">

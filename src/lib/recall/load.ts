@@ -33,6 +33,7 @@ import { crosswalk } from './crosswalk';
 import { loadCodebookSnapshot, codeLabelMap } from '../codebook/snapshot';
 import { buildCaseSearchText, type SearchTextVariant } from '../search/search-text';
 import { resolveProductScope } from '../cases/resolve-scope';
+import { MANUAL_SCOPE_PREFIX } from '../cases/manual-scope';
 import { tagCase } from '../llm/tagging';
 import { tuning } from '../env';
 
@@ -402,6 +403,8 @@ export async function loadRecalls(
             update public.case_event
             set product_scope_id = ${scope.productScopeId}, scope_evidence = ${scope.evidence}
             where id = ${caseId}
+              -- 담당자가 정한 품목은 덮지 않는다 (lib/cases/manual-scope.ts)
+              and coalesce(scope_evidence, '') not like ${MANUAL_SCOPE_PREFIX + '%'}
           `;
         }
 

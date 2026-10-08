@@ -20,44 +20,54 @@ import { useStage } from './StageContext';
  */
 const AI_NOTE = 'AI가 관여하는 화면입니다 — 결과는 후보이고, 확정은 담당자가 합니다';
 
-const STAGES = [
-  { no: '1', href: '/standards', label: '안전기준',   sub: '조항·시험 적재',   ai: true },
-  { no: '2', href: '/accidents', label: '사고보고서', sub: '등록·현황·분석',   ai: true },
-  { no: '3', href: '/recalls',   label: '리콜',       sub: '수집·현황·분석',   ai: true },
-];
+/*
+  사람별 네 묶음 (05_02 P3-8, 2026-10-07)
 
+  전에는 "업무 흐름 1·2·3(안전기준·사고·리콜) / 산출물 / 사전 / 시스템"처럼 자료
+  종류로 나눴다. 그러자 KC기준 담당자의 진짜 일(조항 코드 검수)은 메뉴에 없고,
+  정책담당자가 볼 화면은 「산출물」 한 줄에 묻혔다. 이제 "누가 무엇을 하러 오는가"로 나눈다.
+*/
 const GROUPS: Array<{
   title: string;
   items: Array<{ href: string; label: string; sub: string; ai?: boolean }>;
 }> = [
   {
-    title: '산출물',
+    title: '업무',
     items: [
-      { href: '/insights', label: 'KC안전기준 개선 요인', sub: '사각지대·국내외 대조·시험항목' },
+      { href: '/accidents',        label: '사고조사',           sub: '원문 확인·조항 판정·병행 점검', ai: true },
+      { href: '/recalls',          label: '리콜 분석',          sub: '1단계 국내 관련성 · 2단계 조항', ai: true },
+      { href: '/standards/review', label: 'KC기준 · 코드 검수', sub: '조항에 붙은 위해요인 코드 확정', ai: true },
+      { href: '/standards',        label: 'KC기준 · 원문',      sub: '들여온 기준과 조항' },
     ],
   },
   {
-    title: '사전 · 참고',
+    title: '현황 · 인사이트',
     items: [
-      { href: '/keywords', label: '품목 검색어 사전', sub: '일상어 → 법정 품목', ai: true },
-      { href: '/terms',    label: '품목 용어 사전',   sub: '품목 → 적용기준',    ai: true },
-      { href: '/codebook', label: '위해요인 코드',    sub: '참고 문서' },
+      { href: '/policy', label: '정책 현황판', sub: '위해 분포·불량/불법·사각지대 후보' },
     ],
   },
   {
-    title: '시스템',
+    title: '참고',
     items: [
-      { href: '/llm', label: 'AI 사용과 비용', sub: '자리·모델·단가', ai: true },
-      { href: '/ops', label: '운영',           sub: '상태·알림·접속 관리' },
+      { href: '/dictionary', label: '품목 판정 사전', sub: '검색어·품목→기준·서류 제품명', ai: true },
+      { href: '/codebook',   label: '위해요인 코드',  sub: '코드 목록·원인 추정표' },
+    ],
+  },
+  {
+    title: '관리',
+    items: [
+      { href: '/admin', label: '관리 콘솔', sub: '상태·알림·자동 작업·AI 비용·진척', ai: true },
     ],
   },
 ];
+
+const ALL_HREFS = GROUPS.flatMap((g) => g.items.map((i) => i.href));
 
 /**
  * 지금 화면이 어느 항목에 속하는지 (2026-09-14, 담당자 지적: "보고 있는
  * 화면이 어디에 있는지 좌측 메뉴에서 표시하기")
  *
- * 그 항목의 주소로 시작하면 자기 하위 화면으로 본다 — `/accidents/status`도
+ * 그 항목의 주소로 시작하면 자기 하위 화면으로 본다 — `/accidents/confirm/…`도
  * "사고보고서" 항목이 맞다.
  *
  * `/analysis/[caseId]`(사건 상세)는 주소만으로는 못 맞힌다 — 사고인지
@@ -68,7 +78,10 @@ const GROUPS: Array<{
  */
 function isActive(pathname: string, href: string, stage: string | null): boolean {
   if (stage != null) return stage === href;
-  return pathname === href || pathname.startsWith(`${href}/`);
+  // `/standards/review` 에서는 `/standards` 가 아니라 더 긴 쪽만 켠다 — 가장 길게 맞는 항목 하나
+  const matches = (h: string) => pathname === h || pathname.startsWith(`${h}/`);
+  if (!matches(href)) return false;
+  return !ALL_HREFS.some((h) => h.length > href.length && matches(h));
 }
 
 export function SideNav() {
@@ -128,40 +141,8 @@ export function SideNav() {
         </div>
 
         <div className="px-2 py-4">
-          <div className="label px-3 pb-1">업무 흐름</div>
-          <ol>
-            {STAGES.map((s) => {
-              const active = isActive(pathname, s.href, stage);
-              return (
-                <li key={s.href}>
-                  <Link
-                    href={s.href}
-                    onClick={() => setOpen(false)}
-                    aria-current={active ? 'page' : undefined}
-                    className={`group flex items-baseline gap-3 rounded-sm border-l-2 px-3 py-2.5 transition-colors hover:bg-measure-soft ${
-                      active ? 'border-measure bg-measure-soft' : 'border-transparent'
-                    }`}
-                  >
-                    <span className={`addr text-[11px] group-hover:text-measure ${active ? 'text-measure' : 'text-ink-3'}`}>
-                      {s.no}
-                    </span>
-                    <span className="min-w-0">
-                      <span className={`block text-[13px] font-medium whitespace-nowrap ${active ? 'text-measure' : ''}`}>
-                        {s.label}
-                        {s.ai && (
-                          <span aria-label={AI_NOTE} title={AI_NOTE} className="ml-1">🤖</span>
-                        )}
-                      </span>
-                      <span className="block text-[11px] whitespace-nowrap text-ink-3">{s.sub}</span>
-                    </span>
-                  </Link>
-                </li>
-              );
-            })}
-          </ol>
-
           {GROUPS.map((g) => (
-            <div key={g.title} className="mt-3 border-t border-rule-soft pt-3">
+            <div key={g.title} className="mt-3 border-t border-rule-soft pt-3 first:mt-0 first:border-t-0 first:pt-0">
               <div className="label px-3 pb-1">{g.title}</div>
               <ul>
                 {g.items.map((a) => {
@@ -200,7 +181,7 @@ export function SideNav() {
           <p className="mt-3 text-[11px] leading-relaxed text-ink-3">
             🤖 표시는 그 화면에서 AI가 관여한다는 뜻입니다. 어디에 어떤 모델을 쓰고 얼마가
             드는지는{' '}
-            <Link href="/llm" onClick={() => setOpen(false)} className="underline decoration-rule underline-offset-2 hover:text-measure">
+            <Link href="/admin?tab=llm" onClick={() => setOpen(false)} className="underline decoration-rule underline-offset-2 hover:text-measure">
               AI 사용과 비용
             </Link>
             에 있습니다.

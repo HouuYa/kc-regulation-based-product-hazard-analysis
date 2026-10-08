@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
-import { previewImport, applyImport } from './actions';
+import { previewImport, applyImport } from './keyword-actions';
 import type { KeywordPreviewRow } from '@/lib/terms/keyword-csv';
 
 /**

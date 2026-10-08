@@ -61,12 +61,18 @@ function href(basePath: string, params: BoardParams, changes: Record<string, str
  * 결과가 1쪽뿐이면 빈 화면이 나오기 때문이다.
  */
 export function BoardToolbar({
-  basePath, params, placeholder, filters = [],
+  basePath, params, placeholder, filters = [], hidden = {},
 }: {
   basePath: string;
   params: BoardParams;
   placeholder: string;
   filters?: { name: string; label: string; options: { value: string; label: string }[] }[];
+  /**
+   * 찾기를 눌러도 남겨야 할 값 — 탭·단계처럼 화면을 가르는 값 (2026-10-07)
+   * GET 폼은 action 주소에 붙은 ?tab= 을 버린다. 그래서 리콜 2단계에서 찾으면 1단계로,
+   * 사전 「서류 제품명」 탭에서 찾으면 다른 탭으로 떨어졌다.
+   */
+  hidden?: Record<string, string | undefined>;
 }) {
   const { per, sort, dir } = parseBoard(params, sort0(params));
   return (
@@ -74,6 +80,7 @@ export function BoardToolbar({
       {/* 정렬 상태는 검색해도 유지한다 */}
       <input type="hidden" name="sort" value={sort} />
       <input type="hidden" name="dir" value={dir} />
+      {Object.entries(hidden).map(([k, v]) => v ? <input key={k} type="hidden" name={k} value={v} /> : null)}
 
       <input
         type="search"

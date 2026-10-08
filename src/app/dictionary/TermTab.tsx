@@ -1,17 +1,15 @@
 import Link from 'next/link';
 import { getDb } from '@/lib/db';
-import { PageHead, ConnectionError, EmptyState } from '@/components/Panel';
+import { ConnectionError, EmptyState, FlowChart } from '@/components/Panel';
 import { StatusBar } from '@/components/StatusBar';
 import { ActionForm } from '@/components/ActionForm';
 import { BoardToolbar, BoardTabs, BoardPager, parseBoard, type BoardParams } from '@/components/Board';
 import { GROUP_ORDER, asGroup, standardName } from '@/lib/standards/label';
-import { reviewTerm, addTerm, deleteTerm } from './actions';
+import { reviewTerm, addTerm, deleteTerm } from './term-actions';
 import { TermImport } from './TermImport';
 
-export const dynamic = 'force-dynamic';
-
 /**
- * 품목 용어 사전
+ * 품목 판정 사전 「서류 제품명」 탭 — 서류에 적힌 제품명 → 적용 기준 (옛 /terms, scope_term)
  *
  * 왜 이 화면이 필요한가
  *   이 사전이 기준 선택을 좌우한다. 사고보고서 70건에서 품목 확정이
@@ -247,13 +245,7 @@ const CASE_LABEL: Record<string, string> = {
   RECALL_OVERSEAS: '해외 리콜',
 };
 
-export default async function TermsPage({
-  searchParams,
-}: {
-  searchParams: Promise<BoardParams>;
-}) {
-  const params = await searchParams;
-
+export async function TermTab({ params }: { params: BoardParams }) {
   let data: Awaited<ReturnType<typeof load>> | null = null;
   let error: string | null = null;
   try {
@@ -264,12 +256,9 @@ export default async function TermsPage({
   }
 
   return (
-    <div className="mx-auto max-w-5xl px-6 py-10 lg:px-10 lg:py-14">
-      <PageHead
-        label="참고"
-        title="품목 용어 사전"
-        lead="사고보고서와 리콜 서류에 적힌 제품 이름을, 어느 안전기준으로 볼 것인지 이어 둔 표입니다. 분석은 여기서 정해진 기준만 뒤집니다."
-        workflow={data ? [
+    <>
+      {data && (
+        <FlowChart steps={[
           { label: '서류의 제품명', href: '/accidents', note: '사고·리콜에서', state: 'done' },
           { label: '사전에 등록', note: `${data.summary.terms.toLocaleString()}종`, state: 'done' },
           { label: '기준 이어 붙이기', note: 'AI가 적용범위와 견줌', state: 'done' },
@@ -280,8 +269,8 @@ export default async function TermsPage({
             state: data.summary.unreviewed > 0 ? 'here' : 'done',
           },
           { label: '분석 범위로 사용', href: '/analysis', note: '이 기준만 뒤진다', state: 'todo' },
-        ] : undefined}
-      />
+        ]} />
+      )}
 
       {error && <ConnectionError error={error} />}
 
@@ -347,7 +336,7 @@ export default async function TermsPage({
             담당자는 대개 한 대분류만 맡으므로, 먼저 자기 것만 남기고 보게 한다.
           */}
           <BoardTabs
-            basePath="/terms"
+            basePath="/dictionary"
             params={params}
             name="group"
             options={[
@@ -356,8 +345,10 @@ export default async function TermsPage({
             ]}
           />
 
+          {/* GET 폼은 action 주소의 ?tab=term 을 버리므로 숨은 칸으로 탭을 남긴다 */}
           <BoardToolbar
-            basePath="/terms"
+            basePath="/dictionary"
+            hidden={{ tab: 'term', group: params.group }}
             params={params}
             placeholder="품목명 또는 기준(번호·품목명)으로 찾기"
             filters={[{
@@ -566,7 +557,7 @@ export default async function TermsPage({
               })}
 
               <div className="mt-6">
-                <BoardPager basePath="/terms" params={params} page={data.page} per={data.per} total={data.total} />
+                <BoardPager basePath="/dictionary" params={params} page={data.page} per={data.per} total={data.total} />
               </div>
             </section>
           )}
@@ -657,6 +648,6 @@ export default async function TermsPage({
           </p>
         </>
       )}
-    </div>
+    </>
   );
 }

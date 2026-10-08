@@ -1,6 +1,6 @@
 ---
 created: 2026-09-07
-updated: 2026-09-11
+updated: 2026-10-07
 description: AI를 어디에 어떤 모델로 부르는지, 답을 어떻게 받고 판단 근거를 어디에 남기는지, 비용을 어떻게 보는지 정리한 문서
 status: active
 related: [README.md, docs/전체_프로세스와_용어.md]
@@ -88,9 +88,9 @@ related: [README.md, docs/전체_프로세스와_용어.md]
 | 조항 재채점 | `reason` | `match_result.rerank_reason` | 보인다 — 후보마다 한 줄 |
 | 적용범위 의미검색 | `reasoning` | `scope_term.evidence` · `case_event.scope_evidence` | 보인다 |
 | 적용범위 후보 거르기 | `reasoning` | `case_event.scope_evidence` | 보인다 |
-| 품목 기준 제안 | `reason` | `scope_term.evidence` | 보인다 (`/terms`) |
+| 품목 기준 제안 | `reason` | `scope_term.evidence` | 보인다 (`/dictionary?tab=term`) |
 | GPC 계위 검증 | `reasoning` | `standard.gpc_verification` (JSON) | 일부 |
-| 법정 품목 → 기준 잇기 | `reasoning` | `taxonomy_standard.evidence` | 보인다 (`/keywords`) |
+| 법정 품목 → 기준 잇기 | `reasoning` | `taxonomy_standard.evidence` | 보인다 (`/dictionary?tab=link`) |
 | 가상 조항 생성 (HyDE) | 지어낸 문단 자체 | `match_run.hyde_text` | **아직 안 보인다** |
 
 `evidence_span`은 **원문에서 그대로 인용한 구간**이어야 한다. 요약을 쓰면 원문에 없는 원인을 지어낼 여지가 생기므로, 스키마에서 필수로 두어 구조로 막는다.
@@ -173,7 +173,7 @@ LLM_PRICES={"gpt-5.6-terra":{"input":2.00,"cachedInput":0.20,"output":12.00,"inp
 | 적중 범위 | 캐시된 것 중 **가장 긴 일치 앞부분**을 재사용한다 |
 | `prompt_cache_key` | 라우팅 힌트일 뿐 적중을 보장하지 않는다 |
 
-세 번째 줄이 우리에게 중요하다 — 후보 id 를 enum 으로 박은 스키마는 후보가 달라지면 함께 달라지므로, 후보 묶음이 같은 호출끼리만 적중이 걸린다. 화면(`/llm`)은 적중 0인데 기록이 쌓이면 이 사실을 경고로 띄운다.
+세 번째 줄이 우리에게 중요하다 — 후보 id 를 enum 으로 박은 스키마는 후보가 달라지면 함께 달라지므로, 후보 묶음이 같은 호출끼리만 적중이 걸린다. 화면(`/admin?tab=llm`)은 적중 0인데 기록이 쌓이면 이 사실을 경고로 띄운다.
 
 **기록 토큰이 실제로 웃돈으로 청구되는지는 우리가 확인하지 못했다.** 단가표에 칸은 있는데 조건이 적혀 있지 않고 청구서를 우리가 보지 않는다. 그래서 문맥 길이와 같은 방식으로 **범위에 담는다** — 낮은 쪽은 기록분을 일반 입력으로, 높은 쪽은 기록 단가로 계산한다. 확인되면 범위를 좁히면 된다.
 

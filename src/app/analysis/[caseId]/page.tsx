@@ -8,10 +8,13 @@ import { shortTitle } from '@/lib/standards/label';
 import { withEstimatedCauses } from '@/lib/search/estimate-cause';
 import { searchCandidates, type Candidate as SearchCandidate } from '@/lib/search/match';
 import { loadCaseInput, defaultMatchConfig } from '@/lib/search/run';
-import { loadSecondOpinion } from '@/lib/second-opinion/load';
+import { ReviewShortcuts } from '@/components/ReviewShortcuts';
+import { getDb } from '@/lib/db';
 import { recordReview, runAnalysisAction } from './actions';
 import { CausePickerSubmit } from './CausePickerSubmit';
-import { SecondOpinionReviewQueue, groupPendingFindings } from './SecondOpinion';
+import { InvestigationSummary, SecondOpinionFindings } from './SecondOpinion';
+import { PreReviewSummary } from './PreReview';
+import { GpcSection, RecallSection } from './Reference';
 import { REJECT_REASONS } from './review-options';
 import { load, type ResultRow } from './data';
 
@@ -31,17 +34,52 @@ export const dynamic = 'force-dynamic';
  * 마지막 항목이 특히 중요하다. 사고조사에서 시험 항목 누락은 되돌릴 수 없는 손실이므로
  * 시스템이 임의로 감추면 안 된다(§5.6.3).
  *
- * 사건 요약·품목·적용기준 같은 공통 부분은 `layout.tsx` 가 그린다. 여기는
- * 채택·반려로 결정을 남기는 것 — 관련될 수 있는 조항, 병행 점검 미판정 큐,
- * 원인 후보 고르기, CSV 내려받기 — 만 남는다.
+ * 사건 요약·품목·적용기준 같은 공통 부분은 `layout.tsx` 가 그린다.
+ *
+ * 한 화면 순서 (05_02 P2, 2026-10-07 — 인사이트 화면을 합쳤다)
+ *   1. 보고서가 실제로 한 시험 (사고) — 「이미 했는가」를 판정할 근거
+ *   2. 관련될 수 있는 조항 — 기본 목록, 채택·반려 (단축키 j·k·a·r)
+ *   3. 병행 점검 소견 — 기본 목록 **아래** (CLAUDE.md §13 원칙 2)
+ *   4. 참고 — GPC 품목분류, 해외 리콜 근거
+ *   5. 다음 사건 →
+ * 전에는 병행 점검 미판정 큐가 조항 목록 위에 있었고, 근거는 다른 화면에 있었다.
+ * 채택·반려 기록이 0건이던 이유로 그 배치를 의심했다(05 §2.4).
  */
 
 const SHORTLIST = 5;
 
 const ANALYSIS_TOC: TocItem[] = [
+  { id: 'analysis-pre-review', label: '사전 검토 다섯 가지' },
+  { id: 'analysis-investigation', label: '보고서가 한 시험' },
   { id: 'analysis-results', label: '관련될 수 있는 조항' },
-  { id: 'analysis-second-opinion-queue', label: '병행 점검 미판정' },
+  { id: 'analysis-second-opinion', label: '병행 점검 소견' },
+  { id: 'analysis-reference', label: '참고' },
 ];
+
+/** 사고보고서에만 있는 구역 — 리콜은 원인이 이미 적혀 있어 병행 점검 대상이 아니다 */
+const ACCIDENT_ONLY_IDS = new Set(['analysis-pre-review', 'analysis-investigation', 'analysis-second-opinion']);
+
+/**
+ * 같은 종류에서 아직 판정하지 않은 후보가 남은 다음 사건 (05_02 P2-5)
+ *
+ * 한 건을 끝내도 다음 건으로 가는 길이 없어 목록으로 되돌아가야 했다. 지금 사건보다
+ * 번호가 큰 것을 먼저, 없으면 처음부터 찾는다 — 차례대로 돌다 보면 한 바퀴를 돈다.
+ */
+async function nextPendingCase(caseId: number, sourceType: string): Promise<number | null> {
+  const [row] = await getDb()<{ id: number }[]>`
+    select e.id::int from public.case_event e
+    where e.source_type = ${sourceType} and e.id <> ${caseId}
+      and exists (
+        select 1 from public.match_run r
+        join public.match_result mr on mr.run_id = r.id
+        where r.case_id = e.id
+          and not exists (select 1 from public.review_log rl where rl.match_result_id = mr.id)
+      )
+    order by (e.id > ${caseId}) desc, e.id
+    limit 1
+  `;
+  return row?.id ?? null;
+}
 
 /**
  * 결과를 절로 묶는다 (04 §7.2)
@@ -96,6 +134,8 @@ function Candidate({ r, caseId }: { r: ResultRow; caseId: number }) {
     <article
       className={`border-t border-rule py-5 ${decided ? 'opacity-60' : ''}`}
       id={`r-${r.id}`}
+      // 판정하지 않은 후보만 단축키 대상이다 — 판정하면 빠지고 포커스가 다음 후보로 간다
+      {...(decided ? {} : { 'data-review-row': true, tabIndex: -1 })}
     >
       <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
         <h3 className="flex items-baseline gap-2.5">
@@ -107,9 +147,12 @@ function Candidate({ r, caseId }: { r: ResultRow; caseId: number }) {
             <span className="addr">{r.standard_name}</span>
           </span>
         </h3>
-        <span className="addr tnum text-[11px] text-ink-3">
-          {Number(r.search_score).toFixed(4)}
-          {r.rerank_score != null && ` · 재채점 ${Number(r.rerank_score).toFixed(2)}`}
+        {/* 점수 숫자는 판정 근거가 아니다 — 마우스를 올리면 보이게만 둔다(05_02 P2-3) */}
+        <span
+          className="text-[11px] text-ink-3"
+          title={`검색 점수 ${Number(r.search_score).toFixed(4)}${r.rerank_score != null ? ` · 재채점 ${Number(r.rerank_score).toFixed(2)}` : ''}`}
+        >
+          점수 ⓘ
         </span>
       </div>
 
@@ -375,34 +418,14 @@ export default async function AnalysisReviewPage({
   const data = await load(caseId);
   if (!data) return null;
 
-  const { ev, tags, run, results } = data;
+  const { ev, tags, run, results, recall } = data;
   const shortlist = results.slice(0, SHORTLIST);
   const rest = results.slice(SHORTLIST);
   const hfUnresolved = tags.length > 0
     && causeUnresolved(tags.filter((t) => t.axis === 'HF').map((t) => t.code));
-
-  /*
-    「병행 점검 미판정」 목차 하위 항목 — 실제로 후보가 있는 갈래만 (2026-09-14,
-    담당자 요청: "시험 공백·위해 원인·유사 사례·인증·표시 등으로 분류해 달라")
-
-    비어 있는 갈래까지 목차에 고정으로 넣으면 눌러도 반응 없는 죽은 링크가
-    된다(인사이트 화면에서 이미 같은 이유로 걸러 낸 적이 있다). 그래서 여기서
-    실제 데이터를 한 번 조회해 어느 갈래가 채워져 있는지 보고 목차를 만든다 —
-    SecondOpinionReviewQueue 도 같은 사건을 조회하지만 loadSecondOpinion 이
-    cache() 로 감싸여 있어 같은 요청 안에서는 DB 를 다시 안 부른다.
-  */
-  const secondOpinionView = ev.source_type === 'ACCIDENT' ? await loadSecondOpinion(ev.id) : null;
-  const pendingGroups = secondOpinionView
-    ? groupPendingFindings(secondOpinionView.findings.filter((f) => !f.decision))
-    : [];
-  const toc: TocItem[] = [
-    ...(ev.source_type === 'ACCIDENT'
-      ? ANALYSIS_TOC
-      : ANALYSIS_TOC.filter((t) => t.id !== 'analysis-second-opinion-queue')),
-    ...pendingGroups.map((g) => ({
-      id: `analysis-second-opinion-queue-${g.id}`, label: g.label, indent: true,
-    })),
-  ];
+  const isAccident = ev.source_type === 'ACCIDENT';
+  const toc = isAccident ? ANALYSIS_TOC : ANALYSIS_TOC.filter((t) => !ACCIDENT_ONLY_IDS.has(t.id));
+  const nextCase = await nextPendingCase(ev.id, ev.source_type);
 
   /*
     원인 후보와, 담당자가 고른 원인으로 찾은 두 번째 목록.
@@ -435,7 +458,10 @@ export default async function AnalysisReviewPage({
     <>
       <DoneBanner message={done} />
 
-      {ev.source_type === 'ACCIDENT' && <SecondOpinionReviewQueue caseId={ev.id} />}
+      {/* 사고 사전 검토 다섯 가지 — 아래 구역들의 요약이다(06_02 P1-2) */}
+      {isAccident && <PreReviewSummary data={data} />}
+
+      {isAccident && <InvestigationSummary caseId={ev.id} />}
 
       {!run ? (
         <section id="analysis-results" className="mt-10 scroll-mt-8 border-t border-rule pt-6">
@@ -461,7 +487,19 @@ export default async function AnalysisReviewPage({
             <h2 className="text-[15px] font-semibold">
               관련될 수 있는 조항 {results.length}건 — 확인해 보시기를 권합니다
             </h2>
-            <div className="addr text-[11px] text-ink-3">
+            <span className="text-[11px] text-ink-3">단축키 j·k 이동 · a 채택 · r 반려</span>
+          </section>
+          <ReviewShortcuts />
+
+          {/*
+            검색 방식·AI 사용 내역은 「근거 자세히」로 접는다 (05_02 P2-3)
+
+            판정에 직접 쓰는 정보가 아니라 "왜 이 조항이 나왔나"를 되짚을 때 보는 것이다.
+            펼쳐 두면 담당자에게는 시험 단계의 기술 정보로 읽혀 조항 목록이 밀린다.
+          */}
+          <details className="mt-2 border border-rule-soft px-3 py-2">
+            <summary className="cursor-pointer text-[11px] text-ink-3">
+              근거 자세히 — 어떻게 찾았나 (
               {[
                 run.use_code && '코드',
                 run.use_keyword && '어휘',
@@ -472,43 +510,39 @@ export default async function AnalysisReviewPage({
               ]
                 .filter(Boolean)
                 .join(' + ')}
-            </div>
-          </section>
-
-          {run.rerank_status === 'ok' && run.rerank_model && (
-            <p className="mt-2 text-[11px] leading-relaxed text-ink-3">
-              순서를 다시 매길 때 AI 를 썼습니다({run.rerank_model}). 저장된 결과는 다시 열어도 그대로지만,
-              같은 조건으로 다시 돌리면 순서가 달라질 수 있습니다.
-            </p>
-          )}
-
-          {/*
-            AI 가 지어낸 검색용 문장(HyDE)을 보여 준다 (2026-09-08)
-
-            051 부터 match_run.hyde_text 에 저장은 했지만 화면에는 내보내지 않았다.
-            이 문단이 **어떤 조항이 후보로 떠오르는지를 바꾸기** 때문에(재현율
-            23.8% → 25.2%), 담당자가 "왜 이 조항이 나왔지"를 되짚을 때 이 단계가
-            빈칸이면 경로를 절반만 보는 셈이다.
-
-            다만 그 문단은 기준 원문이 아니다. 그대로 펼쳐 두면 실제 조항으로
-            오해하므로 접어 두고, 열기 전에 무엇인지부터 밝힌다.
-          */}
-          {run.hyde_text && (
-            <details className="mt-2 border border-rule-soft px-3 py-2">
-              <summary className="cursor-pointer text-[11px] text-ink-3">
-                🤖 검색에 쓴 「가상 조항」 보기 — AI가 지어낸 문장입니다 (기준 원문 아님)
-              </summary>
-              <p className="mt-2 text-[12px] leading-relaxed whitespace-pre-wrap text-ink-2">
-                {run.hyde_text}
-              </p>
+              )
+            </summary>
+            {run.rerank_status === 'ok' && run.rerank_model && (
               <p className="mt-2 text-[11px] leading-relaxed text-ink-3">
-                사고 서술만으로는 기준의 문체와 어휘가 달라 의미 검색이 빗나갑니다. 그래서
-                「답에 해당할 법한 조항」을 AI에게 지어내게 해 그 문장으로 검색합니다. 위 문장은
-                <strong className="font-semibold"> 실제 안전기준에 존재하지 않습니다.</strong> 검색이
-                왜 이 방향으로 갔는지를 되짚는 용도이며, 근거로 인용해서는 안 됩니다.
+                순서를 다시 매길 때 AI 를 썼습니다({run.rerank_model}). 저장된 결과는 다시 열어도 그대로지만,
+                같은 조건으로 다시 돌리면 순서가 달라질 수 있습니다.
               </p>
-            </details>
-          )}
+            )}
+            {/*
+              AI 가 지어낸 검색용 문장(HyDE) (2026-09-08) — 어떤 조항이 후보로 떠오르는지를
+              바꾸므로(재현율 23.8% → 25.2%) 되짚을 수 있게 남긴다. 기준 원문이 아니라는
+              점을 먼저 밝힌다.
+            */}
+            {run.hyde_text && (
+              <div className="mt-2">
+                <div className="text-[11px] text-ink-3">
+                  🤖 검색에 쓴 「가상 조항」 — AI가 지어낸 문장입니다 (기준 원문 아님)
+                </div>
+                <p className="mt-1 text-[12px] leading-relaxed whitespace-pre-wrap text-ink-2">
+                  {run.hyde_text}
+                </p>
+                <p className="mt-2 text-[11px] leading-relaxed text-ink-3">
+                  사고 서술만으로는 기준의 문체와 어휘가 달라 의미 검색이 빗나갑니다. 그래서
+                  「답에 해당할 법한 조항」을 AI에게 지어내게 해 그 문장으로 검색합니다. 위 문장은
+                  <strong className="font-semibold"> 실제 안전기준에 존재하지 않습니다.</strong> 검색이
+                  왜 이 방향으로 갔는지를 되짚는 용도이며, 근거로 인용해서는 안 됩니다.
+                </p>
+              </div>
+            )}
+            <p className="mt-2 text-[11px] leading-relaxed text-ink-3">
+              조항마다 붙은 「점수 ⓘ」에 마우스를 올리면 검색·재채점 점수가 보입니다.
+            </p>
+          </details>
 
           {/*
             재채점이 실패한 실행 — 침묵하면 안 되는 자리다 (031)
@@ -597,7 +631,7 @@ export default async function AnalysisReviewPage({
               </p>
               <p className="mt-2 max-w-2xl text-[12px] leading-relaxed text-ink-3">
                 가능한 원인: 품목·기준 미확정 / 조항에 위해요인 코드 미부여 / 시험방법 연결 없음.
-                개요 화면에서 준비 상태 먼저 확인.
+                관리 콘솔(진척 현황)에서 준비 상태 먼저 확인.
               </p>
             </section>
           ) : (
@@ -637,6 +671,37 @@ export default async function AnalysisReviewPage({
           )}
         </>
       )}
+
+      {/* 병행 점검 — 기본 조항 목록 아래 (CLAUDE.md §13 원칙 2). 근거와 판정 버튼이 함께 있다 */}
+      {isAccident && <SecondOpinionFindings caseId={ev.id} />}
+
+      <section id="analysis-reference" className="mt-10 scroll-mt-8 border-t border-rule pt-5">
+        <h2 className="text-[15px] font-semibold">참고</h2>
+        <p className="mt-1 text-[11px] leading-relaxed text-ink-3">
+          판정에 직접 쓰지 않는 배경 자료입니다 — 품목분류 후보와 해외 리콜 공고의 근거.
+        </p>
+        <GpcSection ev={ev} />
+        <RecallSection recall={recall} />
+        {!ev.gpc_candidates?.length && !recall && (
+          <p className="mt-3 text-[12px] text-ink-3">이 사건에는 참고 자료가 없습니다.</p>
+        )}
+      </section>
+
+      <div className="mt-10 flex flex-wrap items-center justify-between gap-3 border-t border-rule pt-5">
+        <Link href={isAccident ? '/accidents' : '/recalls?stage=link'} className="text-[12px] text-ink-3 underline underline-offset-2 hover:text-ink">
+          ← 목록으로
+        </Link>
+        {nextCase ? (
+          <Link
+            href={`/analysis/${nextCase}`}
+            className="border border-measure px-4 py-2 text-[13px] font-medium text-measure hover:bg-measure-soft"
+          >
+            판정이 남은 다음 {isAccident ? '사고보고서' : '리콜'} →
+          </Link>
+        ) : (
+          <span className="text-[12px] text-ink-3">판정이 남은 다른 사건이 없습니다</span>
+        )}
+      </div>
 
       <PageToc items={toc} />
     </>

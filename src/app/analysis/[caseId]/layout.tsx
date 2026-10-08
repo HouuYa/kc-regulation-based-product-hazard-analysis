@@ -1,21 +1,27 @@
 import Link from 'next/link';
 import { FlowChart } from '@/components/Panel';
 import { ActionForm } from '@/components/ActionForm';
-import { ScreenSwitch } from '@/components/ScreenSwitch';
 import { RecallOverview } from '@/components/RecallOverview';
 import { StageAnnouncer } from '@/components/StageContext';
 import { standardName } from '@/lib/standards/label';
 import { loadRecallOverview } from '@/lib/recall/overview';
+import { listProductScopes, MANUAL_SCOPE_PREFIX } from '@/lib/cases/manual-scope';
+import { GPC_SOURCE_LABEL, needsReview, type GpcSource } from '@/lib/gpc/provenance';
+import { DomesticCheckButtons, ScopePicker } from '@/app/recalls/Triage';
 import { load } from './data';
 import { setChildProductCheck } from './actions';
 
 /**
  * 사건 분석 — 공통 헤더 (2026-09-14, 와이어프레임 1a)
  *
- * 검토(`page.tsx`)·인사이트(`insight/page.tsx`) 두 화면이 함께 쓰는 부분을
- * 여기 한 번만 그린다 — 사건 요약, 품목·적용기준(어린이제품 확정 버튼 포함),
- * 그리고 두 화면을 오가는 링크. 설계 근거는
- * docs/화면_구조_개편_검토_인사이트_분리_2026-09-12.md §3.1 (탭 밖 공통 헤더).
+ * 사건 요약, 품목·적용기준(품목 지정·어린이제품 확정 버튼 포함), 리콜이면 국내
+ * 유통 확인을 그린다. 2026-10-07 인사이트 화면을 검토 화면에 합치면서(05_02 P2-1)
+ * 두 화면을 오가던 링크는 뺐다 — 옛 설계 근거는
+ * docs/화면_구조_개편_검토_인사이트_분리_2026-09-12.md §3.1.
+ *
+ * 품목 지정·국내 유통 확인을 여기 두는 이유 (05_02 P1-1·P1-2)
+ *   둘 다 리콜 분석자 1단계 「국내 관련성」의 판단이고, 품목은 아래 조항 후보를
+ *   좌우하는 전제다. 어린이제품 확정 버튼을 이 자리에 둔 것과 같은 이유다.
  *
  * 어린이제품 확정 버튼을 여기 남기는 이유
  *   이 결정은 적용 기준 자체를 바꾸는 전제 조건이라, 검토 화면 안으로 옮기면
@@ -69,14 +75,16 @@ export default async function AnalysisLayout({
     return (
       <div className="mx-auto max-w-4xl px-6 py-10 lg:px-10">
         <p className="text-[13px] text-ink-2">사건 {raw} 이 없습니다.</p>
-        <Link href="/cases" className="mt-2 inline-block text-[13px] text-measure underline">
-          사건 목록으로
+        <Link href="/accidents" className="mt-2 inline-block text-[13px] text-measure underline">
+          사고보고서 목록으로
         </Link>
       </div>
     );
   }
 
-  const { ev, tags, run, results, standards, photos } = data;
+  const { ev, tags, run, results, standards, photos, recall } = data;
+  const scopeOptions = await listProductScopes();
+  const scopeManual = ev.scope_evidence?.startsWith(MANUAL_SCOPE_PREFIX) ?? false;
 
   /*
     리콜 개요 (2026-09-14, 담당자 지적)
@@ -130,7 +138,7 @@ export default async function AnalysisLayout({
               note: `${results.filter((r) => r.decision != null).length} / ${results.length}`,
               state: 'here',
             },
-            { label: '산출물', href: '/insights', note: '시험항목·개선요인', state: 'todo' },
+            { label: '산출물', href: '/policy', note: '시험항목·개선요인', state: 'todo' },
           ]}
         />
         {recallOverview ? (
@@ -227,15 +235,25 @@ export default async function AnalysisLayout({
       </header>
 
       {/*
-        검토/인사이트 화면 전환 — 탭이 아니라 페이지 링크(1a). 자세한 설계 근거는
-        docs/화면_구조_개편_검토_인사이트_분리_2026-09-12.md.
+        국내 유통 확인 (05_02 P1-1) — 미확인은 붉은 박스(2026-09-14 담당자 요청, 어린이제품
+        여부와 같은 규칙). 「제품안전기본법」 제13조 제3항 보고의무 판단의 전제다.
       */}
-      <ScreenSwitch
-        options={[
-          { href: `/analysis/${caseId}`, label: '검토 화면' },
-          { href: `/analysis/${caseId}/insight`, label: '인사이트 화면' },
-        ]}
-      />
+      {recall && (
+        <section
+          id="analysis-domestic"
+          className={`mt-6 border px-4 py-3 ${recall.domestic_check === 'UNCHECKED' ? 'border-halt bg-halt-soft' : 'border-rule-soft'}`}
+        >
+          <div className="flex flex-wrap items-center gap-3">
+            <span className="label">국내에도 풀렸는가</span>
+            <DomesticCheckButtons caseId={caseId} current={recall.domestic_check} />
+          </div>
+          <p className="mt-1.5 text-[11px] leading-relaxed text-ink-3">
+            같은 제품이 국내에도 풀린 것으로 확인되면, 「제품안전기본법」 제13조 제3항에 따라
+            사업자가 곧바로 보고해야 하는지 따져 봐야 합니다. 이 시스템은 국내에 풀렸는지를
+            스스로 짐작하지 않습니다.
+          </p>
+        </section>
+      )}
 
       {/* 품목·적용기준 — 검색보다 먼저 결정되는 것이므로 후보 목록보다 위에 둔다 */}
       <section id="analysis-scope" className="mt-6 scroll-mt-8 border-t border-rule pt-5">
@@ -252,6 +270,13 @@ export default async function AnalysisLayout({
                 </div>
                 {ev.scope_evidence && (
                   <p className="mt-1 text-[12px] text-ink-2">{ev.scope_evidence}</p>
+                )}
+                {/* 원본 DB 가 보낸 품목분류 — 그대로 쓴다(2026-10-07, resolve-scope.ts resolveByGpcBrick) */}
+                {ev.gpc_brick_code && !needsReview(ev.gpc_source) && (
+                  <p className="mt-1 text-[12px] text-ink-2">
+                    원본 품목분류 <span className="addr">GPC {ev.gpc_brick_code}</span>
+                    <span className="ml-1 text-ink-3">({GPC_SOURCE_LABEL[ev.gpc_source as GpcSource] ?? ev.gpc_source})</span>
+                  </p>
                 )}
                 {standards.length > 0 && (
                   <div className="mt-2 flex flex-wrap gap-1.5">
@@ -270,13 +295,19 @@ export default async function AnalysisLayout({
               </>
             ) : (
               <div className="border border-caution bg-caution-soft px-3 py-2 text-[12px] leading-relaxed text-caution">
-                <strong className="font-semibold">품목 미확정 (SCOPE_UNRESOLVED)</strong>
+                <strong className="font-semibold">품목 미확정</strong>
                 <p className="mt-1">
-                  적용 기준 미확정 — 분석 미실행 (전 품목 검색 시 다른 제품 시험 혼입).
-                  품목 등록 후 재실행.
+                  적용 기준을 정하지 못해 분석하지 않습니다 — 전 품목으로 찾으면 다른 제품의
+                  시험이 섞이기 때문입니다. 아래에서 품목을 정한 뒤 분석을 실행해 주세요.
                 </p>
               </div>
             )}
+
+            {/* 품목 지정 (05_02 P1-2) — 정하면 다음 수집이 덮지 않는다(lib/cases/manual-scope.ts) */}
+            <div className="mt-3">
+              {scopeManual && <div className="mb-1 text-[11px] text-ink-3">담당자가 정한 품목입니다.</div>}
+              <ScopePicker caseId={caseId} currentId={ev.product_scope_id} options={scopeOptions} />
+            </div>
 
             {/*
               어린이제품인가 — 사람이 정하고, 정하면 적용 기준이 바뀐다 (055)
